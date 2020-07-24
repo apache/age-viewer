@@ -1,11 +1,13 @@
-import React from 'react'
 import {connect} from 'react-redux'
 import {addFrame} from '../../../features/frame/FrameSlice'
 import Contents from '../presentations/Contents'
+/*
+import React from 'react'
 import ServerStatusFrame from '../../frame/presentations/ServerStatusFrame'
 import ServerConnectFrame from '../../frame/presentations/ServerConnectFrame'
 import ServerDisconnectFrame from '../../frame/presentations/ServerDisconnectFrame'
 import CypherResultFrame from '../../frame/presentations/CypherResultFrame'
+*/
 
 const mapStateToProps = (state)  => {
     return {

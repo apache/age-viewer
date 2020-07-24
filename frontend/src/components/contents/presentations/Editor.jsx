@@ -23,7 +23,7 @@ const Editor = ({ onClick }) => {
                 </div>
             </div>
             <div className="alert alert-primary alert-dismissible fade show" role="alert">
-                Database access not availble. Please use <a href="#" className="badge badge-light"><span
+                Database access not availble. Please use <a href="/#" className="badge badge-light"><span
                         className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to
                 estableish connection. There's
                 a graph waiting for you.
