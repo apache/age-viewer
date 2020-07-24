@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ServerConnectFrame = () => {
+const ServerConnectFrame = ({connectToAgensGraph}) => {
     return (
         < div className="card mt-3" >
             <div className="card-header">
@@ -22,7 +22,7 @@ const ServerConnectFrame = () => {
                         <p>Database access might require and authenticated connection.</p>
                     </div>
                     <div className="col-9">
-                        <form action="#">
+                        <form>
                             <fieldset className="form-group">
                                 <label htmlFor="connectUrl">Connect URL</label>
                                 <input type="text" className="form-control" id="connectUrl" name="connectUrl" />
@@ -51,8 +51,9 @@ const ServerConnectFrame = () => {
                                 <input type="password" className="form-control" id="connectPassword"
                                     name="connectPassword" />
                             </fieldset>
-                            <button type="submit" className="btn btn-info">Connect</button>
+                            
                         </form>
+                        <button className="btn btn-info" onClick={connectToAgensGraph}>aaaa</button>
                     </div>
                 </div>
             </div>

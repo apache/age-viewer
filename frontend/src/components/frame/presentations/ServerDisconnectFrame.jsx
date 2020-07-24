@@ -1,6 +1,13 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 
-const ServerDisconnectFrame = () => {
+const ServerDisconnectFrame = ({disconnectToAgensGraph}) => {
+    useEffect(() => {
+        disconnectToAgensGraph();
+    }, [disconnectToAgensGraph])
+    
+
+
+
     return (
         <div className="card mt-3">
             <div className="card-header">
@@ -23,7 +30,7 @@ const ServerDisconnectFrame = () => {
                         <p>You are successfully disconnected from Agensgraph.</p>
                     </div>
                     <div className="col-9">
-                        <p>You may run <a href="#" className="badge badge-light"><span
+                        <p>You may run <a href="/#" className="badge badge-light"><span
                         className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to establish new connection</p>
                     </div>
                 </div>
