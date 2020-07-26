@@ -15,13 +15,17 @@ const FrameSlice = createSlice({
         const reqString = action.payload.reqString.current.value.trim().toLowerCase()
 
         if (reqString === ':server status') {
-          state.unshift(<ServerStatus key={uuid()}/>)
+          /*state.unshift(<ServerStatus key={uuid()}/>)*/
+          state.unshift({frameName : 'ServerStatus', frameProps : {key : uuid()}})
         } else if (reqString === ':server connect') {
-          state.unshift(<ServerConnect key={uuid()} />)
+          /* state.unshift(<ServerConnect key={uuid()} />) */
+          state.unshift({frameName : 'ServerConnect', frameProps : {key : uuid()}})
         } else if (reqString === ':server disconnect') {
-          state.unshift(<ServerDisconnect key={uuid()} />)
+          /* state.unshift(<ServerDisconnect key={uuid()} />) */
+          state.unshift({frameName : 'ServerDisconnect', frameProps : {key : uuid()}})
         } else if (reqString.startsWith('match')) {
-          state.unshift(<CypherResultFrame key={uuid()} />)
+          /* state.unshift(<CypherResultFrame key={uuid()} />) */
+          state.unshift({frameName : 'CypherResultFrame', frameProps : {key : uuid()}})
         } else {
           alert("Can't understand your command")
           return;
