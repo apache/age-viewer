@@ -211,3 +211,8 @@ a.nav-link {
 .alert {
     margin-bottom: 0px;
 }
+
+.chart-area {
+    height:100%; 
+    width:100%;
+}

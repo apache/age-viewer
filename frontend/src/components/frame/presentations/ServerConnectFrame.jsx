@@ -1,11 +1,11 @@
 import React from 'react'
 
-const ServerConnectFrame = ({connectToAgensGraph}) => {
+const ServerConnectFrame = ({reqString, connectToAgensGraph}) => {
     return (
         < div className="card mt-3" >
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
-                    <div className="mr-auto">$ :server connect</div>
+                    <div className="mr-auto"><strong> $ {reqString} </strong></div>
                     <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
                         aria-hidden="true"></span></div>
                     <div className="card-title-collapsed card-title-close px-3" data-toggle="collapse"

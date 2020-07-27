@@ -8,13 +8,13 @@ import CypherResultFrame from '../../../components/frame/presentations/CypherRes
 const Frames = ({ frameList }) => {
     const frames = frameList.map((frame) => {
         if (frame.frameName === 'ServerStatus') {
-            return <ServerStatus key={frame.frameProps.key}/>;
+            return <ServerStatus key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         } else if (frame.frameName === 'ServerConnect') {
-            return <ServerConnect key={frame.frameProps.key}/>;
+            return <ServerConnect key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         } else if (frame.frameName === 'ServerDisconnect') {
-            return <ServerDisconnect key={frame.frameProps.key}/>;
+            return <ServerDisconnect key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         } else if (frame.frameName === 'CypherResultFrame') {
-            return <CypherResultFrame key={frame.frameProps.key}/>;
+            return <CypherResultFrame key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         }
         return '';
     });
