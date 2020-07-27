@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 
-const ServerDisconnectFrame = ({disconnectToAgensGraph}) => {
+const ServerDisconnectFrame = ({reqString, disconnectToAgensGraph}) => {
     useEffect(() => {
         disconnectToAgensGraph();
     }, [disconnectToAgensGraph])
@@ -12,7 +12,7 @@ const ServerDisconnectFrame = ({disconnectToAgensGraph}) => {
         <div className="card mt-3">
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
-                    <div className="mr-auto">$ :server disconnect</div>
+                <div className="mr-auto"><strong> $ {reqString} </strong></div>
                     <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
                         aria-hidden="true"></span></div>
                     <div className="card-title-collapsed card-title-close px-3" data-toggle="collapse"

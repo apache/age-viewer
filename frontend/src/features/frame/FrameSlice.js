@@ -1,9 +1,4 @@
-import React from 'react'
 import { createSlice } from '@reduxjs/toolkit'
-import ServerStatus from '../../components/frame/containers/ServerStatusContainer'
-import ServerConnect from '../../components/frame/containers/ServerConnectContainer'
-import ServerDisconnect from '../../components/frame/containers/ServerDisconnectContainer'
-import CypherResultFrame from '../../components/frame/presentations/CypherResultFrame'
 import uuid from 'react-uuid'
 
 const FrameSlice = createSlice({
@@ -15,17 +10,13 @@ const FrameSlice = createSlice({
         const reqString = action.payload.reqString.current.value.trim().toLowerCase()
 
         if (reqString === ':server status') {
-          /*state.unshift(<ServerStatus key={uuid()}/>)*/
-          state.unshift({frameName : 'ServerStatus', frameProps : {key : uuid()}})
+          state.unshift({frameName : 'ServerStatus', frameProps : {key : uuid(), reqString : reqString}})
         } else if (reqString === ':server connect') {
-          /* state.unshift(<ServerConnect key={uuid()} />) */
-          state.unshift({frameName : 'ServerConnect', frameProps : {key : uuid()}})
+          state.unshift({frameName : 'ServerConnect', frameProps : {key : uuid(), reqString : reqString}})
         } else if (reqString === ':server disconnect') {
-          /* state.unshift(<ServerDisconnect key={uuid()} />) */
-          state.unshift({frameName : 'ServerDisconnect', frameProps : {key : uuid()}})
+          state.unshift({frameName : 'ServerDisconnect', frameProps : {key : uuid(), reqString : reqString}})
         } else if (reqString.startsWith('match')) {
-          /* state.unshift(<CypherResultFrame key={uuid()} />) */
-          state.unshift({frameName : 'CypherResultFrame', frameProps : {key : uuid()}})
+          state.unshift({frameName : 'CypherResultFrame', frameProps : {key : uuid(), reqString : reqString}})
         } else {
           alert("Can't understand your command")
           return;

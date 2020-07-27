@@ -8,7 +8,9 @@ export const connectToAgensGraph = createAsyncThunk(
       headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-      }})
+      },
+      body: JSON.stringify({host:"192.168.0.68", port:15432, database: "covid19", graph:"corona_spread", user:"consulting", password:"bitnine123!"})
+    })
     return response.data
   }
 )
@@ -24,11 +26,12 @@ export const disconnectToAgensGraph = createAsyncThunk(
 const DatabaseSlice = createSlice({
   name: 'database',
   initialState: {
-    host: '127.0.0.1',
-    port: 5432,
-    userName: 'agens',
-    databaseName: 'northwind',
-    graphPath: 'northwind_graph',
+    host: '192.168.0.68',
+    port: 15432,
+    user: 'consulting',
+    password: 'bitnine123!',
+    database: 'covid19',
+    graph: 'corona_spread',
     status: ''
   },
   reducers: {

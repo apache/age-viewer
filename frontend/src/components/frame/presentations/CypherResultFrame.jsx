@@ -1,12 +1,14 @@
 import React from 'react'
 import { Tab, Nav } from 'react-bootstrap';
+import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
+import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
 
-const CypherResultFrame = () => {
+const CypherResultFrame = ({reqKey, reqString}) => {
     return (
         <div className="card mt-3">
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
-                    <div className="mr-auto">$ MATCH (v)-[r:has]-(v2) RETURN v, r, v2 LIMIT 30;</div>
+                    <div className="mr-auto"><strong> $ {reqString} </strong></div>
                     <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-download fa-lg"
                         aria-hidden="true"></span></div>
                     <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
@@ -22,7 +24,7 @@ const CypherResultFrame = () => {
             </div>
             <div className="card-body card-body-graph collapse show" id="graphCardBody">
                 <div className="d-flex h-100">
-                    <Tab.Container defaultActiveKey="profile">
+                    <Tab.Container defaultActiveKey="graph">
 
                         <Nav variant="pills" className="flex-column graph-card-nav">
 
@@ -43,15 +45,15 @@ const CypherResultFrame = () => {
                             </Nav.Item>
 
                         </Nav>
-                        <Tab.Content className="graph-card-content container-fluid">
+                        <Tab.Content className="graph-card-content container-fluid" >
 
-                            <Tab.Pane eventKey="graph">
-                                <h5>graph</h5>
-                                <p>graph</p>
+                            <Tab.Pane eventKey="graph" style={{ height:'100%' }}>
+                                <CypherResultCytoscapeContainer reqKey={reqKey} reqString={reqString}/>
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
                                 <h5>Table</h5>
+                                <CypherResultTableContainer reqKey={reqKey} reqString={reqString}/>
                                 <table className="table table-hover">
                                     <thead>
                                         <tr>
