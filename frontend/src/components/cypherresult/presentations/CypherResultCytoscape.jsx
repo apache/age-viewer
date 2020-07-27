@@ -2,7 +2,7 @@ import React, {useRef, useLayoutEffect, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import CytoscapeComponent from 'react-cytoscapejs';
 
-const CypherResultCytoscape = ({reqKey, reqString, executeCypherQuery}) => {
+const CypherResultCytoscape = ({data}) => {
 
     const targetRef = useRef();
     const [dimensions, setDimensions] = useState({width: 0 , height: 0});
@@ -19,12 +19,7 @@ const CypherResultCytoscape = ({reqKey, reqString, executeCypherQuery}) => {
       const dispatch = useDispatch();
       const [queryResult, setQueryResult] = useState({})
   
-      useEffect(() => {
-          dispatch(() =>executeCypherQuery([reqKey, reqString]));
-      }, [dispatch])
-
-      const retRievedQueryResult = useSelector(state => state.cypher)
-      
+      console.log("data>> ", data)
 
       const elements = [
         { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },

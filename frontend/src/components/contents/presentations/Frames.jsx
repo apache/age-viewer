@@ -2,7 +2,7 @@ import React  from 'react';
 import ServerStatus from '../../../components/frame/containers/ServerStatusContainer'
 import ServerConnect from '../../../components/frame/containers/ServerConnectContainer'
 import ServerDisconnect from '../../../components/frame/containers/ServerDisconnectContainer'
-import CypherResultFrame from '../../../components/frame/presentations/CypherResultFrame'
+import CypherResult from '../../../components/frame/containers/CypherResultContainers'
 
 
 const Frames = ({ frameList }) => {
@@ -14,7 +14,7 @@ const Frames = ({ frameList }) => {
         } else if (frame.frameName === 'ServerDisconnect') {
             return <ServerDisconnect key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         } else if (frame.frameName === 'CypherResultFrame') {
-            return <CypherResultFrame key={frame.frameProps.key} reqKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
+            return <CypherResult key={frame.frameProps.key} reqKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         }
         return '';
     });

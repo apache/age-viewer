@@ -1,9 +1,18 @@
-import React from 'react'
+import React, {useRef, useLayoutEffect, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux'
 import { Tab, Nav } from 'react-bootstrap';
+import CytoscapeComponent from 'react-cytoscapejs';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
 
-const CypherResultFrame = ({reqKey, reqString}) => {
+const CypherResultFrame = ({reqKey, reqString, executeCypherQuery}) => {
+
+      const dispatch = useDispatch();
+  
+      useEffect(() => {
+          dispatch(() =>executeCypherQuery([reqKey, reqString]));
+      }, [dispatch])
+
     return (
         <div className="card mt-3">
             <div className="card-header">
@@ -48,68 +57,12 @@ const CypherResultFrame = ({reqKey, reqString}) => {
                         <Tab.Content className="graph-card-content container-fluid" >
 
                             <Tab.Pane eventKey="graph" style={{ height:'100%' }}>
-                                <CypherResultCytoscapeContainer reqKey={reqKey} reqString={reqString}/>
+                                <CypherResultCytoscapeContainer reqKey={reqKey}/>
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
-                                <h5>Table</h5>
-                                <CypherResultTableContainer reqKey={reqKey} reqString={reqString}/>
-                                <table className="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>v</th>
-                                            <th>r</th>
-                                            <th>v2</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <CypherResultTableContainer reqKey={reqKey}/>
+                                
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="text">
