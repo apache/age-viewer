@@ -1,8 +1,6 @@
 let express = require('express');
 let ag = require('agensgraph');
 
-let DatabaseInfo = require('../database/DatabaseInfo');
-
 let router = express.Router();
 
 router.post('/', function (req, res, next) {

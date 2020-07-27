@@ -1,7 +1,21 @@
 let express = require('express');
-let DatabaseInfo = require('./DatabaseInfo');
 let router = express.Router();
 
+router.get('/', (req, res, next) => {
+    let message, data;
+    if(!req.session.client) {
+        message = 'Not Connected Database';
+        data = {};
+    } else {
+        message = 'Connected Database';
+        data = req.session.client;
+    }
+
+    res.status(200).send({
+        message: message,
+        data: data
+    }).end();
+})
 
 router.post('/connect', (req, res, next) => {
     let connInfo = req.body;

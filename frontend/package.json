@@ -44,6 +44,6 @@
   },
   "devDependencies": {
     "webpack": "^4.42.0",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.10.3"
   }
 }
