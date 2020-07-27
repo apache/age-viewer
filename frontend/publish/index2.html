@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Collapsible sidebar using Bootstrap 4</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar-fixed-left.css">
+
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Google Poppins Webfont -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+
+</head>
+
+<body>
+
+    <input type="radio" class="theme-switch" name="theme-switch" id="default-theme">
+    <input type="radio" class="theme-switch" name="theme-switch" id="dark-theme">
+
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="navbar" class="navbar navbar-expand-md fixed-left">
+            <div class="collapse navbar-collapse " id="navbarsExampleDefault">
+                <ul class="navbar-nav nav flex-column">
+                    <li class="nav-item">
+                        <a id="side-home-tab" class="nav-link" data-class="fixed-left" data-toggle="pill"
+                            href="#side-home" role="tab" aria-controls="side-home" aria-selected="true"><i
+                                class="fa fa-home"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="side-search-tab" class="nav-link" data-class="fixed-left" data-toggle="pill"
+                            href="#side-search" role="tab" aria-controls="side-search" aria-selected="true"><i
+                                class="fa fa-search"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="side-config-tab" class="nav-link" data-class="fixed-left" data-toggle="pill"
+                            href="#side-config" role="tab" aria-controls="side-config" aria-selected="true"><i
+                                class="fa fa-cog"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="sidebar">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="side-home" role="tabpanel" aria-labelledby="side-home-tab">
+                    <div class="sidebar sidebar-header">
+                        <h3>HOME</h3>
+                    </div>
+                    <div class="sidebar sidebar-body">
+                        Content....
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="side-search" role="tabpanel" aria-labelledby="side-search-tab">
+                    <div class="sidebar sidebar-header">
+                        <h3>SEARCH</h3>
+                    </div>
+                    <div class="sidebar sidebar-body">
+                        Content....
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="side-config" role="tabpanel" aria-labelledby="test-tab">
+                    <div class="sidebar sidebar-header">
+                        <h3>Configure</h3>
+                    </div>
+                    <div class="sidebar sidebar-body">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Themes</label>
+                            <select class="form-control theme-switcher">
+                                <option value="default-theme">Default</option>
+                                <option value="dark-theme">Dark</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="container-fluid editor-area card-header">
+                        <div class="input-group">
+                            <input type="text" class="form-control col-11" placeholder="$"
+                                aria-label="AgensBrowser Editor" aria-describedby="editor-buttons">
+                            <div class="input-group-append ml-auto" id="editor-buttons">
+                                <button class="btn btn-link" type="button"><span class="fa fa-star-o fa-lg"
+                                        aria-hidden="true"></span></button>
+                                <button class="btn btn-link" type="button"><span class="fa fa-eraser fa-lg"
+                                        aria-hidden="true"></span></button>
+                                <button class="btn btn-link" type="button"><span class="fa fa-play-circle-o fa-lg"
+                                        aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    Database access not availble. Please use <a href="#" class="badge badge-light"><span
+                            class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to
+                    estableish connection. There's
+                    a graph waiting for you.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    Database access not availble. Please use <a href="#" class="badge badge-light"><span
+                            class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to
+                    estableish connection. There's
+                    a graph waiting for you.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="container-fluid frame-area pt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex card-title text-muted">
+                            <div class="mr-auto">$ :server status</div>
+                            <div class="card-title-collapsed card-title-close px-3"><span class="fa fa-paperclip fa-lg"
+                                    aria-hidden="true"></span></div>
+                            <div class="card-title-collapsed card-title-close px-3" data-toggle="collapse"
+                                data-target="#connectStatusCardBody" aria-expanded="false"
+                                aria-controls="connectStatusCardBody"><span class="fa fa-lg" aria-hidden="true"></span>
+                            </div>
+                            <div class="card-title-collapsed card-title-close pl-3"
+                                onclick="javascript:fnRemoveFrame(this);">
+                                <span class="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                    <div class="card-body collapse show" id="connectStatusCardBody">
+                        <div class="row">
+                            <div class="col-3">
+                                <h3>Connection Status</h3>
+                                <p>This is your current connection information.</p>
+                            </div>
+                            <div class="col-9">
+                                <p>You are connected as user <strong>agens</strong></p>
+                                <p>to <strong>agens://127.0.0.1:5432</strong></p>
+                                <p>Connection credentials are stored in your web borwser.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="d-flex card-title text-muted">
+                            <div class="mr-auto">$ :server connection</div>
+                            <div class="card-title-collapsed card-title-close px-3"><span class="fa fa-paperclip fa-lg"
+                                    aria-hidden="true"></span></div>
+                            <div class="card-title-collapsed card-title-close px-3" data-toggle="collapse"
+                                data-target="#connectCardBody" aria-expanded="false" aria-controls="connectCardBody">
+                                <span class="fa fa-lg" aria-hidden="true"></span></div>
+                            <div class="card-title-collapsed card-title-close pl-3"
+                                onclick="javascript:fnRemoveFrame(this);">
+                                <span class="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                    <div class="card-body collapse show" id="connectCardBody">
+                        <div class="row">
+                            <div class="col-3">
+                                <h3>Connect to AgensGraph</h3>
+                                <p>Database access might require and authenticated connection.</p>
+                            </div>
+                            <div class="col-9">
+                                <form action="#">
+                                    <fieldset class="form-group">
+                                        <label for="connectUrl">Connect URL</label>
+                                        <input type="text" class="form-control" id="connectUrl" name="connectUrl">
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="connectPort">Connect Port</label>
+                                        <input type="number" class="form-control" id="connectPort" name="connectPort">
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="connectDatabaseName">Database Name</label>
+                                        <input type="text" class="form-control" id="connectDatabaseName"
+                                            name="connectDatabaseName">
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="connectGraphPath">Graph Path</label>
+                                        <input type="text" class="form-control" id="connectGraphPath"
+                                            name="connectGraphPath">
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="connectUserName">User Name</label>
+                                        <input type="text" class="form-control" id="connectUserName"
+                                            name="connectUserName">
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="connectPassword">Password</label>
+                                        <input type="password" class="form-control" id="connectPassword"
+                                            name="connectPassword">
+                                    </fieldset>
+                                    <button type="submit" class="btn btn-info">Connect</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="d-flex card-title text-muted">
+                            <div class="mr-auto">$ MATCH (v)-[r:has]->(v2) RETURN v, r, v2 LIMIT 30;</div>
+                            <div class="card-title-collapsed card-title-close px-3"><span class="fa fa-download fa-lg"
+                                    aria-hidden="true"></span></div>
+                            <div class="card-title-collapsed card-title-close px-3"><span class="fa fa-paperclip fa-lg"
+                                    aria-hidden="true"></span></div>
+                            <div class="card-title-collapsed card-title-close px-3" data-toggle="collapse"
+                                data-target="#graphCardBody" aria-expanded="false" aria-controls="graphCardBody"><span
+                                    class="fa fa-lg" aria-hidden="true"></span></div>
+                            <div class="card-title-collapsed card-title-close px-3">
+                                <span class="fa fa-refresh fa-lg" aria-hidden="true"></span></div>
+                            <div class="card-title-collapsed card-title-close pl-3"
+                                onclick="javascript:fnRemoveFrame(this);">
+                                <span class="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                    <div class="card-body card-body-graph collapse show" id="graphCardBody">
+                        <div class="d-flex h-100">
+                            <div class="graph-card-nav">
+                                <div class="nav flex-column nav-pills" style="height:100%" id="v-pills-tab"
+                                    role="tablist" aria-orientation="vertical">
+                                    <a class="nav-link active" id="graph-area-tab" data-toggle="pill" href="#graph-area"
+                                        role="tab" aria-controls="graph-area" aria-selected="true"><span
+                                            class="fa fa-paperclip" aria-hidden="true"></span><br />Graph</a>
+                                    <a class="nav-link" id="table-area-tab" data-toggle="pill" href="#table-area"
+                                        role="tab" aria-controls="table-area" aria-selected="false"><span
+                                            class="fa fa-table" aria-hidden="true"></span><br />Table</a>
+                                    <a class="nav-link" id="text-area-tab" data-toggle="pill" href="#text-area"
+                                        role="tab" aria-controls="text-area" aria-selected="false"><span
+                                            class="fa fa-font" aria-hidden="true"></span><br />Text</a>
+                                    <a class="nav-link" id="code-area-tab" data-toggle="pill" href="#code-area"
+                                        role="tab" aria-controls="code-area" aria-selected="false"><span
+                                            class="fa fa-terminal" aria-hidden="true"></span><br />Code</a>
+                                </div>
+                            </div>
+                            <div class="graph-card-content container-fluid">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="graph-area" role="tabpanel"
+                                        aria-labelledby="graph-area-tab">.. Chart</div>
+                                    <div class="tab-pane fade" id="table-area" role="tabpanel"
+                                        aria-labelledby="table-area-tab" style="overflow:auto;">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>v</th>
+                                                    <th>r</th>
+                                                    <th>v2</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>d1</td>
+                                                    <td>d2</td>
+                                                    <td>d3</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="text-area" role="tabpanel"
+                                        aria-labelledby="text-area-tab">C.</div>
+                                    <div class="tab-pane fade" id="code-area" role="tabpanel"
+                                        aria-labelledby="code-area-tab">.D.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container-fluid footer-area pt-5 ">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('.nav-item').on('click', function () {
+                if ($(this).children('a').hasClass('active') || !$('#content').hasClass('active')) {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                }
+            });
+
+            $(".theme-switcher").change(function () {
+                $("#" + this.value).prop('checked', true);
+            });
+        });
+        
+
+        function fnRemoveFrame(obj) {
+            let pCard = obj.closest("div .card");
+            pCard.remove();
+        }
+    </script>
+</body>
+
+</html>
