@@ -14,7 +14,7 @@ const Frames = ({ frameList }) => {
         } else if (frame.frameName === 'ServerDisconnect') {
             return <ServerDisconnect key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         } else if (frame.frameName === 'CypherResultFrame') {
-            return <CypherResultFrame key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
+            return <CypherResultFrame key={frame.frameProps.key} reqKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
         }
         return '';
     });

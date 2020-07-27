@@ -2,7 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const executeCypherQuery = createAsyncThunk(
   'cypher/executeCypherQuery',
-  async (cmdQuery) => {
+  async (args) => {
+    console.log("key > " , args[0])
+    console.log("cmdQuery > " , args[1])
     const response = await fetch('/api/v1/cypher', 
     {
       method: 'POST',
@@ -10,10 +12,13 @@ export const executeCypherQuery = createAsyncThunk(
           Accept: 'application/json',
           'Content-Type': 'application/json',
       },
-      body: JSON.stringify({cmd: cmdQuery})
+      body: JSON.stringify({cmd: args[1]})
     })
     if (response.ok) {
-      return await response.json();
+      const resData = {}
+      resData['key'] = args[0];
+      resData['data'] = await response.json();     
+      return resData;
     } else {
       alert("Connection Error")
       return {};
@@ -26,7 +31,7 @@ export const executeCypherQuery = createAsyncThunk(
 const CypherSlice = createSlice({
   name: 'cypher',
   initialState: {
-    queryResult : []
+    queryResult : {}
   },
   reducers: {
   },
@@ -36,7 +41,7 @@ const CypherSlice = createSlice({
     },
     [executeCypherQuery.fulfilled]: (state, action) => {
       console.log('CypherSlice Data Loaded.')
-      state.queryResult = action.payload
+      state.queryResult[action.payload.key] = action.payload
     },
     [executeCypherQuery.rejectd]: (state, action) => {
       console.log('CypherSlice Data Loading Error.')

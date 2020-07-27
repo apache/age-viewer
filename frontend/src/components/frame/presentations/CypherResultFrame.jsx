@@ -1,9 +1,9 @@
 import React from 'react'
 import { Tab, Nav } from 'react-bootstrap';
-import CypherResultCytoscapeContainer from '../../cytoscape/containers/CypherResultCytoscapeContainer'
+import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
+import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
 
-const CypherResultFrame = ({reqString}) => {
-     
+const CypherResultFrame = ({reqKey, reqString}) => {
     return (
         <div className="card mt-3">
             <div className="card-header">
@@ -48,11 +48,12 @@ const CypherResultFrame = ({reqString}) => {
                         <Tab.Content className="graph-card-content container-fluid" >
 
                             <Tab.Pane eventKey="graph" style={{ height:'100%' }}>
-                                <CypherResultCytoscapeContainer reqString={reqString}/>
+                                <CypherResultCytoscapeContainer reqKey={reqKey} reqString={reqString}/>
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
                                 <h5>Table</h5>
+                                <CypherResultTableContainer reqKey={reqKey} reqString={reqString}/>
                                 <table className="table table-hover">
                                     <thead>
                                         <tr>
