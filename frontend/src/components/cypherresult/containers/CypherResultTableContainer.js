@@ -1,16 +1,18 @@
 import {connect} from 'react-redux'
-import {executeCypherQuery} from '../../../features/cypher/CypherSlice'
 import CypherResultTable from '../presentations/CypherResultTable'
-import { createImmutableStateInvariantMiddleware } from '@reduxjs/toolkit'
 
 const mapStateToProps = (state, ownProps) => {
     const { reqKey } = ownProps
+    console.log("!!!" , state)
+    console.log("!!!" , state.cypher)
+    console.log("!!!" , state.cypher.queryResult)
+    console.log("!!!" , reqKey)
     console.log("!!!" , state.cypher.queryResult[reqKey])
     return {
-        queryResult : state.cypher.queryResult[reqKey]
+        data : state.cypher.queryResult[reqKey]
     }
 }
 
-const mapDispatchToProps = { executeCypherQuery }
+const mapDispatchToProps = {  }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CypherResultTable);
