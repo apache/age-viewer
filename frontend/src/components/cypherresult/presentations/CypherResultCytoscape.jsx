@@ -22,25 +22,27 @@ const CypherResultCytoscape = ({data}) => {
     const containerRef = useRef();
 
     useEffect(() => {
-
       const stylesheet = [
         {
           selector: 'node',
           style: {
             width: 70,
             height: 70,
-            label: 'data(label)'
+            label: 'data(label)',
+            'background-color': function( ele ) { return ele == null ? '#FFF' : ele.data('backgroundColor'); }
           }
         },
         {
           selector: 'edge',
           style: {
-            width: 6
+            width: 6,
+            'line-color': function( ele ) { return ele == null ? '#FFF' : ele.data('backgroundColor'); }
           }
         }
       ]
+
       const layout = { name : 'cose-bilkent' }
-      console.log(data)
+      
       const config = {
         // Common Options
         container: containerRef.current,
