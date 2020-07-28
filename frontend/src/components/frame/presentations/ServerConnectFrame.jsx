@@ -53,7 +53,7 @@ const ServerConnectFrame = ({reqString, connectToAgensGraph}) => {
                             </fieldset>
                             
                         </form>
-                        <button className="btn btn-info" onClick={connectToAgensGraph}>aaaa</button>
+                        <button className="btn btn-info" onClick={connectToAgensGraph}>CONNECT</button>
                     </div>
                 </div>
             </div>
