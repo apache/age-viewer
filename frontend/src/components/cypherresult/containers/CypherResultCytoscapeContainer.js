@@ -22,22 +22,23 @@ const mapStateToProps = (state, ownProps) => {
         if (data) {
             data['data'].forEach((row, index) => {
                 for (const [alias, val] of Object.entries(row)) {
+                    let labelName = val['label']
                     if (val['start'] && val['end']) {
-                        if (!edgeColors.hasOwnProperty(alias)) { edgeColors[alias] = getRandomColor() }
+                        if (!edgeColors.hasOwnProperty(labelName)) { edgeColors[labelName] = getRandomColor() }
                         edges.push(
-                            { group: 'edges', data: { id: val.id, source: val.start, target: val.end, label: val.label, backgroundColor: edgeColors[alias] }, alias: alias, backgroundColor: nodeColors[alias], classes: ['node'] }
+                            { group: 'edges', data: { id: val.id, source: val.start, target: val.end, label: val.label, backgroundColor: edgeColors[labelName] }, alias: alias, backgroundColor: nodeColors[labelName], classes: ['node'] }
                         )
                     } else {
-                        if (!nodeColors.hasOwnProperty(alias)) { nodeColors[alias] = getRandomColor() }
+                        if (!nodeColors.hasOwnProperty(labelName)) { nodeColors[labelName] = getRandomColor() }
                         nodes.push(
-                            { group: 'nodes', data: { id: val.id, label: val.label, backgroundColor: nodeColors[alias] }, alias: alias, backgroundColor: nodeColors[alias], classes: ['node'] }
+                            { group: 'nodes', data: { id: val.id, label: val.label, backgroundColor: nodeColors[labelName] }, alias: alias, backgroundColor: nodeColors[labelName], classes: ['node'] }
                         )
                     }
                 }
             });
 
         }
-        return { nodes: nodes, edges: edges }
+        return [{nodeColors: nodeColors, edgeColors: edgeColors}, { nodes: nodes, edges: edges }]
 
     }
 

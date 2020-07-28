@@ -1,6 +1,7 @@
 import React, {useRef, useLayoutEffect, useEffect, useState} from 'react';
 import Cytoscape from 'cytoscape';
 import COSEBilkent from 'cytoscape-cose-bilkent';
+import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
 
 Cytoscape.use(COSEBilkent);
 
@@ -29,7 +30,9 @@ const CypherResultCytoscape = ({data}) => {
             width: 70,
             height: 70,
             label: 'data(label)',
-            'background-color': function( ele ) { return ele == null ? '#FFF' : ele.data('backgroundColor'); }
+            'background-color': function( ele ) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
+            "text-valign" : "center",
+            "text-halign" : "center"
           }
         },
         {
@@ -43,11 +46,12 @@ const CypherResultCytoscape = ({data}) => {
 
       const layout = { name : 'cose-bilkent' }
       
+      console.log(">>>> ", data)
       const config = {
         // Common Options
         container: containerRef.current,
         style: stylesheet,
-        elements: data,
+        elements: data[1],
         layout: layout,
         // Viewport Options
         zoom: 1,
@@ -82,7 +86,10 @@ const CypherResultCytoscape = ({data}) => {
 
 
 
-    return <div className="chart-area" ref={targetRef}><div ref={containerRef} style={ { width: dimensions.width , height: dimensions.height  } } /></div>
+    return <div className="chart-area" ref={targetRef}>
+            <CypherResultCytoscapeLegend legendData={data[0]}/>
+            <div ref={containerRef} style={ { width: dimensions.width , height: dimensions.height, position:'absolute', 'zIndex':1 } } />
+          </div>
 }
 
 
