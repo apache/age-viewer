@@ -40,7 +40,7 @@ const CypherResultCytoscape = ({data}) => {
         }
       ]
       const layout = { name : 'cose-bilkent' }
-
+      console.log(data)
       const config = {
         // Common Options
         container: containerRef.current,

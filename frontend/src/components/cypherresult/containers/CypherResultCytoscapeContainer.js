@@ -11,11 +11,11 @@ const mapStateToProps = (state, ownProps) => {
             for (const [alias, val] of Object.entries(row)) {
                 if (val['start'] && val['end']) {
                 edges.push(
-                    {group: 'edges', data: {id: `${val.id.oid}.${val.id.id}`, source: `${val.start.oid}.${val.start.id}`, target: `${val.end.oid}.${val.end.id}`, label: val.label}, classes: ['node']}
+                    {group: 'edges', data: {id: val.id, source: val.start, target: val.end, label: val.label}, classes: ['node']}
                 )
                 } else {
                 nodes.push(
-                    {group: 'nodes', data: {id: `${val.id.oid}.${val.id.id}`, label: val.label}, classes: ['node']}
+                    {group: 'nodes', data: {id: val.id, label: val.label}, classes: ['node']}
                 )
                 }
             }
