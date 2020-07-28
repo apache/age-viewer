@@ -15,7 +15,8 @@ export const executeCypherQuery = createAsyncThunk(
     if (response.ok) {
       const resData = {}
       resData['key'] = args[0];
-      resData['data'] = await response.json();     
+      const res = await response.json();     
+      resData['data'] = res['data']
       return resData;
     } else {
       alert("Connection Error")
@@ -39,8 +40,10 @@ const CypherSlice = createSlice({
     },
     [executeCypherQuery.fulfilled]: (state, action) => {
       console.log('CypherSlice Data Loaded.')
-      state.queryResult[action.payload.key] = action.payload
-      state.queryResult[action.payload.key].aliasList = Object.keys(action.payload.data[0])
+      state.queryResult[action.payload.key] = {}
+      state.queryResult[action.payload.key].key = action.payload.key
+      state.queryResult[action.payload.key].data = action.payload.data.rows
+      state.queryResult[action.payload.key].aliasList = action.payload.data.columns
     },
     [executeCypherQuery.rejectd]: (state, action) => {
       console.log('CypherSlice Data Loading Error.')

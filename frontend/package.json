@@ -10,6 +10,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "cytoscape": "^3.2.19",
+    "cytoscape-cose-bilkent": "^4.1.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.2.2",
     "react-cytoscapejs": "^1.2.1",
