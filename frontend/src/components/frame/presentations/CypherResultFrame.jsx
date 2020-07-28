@@ -1,7 +1,6 @@
-import React, {useRef, useLayoutEffect, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux'
 import { Tab, Nav } from 'react-bootstrap';
-import CytoscapeComponent from 'react-cytoscapejs';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
 
@@ -11,7 +10,7 @@ const CypherResultFrame = ({reqKey, reqString, executeCypherQuery}) => {
   
       useEffect(() => {
           dispatch(() =>executeCypherQuery([reqKey, reqString]));
-      }, [dispatch])
+      }, [reqKey, reqString, executeCypherQuery, dispatch])
 
     return (
         <div className="card mt-3">
