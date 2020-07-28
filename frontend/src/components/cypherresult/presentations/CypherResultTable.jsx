@@ -1,7 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
 const CypherResultCytoscape = ({data}) => {
-  if (data !== undefined) {  
     return (
       <Table className="table table-hover">
         <thead>
@@ -25,9 +24,7 @@ const CypherResultCytoscape = ({data}) => {
         </tbody>
       </Table>
     )
-  } 
 
-  return <table className="table table-hover"></table>
 }
 
 
