@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
-const CypherResultCytoscape = ({data}) => {
+const CypherResultTable = ({data}) => {
     return (
       <Table className="table table-hover">
         <thead>
@@ -28,4 +28,4 @@ const CypherResultCytoscape = ({data}) => {
 }
 
 
-export default CypherResultCytoscape
+export default CypherResultTable

@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux'
 import { Tab, Nav } from 'react-bootstrap';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
+import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer'
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer'
 
 const CypherResultFrame = ({reqKey, reqString, executeCypherQuery}) => {
@@ -63,10 +64,9 @@ const CypherResultFrame = ({reqKey, reqString, executeCypherQuery}) => {
                             <Tab.Pane eventKey="table">
                                 <CypherResultTableContainer reqKey={reqKey}/>                                
                             </Tab.Pane>
-
+                            
                             <Tab.Pane eventKey="text">
-                                <h5>Text</h5>
-                                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+                                <CypherResultTextContainer reqKey={reqKey}/>                                
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="code">
