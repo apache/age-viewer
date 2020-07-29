@@ -16,29 +16,29 @@ const mapStateToProps = (state, ownProps) => {
     const generateCytoscapeElement = (data) => {
         let nodes = []
         let edges = []
-        let nodeColors = {}
-        let edgeColors = {}
+        let nodeLegend = {}
+        let edgeLegend = {}
 
         if (data) {
-            data['data'].forEach((row, index) => {
+            data['response']['data']['rows'].forEach((row, index) => {
                 for (const [alias, val] of Object.entries(row)) {
                     let labelName = val['label']
                     if (val['start'] && val['end']) {
-                        if (!edgeColors.hasOwnProperty(labelName)) { edgeColors[labelName] = getRandomColor() }
+                        if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = getRandomColor() }
                         edges.push(
-                            { group: 'edges', data: { id: val.id, source: val.start, target: val.end, label: val.label, backgroundColor: edgeColors[labelName] }, alias: alias, backgroundColor: nodeColors[labelName], classes: ['node'] }
+                            { group: 'edges', data: { id: val.id, source: val.start, target: val.end, label: val.label, backgroundColor: edgeLegend[labelName] }, alias: alias, backgroundColor: nodeLegend[labelName], classes: ['node'] }
                         )
                     } else {
-                        if (!nodeColors.hasOwnProperty(labelName)) { nodeColors[labelName] = getRandomColor() }
+                        if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = getRandomColor() }
                         nodes.push(
-                            { group: 'nodes', data: { id: val.id, label: val.label, backgroundColor: nodeColors[labelName] }, alias: alias, backgroundColor: nodeColors[labelName], classes: ['node'] }
+                            { group: 'nodes', data: { id: val.id, label: val.label, backgroundColor: nodeLegend[labelName] }, alias: alias, backgroundColor: nodeLegend[labelName], classes: ['node'] }
                         )
                     }
                 }
             });
 
         }
-        return [{nodeColors: nodeColors, edgeColors: edgeColors}, { nodes: nodes, edges: edges }]
+        return { legend : {nodeLegend: nodeLegend, edgeLegend: edgeLegend}, elements : { nodes: nodes, edges: edges }}
 
     }
 

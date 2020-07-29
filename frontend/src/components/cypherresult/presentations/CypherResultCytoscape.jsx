@@ -46,12 +46,11 @@ const CypherResultCytoscape = ({data}) => {
 
       const layout = { name : 'cose-bilkent' }
       
-      console.log(">>>> ", data)
       const config = {
         // Common Options
         container: containerRef.current,
         style: stylesheet,
-        elements: data[1],
+        elements: data['elements'],
         layout: layout,
         // Viewport Options
         zoom: 1,
@@ -87,7 +86,7 @@ const CypherResultCytoscape = ({data}) => {
 
 
     return <div className="chart-area" ref={targetRef}>
-            <CypherResultCytoscapeLegend legendData={data[0]}/>
+            <CypherResultCytoscapeLegend legendData={data['legend']}/>
             <div ref={containerRef} style={ { width: dimensions.width , height: dimensions.height, position:'absolute', 'zIndex':1 } } />
           </div>
 }

@@ -2,17 +2,17 @@ import React from 'react';
 import {Badge} from 'react-bootstrap'
 
 const CypherResultCytoscapeLegend = ({legendData}) => {
-  const {nodeColors, edgeColors} = legendData
+  const {nodeLegend, edgeLegend} = legendData
 
   const nodeBadges = []
   const edgeBadges = []
 
 
-  for (const [label, color] of Object.entries(nodeColors)) {
+  for (const [label, color] of Object.entries(nodeLegend)) {
     nodeBadges.push(<Badge className="px-3 mx-1" pill key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
   }
 
-  for (const [label, color] of Object.entries(edgeColors)) {
+  for (const [label, color] of Object.entries(edgeLegend)) {
     edgeBadges.push(<Badge className="px-3 mx-1" key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
   }
   
