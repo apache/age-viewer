@@ -3,8 +3,17 @@ import CypherResultTable from '../presentations/CypherResultTable'
 
 const mapStateToProps = (state, ownProps) => {
     const { reqKey } = ownProps
+    const generateTableData = (data) => {
+        let columns = []
+        let rows = []
+        if (data) {
+            columns = data['response']['data']['columns']
+            rows = data['response']['data']['rows']
+        }
+        return { columns: columns, rows: rows }
+    }
     return {
-        data : state.cypher.queryResult[reqKey] === undefined ? {'key' : '', 'data' : [], 'aliasList' : []} : state.cypher.queryResult[reqKey]
+        data : generateTableData(state.cypher.queryResult[reqKey])
     }
 }
 
