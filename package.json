@@ -1,13 +1,17 @@
 {
-  "name": "agensbrowser",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "front": "cd frontend && npm run start",
-    "backend": "cd backend && npm run start",
-    "start": "npm-run-all --parallel backend front"
-  },
-  "dependencies": {
-    "npm-run-all": "^4.1.5"
-  }
+    "name": "agensbrowser",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "setup-main": "npm install",
+        "setup-front": "cd frontend && npm install",
+        "setup-backend": "cd backend && npm install",
+        "setup": "npm-run-all --parallel setup-main setup-front setup-backend",
+        "front": "cd frontend && npm run start",
+        "backend": "cd backend && npm run start",
+        "start": "npm-run-all --parallel backend front"
+    },
+    "dependencies": {
+        "npm-run-all": "^4.1.5"
+    }
 }
