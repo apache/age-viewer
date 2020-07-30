@@ -20,7 +20,7 @@ const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame
                     <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
                         aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
-                        aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls="connectCardBody">
+                        aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
                         <span className="fa fa-lg" aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link pl-3">
                         <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
@@ -28,7 +28,7 @@ const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame
             </div>
 
             <Collapse in={isExpanded}>
-            <div className="card-body collapse" id="connectCardBody">
+            <div className="card-body collapse" id={refKey}>
                 <div className="row">
                     <div className="col-3">
                         <h3>Connect to AgensGraph</h3>

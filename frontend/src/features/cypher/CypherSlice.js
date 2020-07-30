@@ -37,15 +37,12 @@ const CypherSlice = createSlice({
   },
   extraReducers: {
     [executeCypherQuery.pending]: (state, action) => {
-      console.log('CypherSlice Loading data...')
     },
     [executeCypherQuery.fulfilled]: (state, action) => {
-      console.log('CypherSlice Data Loaded.')
       state.queryResult[action.payload.key] = {}
       state.queryResult[action.payload.key].response = action.payload
     },
     [executeCypherQuery.rejectd]: (state, action) => {
-      console.log('CypherSlice Data Loading Error.')
     }
   }
 })

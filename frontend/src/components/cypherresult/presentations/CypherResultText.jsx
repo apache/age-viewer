@@ -8,7 +8,6 @@ const CypherResultText = ({data}) => {
       const rows = data['columns'].map((alias, cIndex) => {
         return JSON.stringify(d[alias])
       })
-      console.log("!" , rows)
       return rows
     })
   }

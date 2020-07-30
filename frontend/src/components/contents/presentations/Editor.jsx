@@ -11,6 +11,7 @@ const Editor = ({ onClick, addAlert, alertList, serverInfo }) => {
     const onEnter = (e) => {
         if(e.keyCode === 13){
             addFrame()
+            clearReqString()
          }
     }
     

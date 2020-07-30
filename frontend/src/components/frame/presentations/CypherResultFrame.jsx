@@ -1,38 +1,40 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux'
-import { Tab, Nav } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux'
+import { Tab, Nav, Collapse } from 'react-bootstrap';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer'
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer'
 
-const CypherResultFrame = ({refKey, reqString, removeFrame, executeCypherQuery}) => {
+const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery }) => {
+    const [isExpanded, setIsExpanded] = useState(true)
 
-      const dispatch = useDispatch();
-  
-      useEffect(() => {
-          dispatch(() =>executeCypherQuery([refKey, reqString]));
-      }, [refKey, reqString, executeCypherQuery, dispatch])
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(() => executeCypherQuery([refKey, reqString]));
+    }, [refKey, reqString, executeCypherQuery, dispatch])
 
     return (
         <div className="card mt-3">
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <div className="frame-head-button card-title-collapsed card-title-close px-3"><span className="fa fa-download fa-lg"
-                        aria-hidden="true"></span></div>
-                    <div className="frame-head-button card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
-                        aria-hidden="true"></span></div>
-                    <div className="frame-head-button card-title-collapsed card-title-close px-3" data-toggle="collapse"
-                        data-target="#graphCardBody" aria-expanded="false" aria-controls="graphCardBody"><span
-                            className="fa fa-lg" aria-hidden="true"></span></div>
-                    <div className="frame-head-button card-title-collapsed card-title-close px-3">
-                        <span className="fa fa-refresh fa-lg" aria-hidden="true"></span></div>
-                    <div className="frame-head-button card-title-collapsed card-title-close pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></div>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-download fa-lg"
+                        aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
+                        aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
+                        aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
+                        <span className="fa fa-lg" aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3">
+                        <span className="fa fa-refresh fa-lg" aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link pl-3">
+                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
             </div>
-            <div className="card-body card-body-graph collapse show" id="graphCardBody">
+            <Collapse in={isExpanded}>
+            <div className="card-body card-body-graph collapse" id={refKey}>
                 <div className="d-flex h-100">
                     <Tab.Container defaultActiveKey="graph">
 
@@ -57,26 +59,27 @@ const CypherResultFrame = ({refKey, reqString, removeFrame, executeCypherQuery})
                         </Nav>
                         <Tab.Content className="graph-card-content container-fluid" >
 
-                            <Tab.Pane eventKey="graph" style={{ height:'100%' }}>
-                                <CypherResultCytoscapeContainer refKey={refKey}/>
+                            <Tab.Pane eventKey="graph" style={{ height: '100%' }}>
+                                <CypherResultCytoscapeContainer refKey={refKey} />
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
-                                <CypherResultTableContainer refKey={refKey}/>                                
+                                <CypherResultTableContainer refKey={refKey} />
                             </Tab.Pane>
-                            
+
                             <Tab.Pane eventKey="text">
-                                <CypherResultTextContainer refKey={refKey}/>                                
+                                <CypherResultTextContainer refKey={refKey} />
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="code">
-                                <CypherResultMetaContainer refKey={refKey}/>
+                                <CypherResultMetaContainer refKey={refKey} />
                             </Tab.Pane>
 
                         </Tab.Content>
                     </Tab.Container>
                 </div>
             </div>
+            </Collapse>
         </div>
 
     );
