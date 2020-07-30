@@ -2,15 +2,15 @@ import { connect } from 'react-redux'
 import CypherResultMeta from '../presentations/CypherResultMeta'
 
 const mapStateToProps = (state, ownProps) => {
-    const { reqKey } = ownProps
+    const { refKey } = ownProps
 
     let database = {}
     let query = ''
     let data = {}
-    if (state.cypher.queryResult[reqKey]) {
+    if (state.cypher.queryResult[refKey]) {
         database = state.database
-        query = state.cypher.queryResult[reqKey].response.query
-        data = state.cypher.queryResult[reqKey].response.data
+        query = state.cypher.queryResult[refKey].response.query
+        data = state.cypher.queryResult[refKey].response.data
     }
 
     return {

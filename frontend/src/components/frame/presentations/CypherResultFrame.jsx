@@ -6,30 +6,30 @@ import CypherResultTableContainer from '../../cypherresult/containers/CypherResu
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer'
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer'
 
-const CypherResultFrame = ({reqKey, reqString, executeCypherQuery}) => {
+const CypherResultFrame = ({refKey, reqString, removeFrame, executeCypherQuery}) => {
 
       const dispatch = useDispatch();
   
       useEffect(() => {
-          dispatch(() =>executeCypherQuery([reqKey, reqString]));
-      }, [reqKey, reqString, executeCypherQuery, dispatch])
+          dispatch(() =>executeCypherQuery([refKey, reqString]));
+      }, [refKey, reqString, executeCypherQuery, dispatch])
 
     return (
         <div className="card mt-3">
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-download fa-lg"
+                    <div className="frame-head-button card-title-collapsed card-title-close px-3"><span className="fa fa-download fa-lg"
                         aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
+                    <div className="frame-head-button card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
                         aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3" data-toggle="collapse"
+                    <div className="frame-head-button card-title-collapsed card-title-close px-3" data-toggle="collapse"
                         data-target="#graphCardBody" aria-expanded="false" aria-controls="graphCardBody"><span
                             className="fa fa-lg" aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3">
+                    <div className="frame-head-button card-title-collapsed card-title-close px-3">
                         <span className="fa fa-refresh fa-lg" aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                    <div className="frame-head-button card-title-collapsed card-title-close pl-3">
+                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></div>
                 </div>
             </div>
             <div className="card-body card-body-graph collapse show" id="graphCardBody">
@@ -58,19 +58,19 @@ const CypherResultFrame = ({reqKey, reqString, executeCypherQuery}) => {
                         <Tab.Content className="graph-card-content container-fluid" >
 
                             <Tab.Pane eventKey="graph" style={{ height:'100%' }}>
-                                <CypherResultCytoscapeContainer reqKey={reqKey}/>
+                                <CypherResultCytoscapeContainer refKey={refKey}/>
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
-                                <CypherResultTableContainer reqKey={reqKey}/>                                
+                                <CypherResultTableContainer refKey={refKey}/>                                
                             </Tab.Pane>
                             
                             <Tab.Pane eventKey="text">
-                                <CypherResultTextContainer reqKey={reqKey}/>                                
+                                <CypherResultTextContainer refKey={refKey}/>                                
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="code">
-                                <CypherResultMetaContainer reqKey={reqKey}/>
+                                <CypherResultMetaContainer refKey={refKey}/>
                             </Tab.Pane>
 
                         </Tab.Content>

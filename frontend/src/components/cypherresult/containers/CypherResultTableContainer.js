@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import CypherResultTable from '../presentations/CypherResultTable'
 
 const mapStateToProps = (state, ownProps) => {
-    const { reqKey } = ownProps
+    const { refKey } = ownProps
     const generateTableData = (data) => {
         let columns = []
         let rows = []
@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
         return { columns: columns, rows: rows }
     }
     return {
-        data : generateTableData(state.cypher.queryResult[reqKey])
+        data : generateTableData(state.cypher.queryResult[refKey])
     }
 }
 

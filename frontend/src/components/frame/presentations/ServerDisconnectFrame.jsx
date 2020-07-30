@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {useDispatch} from 'react-redux'
 
-const ServerDisconnectFrame = ({reqString, disconnectToAgensGraph, addFrame, addAlert}) => {
+const ServerDisconnectFrame = ({refKey, reqString, disconnectToAgensGraph, addFrame, removeFrame, addAlert}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,14 +18,14 @@ const ServerDisconnectFrame = ({reqString, disconnectToAgensGraph, addFrame, add
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                 <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
+                    <div className="frame-head-button card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
                         aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3" data-toggle="collapse"
+                    <div className="frame-head-button card-title-collapsed card-title-close px-3" data-toggle="collapse"
                         data-target="#disconnectionCardBody" aria-expanded="false"
                         aria-controls="disconnectionCardBody"><span className="fa fa-lg" aria-hidden="true"></span>
                     </div>
-                    <div className="card-title-collapsed card-title-close pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                    <div className="frame-head-button card-title-collapsed card-title-close pl-3">
+                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></div>
                 </div>
             </div>
             <div className="card-body collapse show" id="disconnectionCardBody">
