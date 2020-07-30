@@ -1,7 +1,7 @@
 import React from 'react'
 
 const ServerStatusFrame = ({reqString, serverInfo, frameIndex }) => {
-    const { host, port, userName, databaseName, graphPath } = serverInfo;
+    const { host, port, user, database, graph } = serverInfo;
     return (
         <div className="card mt-3">
             <div className="card-header">
@@ -24,9 +24,9 @@ const ServerStatusFrame = ({reqString, serverInfo, frameIndex }) => {
                         <p>This is your current connection information.</p>
                     </div>
                     <div className="col-9">
-                        <p>You are connected as user <strong>{userName}</strong></p>
-                        <p>to <strong>{host}:{port}/{databaseName}</strong></p>
-                        <p>Graph path has been set to <strong>{graphPath}</strong></p>
+                        <p>You are connected as user <strong>{user}</strong></p>
+                        <p>to <strong>{host}:{port}/{database}</strong></p>
+                        <p>Graph path has been set to <strong>{graph}</strong></p>
                     </div>
                 </div>
             </div>

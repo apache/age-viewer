@@ -1,9 +1,14 @@
 import React, {useEffect} from 'react'
+import {useDispatch} from 'react-redux'
 
-const ServerDisconnectFrame = ({reqString, disconnectToAgensGraph}) => {
+const ServerDisconnectFrame = ({reqString, disconnectToAgensGraph, addFrame, addAlert}) => {
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        disconnectToAgensGraph();
-    }, [disconnectToAgensGraph])
+        dispatch(() => disconnectToAgensGraph())
+        dispatch(() => addFrame(':server connect'));
+        dispatch(() => addAlert('NoticeServerDisconnected'));
+    }, [dispatch, disconnectToAgensGraph, addFrame, addAlert])
     
 
 

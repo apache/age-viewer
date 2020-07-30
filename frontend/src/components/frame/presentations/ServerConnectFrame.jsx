@@ -1,6 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-const ServerConnectFrame = ({reqString, connectToAgensGraph}) => {
+const ServerConnectFrame = ({reqString, connectToAgensGraph, addFrame, addAlert}) => {
+    const [formData, setFormData] = useState({})
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value.trim()
+          });
+    }
+
     return (
         < div className="card mt-3" >
             <div className="card-header">
@@ -24,36 +33,36 @@ const ServerConnectFrame = ({reqString, connectToAgensGraph}) => {
                     <div className="col-9">
                         <form>
                             <fieldset className="form-group">
-                                <label htmlFor="connectUrl">Connect URL</label>
-                                <input type="text" className="form-control" id="connectUrl" name="connectUrl" />
+                                <label htmlFor="host">Connect URL</label>
+                                <input type="text" className="form-control" id="host" name="host" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectPort">Connect Port</label>
-                                <input type="number" className="form-control" id="connectPort" name="connectPort" />
+                                <label htmlFor="port">Connect Port</label>
+                                <input type="number" className="form-control" id="port" name="port" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectDatabaseName">Database Name</label>
-                                <input type="text" className="form-control" id="connectDatabaseName"
-                                    name="connectDatabaseName" />
+                                <label htmlFor="database">Database Name</label>
+                                <input type="text" className="form-control" id="database"
+                                    name="database" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectGraphPath">Graph Path</label>
-                                <input type="text" className="form-control" id="connectGraphPath"
-                                    name="connectGraphPath" />
+                                <label htmlFor="graph">Graph Path</label>
+                                <input type="text" className="form-control" id="graph"
+                                    name="graph" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectUserName">User Name</label>
-                                <input type="text" className="form-control" id="connectUserName"
-                                    name="connectUserName" />
+                                <label htmlFor="user">User Name</label>
+                                <input type="text" className="form-control" id="user"
+                                    name="user" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectPassword">Password</label>
-                                <input type="password" className="form-control" id="connectPassword"
-                                    name="connectPassword" />
+                                <label htmlFor="password">Password</label>
+                                <input type="password" className="form-control" id="password"
+                                    name="password" onChange={handleChange}/>
                             </fieldset>
                             
                         </form>
-                        <button className="btn btn-info" onClick={connectToAgensGraph}>CONNECT</button>
+                        <button className="btn btn-info" onClick={() => [connectToAgensGraph(formData), addAlert('NoticeServerConnected')]}>CONNECT</button>
                     </div>
                 </div>
             </div>
