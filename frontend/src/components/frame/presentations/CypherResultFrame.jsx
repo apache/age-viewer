@@ -57,7 +57,7 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
                             </Nav.Item>
 
                         </Nav>
-                        <Tab.Content className="graph-card-content container-fluid" >
+                        <Tab.Content className="graph-card-content container-fluid graph-tabpanel">
 
                             <Tab.Pane eventKey="graph" style={{ height: '100%' }}>
                                 <CypherResultCytoscapeContainer refKey={refKey} />

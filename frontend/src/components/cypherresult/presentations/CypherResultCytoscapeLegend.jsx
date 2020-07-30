@@ -9,20 +9,19 @@ const CypherResultCytoscapeLegend = ({legendData}) => {
 
 
   for (const [label, color] of Object.entries(nodeLegend)) {
-    nodeBadges.push(<Badge className="px-3 mx-1" pill key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
+    nodeBadges.push(<Badge className="px-3 py-2 mx-1 my-2" pill key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
   }
 
   for (const [label, color] of Object.entries(edgeLegend)) {
-    edgeBadges.push(<Badge className="px-3 mx-1" key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
+    edgeBadges.push(<Badge className="px-3 py-2 mx-1 my-2" key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
   }
   
-    return <div className="legend-area pt-2" style={{ width: '100%', height:'50px', position:'absolute', 'zIndex':100}}>
-      <div className="nodeLegend" style={{ width: '100%' }}>
+    return <div className="legend-area" style={{ width: '100%'}}>
+      <div className="nodeLegend">
       {nodeBadges}
       </div>
-      <div className="edgeLegend" style={{ width: '100%' }}>
-      {edgeBadges}
-      </div>
+      {edgeBadges.length > 0 ? <div className="edgeLegend">{edgeBadges}</div> : ''}
+      
     </div>
 }
 
