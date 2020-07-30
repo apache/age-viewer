@@ -7,11 +7,7 @@ const FrameSlice = createSlice({
   reducers: {
     addFrame: {
       reducer: (state, action) => {
-        let reqString = action.payload.reqString
-
-        if (action.payload.reqString.current) {
-          reqString = action.payload.reqString.current.value.trim().toLowerCase()
-        }
+        const reqString = action.payload.reqString.trim().toLowerCase()
 
         if (reqString === ':server status') {
           state.unshift({ frameName: 'ServerStatus', frameProps: { key: uuid(), reqString: reqString } })

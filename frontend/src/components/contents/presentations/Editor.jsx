@@ -23,7 +23,7 @@ const Editor = ({ onClick, addAlert, alertList, serverInfo }) => {
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
             return;
         } else {
-            dispatch(() => onClick(reqString))            
+            dispatch(() => onClick(reqString.current.value))            
             return;
         }
     }; 
