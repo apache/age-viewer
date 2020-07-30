@@ -5,7 +5,7 @@ import ServerDisconnect from '../../../components/frame/containers/ServerDisconn
 import CypherResult from '../../../components/frame/containers/CypherResultContainers'
 
 
-const Frames = ({ frameList }) => {
+const Frames = ({ frameList, serverInfo }) => {
     const frames = frameList.map((frame) => {
         if (frame.frameName === 'ServerStatus') {
             return <ServerStatus key={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
@@ -18,6 +18,7 @@ const Frames = ({ frameList }) => {
         }
         return '';
     });
+
     return (
         <div className="container-fluid frame-area pt-3">
             {frames}

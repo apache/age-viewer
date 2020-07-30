@@ -2,16 +2,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const connectToAgensGraph = createAsyncThunk(
   'database/connectToAgensGraph',
-  async () => {
+  async (formData) => {
     const response = await fetch('/api/v1/db/connect', 
     {method: 'POST',
       headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
       },
-      body: JSON.stringify({host:"192.168.0.68", port:15432, database: "covid19", graph:"corona_spread", user:"consulting", password:"bitnine123!"})
+      body: JSON.stringify(formData)
     })
-    return response.data
+    const res = await response.json();
+    return res.data
   }
 )
 
@@ -26,21 +27,33 @@ export const disconnectToAgensGraph = createAsyncThunk(
 const DatabaseSlice = createSlice({
   name: 'database',
   initialState: {
-    host: '192.168.0.68',
-    port: 15432,
-    user: 'consulting',
-    password: 'bitnine123!',
-    database: 'covid19',
-    graph: 'corona_spread',
-    status: ''
+    host: '',
+    port: '',
+    user: '',
+    password: '',
+    database: '',
+    graph: '',
+    status: 'disconnected'
   },
   reducers: {
   },
   extraReducers: {
     [connectToAgensGraph.fulfilled]: (state, action) => {
+      state.host = action.payload.host !== '' ? action.payload.host : state.host
+      state.port = action.payload.port !== '' ? action.payload.port : state.port
+      state.user = action.payload.user !== '' ? action.payload.user : state.user
+      state.password = action.payload.password !== '' ? action.payload.password : state.password
+      state.database = action.payload.database !== '' ? action.payload.database : state.database
+      state.graph = action.payload.graph !== '' ? action.payload.graph : state.graph
       state.status = 'connected'
     },     
     [disconnectToAgensGraph.fulfilled]: (state, action) => {
+      state.host = ''
+      state.port = ''
+      state.user = ''
+      state.password = ''
+      state.database = ''
+      state.graph = ''
       state.status = 'disconnected'
     }
   }

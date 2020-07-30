@@ -1,5 +1,6 @@
 import {connect} from 'react-redux'
 import {addFrame} from '../../../features/frame/FrameSlice'
+import {addAlert} from '../../../features/alert/AlertSlice'
 import Contents from '../presentations/Contents'
 /*
 import React from 'react'
@@ -13,6 +14,7 @@ const mapStateToProps = (state)  => {
     return {
         activeMenuName: state.navigator.activeMenu,
         frameList: state.frames,
+        alertList: state.alerts,
         database: state.database
     }
 }
@@ -50,7 +52,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 */
 
-const mapDispatchToProps = { addFrame }
+const mapDispatchToProps = { addFrame, addAlert }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contents);
 

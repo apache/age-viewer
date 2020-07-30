@@ -3,11 +3,15 @@ import uuid from 'react-uuid'
 
 const FrameSlice = createSlice({
   name: 'frames',
-  initialState: [],
+  initialState: [{frameName : 'ServerConnect', frameProps : {key : uuid(), reqString : ':server connect'}}],
   reducers: {
     addFrame: {
       reducer: (state, action) => {
-        const reqString = action.payload.reqString.current.value.trim().toLowerCase()
+        let reqString = action.payload.reqString
+
+        if (action.payload.reqString.current) {
+          reqString = action.payload.reqString.current.value.trim().toLowerCase()
+        }        
 
         if (reqString === ':server status') {
           state.unshift({frameName : 'ServerStatus', frameProps : {key : uuid(), reqString : reqString}})
