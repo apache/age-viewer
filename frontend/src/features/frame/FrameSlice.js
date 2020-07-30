@@ -1,26 +1,22 @@
-import React from 'react'
 import { createSlice } from '@reduxjs/toolkit'
-import ServerStatus from '../../components/frame/containers/ServerStatusContainer'
-import ServerConnectFrame from '../../components/frame/presentations/ServerConnectFrame'
-import ServerDisconnectFrame from '../../components/frame/presentations/ServerDisconnectFrame'
-import CypherResultFrame from '../../components/frame/presentations/CypherResultFrame'
+import uuid from 'react-uuid'
 
 const FrameSlice = createSlice({
   name: 'frames',
-  initialState: [],
+  initialState: [{ frameName: 'ServerConnect', frameProps: { key: uuid(), reqString: ':server connect' } }],
   reducers: {
     addFrame: {
       reducer: (state, action) => {
-        const reqString = action.payload.reqString.current.value.trim().toLowerCase()
+        const reqString = action.payload.reqString.trim().toLowerCase()
 
         if (reqString === ':server status') {
-          state.unshift(<ServerStatus />)
+          state.unshift({ frameName: 'ServerStatus', frameProps: { key: uuid(), reqString: reqString } })
         } else if (reqString === ':server connect') {
-          state.unshift(<ServerConnectFrame />)
+          state.unshift({ frameName: 'ServerConnect', frameProps: { key: uuid(), reqString: reqString } })
         } else if (reqString === ':server disconnect') {
-          state.unshift(<ServerDisconnectFrame />)
+          state.unshift({ frameName: 'ServerDisconnect', frameProps: { key: uuid(), reqString: reqString } })
         } else if (reqString.startsWith('match')) {
-          state.unshift(<CypherResultFrame />)
+          state.unshift({ frameName: 'CypherResultFrame', frameProps: { key: uuid(), reqString: reqString } })
         } else {
           alert("Can't understand your command")
           return;
@@ -29,10 +25,20 @@ const FrameSlice = createSlice({
       prepare: (reqString) => {
         return { payload: { reqString } }
       }
+    },
+    removeFrame: {
+      reducer: (state, action) => {
+        const frameKey = action.payload.refKey
+        state.splice(state.findIndex((frame) => (frame.frameProps.key === frameKey)), 1)        
+      },
+      prepare: (refKey) => {
+        return { payload: { refKey } }
+      }
+
     }
   }
 })
 
-export const { addFrame } = FrameSlice.actions
+export const { addFrame, removeFrame } = FrameSlice.actions
 
 export default FrameSlice.reducer

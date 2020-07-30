@@ -1,28 +1,42 @@
-import React from 'react'
-import { Tab, Nav } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux'
+import { Tab, Nav, Collapse } from 'react-bootstrap';
+import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
+import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
+import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer'
+import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer'
 
-const CypherResultFrame = () => {
+const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery }) => {
+    const [isExpanded, setIsExpanded] = useState(true)
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(() => executeCypherQuery([refKey, reqString]));
+    }, [refKey, reqString, executeCypherQuery, dispatch])
+
     return (
         <div className="card mt-3">
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
-                    <div className="mr-auto">$ MATCH (v)-[r:has]-(v2) RETURN v, r, v2 LIMIT 30;</div>
-                    <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-download fa-lg"
-                        aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
-                        aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3" data-toggle="collapse"
-                        data-target="#graphCardBody" aria-expanded="false" aria-controls="graphCardBody"><span
-                            className="fa fa-lg" aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3">
-                        <span className="fa fa-refresh fa-lg" aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                    <div className="mr-auto"><strong> $ {reqString} </strong></div>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-download fa-lg"
+                        aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
+                        aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
+                        aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
+                        <span className="fa fa-lg" aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3">
+                        <span className="fa fa-refresh fa-lg" aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link pl-3">
+                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
             </div>
-            <div className="card-body card-body-graph collapse show" id="graphCardBody">
+            <Collapse in={isExpanded}>
+            <div className="card-body card-body-graph collapse" id={refKey}>
                 <div className="d-flex h-100">
-                    <Tab.Container defaultActiveKey="profile">
+                    <Tab.Container defaultActiveKey="graph">
 
                         <Nav variant="pills" className="flex-column graph-card-nav">
 
@@ -39,91 +53,33 @@ const CypherResultFrame = () => {
                             </Nav.Item>
 
                             <Nav.Item>
-                                <Nav.Link eventKey="code"><span className="fa fa-terminal" aria-hidden="true"></span><br />Code</Nav.Link>
+                                <Nav.Link eventKey="code"><span className="fa fa-terminal" aria-hidden="true"></span><br />Meta</Nav.Link>
                             </Nav.Item>
 
                         </Nav>
-                        <Tab.Content className="graph-card-content container-fluid">
+                        <Tab.Content className="graph-card-content container-fluid" >
 
-                            <Tab.Pane eventKey="graph">
-                                <h5>graph</h5>
-                                <p>graph</p>
+                            <Tab.Pane eventKey="graph" style={{ height: '100%' }}>
+                                <CypherResultCytoscapeContainer refKey={refKey} />
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
-                                <h5>Table</h5>
-                                <table className="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>v</th>
-                                            <th>r</th>
-                                            <th>v2</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                        <tr>
-                                            <td>d1</td>
-                                            <td>d2</td>
-                                            <td>d3</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <CypherResultTableContainer refKey={refKey} />
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="text">
-                                <h5>Text</h5>
-                                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+                                <CypherResultTextContainer refKey={refKey} />
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="code">
-                                <h5>Code</h5>
-                                <p>code</p>
+                                <CypherResultMetaContainer refKey={refKey} />
                             </Tab.Pane>
 
                         </Tab.Content>
                     </Tab.Container>
                 </div>
             </div>
+            </Collapse>
         </div>
 
     );

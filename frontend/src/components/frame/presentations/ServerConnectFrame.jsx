@@ -1,61 +1,76 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {Collapse} from 'react-bootstrap'
 
-const ServerConnectFrame = () => {
+const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame, addAlert}) => {
+    const [formData, setFormData] = useState({})
+    const [isExpanded, setIsExpanded] = useState(true)
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value.trim()
+          });
+    }
+
     return (
         < div className="card mt-3" >
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
-                    <div className="mr-auto">$ :server connect</div>
-                    <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
-                        aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3" data-toggle="collapse"
-                        data-target="#connectCardBody" aria-expanded="false" aria-controls="connectCardBody">
-                        <span className="fa fa-lg" aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                    <div className="mr-auto"><strong> $ {reqString} </strong></div>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
+                        aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
+                        aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
+                        <span className="fa fa-lg" aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link pl-3">
+                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
             </div>
-            <div className="card-body collapse show" id="connectCardBody">
+
+            <Collapse in={isExpanded}>
+            <div className="card-body collapse" id={refKey}>
                 <div className="row">
                     <div className="col-3">
                         <h3>Connect to AgensGraph</h3>
                         <p>Database access might require and authenticated connection.</p>
                     </div>
                     <div className="col-9">
-                        <form action="#">
+                        <form>
                             <fieldset className="form-group">
-                                <label htmlFor="connectUrl">Connect URL</label>
-                                <input type="text" className="form-control" id="connectUrl" name="connectUrl" />
+                                <label htmlFor="host">Connect URL</label>
+                                <input type="text" className="form-control" id="host" name="host" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectPort">Connect Port</label>
-                                <input type="number" className="form-control" id="connectPort" name="connectPort" />
+                                <label htmlFor="port">Connect Port</label>
+                                <input type="number" className="form-control" id="port" name="port" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectDatabaseName">Database Name</label>
-                                <input type="text" className="form-control" id="connectDatabaseName"
-                                    name="connectDatabaseName" />
+                                <label htmlFor="database">Database Name</label>
+                                <input type="text" className="form-control" id="database"
+                                    name="database" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectGraphPath">Graph Path</label>
-                                <input type="text" className="form-control" id="connectGraphPath"
-                                    name="connectGraphPath" />
+                                <label htmlFor="graph">Graph Path</label>
+                                <input type="text" className="form-control" id="graph"
+                                    name="graph" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectUserName">User Name</label>
-                                <input type="text" className="form-control" id="connectUserName"
-                                    name="connectUserName" />
+                                <label htmlFor="user">User Name</label>
+                                <input type="text" className="form-control" id="user"
+                                    name="user" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="connectPassword">Password</label>
-                                <input type="password" className="form-control" id="connectPassword"
-                                    name="connectPassword" />
+                                <label htmlFor="password">Password</label>
+                                <input type="password" className="form-control" id="password"
+                                    name="password" onChange={handleChange}/>
                             </fieldset>
-                            <button type="submit" className="btn btn-info">Connect</button>
+                            
                         </form>
+                        <button className="btn btn-info" onClick={() => [connectToAgensGraph(formData), addAlert('NoticeServerConnected')]}>CONNECT</button>
                     </div>
                 </div>
             </div>
+            </Collapse>
             <div className="card-footer">
 
             </div>

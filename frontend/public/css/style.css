@@ -168,11 +168,11 @@ a[data-toggle="collapse"] {
     margin: 0.5rem 0;
 }
 
-[data-toggle="collapse"] .fa:before {   
+[aria-expanded="true"] .fa:before {   
     content: "\f077";
 }
 
-[data-toggle="collapse"].collapsed .fa:before {
+[aria-expanded="false"] .fa:before {
     content: "\f078";
 }
 
@@ -210,4 +210,13 @@ a.nav-link {
 
 .alert {
     margin-bottom: 0px;
+}
+
+.chart-area {
+    height:100%; 
+    width:100%;
+}
+
+.frame-head-button:hover {
+    color: #212121 !important;
 }

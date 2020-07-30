@@ -1,38 +1,61 @@
 import React, {useRef}  from 'react';
+import {useDispatch} from 'react-redux'
+import AlertContainers from '../../alert/containers/AlertContainers'
 
 
-const Editor = ({ onClick }) => {
-    const reqString = useRef()
-
+const Editor = ({ onClick, addAlert, alertList, serverInfo }) => {
+    const dispatch = useDispatch();
+    let reqString = useRef()
+    const clearReqString = () => (reqString.current.value = '' );
+    
+    const onEnter = (e) => {
+        if(e.keyCode === 13){
+            addFrame()
+            clearReqString()
+         }
+    }
+    
+    const addFrame = () => {
+        if (serverInfo.status === 'disconnected' && reqString.current.value.startsWith('match')) {
+            dispatch(() => addAlert('ErrorNoDatabaseConnected'))
+            return;
+        } if (serverInfo.status === 'disconnected' && reqString.current.value === ':server status') {
+            dispatch(() => addAlert('ErrorNoDatabaseConnected'))
+            return;
+        } else {
+            dispatch(() => onClick(reqString.current.value))            
+            return;
+        }
+    }; 
+    const alerts = alertList.map((alert) => {
+        return <AlertContainers key={alert.alerProps.key} alertKey={alert.alerProps.key} alertType={alert.alertType}/>;
+    });
+   
     return (
         <div className="container-fluid">
-            <div className="card">
-                <div className="container-fluid editor-area card-header">
-                    <div className="input-group">
-                        <input type="text" className="form-control col-11" placeholder="$"
-                            aria-label="AgensBrowser Editor" aria-describedby="editor-buttons" ref={reqString} />
-                        <div className="input-group-append ml-auto" id="editor-buttons">
-                            <button className="btn btn-link" type="button"><span className="fa fa-star-o fa-lg"
-                                    aria-hidden="true"></span></button>
-                            <button className="btn btn-link" type="button"><span className="fa fa-eraser fa-lg"
-                                    aria-hidden="true"></span></button>
-                            <button className="btn btn-link" type="button" onClick={() => onClick(reqString)}><span className="fa fa-play-circle-o fa-lg"
-                                    aria-hidden="true"></span></button>
-                        </div>
+        <div className="card">
+            <div className="container-fluid editor-area card-header">
+                <div className="input-group">
+                    <input type="text" className="form-control col-11" placeholder="$"
+                        aria-label="AgensBrowser Editor" aria-describedby="editor-buttons" onKeyDown={onEnter} ref={reqString}/>
+                    <div className="input-group-append ml-auto" id="editor-buttons">
+                        <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-star-o fa-lg"
+                                aria-hidden="true"></span></button>
+                        <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-eraser fa-lg"
+                                aria-hidden="true"></span></button>
+                        <button className="frame-head-button btn btn-link" type="button" onClick={() => [addFrame(), clearReqString()]}><span className="fa fa-play-circle-o fa-lg"
+                                aria-hidden="true"></span></button>
                     </div>
                 </div>
             </div>
-            <div className="alert alert-primary alert-dismissible fade show" role="alert">
-                Database access not availble. Please use <a href="#" className="badge badge-light"><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to
-                estableish connection. There's
-                a graph waiting for you.
-                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+        </div>
+        {alerts}
+
+
         </div>
     );
 }
+
+
 
 export default Editor
