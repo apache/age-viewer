@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
+import {Collapse} from 'react-bootstrap'
 
-const ServerConnectFrame = ({reqString, connectToAgensGraph, addFrame, addAlert}) => {
+const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame, addAlert}) => {
     const [formData, setFormData] = useState({})
+    const [isExpanded, setIsExpanded] = useState(true)
 
     const handleChange = (e) => {
         setFormData({
@@ -15,16 +17,18 @@ const ServerConnectFrame = ({reqString, connectToAgensGraph, addFrame, addAlert}
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <div className="card-title-collapsed card-title-close px-3"><span className="fa fa-paperclip fa-lg"
-                        aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close px-3" data-toggle="collapse"
-                        data-target="#connectCardBody" aria-expanded="false" aria-controls="connectCardBody">
-                        <span className="fa fa-lg" aria-hidden="true"></span></div>
-                    <div className="card-title-collapsed card-title-close pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true"></span></div>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
+                        aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
+                        aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls="connectCardBody">
+                        <span className="fa fa-lg" aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link pl-3">
+                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
             </div>
-            <div className="card-body collapse show" id="connectCardBody">
+
+            <Collapse in={isExpanded}>
+            <div className="card-body collapse" id="connectCardBody">
                 <div className="row">
                     <div className="col-3">
                         <h3>Connect to AgensGraph</h3>
@@ -66,6 +70,7 @@ const ServerConnectFrame = ({reqString, connectToAgensGraph, addFrame, addAlert}
                     </div>
                 </div>
             </div>
+            </Collapse>
             <div className="card-footer">
 
             </div>

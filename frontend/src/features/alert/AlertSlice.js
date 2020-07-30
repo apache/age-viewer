@@ -22,9 +22,6 @@ const AlertSlice = createSlice({
       prepare: (alertType) => {
         return { payload: { alertType } }
       }
-    },
-    removeAlert: {
-
     }
   }
 })

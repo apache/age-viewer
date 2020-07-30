@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import CypherResultCytoscape from '../presentations/CypherResultCytoscape'
 
 const mapStateToProps = (state, ownProps) => {
-    const { reqKey } = ownProps
+    const { refKey } = ownProps
 
     const getRandomColor = () => {
         var letters = '0123456789ABCDEF';
@@ -44,7 +44,7 @@ const mapStateToProps = (state, ownProps) => {
 
 
     return {
-        data: generateCytoscapeElement(state.cypher.queryResult[reqKey])
+        data: generateCytoscapeElement(state.cypher.queryResult[refKey])
     }
 }
 
