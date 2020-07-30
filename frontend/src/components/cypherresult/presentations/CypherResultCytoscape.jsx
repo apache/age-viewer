@@ -2,6 +2,7 @@ import React, {useRef, useLayoutEffect, useEffect, useState} from 'react';
 import Cytoscape from 'cytoscape';
 import COSEBilkent from 'cytoscape-cose-bilkent';
 import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
+import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
 
 Cytoscape.use(COSEBilkent);
 
@@ -80,14 +81,27 @@ const CypherResultCytoscape = ({data}) => {
         pixelRatio: 'auto'
       };
   
+
+      if (Object.keys(data.legend.edgeLegend).length > 0) {
+        setDimensions({
+          width: targetRef.current.offsetWidth,
+          height: targetRef.current.offsetHeight - 47
+        });
+      }
+
       Cytoscape(config);
+      
+
     }, [data]);
 
 
 
-    return <div className="chart-area" ref={targetRef}>
-            <CypherResultCytoscapeLegend legendData={data['legend']}/>
-            <div ref={containerRef} style={ { width: dimensions.width , height: dimensions.height, position:'absolute', 'zIndex':1 } } />
+    return <div className="chart-frame-area" style={{ height:'100%', width:'100%' }}>
+            <CypherResultCytoscapeLegend legendData={data['legend']} />
+            <div className="chart-area" ref={targetRef} >
+              <div ref={containerRef} style={ { width: dimensions.width , height: dimensions.height } } />
+            </div>
+            <CypherResultCytoscapeFooter />
           </div>
 }
 
