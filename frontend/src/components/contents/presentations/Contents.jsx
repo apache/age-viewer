@@ -1,12 +1,23 @@
 import React from 'react';
-import Editor from '../presentations/Editor'
-import Frames from '../presentations/Frames'
+import {useDispatch} from 'react-redux'
+import EditorContainer from '../containers/Editor'
+import FramesContainer from '../containers/Frames'
 
-const Contents = ({ activeMenuName, frameList, alertList, addFrame, addAlert, database }) => {
+const Contents = ({ activeMenuName, database, getConnectionStatus, addFrame }) => {
+    const dispatch = useDispatch();
+
+    console.log(database.status)
+    if (database.status === 'init') {
+        dispatch(() => getConnectionStatus())
+    }
+    else if (database.status === 'disconnected') {
+        dispatch(() => addFrame(':server connect'))
+    }
+
     return (
         <div id="content" className={activeMenuName !== "" ? " active " : ""}>
-                <Editor onClick={addFrame} addAlert={addAlert} alertList={alertList} serverInfo={database} />
-                <Frames frameList={frameList} serverInfo={database} />
+                <EditorContainer />
+                <FramesContainer />
         </div>
     );
 }
