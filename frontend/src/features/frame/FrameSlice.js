@@ -3,7 +3,7 @@ import uuid from 'react-uuid'
 
 const FrameSlice = createSlice({
   name: 'frames',
-  initialState: [{ frameName: 'ServerConnect', frameProps: { key: uuid(), reqString: ':server connect' } }],
+  initialState: [],
   reducers: {
     addFrame: {
       reducer: (state, action) => {

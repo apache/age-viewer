@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
+import {getConnectionStatus} from '../../../features/database/DatabaseSlice'
 import {addFrame} from '../../../features/frame/FrameSlice'
-import {addAlert} from '../../../features/alert/AlertSlice'
 import Contents from '../presentations/Contents'
 /*
 import React from 'react'
@@ -13,8 +13,6 @@ import CypherResultFrame from '../../frame/presentations/CypherResultFrame'
 const mapStateToProps = (state)  => {
     return {
         activeMenuName: state.navigator.activeMenu,
-        frameList: state.frames,
-        alertList: state.alerts,
         database: state.database
     }
 }
@@ -52,7 +50,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 */
 
-const mapDispatchToProps = { addFrame, addAlert }
+const mapDispatchToProps = { getConnectionStatus, addFrame }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contents);
 
