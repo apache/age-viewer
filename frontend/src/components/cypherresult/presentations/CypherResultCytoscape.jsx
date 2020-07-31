@@ -12,12 +12,6 @@ const CypherResultCytoscape = ({data}) => {
     const [dimensions, setDimensions] = useState({width: 0 , height: 0});
 
     useLayoutEffect(() => {
-        if (targetRef.current) {
-          setDimensions({
-            width: targetRef.current.offsetWidth,
-            height: targetRef.current.offsetHeight
-          });
-        }
     }, []);  
 
 
@@ -81,13 +75,13 @@ const CypherResultCytoscape = ({data}) => {
         pixelRatio: 'auto'
       };
   
-
-      if (Object.keys(data.legend.edgeLegend).length > 0) {
+      if (targetRef.current) {
+        const targetRefHeight = Object.keys(data.legend.edgeLegend).length > 0 ? targetRef.current.offsetHeight - 47 : targetRef.current.offsetHeight
         setDimensions({
-          width: targetRef.current.offsetWidth,
-          height: targetRef.current.offsetHeight - 47
+          width: '100%',
+          height: targetRefHeight
         });
-      }
+      }      
 
       Cytoscape(config);
       
