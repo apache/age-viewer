@@ -4,18 +4,22 @@ const MenuSlice = createSlice({
   name: 'navigator',
   initialState: {
     menuList: [['home', 'home'], ['setting', 'cog']],
-    activeMenu: ''
+    activeMenu: 'init',
+    isActive: false
   },
   reducers: {
     toggleMenu: {
       reducer: (state, action) => {
+        let isActive = true
         if (state.activeMenu === action.payload.selectedMenuName) {
           action.payload.selectedMenuName = ''
+          isActive = false
         }
         state.activeMenu = action.payload.selectedMenuName
+        state.isActive = isActive
       },
-      prepare: (activeMenuName, selectedMenuName) => {
-        return { payload : {activeMenuName, selectedMenuName}}
+      prepare: (selectedMenuName) => {
+        return { payload : {selectedMenuName}}
       }
     }
   }

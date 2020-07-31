@@ -3,9 +3,9 @@ import SidebarHome from './SidebarHome'
 import SidebarSetting from './SidebarSetting'
 
 
-const Sidebar = ({ activeMenuName, changeTheme }) => {
+const Sidebar = ({ activeMenuName, isActive, changeTheme }) => {
     return (        
-        <div id="sidebar" className={activeMenuName !== "" ? " active " : ""}>
+        <div id="sidebar" className={isActive ? " active " : ""}>
                 <div className="tab-content">
                     <div className={"tab-pane fade" + (activeMenuName === "home" ? " active show " : "") } role="tabpanel" aria-labelledby="side-home-tab">
                         <SidebarHome />

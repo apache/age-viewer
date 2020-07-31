@@ -12,7 +12,6 @@ import CypherResultFrame from '../../frame/presentations/CypherResultFrame'
 
 const mapStateToProps = (state)  => {
     return {
-        activeMenuName: state.navigator.activeMenu,
         database: state.database
     }
 }

@@ -4,7 +4,8 @@ import Sidebar from '../presentations/Sidebar'
 
 const mapStateToProps = (state) => {
     return {
-        activeMenuName: state.navigator.activeMenu
+        activeMenuName: state.navigator.activeMenu,
+        isActive: state.navigator.isActive
     }
 }
 

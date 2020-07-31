@@ -86,7 +86,7 @@ body {
     width: 70px;
     background-color: var(--navbar-color);
 }
-
+/*
 #sidebar {
     width: 250px;
     position: fixed;
@@ -99,9 +99,20 @@ body {
     transition: all 0.3s;
     margin-left: -250px;
 }
-
+*/
+#sidebar {
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 70px;
+    height: 100vh;
+    z-index: 999;
+    background-color: var(--sidebar-color);
+    color: #fff;
+    transition: all 0.3s;
+}
 #sidebar.active {
-    margin-left: 0px;
+    width: 320px;
 }
 
 a[data-toggle="collapse"] {
@@ -128,11 +139,12 @@ a[data-toggle="collapse"] {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
-
+/*
 #content.active {
     width: calc(100% - 320px);
     
 }
+*/
 
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -213,14 +225,15 @@ a.nav-link {
 }
 
 .chart-frame-area {
-    position: relative;
     height:100%; 
     width:100%;
 
 }
-.chart-area {
-    height:367px;
+#chart-area {
+    height:376px;
+    width: 100%;
 }
+
 
 .frame-head-button:hover {
     color: #212121 !important;
@@ -242,9 +255,6 @@ a.nav-link {
 .chart-footer-area {
     width: 100%;
     height: 35px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     background-color: rgba(0,0,0,.03);
     border-top: 1px solid rgba(0,0,0,.125);
 }

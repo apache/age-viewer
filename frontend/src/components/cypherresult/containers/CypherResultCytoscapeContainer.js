@@ -44,7 +44,8 @@ const mapStateToProps = (state, ownProps) => {
 
 
     return {
-        data: generateCytoscapeElement(state.cypher.queryResult[refKey])
+        data: generateCytoscapeElement(state.cypher.queryResult[refKey]),
+        isActive: state.navigator.isActive
     }
 }
 

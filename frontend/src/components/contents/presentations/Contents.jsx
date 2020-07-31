@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import EditorContainer from '../containers/Editor'
 import FramesContainer from '../containers/Frames'
 
-const Contents = ({ activeMenuName, database, getConnectionStatus, addFrame }) => {
+const Contents = ({ database, getConnectionStatus, addFrame }) => {
     const dispatch = useDispatch();
 
     console.log(database.status)
@@ -15,7 +15,7 @@ const Contents = ({ activeMenuName, database, getConnectionStatus, addFrame }) =
     }
 
     return (
-        <div id="content" className={activeMenuName !== "" ? " active " : ""}>
+        <div id="content">
                 <EditorContainer />
                 <FramesContainer />
         </div>
