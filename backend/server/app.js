@@ -1,11 +1,11 @@
-let express = require('express');
-let session = require('express-session')
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
-
-let cypherRouter = require('./api/cypher/cypherController');
-let databaseRouter = require('./api/database/databaseController');
+const express = require('express');
+const session = require('express-session')
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const supertest = require('supertest');
+const cypherRouter = require('./api/cypher/cypherController');
+const databaseRouter = require('./api/database/databaseController');
 
 let app = express();
 
@@ -22,5 +22,7 @@ app.use(cookieParser());
 
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
+
+
 
 module.exports = app;

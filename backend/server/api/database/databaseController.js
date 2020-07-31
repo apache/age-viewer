@@ -2,13 +2,13 @@ let express = require('express');
 let router = express.Router();
 
 router.get('/', (req, res, next) => {
-    let message, data;
-    if(!req.session.client) {
+    let message,
+    data = req.session.client;
+    if(!data) {
         message = 'Not Connected Database';
-        data = {};
+        data = null;
     } else {
         message = 'Connected Database';
-        data = req.session.client;
     }
 
     res.status(200).send({
