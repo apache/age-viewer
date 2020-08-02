@@ -65,7 +65,7 @@ const DatabaseSlice = createSlice({
       }
     },
     [getConnectionStatus.fulfilled]: (state, action) => {
-      if (Object.keys(action.payload).length > 0) {
+      if (action.payload) {
         return {
           host: action.payload.host
           , port: action.payload.port
