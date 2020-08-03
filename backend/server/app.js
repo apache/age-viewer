@@ -23,6 +23,9 @@ app.use(cookieParser());
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
 
+process.on('uncaughtException', function (exception) {
+    console.log(exception)
+});
 
 
 module.exports = app;
