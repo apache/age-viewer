@@ -13,31 +13,36 @@ router.post('/', function (req, res, next) {
         client.connect();
         client.query(`set graph_path=${req.session.client.graph}`);
         client.query(cmd, (err, resultSet) => {
-            let rows = resultSet.rows, columns = resultSet.fields.map((d) => d.name);
+            try {
+                let rows = resultSet.rows,
+                    columns = resultSet.fields.map((d) => d.name);
 
-            let convertedRows = rows.map((row) => {
-                let convetedObject = {};
-                for (let k in row) {
-                    if (row[k].hasOwnProperty('start')) {
-                        convetedObject[k] = convertEdge(row[k]);
-                    } else if (row[k].hasOwnProperty('id')) {
-                        convetedObject[k] = convertVertex(row[k]);
-                    } else {
-                        convetedObject[k] = row[k];
+                let convertedRows = rows.map((row) => {
+                    let convetedObject = {};
+                    for (let k in row) {
+                        if (row[k].hasOwnProperty('start')) {
+                            convetedObject[k] = convertEdge(row[k]);
+                        } else if (row[k].hasOwnProperty('id')) {
+                            convetedObject[k] = convertVertex(row[k]);
+                        } else {
+                            convetedObject[k] = row[k];
+                        }
                     }
-                }
-                return convetedObject;
-            });
+                    return convetedObject;
+                });
 
-            result = convertedRows;
-            res.status(200).json({
-                message: 'OK',
-                data: {
-                    rows: convertedRows,
-                    columns: columns,
-                },
-            });
-            client.end();
+                result = convertedRows;
+                res.status(200).json({
+                    message: 'OK',
+                    data: {
+                        rows: convertedRows,
+                        columns: columns,
+                    },
+                });
+                client.end();
+            } catch (err) {
+                next(err);
+            }
         });
     }
 });
