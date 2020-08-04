@@ -175,6 +175,18 @@ a[data-toggle="collapse"] {
     color: gray !important;
 }
 
+.card.fullscreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1040;
+}
+
+.card.fullscreen .chart-area {
+    height: calc(100% - 94px - 35px)
+}
 .card-header {
     border-bottom: 1px solid rgba(0,0,0,.125);    
 }
@@ -228,13 +240,21 @@ a.nav-link {
 }
 
 .chart-frame-area {
-    height:100%; 
     width:100%;
+    height:100%;
 
 }
-#chart-area {
-    height:376px;
+.chart-area {
+    height: 329px;
     width: 100%;
+    display: 'block';
+    overflow:hidden;
+}
+
+.chart-footer-area {
+    width: 100%;
+    background-color: rgba(0,0,0,.03);
+    border-top: 1px solid rgba(0,0,0,.125);
 }
 
 
@@ -248,16 +268,10 @@ a.nav-link {
 }
 
 .nodeLegend, .edgeLegend {
+    height: 47px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
     background-color: rgba(0,0,0,.03);
     border-bottom: 1px solid rgba(0,0,0,.125);
-}
-
-.chart-footer-area {
-    width: 100%;
-    height: 35px;
-    background-color: rgba(0,0,0,.03);
-    border-top: 1px solid rgba(0,0,0,.125);
 }
