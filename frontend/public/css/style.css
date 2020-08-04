@@ -106,7 +106,6 @@ body {
     top: 0;
     left: 70px;
     height: 100vh;
-    z-index: 999;
     background-color: var(--sidebar-color);
     color: #fff;
     transition: all 0.3s;
@@ -138,6 +137,10 @@ a[data-toggle="collapse"] {
     right: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
+}
+
+#sidebar.active~#content{
+    width: calc(100% - 390px);
 }
 /*
 #content.active {
