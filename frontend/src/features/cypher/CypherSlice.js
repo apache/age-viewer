@@ -31,9 +31,35 @@ export const executeCypherQuery = createAsyncThunk(
 const CypherSlice = createSlice({
   name: 'cypher',
   initialState: {
-    queryResult : {}
+    queryResult : {},
+    labelColor : [
+      {color: '#664B00', labels : [], index : 0},  
+      {color: '#D1B2FF', labels : [], index : 1}, 
+      {color: '#FFC19E', labels : [], index : 2}, 
+      {color: '#B2EBF4', labels : [], index : 3}, 
+      {color: '#F15F5F', labels : [], index : 4}, 
+      {color: '#C4B73B', labels : [], index : 5}, 
+      {color: '#9FC93C', labels : [], index : 6}, 
+      {color: '#FFD9EC', labels : [], index : 7}, 
+      {color: '#6799FF', labels : [], index : 8}, 
+      {color: '#FFBB00', labels : [], index : 9}, 
+      {color: '#FFB2D9', labels : [], index : 10}, 
+      {color: '#6B9900', labels : [], index : 11}
+    ]
   },
-  reducers: {
+  reducers: {    
+    setLabelColor: {
+      reducer: (state, action) => {
+        for (const [label, labelColor] of Object.entries(action.payload.newNodeLegends)) {
+          console.log(label, labelColor.index,)
+          state.labelColor[labelColor.index].labels.push(label)
+        }
+      },
+      prepare: (newNodeLegends, newEdgeLegends) => {
+        return { payload: { newNodeLegends, newEdgeLegends } }
+      }
+
+    }
   },
   extraReducers: {
     [executeCypherQuery.pending]: (state, action) => {
@@ -46,5 +72,8 @@ const CypherSlice = createSlice({
     }
   }
 })
+
+
+export const { setLabelColor } = CypherSlice.actions
 
 export default CypherSlice.reducer

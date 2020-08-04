@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createRef } from 'react';
 import { useDispatch } from 'react-redux'
 import { Tab, Nav, Collapse } from 'react-bootstrap';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
@@ -7,28 +7,57 @@ import CypherResultTextContainer from '../../cypherresult/containers/CypherResul
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer'
 
 const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery }) => {
+    const chartAreaRef = createRef()
     const [isExpanded, setIsExpanded] = useState(true)
+    const [isFullScreen, setIsFullScreen] = useState(false)
+    const [zoomRate, setZoomRate] = useState(0)
+    const [pan, setPan] = useState({x : 0, y : 0})
+    const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false)
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(() => executeCypherQuery([refKey, reqString]));
+        dispatch(() => executeCypherQuery([refKey, reqString]));       
+        setZoomRate(chartAreaRef.current.getCy().zoom())
+        setPan(chartAreaRef.current.getCy().pan())
     }, [refKey, reqString, executeCypherQuery, dispatch])
 
+    
+    const expandFrame = () => {       
+        setIsFullScreen(!isFullScreen)
+        setCyZoomingEnabled(!cyZoomingEnabled)
+        const ref = chartAreaRef.current
+        window.setTimeout(resize, 500)
+        function resize() {
+            ref.getCy().resize()           
+            ref.getCy().zoom(zoomRate)
+            ref.getCy().zoomingEnabled(!cyZoomingEnabled)
+            ref.getCy().userZoomingEnabled(!cyZoomingEnabled)
+        }
+    }
+
+    const refreshFrame = () => {
+        const ref = chartAreaRef.current
+        ref.resetChart()
+        dispatch(() => executeCypherQuery([refKey, reqString]));       
+    }
+
     return (
-        <div className="card mt-3">
+        <div className={"card " + (isFullScreen ? " fullscreen " : "mt-3")}>
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
                     <button className="frame-head-button btn btn-link px-3"><span className="fa fa-download fa-lg"
                         aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3">
+                        <span className="fa fa-expand fa-lg" aria-hidden="true" onClick={() => expandFrame()}></span></button>
+                    <button className="frame-head-button btn btn-link px-3">
+                        <span className="fa fa-refresh fa-lg" aria-hidden="true" onClick={() => refreshFrame()}></span></button>
                     <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
                         aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
                         aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
                         <span className="fa fa-lg" aria-hidden="true"></span></button>
-                    <button className="frame-head-button btn btn-link px-3">
-                        <span className="fa fa-refresh fa-lg" aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link pl-3">
                         <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
@@ -57,10 +86,10 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
                             </Nav.Item>
 
                         </Nav>
-                        <Tab.Content className="graph-card-content container-fluid graph-tabpanel" style={{ overflow: 'hidden' }}>
+                        <Tab.Content className="graph-card-content container-fluid graph-tabpanel">
 
                             <Tab.Pane eventKey="graph" style={{ height: '100%' }}>
-                                <CypherResultCytoscapeContainer refKey={refKey} />
+                                <CypherResultCytoscapeContainer forwardedRef={chartAreaRef} refKey={refKey} isFullScreen={isFullScreen} />
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
