@@ -4,14 +4,43 @@ import COSEBilkent from 'cytoscape-cose-bilkent';
 
 
 cytoscape.use(COSEBilkent);
+
+const getLabel = (data) => {
+  const props = data.data('properties')
+  if (props.name) {
+    return props.name
+  } else if (props.id) {
+    return props.id
+  } else {
+    return data.data('id')
+  }
+}
+
 const stylesheet = [
   {
     selector: 'node',
     style: {
       width: 70,
       height: 70,
-      label: 'data(label)',
+      label: function (ele) { return ele == null ? '' : getLabel(ele); },
       'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
+      'border-width': "3px",
+      'border-color': function (ele) { return ele == null ? '#FFF' : ele.data('borderColor'); },
+      'border-opacity': 0.6,
+      "text-valign": "center",
+      "text-halign": "center"
+    }
+  },
+  {
+    selector: 'node.highlight',
+    style: {
+      width: 70,
+      height: 70,
+      label: function (ele) { return ele == null ? '' : getLabel(ele); },
+      'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
+      'border-width': "10px",
+      'border-color': "#B2EBF4",
+      'border-opacity': 0.9,
       "text-valign": "center",
       "text-halign": "center"
     }
@@ -19,8 +48,21 @@ const stylesheet = [
   {
     selector: 'edge',
     style: {
+      width: 3,
+      'line-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
+      'target-arrow-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
+      'target-arrow-shape': 'triangle',
+      'curve-style': 'bezier'
+    }
+  },
+  {
+    selector: 'edge.highlight',
+    style: {
       width: 6,
-      'line-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); }
+      'line-color': "#B2EBF4",
+      'target-arrow-color': "#B2EBF4",
+      'target-arrow-shape': 'triangle',
+      'curve-style': 'bezier'
     }
   }
 ]
@@ -34,8 +76,8 @@ const conf = {
   // Viewport Options
   zoom: 1,
   // Interaction Options
-  minZoom: 1e-50,
-  maxZoom: 1e50,
+  minZoom: 0.5,
+  maxZoom: 4,
   zoomingEnabled: false, //true
   userZoomingEnabled: false, //true
   panningEnabled: true,
@@ -80,11 +122,14 @@ class CytoscapeComponent extends Component{
       this.cy.add(nextProps.elements)
       this.cy.layout(layout).run()
       
-      this.cy.elements().bind('mouseover', (e) => 
+      this.cy.elements().bind('mouseover', (e) => {
+        console.log(e.target)
         nextProps.onElementsMouseover({type:'elements', data:e.target.data()})
-      )
+        e.target.addClass('highlight')
+      })
       this.cy.elements().bind('mouseout', (e) => {
         nextProps.onElementsMouseover({type:'background', data:{nodeCount: this.cy.nodes().size(), edgeCount: this.cy.edges().size()}})
+        e.target.removeClass('highlight')
       })
       
     } else {
