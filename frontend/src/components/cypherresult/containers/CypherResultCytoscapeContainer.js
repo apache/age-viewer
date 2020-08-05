@@ -50,12 +50,12 @@ const mapStateToProps = (state, ownProps) => {
                     if (val['start'] && val['end']) {
                         if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = getRandomColor(labelName) }
                         edges.push(
-                            { group: 'edges', data: { id: val.id, source: val.start, target: val.end, label: val.label, backgroundColor: edgeLegend[labelName] }, alias: alias, classes: ['node'], properties: val.properties }
+                            { group: 'edges', data: { id: val.id, source: val.start, target: val.end, label: val.label, backgroundColor: edgeLegend[labelName], properties: val.properties }, alias: alias, classes: ['node'] }
                         )
                     } else {
                         if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = getRandomColor(labelName) }
                         nodes.push(
-                            { group: 'nodes', data: { id: val.id, label: val.label, backgroundColor: nodeLegend[labelName] }, alias: alias,  classes: ['node'], properties: val.properties }
+                            { group: 'nodes', data: { id: val.id, label: val.label, backgroundColor: nodeLegend[labelName], properties: val.properties }, alias: alias,  classes: ['node'] }
                         )
                     }
                 }

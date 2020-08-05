@@ -77,20 +77,32 @@ class CytoscapeComponent extends Component{
 
   componentWillReceiveProps(nextProps){
     if (this.props.elements.nodes.length === 0) {
-      console.log("99999999999999")
       this.cy.add(nextProps.elements)
       this.cy.layout(layout).run()
+      
+      this.cy.elements().bind('mouseover', (e) => 
+        nextProps.onElementsMouseover({type:'elements', data:e.target.data()})
+      )
+      this.cy.elements().bind('mouseout', (e) => {
+        nextProps.onElementsMouseover({type:'background', data:{nodeCount: this.cy.nodes().size(), edgeCount: this.cy.edges().size()}})
+      })
+      
+    } else {
+      this.cy.resize()
+      this.cy.fit()
     }
   }
 
   componentWillUnmount(){
     this.cy.destroy();
   }
+  
 
   resetChart() {
     this.props.elements.nodes = []
     this.props.elements.edges = []
   }
+
   getCy(){
     return this.cy;
   }
