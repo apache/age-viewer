@@ -252,6 +252,7 @@ a.nav-link {
 }
 
 .chart-footer-area {
+    min-height: 25px;
     width: 100%;
     background-color: rgba(0,0,0,.03);
     border-top: 1px solid rgba(0,0,0,.125);

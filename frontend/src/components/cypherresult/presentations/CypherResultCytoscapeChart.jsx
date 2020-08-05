@@ -89,7 +89,6 @@ class CytoscapeComponent extends Component{
       
     } else {
       this.cy.resize()
-      this.cy.fit()
     }
   }
 
