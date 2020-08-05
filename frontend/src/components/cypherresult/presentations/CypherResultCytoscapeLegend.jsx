@@ -26,9 +26,7 @@ class CypherResultCytoscapeLegend extends Component{
         for (const [label, color] of Object.entries(nextProps.legendData.edgeLegend)) {
           this.edgeBadges.push(<Badge className="px-3 py-2 mx-1 my-2" key={uuid()} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
         }
-
     }
-
   }
 
   componentWillUnmount(){
@@ -40,9 +38,8 @@ class CypherResultCytoscapeLegend extends Component{
       <div className="nodeLegend">
       {this.nodeBadges}
       </div>
-      <div className="edgeLegend">
-      {this.edgeBadges}
-      </div>
+      
+      {this.edgeBadges.length === 0 ? '' : <div className="edgeLegend">this.edgeBadges</div>}
       
     </div>
   }
