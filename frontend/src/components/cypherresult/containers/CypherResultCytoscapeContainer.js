@@ -72,7 +72,8 @@ const mapStateToProps = (state, ownProps) => {
 
     return {
         data: generateCytoscapeElement(state.cypher.queryResult[refKey]),
-        isActive: state.navigator.isActive
+        isActive: state.navigator.isActive,
+        labelColors: labelColors
     }
 }
 

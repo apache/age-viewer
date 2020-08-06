@@ -18,7 +18,7 @@ const getLabel = (data) => {
 
 const stylesheet = [
   {
-    selector: 'node',
+    selector: 'node', 
     style: {
       width: 70,
       height: 70,
@@ -34,15 +34,10 @@ const stylesheet = [
   {
     selector: 'node.highlight',
     style: {
-      width: 70,
-      height: 70,
       label: function (ele) { return ele == null ? '' : getLabel(ele); },
-      'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'border-width': "10px",
       'border-color': "#B2EBF4",
-      'border-opacity': 0.9,
-      "text-valign": "center",
-      "text-halign": "center"
+      'border-opacity': 0.9
     }
   },
   {
@@ -123,7 +118,6 @@ class CytoscapeComponent extends Component{
       this.cy.layout(layout).run()
       
       this.cy.elements().bind('mouseover', (e) => {
-        console.log(e.target)
         nextProps.onElementsMouseover({type:'elements', data:e.target.data()})
         e.target.addClass('highlight')
       })
