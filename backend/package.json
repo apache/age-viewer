@@ -4,6 +4,8 @@
     "private": true,
     "scripts": {
         "test": "mocha",
+        "test:connector": "mocha ./test/connector.api.test.js",
+        "test:cypher": "mocha ./test/cypher.api.test.js",
         "start": "node ./server/bin/www"
     },
     "dependencies": {
