@@ -20,6 +20,26 @@ const CypherResultCytoscape = forwardRef(( props, ref ) => {
     setFooterData(props)
   }
 
+  const colorChange = (elementType, label, color) => {
+    if (elementType === 'node') {
+      let nodeLegendObj = legendData.nodeLegend
+      if (nodeLegendObj.hasOwnProperty(label)) {
+        nodeLegendObj[label] = [color.color, color.borderColor, color.fontColor]
+      }      
+      setLegendData(Object.assign({}, legendData, {nodeLegend : nodeLegendObj}))
+      setFooterData({ type: 'labels', data: { type: 'node', backgroundColor: color.color, fontColor: color.fontColor, label: label } })
+    } else if (elementType === 'edge') {
+      let edgeLegendObj = legendData.edgeLegend
+      if (edgeLegendObj.hasOwnProperty(label)) {
+        edgeLegendObj[label] = [color.color, color.borderColor, color.fontColor]
+      }
+      setLegendData(Object.assign({}, legendData, {edgeLegend : edgeLegendObj}))
+      setFooterData({ type: 'labels', data: { type: 'edge', backgroundColor: color.color, fontColor: color.fontColor, label: label } })
+
+    }
+    chartRef.current.colorChange(elementType, label, color);
+  }
+
   useImperativeHandle(ref, () => ({
 
     getCy() {
@@ -35,7 +55,7 @@ const CypherResultCytoscape = forwardRef(( props, ref ) => {
   return <div className="chart-frame-area">
     <CypherResultCytoscapeLegend onLabelClick={getFooterData} legendData={legendData} />
     <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} elements={elements} />
-    <CypherResultCytoscapeFooter footerData={footerData} labelColors={props.labelColors}/>
+    <CypherResultCytoscapeFooter colorChange={colorChange} footerData={footerData} labelColors={props.labelColors}/>
   </div>
 })
 

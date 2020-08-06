@@ -20,22 +20,23 @@ const stylesheet = [
   {
     selector: 'node', 
     style: {
-      width: 70,
-      height: 70,
+      width: 55,
+      height: 55,
       label: function (ele) { return ele == null ? '' : getLabel(ele); },
       'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'border-width': "3px",
       'border-color': function (ele) { return ele == null ? '#FFF' : ele.data('borderColor'); },
       'border-opacity': 0.6,
       "text-valign": "center",
-      "text-halign": "center"
+      "text-halign": "center",
+      color: function (ele) { return ele == null ? '#FFF' : ele.data('fontColor'); },
+      "font-size": "10px"
     }
   },
   {
     selector: 'node.highlight',
     style: {
-      label: function (ele) { return ele == null ? '' : getLabel(ele); },
-      'border-width': "10px",
+      'border-width': "6px",
       'border-color': "#B2EBF4",
       'border-opacity': 0.9
     }
@@ -43,11 +44,17 @@ const stylesheet = [
   {
     selector: 'edge',
     style: {
-      width: 3,
+      width: 1,
+      label: 'data(label)',
+      'text-background-color': '#FFF',
+      'text-background-opacity': 1,
+      'text-background-padding': '5px',
       'line-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'target-arrow-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'target-arrow-shape': 'triangle',
-      'curve-style': 'bezier'
+      'curve-style': 'bezier',
+      color: function (ele) { return ele == null ? '#FFF' : ele.data('fontColor'); },
+      "font-size": "15px"
     }
   },
   {
@@ -62,7 +69,7 @@ const stylesheet = [
   }
 ]
 
-const layout = { name: 'cose-bilkent' }
+const layout = { name: 'cose-bilkent',  idealEdgeLength: 80}
 
 const conf = {
   // Common Options
@@ -139,6 +146,15 @@ class CytoscapeComponent extends Component{
   resetChart() {
     this.props.elements.nodes = []
     this.props.elements.edges = []
+  }
+
+  colorChange(elementType, label, color) {    
+    if (elementType === 'node') {
+      this.cy.elements('node[label = "'+label+'"]').data("backgroundColor", color.color).data("borderColor", color.borderColor).data("fontColor", color.fontColor)
+    } else if (elementType === 'edge') {
+      this.cy.elements('edge[label = "'+label+'"]').data("backgroundColor", color.color).data("fontColor", color.fontColor)
+    }
+    
   }
 
   getCy(){

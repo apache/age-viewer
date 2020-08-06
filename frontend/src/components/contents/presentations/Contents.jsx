@@ -6,7 +6,6 @@ import FramesContainer from '../containers/Frames'
 const Contents = ({ database, getConnectionStatus, addFrame }) => {
     const dispatch = useDispatch();
 
-    console.log(database.status)
     if (database.status === 'init') {
         dispatch(() => getConnectionStatus())
     }

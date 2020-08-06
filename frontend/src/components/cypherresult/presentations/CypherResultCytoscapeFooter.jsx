@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Badge } from 'react-bootstrap'
 import uuid from 'react-uuid'
 
-const CypherResultCytoscapeFooter = ({ footerData, labelColors}) => {
+const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange }) => {
 
   const extractData = (d) => {
     let extractedData = []
@@ -11,6 +11,7 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors}) => {
     }
     return extractedData
   }
+  
   const displayFooterData = () => {
 
     if (footerData.type === 'elements') {
@@ -18,7 +19,7 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors}) => {
 
       return (
         <div className="pl-3">
-          <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, fontSize: '0.9rem' }}>{footerData.data.label}</Badge>
+          <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, color: footerData.data.fontColor }}>{footerData.data.label}</Badge>
           <span className="label"><strong className="pl-3">&lt;gid&gt; : </strong> {footerData.data.id}</span>
           {extractData(footerData.data.properties)}
         </div>
@@ -31,10 +32,10 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors}) => {
 
       return (
         <div className="pl-3">
-          <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, fontSize: '0.9rem' }}>{footerData.data.label}</Badge>
+          <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, color: footerData.data.fontColor }}>{footerData.data.label}</Badge>
           <span className="label">
             <span className="pl-3">Color : </span> 
-            {labelColors.map((color)=>{return <button key={uuid()} type="button" className={"btn colorSelector " + (footerData.data.backgroundColor === color.color ? " selectedColor " : "")} style={{backgroundColor:color.color}}></button> })}
+            {labelColors.map((color)=>{return <button onClick={() => colorChange(footerData.data.type, footerData.data.label, color)} key={uuid()} type="button" className={"btn colorSelector " + (footerData.data.backgroundColor === color.color ? " selectedColor " : "")} style={{backgroundColor:color.color}}></button> })}
           </span>
           <span className="label">
             <span className="pl-3">Size : </span> 
@@ -51,7 +52,7 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors}) => {
     }
   }
 
-  return <div className="chart-footer-area">
+  return <div className="chart-footer-area text-muted">
     {displayFooterData()}
   </div>
 }
