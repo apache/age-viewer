@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useState, useImperativeHandle} from 'react';
+import React, {forwardRef, useEffect, useRef, useState, useImperativeHandle} from 'react';
 import CypherResultCytoscapeChart from './CypherResultCytoscapeChart'
 import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
 import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
@@ -6,9 +6,17 @@ import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
 
 const CypherResultCytoscape = forwardRef(( props, ref ) => {
   const [footerData, setFooterData] = useState({})
+  const [legendData, setLegendData] = useState(props.data.legend)
+  const [elements, setElements] = useState(props.data.elements)
   const chartRef = useRef()
 
-  const getElementProperties = (props) => {
+  useEffect(() => {
+    if (props.data['legend'] !== undefined && Object.keys(props.data['legend']['nodeLegend']).length > 0){
+      setLegendData(props.data['legend'])
+      setElements(props.data.elements)
+    }
+  })
+  const getFooterData = (props) => {
     setFooterData(props)
   }
 
@@ -25,9 +33,9 @@ const CypherResultCytoscape = forwardRef(( props, ref ) => {
   }));
 
   return <div className="chart-frame-area">
-    <CypherResultCytoscapeLegend legendData={props.data['legend']} />
-    <CypherResultCytoscapeChart onElementsMouseover={getElementProperties} ref={chartRef} elements={props.data.elements} />
-    <CypherResultCytoscapeFooter footerData={footerData}/>
+    <CypherResultCytoscapeLegend onLabelClick={getFooterData} legendData={legendData} />
+    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} elements={elements} />
+    <CypherResultCytoscapeFooter footerData={footerData} labelColors={props.labelColors}/>
   </div>
 })
 

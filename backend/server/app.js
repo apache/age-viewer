@@ -4,8 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const supertest = require('supertest');
-const cypherRouter = require('./api/cypher/cypherController');
-const databaseRouter = require('./api/database/databaseController');
+const cypherRouter = require('./application/cypher/cypherController');
+const databaseRouter = require('./application/connector/connectorController');
 
 let app = express();
 
