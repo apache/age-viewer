@@ -5,6 +5,10 @@ const AgensDatabaseHelper = require('../db/agensDatabaseHelper');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
+    if (!req.session.client) {
+        res.status(200).json(new ResponseModel({}).toJSON()).end();
+        return
+    }
     let agensDatabaseHelper = new AgensDatabaseHelper(req.session.client);
 
     let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
