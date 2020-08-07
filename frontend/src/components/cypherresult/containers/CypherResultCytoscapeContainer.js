@@ -52,14 +52,34 @@ const mapStateToProps = (state, ownProps) => {
                 for (const [alias, val] of Object.entries(row)) {
                     let labelName = val['label']
                     if (val['start'] && val['end']) {
-                        if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = ['#8C8C8C', '#8C8C8C', '#2A2C34'] }
+                        if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = {color: ['#8C8C8C', '#8C8C8C', '#2A2C34'], size: 1} }
                         edges.push(
-                            { group: 'edges', data: { id: val.id, source: val.start, target: val.end, label: val.label, backgroundColor: edgeLegend[labelName][0], borderColor: edgeLegend[labelName][1], fontColor: edgeLegend[labelName][2], properties: val.properties }, alias: alias, classes: ['node'] }
+                            { group: 'edges'
+                            , data: { id: val.id
+                                , source: val.start
+                                , target: val.end
+                                , label: val.label
+                                , backgroundColor: edgeLegend[labelName]['color'][0]
+                                , borderColor: edgeLegend[labelName]['color'][1]
+                                , fontColor: edgeLegend[labelName]['color'][2]
+                                , size: edgeLegend[labelName]['size']
+                                , properties: val.properties }
+                            , alias: alias
+                            , classes: ['node'] }
                         )
                     } else {
-                        if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = getRandomColor(labelName) }
+                        if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = {color: getRandomColor(labelName), size: 55} }
                         nodes.push(
-                            { group: 'nodes', data: { id: val.id, label: val.label, backgroundColor: nodeLegend[labelName][0], borderColor: nodeLegend[labelName][1], fontColor: nodeLegend[labelName][2], properties: val.properties }, alias: alias,  classes: ['node'] }
+                            { group: 'nodes'
+                            , data: { id: val.id
+                                , label: val.label
+                                , backgroundColor: nodeLegend[labelName]['color'][0]
+                                , borderColor: nodeLegend[labelName]['color'][1]
+                                , fontColor: nodeLegend[labelName]['color'][2]
+                                , size: nodeLegend[labelName]['size']
+                                , properties: val.properties }
+                            , alias: alias
+                            , classes: ['node'] }
                         )
                     }
                 }

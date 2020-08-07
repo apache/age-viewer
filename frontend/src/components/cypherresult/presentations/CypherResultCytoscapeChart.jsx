@@ -20,8 +20,8 @@ const stylesheet = [
   {
     selector: 'node', 
     style: {
-      width: 55,
-      height: 55,
+      width: function (ele) { return ele == null ? 55 : ele.data('size'); },
+      height: function (ele) { return ele == null ? 55 : ele.data('size'); },
       label: function (ele) { return ele == null ? '' : getLabel(ele); },
       'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'border-width': "3px",
@@ -30,7 +30,9 @@ const stylesheet = [
       "text-valign": "center",
       "text-halign": "center",
       color: function (ele) { return ele == null ? '#FFF' : ele.data('fontColor'); },
-      "font-size": "10px"
+      "font-size": "10px",
+      "text-wrap": "ellipsis",
+      "text-max-width": function (ele) { return ele == null ? 55 : ele.data('size'); }
     }
   },
   {
@@ -44,23 +46,24 @@ const stylesheet = [
   {
     selector: 'edge',
     style: {
-      width: 1,
-      label: 'data(label)',
+      width: function (ele) { return ele == null ? 1 : ele.data('size'); },
+      label: function(ele) {return '[ ' + ele.data('label') + ' ]'},
       'text-background-color': '#FFF',
       'text-background-opacity': 1,
-      'text-background-padding': '5px',
+      'text-background-padding': '3px',
       'line-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'target-arrow-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'target-arrow-shape': 'triangle',
       'curve-style': 'bezier',
       color: function (ele) { return ele == null ? '#FFF' : ele.data('fontColor'); },
-      "font-size": "15px"
+      "font-size": "10px",
+      "text-rotation": "autorotate"
     }
   },
   {
     selector: 'edge.highlight',
     style: {
-      width: 6,
+      width: function (ele) { return ele == null ? 1 : ele.data('size'); },
       'line-color': "#B2EBF4",
       'target-arrow-color': "#B2EBF4",
       'target-arrow-shape': 'triangle',
@@ -69,7 +72,7 @@ const stylesheet = [
   }
 ]
 
-const layout = { name: 'cose-bilkent',  idealEdgeLength: 80}
+const layout = { name: 'cose-bilkent',  idealEdgeLength: 100}
 
 const conf = {
   // Common Options
@@ -156,6 +159,18 @@ class CytoscapeComponent extends Component{
     }
     
   }
+
+  sizeChange(elementType, label, size) {    
+      const changedData = this.cy.elements(elementType + '[label = "'+label+'"]').data("size", size)
+      
+      if (size > 6) {
+        changedData.style('text-background-opacity', 0)
+      } else {
+        changedData.style('text-background-opacity', 1)
+      }
+  }
+
+  
 
   getCy(){
     return this.cy;
