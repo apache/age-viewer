@@ -86,9 +86,8 @@ body {
     width: 70px;
     background-color: var(--navbar-color);
 }
-/*
 #sidebar {
-    width: 250px;
+    width: 320px;
     position: fixed;
     top: 0;
     left: 70px;
@@ -97,9 +96,13 @@ body {
     background-color: var(--sidebar-color);
     color: #fff;
     transition: all 0.3s;
-    margin-left: -250px;
+    margin-left: -320px;
 }
-*/
+#sidebar.active {
+    margin-left: 0px;
+}
+
+/*
 #sidebar {
     width: 0;
     position: fixed;
@@ -113,6 +116,7 @@ body {
 #sidebar.active {
     width: 320px;
 }
+*/
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -138,16 +142,17 @@ a[data-toggle="collapse"] {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
-
+/*
 #sidebar.active~#content{
     width: calc(100% - 390px);
 }
-/*
+*/
+
 #content.active {
-    width: calc(100% - 320px);
+    width: calc(100% - 390px);
     
 }
-*/
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -155,7 +160,7 @@ a[data-toggle="collapse"] {
 
 @media (max-width: 768px) {
     #sidebar {
-        margin-left: -250px;
+        margin-left: -320px;
     }
     #sidebar.active {
         margin-left: 0;
@@ -164,7 +169,7 @@ a[data-toggle="collapse"] {
         width: 100%;
     }
     #content.active {
-        width: calc(100% - 250px);
+        width: calc(100% - 320px);
     }
     #sidebarCollapse span {
         display: none;

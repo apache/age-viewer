@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import EditorContainer from '../containers/Editor'
 import FramesContainer from '../containers/Frames'
 
-const Contents = ({ database, getConnectionStatus, addFrame }) => {
+const Contents = ({ database, isActive, getConnectionStatus, addFrame }) => {
     const dispatch = useDispatch();
 
     if (database.status === 'init') {
@@ -14,7 +14,7 @@ const Contents = ({ database, getConnectionStatus, addFrame }) => {
     }
 
     return (
-        <div id="content">
+        <div id="content" className={isActive ? "active" : ""}>
                 <EditorContainer />
                 <FramesContainer />
         </div>
