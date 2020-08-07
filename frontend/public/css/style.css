@@ -300,8 +300,8 @@ a.nav-link {
     line-height: 1.5;
     border-radius: .2rem;
     margin-left: 5px;
-    color: darkgrey;
     border-color: darkgrey;
+    opacity: 0.5; 
 }
 
 .sizeSelector.node {
@@ -336,5 +336,9 @@ a.nav-link {
 }
 
 .colorSelector.selectedColor {
+    opacity: 1; 
+}
+
+.captionSelector.selectedCaption {
     opacity: 1; 
 }

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Badge } from 'react-bootstrap'
 import uuid from 'react-uuid'
 
-const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange, sizeChange }) => {
+const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange, sizeChange, captionChange }) => {
 
   const extractData = (d) => {
     let extractedData = []
@@ -39,6 +39,7 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange, siz
       }
 
       const edgeSizeButton = (i) => {
+        console.log("???" , i, footerData.data.size, (i * 4 + i + 1), footerData.data.size >= (i * 4 + i + 1))
         let size = (i * 3) + 12; 
         return <button onClick={() => sizeChange(footerData.data.type, footerData.data.label, (i * 4 + i + 1))} 
         key={uuid()} 
@@ -67,8 +68,9 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange, siz
           </span>
           <span className="label">
             <span className="pl-3">Caption : </span> 
-            <button type="button" class="btn btn-outline-dark captionSelector"><strong>&lt;id&gt;</strong></button>
-            <button type="button" class="btn btn-outline-dark captionSelector"><strong>&lt;name&gt;</strong></button>
+            {footerData.data.captions.map((caption) => {
+              return <button onClick={() => captionChange(footerData.data.type, footerData.data.label, caption)} key={uuid()} type="button" class={"btn captionSelector " + (footerData.data.selectedCaption === caption ? " btn-secondary " : " btn-outline-dark ")}><strong>&lt;{caption}&gt;</strong></button>
+            })}
 
           </span>
         </div>
