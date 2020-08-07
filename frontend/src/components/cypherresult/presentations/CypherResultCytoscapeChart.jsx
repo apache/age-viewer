@@ -8,12 +8,20 @@ cytoscape.use(COSEBilkent);
 const getLabel = (data) => {
   const props = data.data('properties')
   if (props.name) {
+    selectedLabel.node[data.data('label')] = 'name'
     return props.name
   } else if (props.id) {
+    selectedLabel.node[data.data('label')] = 'id'
     return props.id
   } else {
-    return data.data('id')
+    selectedLabel.node[data.data('label')] = 'gid'
+    return "[ :" + data.data('id') + " ]"
   }
+}
+
+let selectedLabel = {
+  node: {},
+  edge: {}
 }
 
 const stylesheet = [
@@ -39,15 +47,14 @@ const stylesheet = [
     selector: 'node.highlight',
     style: {
       'border-width': "6px",
-      'border-color': "#B2EBF4",
-      'border-opacity': 0.9
+      'border-color': "#B2EBF4"
     }
   },
   {
     selector: 'edge',
     style: {
       width: function (ele) { return ele == null ? 1 : ele.data('size'); },
-      label: function(ele) {return '[ ' + ele.data('label') + ' ]'},
+      label: function(ele) {return '[ :' + ele.data('label') + ' ]'},
       'text-background-color': '#FFF',
       'text-background-opacity': 1,
       'text-background-padding': '3px',
@@ -151,7 +158,29 @@ class CytoscapeComponent extends Component{
     this.props.elements.edges = []
   }
 
+  getCaptions(elementType, label) {
+    const eles = this.cy.elements(elementType + '[label = "'+label+'"]').jsons()
+    let extendedSet = new Set([])
+    eles.forEach((ele) => {
+      extendedSet = new Set([...extendedSet, ...Object.keys(ele.data.properties)])
+    })
+    return extendedSet    
+  }
+
+  getCurrecntCaption(elementType, label) {
+    if (elementType === 'edge' && selectedLabel[elementType][label] === undefined) {
+      selectedLabel[elementType][label] = 'label'
+    }
+
+    return selectedLabel[elementType][label]
+  }
+
+  getCy(){
+    return this.cy;
+  }  
+
   colorChange(elementType, label, color) {    
+    console.log(this.cy.elements('node[label = "'+label+'"]'))
     if (elementType === 'node') {
       this.cy.elements('node[label = "'+label+'"]').data("backgroundColor", color.color).data("borderColor", color.borderColor).data("fontColor", color.fontColor)
     } else if (elementType === 'edge') {
@@ -170,10 +199,16 @@ class CytoscapeComponent extends Component{
       }
   }
 
-  
+  captionChange(elementType, label, caption) {
+    selectedLabel[elementType][label] = caption
 
-  getCy(){
-    return this.cy;
+    if (caption === 'gid') {
+      this.cy.elements(elementType + '[label = "'+label+'"]').style('label', function (ele) { return ele == null ? '' : "[ " + ele.data('id') + " ]"; })  
+    } else if (caption === 'label'){
+      this.cy.elements(elementType + '[label = "'+label+'"]').style('label', function (ele) { return ele == null ? '' : "[ :" + ele.data('label') + " ]"; })  
+    }else {
+      this.cy.elements(elementType + '[label = "'+label+'"]').style('label', function (ele) { return ele == null ? '' : (ele.data('properties')[caption] == null ? '' : ele.data('properties')[caption]) })
+    }        
   }
 
   render(){
