@@ -304,7 +304,7 @@ a.nav-link {
     border-color: darkgrey;
 }
 
-.sizeSelector {
+.sizeSelector.node {
     background-color: darkgrey;
     padding: 6px 0px; 
     border-radius: 15px; 
@@ -312,6 +312,23 @@ a.nav-link {
     text-align: center; 
     margin-left: 5px;
     opacity: 0.2; 
+}
+
+.sizeSelector.edge {
+    background-color: darkgrey;
+    padding: 6px 0px; 
+    font-size: 8px; 
+    text-align: center; 
+    margin-left: 5px;
+    opacity: 0.2; 
+}
+
+.sizeSelector:hover {
+    opacity: 1; 
+}
+
+.sizeSelector.selectedSize {
+    opacity: 1; 
 }
 
 .colorSelector:hover {
