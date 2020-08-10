@@ -10,7 +10,7 @@ class CypherService {
             let rows = queryResult.rows,
                 columns = queryResult.fields.map((d) => d.name);
 
-            let convertedRows = rows.map((row) => {
+                let convertedRows = rows.map((row) => {
                 let convetedObject = {};
                 for (let k in row) {
                     if (row[k].hasOwnProperty('start')) {
