@@ -6,6 +6,7 @@
         "test": "mocha",
         "test:connector": "mocha ./test/connector.api.test.js",
         "test:cypher": "mocha ./test/cypher.api.test.js",
+        "test:query": "mocha ./test/cypher.service.test.js",
         "start": "node ./server/bin/www"
     },
     "dependencies": {

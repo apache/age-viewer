@@ -1,7 +1,7 @@
 const { Pool } = require('agensgraph');
 
 class AgensDatabaseHelper {
-    constructor({ host, port, database, graph, user, password }) {
+    constructor({ host, port, database, graph, user, password } = {}) {
         this._host = host;
         this._port = port;
         this._database = database;
@@ -11,14 +11,17 @@ class AgensDatabaseHelper {
     }
 
     async isHealth() {
-        let client = await this.getConnection();
         let result = false;
+        if(this.toPoolConnectionInfo() == null) {
+            return result;
+        }
+
+        let client = await this.getConnection();
         try {
             await client.query('SELECT 1');
             result = true;
         } catch (err) {
             console.error('Error Occurred!!!: ', err);
-            result = false;
         } finally {
             client.release();
         }
@@ -49,6 +52,9 @@ class AgensDatabaseHelper {
     }
 
     toPoolConnectionInfo() {
+        if(!this._host || !this._port || !this._database) {
+            return null;
+        }
         return {
             host: this._host,
             port: this._port,
@@ -62,6 +68,9 @@ class AgensDatabaseHelper {
     }
 
     toConnectionInfo() {
+        if(!this._host || !this._port || !this._database) {
+            return null;
+        }
         return {
             host: this._host,
             port: this._port,

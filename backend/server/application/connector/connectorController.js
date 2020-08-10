@@ -4,15 +4,11 @@ const ConnectorService = require('./connectorService')
 const AgensDatabaseHelper = require('../db/agensDatabaseHelper');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-    if (!req.session.client) {
-        res.status(200).json(new ResponseModel({}).toJSON()).end();
-        return
-    }
+router.get('/', async (req, res, next) => {
     let agensDatabaseHelper = new AgensDatabaseHelper(req.session.client);
 
     let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
-    let {status, message, data} = connectorService.getConnectionStatus();
+    let {status, message, data} = await connectorService.getConnectionStatus();
 
     res.status(status).json(new ResponseModel(message, data).toJSON()).end();
 });
