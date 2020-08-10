@@ -90,11 +90,11 @@ class ConnectorService {
         };
     }
 
-    getConnectionStatus() {
+    async getConnectionStatus() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let status, message, data;
 
-        if (agensDatabaseHelper.isHealth()) {
+        if (await agensDatabaseHelper.isHealth()) {
             message = 'Connected Database';
             data = agensDatabaseHelper.toConnectionInfo();
             status = 200;
