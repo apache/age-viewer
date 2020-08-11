@@ -13,11 +13,11 @@ router.get('/', async (req, res, next) => {
     res.status(status).json(new ResponseModel(message, data).toJSON()).end();
 });
 
-router.post('/connect', (req, res, next) => {
+router.post('/connect', async (req, res, next) => {
     let agensDatabaseHelper = new AgensDatabaseHelper(req.body);
 
     let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
-    let {status, message, data} = connectorService.connectDatabase();
+    let {status, message, data} = await connectorService.connectDatabase();
 
     res.status(status).json(new ResponseModel(message, data).toJSON()).end();
 });

@@ -3,14 +3,41 @@ class CypherService {
         this._agensDatabaseHelper = agensDatabaseHelper;
     }
 
-    async executeCommand(query) {
+    async executeCypher(query) {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(query);
-        try {
-            let rows = queryResult.rows,
-                columns = queryResult.fields.map((d) => d.name);
+        let result = {
+            message: '',
+            status: 200,
+            data: null,
+        };
 
-                let convertedRows = rows.map((row) => {
+        if (!query) {
+            result.message = 'Query is not valid';
+            result.status = 400;
+            result.data = { cmd: query };
+        } else {
+            if (await agensDatabaseHelper.isHealth()) {
+                result.message = 'Query is not valid';
+                result.status = 200;
+                result.data = await this.getExecuteResult(query);
+            } else {
+                result.message = 'ConnectionInfo is not valid';
+                result.data = agensDatabaseHelper.toConnectionInfo();
+                result.status = 500;
+            }
+        }
+
+        return result;
+    }
+
+    async getExecuteResult(query) {
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        try {
+            let queryResult = await agensDatabaseHelper.execute(query);
+            let rows = queryResult.rows,
+                columns = queryResult.fields.map((field) => field.name);
+
+            let convertedRows = rows.map((row) => {
                 let convetedObject = {};
                 for (let k in row) {
                     if (row[k].hasOwnProperty('start')) {
