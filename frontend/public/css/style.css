@@ -347,3 +347,13 @@ a.nav-link {
 .captionSelector.selectedCaption {
     opacity: 1; 
 }
+
+
+
+
+/* ---------------------------------------------------
+    Cytoscapejs-cxtmenu
+----------------------------------------------------- */
+.cxtmenu-content {
+    font-size: 10px;
+}
