@@ -49,11 +49,11 @@ class ConnectorService {
         return queryResult.rows;
     }
 
-    connectDatabase() {
+    async connectDatabase() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let status, message, data;
 
-        if (agensDatabaseHelper.isHealth()) {
+        if (await agensDatabaseHelper.isHealth()) {
             this._session.client = agensDatabaseHelper.toConnectionInfo();
             message = 'Successful Connected';
             data = agensDatabaseHelper.toConnectionInfo();
