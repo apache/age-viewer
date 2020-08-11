@@ -6,16 +6,23 @@ import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
 
 const CypherResultCytoscape = forwardRef(( props, ref ) => {
   const [footerData, setFooterData] = useState({})
-  const [legendData, setLegendData] = useState(props.data.legend)
-  const [elements, setElements] = useState(props.data.elements)
+  const [legendData, setLegendData] = useState({edgeLegend:{}, nodeLegend:{}})
+  const [elements, setElements] = useState({edges:[], nodes:[]})
   const chartRef = useRef()
 
   useEffect(() => {
     if (props.data['legend'] !== undefined && Object.keys(props.data['legend']['nodeLegend']).length > 0){
-      setLegendData(props.data['legend'])
-      setElements(props.data.elements)
+
+      if (Object.keys(legendData.edgeLegend).length === 0 && Object.keys(legendData.nodeLegend).length === 0) {
+        setLegendData(props.data['legend'])
+      }
+      
+      if (elements.edges.length === 0 && elements.nodes.length === 0) {
+        setElements(props.data.elements)
+      }      
     }
   })
+
   const getFooterData = (props) => {
     if (props.type === 'labels') {
       props.data['captions'] = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(props.data.type, props.data.label)))
@@ -23,6 +30,10 @@ const CypherResultCytoscape = forwardRef(( props, ref ) => {
     }
     
     setFooterData(props)
+  }
+
+  const addLegendData = (addedLegendData) => {
+    setLegendData(addedLegendData)
   }
 
   const colorChange = (elementType, label, color) => {          
@@ -94,7 +105,7 @@ const CypherResultCytoscape = forwardRef(( props, ref ) => {
 
   return <div className="chart-frame-area">
     <CypherResultCytoscapeLegend onLabelClick={getFooterData} legendData={legendData} />
-    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} elements={elements} />
+    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} elements={elements} addLegendData={addLegendData}/>
     <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} footerData={footerData} labelColors={props.labelColors}/>
   </div>
 })
