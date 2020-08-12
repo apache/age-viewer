@@ -189,6 +189,7 @@ class CytoscapeComponent extends Component {
 
   addElements(d) {
     const generatedData = generateCytoscapeElement({ response: d })
+    console.log("generatedData >>> ", generatedData)
     if (generatedData.elements.nodes.length === 0) {
       alert("No data to extend.")
       return
@@ -261,6 +262,7 @@ class CytoscapeComponent extends Component {
               })
               .then(res => res.json())
               .then(data => {
+                console.log("data>>>", data)
                 this.addElements(data)
               })
           }.bind(this)

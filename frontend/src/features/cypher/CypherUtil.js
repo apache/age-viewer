@@ -38,6 +38,14 @@ const getRandomColor = (labelName) => {
     return selectedColor;
 }
 
+const sortByKey = (data) => {
+    const sorted = {};
+    Object.keys(data).sort().forEach(function(key) {
+        sorted[key] = data[key];
+    });
+    return sorted;
+}
+
 export const updateLabelColor = (labelName, newLabelColor) => {
     labelColors.forEach((labelColor) => {
         if (labelColor.labels.has(labelName)) {
@@ -48,6 +56,16 @@ export const updateLabelColor = (labelName, newLabelColor) => {
             labelColor.labels.add(labelName)            
         }
     })
+}
+
+export const getCurrentLabelColor = (labelName) => {
+    labelColors.forEach((labelColor) => {
+        if (labelColor.labels.has(labelName)) {
+            return labelColor
+        }
+    })
+
+    return getRandomColor(labelName)
 }
 
 export const generateCytoscapeElement = (data) => {
@@ -101,8 +119,8 @@ export const generateCytoscapeElement = (data) => {
                 }
             }
         });
-
     }
-    return { legend: { nodeLegend: nodeLegend, edgeLegend: edgeLegend }, elements: { nodes: nodes, edges: edges } }
+    
+    return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
 
 }

@@ -39,6 +39,8 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
     const refreshFrame = () => {
         const ref = chartAreaRef.current
         ref.resetChart()
+        ref.resetLegend()
+        ref.resetElements()
         dispatch(() => executeCypherQuery([refKey, reqString]));       
     }
 
