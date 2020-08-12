@@ -39,10 +39,10 @@ class ConnectorService {
     async getPropertyKeys() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let query = [];
-        query.push("MATCH(v)");
+        query.push('MATCH(v)');
         query.push("RETURN DISTINCT jsonb_object_keys(v) AS key, 'v' AS key_type");
-        query.push("UNION ALL");
-        query.push("MATCH(v1) - [e] - (v2)");
+        query.push('UNION ALL');
+        query.push('MATCH(v1) - [e] - (v2)');
         query.push("RETURN DISTINCT jsonb_object_keys(e) AS key, 'e' AS key_type");
 
         let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
@@ -51,62 +51,51 @@ class ConnectorService {
 
     async connectDatabase() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status, message, data;
+        let status, data;
 
         if (await agensDatabaseHelper.isHealth()) {
             this._session.client = agensDatabaseHelper.toConnectionInfo();
-            message = 'Successful Connected';
             data = agensDatabaseHelper.toConnectionInfo();
             status = 200;
         } else {
-            message = 'Failed Connect';
             data = null;
             status = 500;
         }
 
         return {
             status: status,
-            message: message,
             data: data,
         };
     }
 
     disconnectDatabase() {
         let status = 200,
-            message,
             data = null;
-
-        if (!this._session.client) {
-            message = 'Already Disconnected database';
-        } else {
+        try {
             this._session.client = null;
-            message = 'Disconnect database';
+        } catch (err) {
+            console.log("Already Disconnected");
         }
-
         return {
             status: status,
-            message: message,
             data: data,
         };
     }
 
     async getConnectionStatus() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status, message, data;
+        let status, data;
 
         if (await agensDatabaseHelper.isHealth()) {
-            message = 'Connected Database';
             data = agensDatabaseHelper.toConnectionInfo();
             status = 200;
         } else {
-            message = 'Not Connected Database';
             data = null;
             status = 500;
         }
 
         return {
             status: status,
-            message: message,
             data: data,
         };
     }

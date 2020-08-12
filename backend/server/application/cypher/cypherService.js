@@ -6,22 +6,18 @@ class CypherService {
     async executeCypher(query) {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let result = {
-            message: '',
             status: 200,
             data: null,
         };
 
         if (!query) {
-            result.message = 'Query is not valid';
             result.status = 400;
             result.data = { cmd: query };
         } else {
             if (await agensDatabaseHelper.isHealth()) {
-                result.message = 'Query is not valid';
                 result.status = 200;
                 result.data = await this.getExecuteResult(query);
             } else {
-                result.message = 'ConnectionInfo is not valid';
                 result.data = agensDatabaseHelper.toConnectionInfo();
                 result.status = 500;
             }
@@ -34,10 +30,14 @@ class CypherService {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         try {
             let queryResult = await agensDatabaseHelper.execute(query);
-            let rows = queryResult.rows,
-                columns = queryResult.fields.map((field) => field.name);
+            let result = {
+                rows: null,
+                columns: queryResult.fields.map((field) => field.name),
+                rowCount: queryResult.rowCount,
+                command: queryResult.command
+            }
 
-            let convertedRows = rows.map((row) => {
+            result.rows = queryResult.rows.map((row) => {
                 let convetedObject = {};
                 for (let k in row) {
                     if (row[k].hasOwnProperty('start')) {
@@ -51,10 +51,7 @@ class CypherService {
                 return convetedObject;
             });
 
-            return {
-                rows: convertedRows,
-                columns: columns,
-            };
+            return result;
         } catch (err) {
             console.log(err);
             throw err;
