@@ -11,8 +11,6 @@ class CypherResultCytoscapeLegend extends Component {
     }
   }
 
-
-
   componentDidMount() {
   }
 
@@ -28,12 +26,12 @@ class CypherResultCytoscapeLegend extends Component {
       newEdgeBadges =  new Map()
     }
 
-    for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {        
-      newNodeBadges.set(label, <Badge className="nodeLabel px-3 py-2 mx-1 my-2" pill key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'node', backgroundColor: legend.color[0], fontColor: legend.color[2], size: legend.size, label: label } })} style={{ backgroundColor: legend.color[0], color: legend.color[2] }}>{label}</Badge>)
+    for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {       
+      newNodeBadges.set(label, <Badge className="nodeLabel px-3 py-2 mx-1 my-2" pill key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'node', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } })} style={{ backgroundColor: legend.color, color: legend.fontColor }}>{label}</Badge>)
     }
     
     for (const [label, legend] of Object.entries(nextProps.legendData.edgeLegend)) {
-      newEdgeBadges.set(label, <Badge className="edgeLabel px-3 py-2 mx-1 my-2" key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'edge', backgroundColor: legend.color[0], fontColor: legend.color[2], size: legend.size, label: label } })} style={{ backgroundColor: legend.color[0], color: legend.color[2] }}>{label}</Badge>)
+      newEdgeBadges.set(label, <Badge className="edgeLabel px-3 py-2 mx-1 my-2" key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'edge', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } })} style={{ backgroundColor: legend.color, color: legend.fontColor }}>{label}</Badge>)
     }
 
     this.setState({nodeBadges : newNodeBadges})

@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import { Badge } from 'react-bootstrap'
 import uuid from 'react-uuid'
-import { updateLabelColor } from '../../../features/cypher/CypherUtil'
+import { updateLabelColor, updateNodeLabelSize, updateEdgeLabelSize, updateLabelCaption } from '../../../features/cypher/CypherUtil'
 
-const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange, sizeChange, captionChange }) => {
-
+const CypherResultCytoscapeFooter = ({ footerData, labelColors, nodeLabelSizes, edgeLabelSizes, colorChange, sizeChange, captionChange }) => {
   const extractData = (d) => {
     let extractedData = []
     for (const [alias, val] of Object.entries(d)) {
@@ -30,21 +29,35 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange, siz
       return <span className="label pl-3">Displaying <strong>{footerData.data.nodeCount}</strong> nodes, <strong>{footerData.data.edgeCount}</strong> edges</span>
     } else if (footerData.type === 'labels') {
       const isEdge = footerData.data.type === 'edge' ? {} : { pill: true }
-      const nodeSizeButton = (i) => {
+
+
+      const generateButton = () => {
+          if (footerData.data.type === 'node') {
+            return nodeLabelSizes.map((labelSize, i) => {
+              return nodeSizeButton(labelSize.size, i)
+            })
+          } else if (footerData.data.type === 'edge') {
+            return edgeLabelSizes.map((labelSize, i) => {
+              return edgeSizeButton(labelSize.size, i)
+            })
+          }           
+      }
+      
+      const nodeSizeButton = (nodeSize, i) => {
         let size = (i * 3) + 12; 
-        return <button onClick={() => sizeChange(footerData.data.type, footerData.data.label, ((i * 2 + 1) * 11))} 
+        return <button onClick={() => [updateNodeLabelSize(footerData.data.label, nodeSize), sizeChange(footerData.data.type, footerData.data.label, nodeSize)]} 
         key={uuid()} 
         type="button" 
-        className={"btn sizeSelector node " + (footerData.data.size >= (i * 2 + 1) * 11 ? " selectedSize " : "")} 
+        className={"btn sizeSelector node " + (footerData.data.size >= nodeSize ? " selectedSize " : "")} 
         style={{width: size+'px', height: size+'px'}} />
       }
 
-      const edgeSizeButton = (i) => {
+      const edgeSizeButton = (edgeSize, i) => {
         let size = (i * 3) + 12; 
-        return <button onClick={() => sizeChange(footerData.data.type, footerData.data.label, (i * 4 + i + 1))} 
+        return <button onClick={() => [updateEdgeLabelSize(footerData.data.label, edgeSize), sizeChange(footerData.data.type, footerData.data.label, edgeSize)]} 
         key={uuid()} 
         type="button" 
-        className={"btn sizeSelector edge " + (footerData.data.size >= (i * 4 + i + 1) ? " selectedSize " : "")} 
+        className={"btn sizeSelector edge " + (footerData.data.size >= edgeSize ? " selectedSize " : "")} 
         style={{width: size+18+'px', height: size+'px'}} />
       }
 
@@ -57,19 +70,12 @@ const CypherResultCytoscapeFooter = ({ footerData, labelColors, colorChange, siz
           </span>
           <span className="label">
             <span className="pl-3">Size : </span> 
-            {Array(5).fill().map((_, i) => {
-              if (footerData.data.type === 'node') {
-                return nodeSizeButton(i)
-              } else if (footerData.data.type === 'edge') {
-                return edgeSizeButton(i)
-              } 
-              
-            })}
+            {generateButton()}
           </span>
           <span className="label">
             <span className="pl-3">Caption : </span> 
             {footerData.data.captions.map((caption) => {
-              return <button onClick={() => captionChange(footerData.data.type, footerData.data.label, caption)} key={uuid()} type="button" class={"btn captionSelector " + (footerData.data.selectedCaption === caption ? " btn-secondary " : " btn-outline-dark ")}><strong>&lt;{caption}&gt;</strong></button>
+              return <button onClick={() => [updateLabelCaption(footerData.data.type, footerData.data.label, caption), captionChange(footerData.data.type, footerData.data.label, caption)]} key={uuid()} type="button" class={"btn captionSelector " + (footerData.data.selectedCaption === caption ? " btn-secondary " : " btn-outline-dark ")}><strong>&lt;{caption}&gt;</strong></button>
             })}
 
           </span>

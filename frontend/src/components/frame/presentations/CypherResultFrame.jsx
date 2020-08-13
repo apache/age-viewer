@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { useDispatch } from 'react-redux'
+import uuid from 'react-uuid'
 import { Tab, Nav, Collapse } from 'react-bootstrap';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
@@ -13,6 +14,7 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
     const [zoomRate, setZoomRate] = useState(0)
     const [pan, setPan] = useState({x : 0, y : 0})
     const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false)
+    const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid())
 
     const dispatch = useDispatch();
 
@@ -37,11 +39,7 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
     }
 
     const refreshFrame = () => {
-        const ref = chartAreaRef.current
-        ref.resetChart()
-        ref.resetLegend()
-        ref.resetElements()
-        dispatch(() => executeCypherQuery([refKey, reqString]));       
+        setCytoscapeContainerKey(uuid())
     }
 
     return (
@@ -91,7 +89,7 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
                         <Tab.Content className="graph-card-content container-fluid graph-tabpanel">
 
                             <Tab.Pane eventKey="graph" style={{ height: '100%' }}>
-                                <CypherResultCytoscapeContainer forwardedRef={chartAreaRef} refKey={refKey} isFullScreen={isFullScreen} />
+                                <CypherResultCytoscapeContainer key={cytoscapeContainerKey} forwardedRef={chartAreaRef} refKey={refKey} isFullScreen={isFullScreen} />
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="table">
