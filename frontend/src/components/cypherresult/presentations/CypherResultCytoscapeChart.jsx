@@ -8,18 +8,26 @@ import COSEBilkent from 'cytoscape-cose-bilkent';
 cytoscape.use(COSEBilkent);
 cytoscape.use(cxtmenu);
 
-const getLabel = (data) => {
-  const props = data.data('properties')
-  if (props.name) {
-    selectedLabel.node[data.data('label')] = 'name'
-    return props.name
-  } else if (props.id) {
-    selectedLabel.node[data.data('label')] = 'id'
-    return props.id
+const getLabel = (ele, captionProp) => {
+  if (captionProp === 'gid') {
+    ele.isNode() ? selectedLabel.node[ele.data('label')] = 'gid' : selectedLabel.edge[ele.data('label')] = 'gid'
+    return "[ " + ele.data('id') + " ]"
+  } else if (captionProp === 'label') {
+    ele.isNode() ? selectedLabel.node[ele.data('label')] = 'label' : selectedLabel.edge[ele.data('label')] = 'label'
+    return "[ :" + ele.data('label') + " ]"
   } else {
-    selectedLabel.node[data.data('label')] = 'gid'
-    return "[ " + data.data('id') + " ]"
+    const props = ele.data('properties')
+    if (props[captionProp] === undefined) { 
+      ele.isNode() ? selectedLabel.node[ele.data('label')] = 'gid' : selectedLabel.edge[ele.data('label')] = 'gid'
+      return "[ " + ele.data('id') + " ]"
+    }
+    else { 
+      ele.isNode() ? selectedLabel.node[ele.data('label')] = captionProp : selectedLabel.edge[ele.data('label')] = captionProp
+      return props[captionProp] 
+    }
   }
+
+  console.log("getLabel!!")
 }
 
 let selectedLabel = {
@@ -35,7 +43,7 @@ const stylesheet = [
     style: {
       width: function (ele) { return ele == null ? 55 : ele.data('size'); },
       height: function (ele) { return ele == null ? 55 : ele.data('size'); },
-      label: function (ele) { return ele == null ? '' : getLabel(ele); },
+      label: function (ele) { const captionProp = ele.data('caption'); return ele == null ? '' : getLabel(ele, captionProp); },
       'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'border-width': "3px",
       'border-color': function (ele) { return ele == null ? '#FFF' : ele.data('borderColor'); },
@@ -66,7 +74,7 @@ const stylesheet = [
     selector: 'edge',
     style: {
       width: function (ele) { return ele == null ? 1 : ele.data('size'); },
-      label: function (ele) { return '[ :' + ele.data('label') + ' ]' },
+      label: function (ele) { const captionProp = ele.data('caption'); return ele == null ? '' : getLabel(ele, captionProp); },
       'text-background-color': '#FFF',
       'text-background-opacity': 1,
       'text-background-padding': '3px',
@@ -189,7 +197,6 @@ class CytoscapeComponent extends Component {
 
   addElements(d) {
     const generatedData = generateCytoscapeElement({ response: d })
-    console.log("generatedData >>> ", generatedData)
     if (generatedData.elements.nodes.length === 0) {
       alert("No data to extend.")
       return
@@ -262,7 +269,6 @@ class CytoscapeComponent extends Component {
               })
               .then(res => res.json())
               .then(data => {
-                console.log("data>>>", data)
                 this.addElements(data)
               })
           }.bind(this)
@@ -310,9 +316,23 @@ class CytoscapeComponent extends Component {
       this.handleUserAction(nextProps)
 
     } else {
+      if (nextProps.legendData !== undefined) {
+
+        for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {  
+          console.log(label, legend)
+          this.colorChange('node', label, {color : legend.color, borderColor : legend.borderColor, fontColor : legend.fontColor})
+          this.sizeChange('node', label, legend.size)
+          this.captionChange('node', label, legend.caption)
+        }
+        
+        for (const [label, legend] of Object.entries(nextProps.legendData.edgeLegend)) {
+          this.colorChange('edge', label, {color : legend.color, borderColor : legend.borderColor, fontColor : legend.fontColor})
+          this.sizeChange('edge', label, legend.size)
+          this.captionChange('edge', label, legend.caption)
+        }
+      }
       this.cy.resize()
     }
-
   }
 
   componentWillUnmount() {
@@ -349,10 +369,20 @@ class CytoscapeComponent extends Component {
   }
 
   colorChange(elementType, label, color) {
+    let c = {}
+
+    if (Array.isArray(color)) {
+      c['color'] = color[0]
+      c['borderColor'] = color[1]
+      c['fontColor'] = color[2]
+    } else {
+      c = color
+    }
+
     if (elementType === 'node') {
-      this.cy.elements('node[label = "' + label + '"]').data("backgroundColor", color.color).data("borderColor", color.borderColor).data("fontColor", color.fontColor)
+      this.cy.nodes('[label = "' + label + '"]').data("backgroundColor", c.color).data("borderColor", c.borderColor).data("fontColor", c.fontColor)
     } else if (elementType === 'edge') {
-      this.cy.elements('edge[label = "' + label + '"]').data("backgroundColor", color.color).data("fontColor", color.fontColor)
+      this.cy.edges('[label = "' + label + '"]').data("backgroundColor", c.color).data("fontColor", c.fontColor)
     }
 
   }
@@ -368,8 +398,7 @@ class CytoscapeComponent extends Component {
   }
 
   captionChange(elementType, label, caption) {
-    selectedLabel[elementType][label] = caption
-
+    console.log("captionchange elementType, label, caption >>", elementType, label, caption)
     if (caption === 'gid') {
       this.cy.elements(elementType + '[label = "' + label + '"]').style('label', function (ele) { return ele == null ? '' : "[ " + ele.data('id') + " ]"; })
     } else if (caption === 'label') {

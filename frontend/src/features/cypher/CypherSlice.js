@@ -32,31 +32,24 @@ const CypherSlice = createSlice({
   name: 'cypher',
   initialState: {
     queryResult: {},
-    labelColors: JSON.stringify([
-      { color: '#664B00', borderColor: '#662500', labels: [], index: 0 },
-      { color: '#D1B2FF', borderColor: '#A566FF', labels: [], index: 1 },
-      { color: '#FFC19E', borderColor: '#F29661', labels: [], index: 2 },
-      { color: '#B5B2FF', borderColor: '#6B66FF', labels: [], index: 3 },
-      { color: '#F15F5F', borderColor: '#CC3D3D', labels: [], index: 4 },
-      { color: '#C4B73B', borderColor: '#998A00', labels: [], index: 5 },
-      { color: '#9FC93C', borderColor: '#6B9900', labels: [], index: 6 },
-      { color: '#FFD9EC', borderColor: '#FFB2D9', labels: [], index: 7 },
-      { color: '#6799FF', borderColor: '#4374D9', labels: [], index: 8 },
-      { color: '#FFBB00', borderColor: '#DB9700', labels: [], index: 9 },
-      { color: '#FFB2D9', borderColor: '#F361A6', labels: [], index: 10 },
-      { color: '#6B9900', borderColor: '#476600', labels: [], index: 11 }
-    ])
+    labels: { nodeLabels : {}, edgeLabels : {} }
   },
   reducers: {
-    setLabelColor: {
+    setLabels: {
       reducer: (state, action) => {
-        state.labelColors = JSON.stringify(action.payload.labelColors)
-      
+        if (action.payload.elementType === 'node') {
+          if (state.labels.nodeLabels[action.payload.label] === undefined ) {state.labels.nodeLabels[action.payload.label] = action.payload.property} 
+          else {Object.assign(state.labels.nodeLabels[action.payload.label], action.payload.property)} 
+          
+        } else if (action.payload.elementType === 'edge') {
+          if (state.labels.edgeLabels[action.payload.label] === undefined ) {state.labels.edgeLabels[action.payload.label] = action.payload.property} 
+          else {Object.assign(state.labels.edgeLabels[action.payload.label], action.payload.property)} 
+        }
+        
       },
-      prepare: (labelColors) => {
-        return { payload: { labelColors } }
+      prepare: (elementType, label, property) => {
+        return { payload: { elementType, label, property } }
       }
-
     }
   },
   extraReducers: {
@@ -72,6 +65,6 @@ const CypherSlice = createSlice({
 })
 
 
-export const { setLabelColor } = CypherSlice.actions
+export const { setLabels } = CypherSlice.actions
 
 export default CypherSlice.reducer
