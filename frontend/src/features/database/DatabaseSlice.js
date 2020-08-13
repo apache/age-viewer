@@ -44,12 +44,12 @@ const DatabaseSlice = createSlice({
   extraReducers: {
     [connectToAgensGraph.fulfilled]: (state, action) => {
       return {
-        host: action.payload.host
-        , port: action.payload.port
-        , user: action.payload.user
-        , password: action.payload.password
-        , database: action.payload.database
-        , graph: action.payload.graph
+        host: action.meta.arg.host
+        , port: action.meta.arg.port
+        , user: action.meta.arg.user
+        , password: action.meta.arg.password
+        , database: action.meta.arg.database
+        , graph: action.meta.arg.graph
         , status: 'connected'
       }
     },
@@ -67,12 +67,12 @@ const DatabaseSlice = createSlice({
     [getConnectionStatus.fulfilled]: (state, action) => {
       if (action.payload) {
         return {
-          host: action.payload.host
-          , port: action.payload.port
-          , user: action.payload.user
-          , password: action.payload.password
-          , database: action.payload.database
-          , graph: action.payload.graph
+          host: action.meta.arg.host
+          , port: action.meta.arg.port
+          , user: action.meta.arg.user
+          , password: action.meta.arg.password
+          , database: action.meta.arg.database
+          , graph: action.meta.arg.graph
           , status: 'connected'
         }
       } else {
