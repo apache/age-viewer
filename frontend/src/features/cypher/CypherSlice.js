@@ -17,7 +17,7 @@ export const executeCypherQuery = createAsyncThunk(
       resData['key'] = args[0];
       resData['query'] = args[1];
       const res = await response.json();
-      resData['data'] = res['data']
+      resData['data'] = res
       return resData;
     } else {
       alert("Connection Error")

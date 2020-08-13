@@ -12,16 +12,14 @@ export const connectToAgensGraph = createAsyncThunk(
         },
         body: JSON.stringify(formData)
       })
-    const res = await response.json();
-    return res.data
+    return await response.json();
   }
 )
 
 export const disconnectToAgensGraph = createAsyncThunk(
   'database/disconnectToAgensGraph',
   async () => {
-    const response = await fetch('/api/v1/db/disconnect')
-    return response.data
+    return await fetch('/api/v1/db/disconnect')
   }
 )
 
@@ -29,8 +27,7 @@ export const getConnectionStatus = createAsyncThunk(
   'database/getConnectionStatus',
   async () => {
     const response = await fetch('/api/v1/db')
-    const res = await response.json();
-    return res.data
+    return await response.json();
   }
 )
 
@@ -44,12 +41,12 @@ const DatabaseSlice = createSlice({
   extraReducers: {
     [connectToAgensGraph.fulfilled]: (state, action) => {
       return {
-        host: action.meta.arg.host
-        , port: action.meta.arg.port
-        , user: action.meta.arg.user
-        , password: action.meta.arg.password
-        , database: action.meta.arg.database
-        , graph: action.meta.arg.graph
+        host: action.payload.host
+        , port: action.payload.port
+        , user: action.payload.user
+        , password: action.payload.password
+        , database: action.payload.database
+        , graph: action.payload.graph
         , status: 'connected'
       }
     },
@@ -67,12 +64,12 @@ const DatabaseSlice = createSlice({
     [getConnectionStatus.fulfilled]: (state, action) => {
       if (action.payload) {
         return {
-          host: action.meta.arg.host
-          , port: action.meta.arg.port
-          , user: action.meta.arg.user
-          , password: action.meta.arg.password
-          , database: action.meta.arg.database
-          , graph: action.meta.arg.graph
+          host: action.payload.host
+          , port: action.payload.port
+          , user: action.payload.user
+          , password: action.payload.password
+          , database: action.payload.database
+          , graph: action.payload.graph
           , status: 'connected'
         }
       } else {

@@ -31,18 +31,12 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
 
       props.data['captions'] = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(props.data.type, props.data.label)))
 
-      console.log("====================================")
-      console.log("props.data.type" , props.data.type)
       if (props.data.type === 'node') {
-        console.log("legendData.nodeLegend >>> " , legendData.nodeLegend, props.data.label, legendData.nodeLegend[props.data.label].caption)
         props.data['selectedCaption'] = legendData.nodeLegend[props.data.label].caption
       } else {
         props.data['selectedCaption'] = legendData.edgeLegend[props.data.label].caption
       }
     }
-
-    console.log("props >>." , props)
-    console.log("====================================")
 
     setFooterData(props)
   }

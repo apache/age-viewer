@@ -27,7 +27,6 @@ const getLabel = (ele, captionProp) => {
     }
   }
 
-  console.log("getLabel!!")
 }
 
 let selectedLabel = {
@@ -319,7 +318,6 @@ class CytoscapeComponent extends Component {
       if (nextProps.legendData !== undefined) {
 
         for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {  
-          console.log(label, legend)
           this.colorChange('node', label, {color : legend.color, borderColor : legend.borderColor, fontColor : legend.fontColor})
           this.sizeChange('node', label, legend.size)
           this.captionChange('node', label, legend.caption)
@@ -398,7 +396,6 @@ class CytoscapeComponent extends Component {
   }
 
   captionChange(elementType, label, caption) {
-    console.log("captionchange elementType, label, caption >>", elementType, label, caption)
     if (caption === 'gid') {
       this.cy.elements(elementType + '[label = "' + label + '"]').style('label', function (ele) { return ele == null ? '' : "[ " + ele.data('id') + " ]"; })
     } else if (caption === 'label') {

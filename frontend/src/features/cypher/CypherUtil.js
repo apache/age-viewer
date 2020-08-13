@@ -155,7 +155,6 @@ export const updateEdgeLabelSize = (labelName, newLabelSize) => {
 
 
 export const updateLabelCaption = (labelType, labelName, newLabelCaption) => {
-    console.log("util labelType, labelName, newLabelCaption", labelType, labelName, newLabelCaption)
     if (labelType === 'node') {
         nodelabelCaptions[labelName] = newLabelCaption
     } else {
@@ -220,13 +219,6 @@ export const reGenerateCytoscapeElements = (data, labels) => {
         });
     }
   
-    console.log("|||||||||||||||||||||||||||")
-    console.log("data >> ", data)
-    console.log("nodes >> ", nodes)
-    console.log("edges >> ", edges)
-    console.log("nodeLegend >> ", nodeLegend)
-    console.log("edgeLegend >> ", edgeLegend)
-    console.log("|||||||||||||||||||||||||||")
     return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
 }
 
@@ -287,14 +279,6 @@ export const generateCytoscapeElement = (data) => {
         });
     }
   
-    
-    console.log("1111111111111111111111")
-    console.log("data >> ", data)
-    console.log("nodes >> ", nodes)
-    console.log("edges >> ", edges)
-    console.log("nodeLegend >> ", nodeLegend)
-    console.log("edgeLegend >> ", edgeLegend)
-    console.log("1111111111111111111111")
     return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
 
 }
