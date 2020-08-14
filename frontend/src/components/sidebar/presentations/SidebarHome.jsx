@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react'
 import { Badge } from 'react-bootstrap'
 import { Fragment } from 'react';
+import uuid from 'react-uuid';
 
 const ColoredLine = () => (
     <hr
@@ -18,6 +19,7 @@ const NodeList = ({nodes}) => {
     if(nodes) {
         list = nodes.map(item => (
             <NodeItems
+                key={uuid()}
                 label={item.label}
                 cnt={item.cnt}
             />
@@ -44,6 +46,7 @@ const EdgeList = ({edges}) => {
     if(edges) {
         list = edges.map(item => (
             <EdgeItems
+                key={uuid()}
                 label={item.label}
                 cnt={item.cnt}
             />
@@ -70,7 +73,8 @@ const PropertyList = ({propertyKeys}) => {
     if(propertyKeys) {
         list = propertyKeys.map(item => (
             <PropertyItems
-                propertyKey={item.key}
+                key={uuid()}
+                propertyName={item.key}
                 classNames={item.key_type === 'v' ? 'badge badge-dark' : 'badge badge-light'}
             />
         ));
@@ -85,9 +89,9 @@ const PropertyList = ({propertyKeys}) => {
     }
 };
 
-const PropertyItems =({propertyKey, classNames}) => (
+const PropertyItems =({propertyName, classNames}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em'}}><span className={classNames}>{propertyKey}</span></h5>
+        <h5 style={{paddingRight: '0.3em'}}><span className={classNames}>{propertyName}</span></h5>
     </Fragment>
 );
 
