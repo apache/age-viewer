@@ -13,12 +13,8 @@ export const executeCypherQuery = createAsyncThunk(
         body: JSON.stringify({ cmd: args[1] })
       })
     if (response.ok) {
-      const resData = {}
-      resData['key'] = args[0];
-      resData['query'] = args[1];
       const res = await response.json();
-      resData['data'] = res
-      return resData;
+      return Object.assign({key : args[0], query : args[1], ...res})
     } else {
       alert("Connection Error")
       return {};
@@ -57,7 +53,8 @@ const CypherSlice = createSlice({
     },
     [executeCypherQuery.fulfilled]: (state, action) => {
       state.queryResult[action.payload.key] = {}
-      state.queryResult[action.payload.key].response = action.payload
+      //state.queryResult[action.payload.key].response = action.payload
+      Object.assign(state.queryResult[action.payload.key], action.payload)
     },
     [executeCypherQuery.rejectd]: (state, action) => {
     }

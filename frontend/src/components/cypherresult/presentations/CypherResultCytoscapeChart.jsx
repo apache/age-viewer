@@ -195,7 +195,7 @@ class CytoscapeComponent extends Component {
   }
 
   addElements(d) {
-    const generatedData = generateCytoscapeElement({ response: d })
+    const generatedData = generateCytoscapeElement( d )
     if (generatedData.elements.nodes.length === 0) {
       alert("No data to extend.")
       return

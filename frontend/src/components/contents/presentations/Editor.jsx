@@ -1,9 +1,10 @@
 import React, {useRef}  from 'react';
 import {useDispatch} from 'react-redux'
 import AlertContainers from '../../alert/containers/AlertContainers'
+import uuid from 'react-uuid'
 
 
-const Editor = ({ addFrame, addAlert, alertList, database, getConnectionStatus }) => {
+const Editor = ({ addFrame, addAlert, alertList, database, executeCypherQuery }) => {
 
     const dispatch = useDispatch();
     let reqString = useRef()
@@ -17,12 +18,13 @@ const Editor = ({ addFrame, addAlert, alertList, database, getConnectionStatus }
     }
     
     const onClick = () => {
-        if (database.status === 'disconnected' && reqString.current.value.startsWith('match')) {
+        const refKey = uuid()
+        if (database.status === 'disconnected' && reqString.current.value.match('(match|create).*')) {
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
         } else if (database.status === 'disconnected' && reqString.current.value === ':server status') {
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
         } else {
-            dispatch(() => addFrame(reqString.current.value))            
+            dispatch(() => [addFrame(reqString.current.value, refKey), executeCypherQuery([refKey, reqString.current.value])])            
         }
         clearReqString()
     }; 

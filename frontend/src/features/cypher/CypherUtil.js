@@ -169,7 +169,7 @@ export const reGenerateCytoscapeElements = (data, labels) => {
     let edgeLegend = {}
 
     if (data) {
-        data['response']['data']['rows'].forEach((row, index) => {
+        data['rows'].forEach((row, index) => {
             for (const [alias, val] of Object.entries(row)) {
                 let labelName = val['label']
                 if (val['start'] && val['end']) {
@@ -227,9 +227,10 @@ export const generateCytoscapeElement = (data) => {
     let edges = []
     let nodeLegend = {}
     let edgeLegend = {}
+    console.log("data>> " , data)
 
     if (data) {
-        data['response']['data']['rows'].forEach((row, index) => {
+        data['rows'].forEach((row, index) => {
             for (const [alias, val] of Object.entries(row)) {
                 let labelName = val['label']
                 if (val['start'] && val['end']) {
