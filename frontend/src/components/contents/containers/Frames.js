@@ -3,6 +3,7 @@ import Frames from '../presentations/Frames'
 const mapStateToProps = (state)  => {
     return {
         frameList: state.frames,
+        queryResult : state.cypher.queryResult,
         database: state.database
     }
 }

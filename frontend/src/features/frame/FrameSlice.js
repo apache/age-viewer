@@ -15,7 +15,7 @@ const FrameSlice = createSlice({
           state.unshift({ frameName: 'ServerConnect', frameProps: { key: refKey, reqString: reqString } })
         } else if (reqString === ':server disconnect') {
           state.unshift({ frameName: 'ServerDisconnect', frameProps: { key: refKey, reqString: reqString } })
-        } else if (reqString.startsWith('match')) {
+        } else if (reqString.match("(match|create).*")) {
           state.unshift({ frameName: 'CypherResultFrame', frameProps: { key: refKey, reqString: reqString } })
         } else {
           alert("Can't understand your command")
@@ -23,6 +23,7 @@ const FrameSlice = createSlice({
         }
       },
       prepare: (reqString, refKey) => {
+        console.log("reqString, refKey >> ", reqString, refKey)
         return { payload: { reqString, refKey } }
       }
     },

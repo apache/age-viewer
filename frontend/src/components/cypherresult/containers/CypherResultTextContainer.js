@@ -7,8 +7,8 @@ const mapStateToProps = (state, ownProps) => {
         let columns = []
         let rows = []
         if (data) {
-            columns = data['response']['data']['columns']
-            rows = data['response']['data']['rows']
+            columns = data['columns']
+            rows = data['rows']
         }
         return { columns: columns, rows: rows }
     }
