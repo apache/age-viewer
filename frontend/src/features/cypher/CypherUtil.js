@@ -1,20 +1,36 @@
 
 
 
-export const labelColors = [
-    { color: '#604A0E', borderColor: '#423204', fontColor: '#FFF', labels: new Set([]), index: 0 },
-    { color: '#C990C0', borderColor: '#B261A5', fontColor: '#FFF', labels: new Set([]), index: 1 },
-    { color: '#F79767', borderColor: '#F36924', fontColor: '#FFF', labels: new Set([]), index: 2 },
-    { color: '#57C7E3', borderColor: '#23B3D7', fontColor: '#2A2C34', labels: new Set([]), index: 3 },
-    { color: '#F16667', borderColor: '#EB2728', fontColor: '#FFF', labels: new Set([]), index: 4 },
-    { color: '#D9C8AE', borderColor: '#C0A378', fontColor: '#2A2C34', labels: new Set([]), index: 5 },
-    { color: '#8DCC93', borderColor: '#5DB665', fontColor: '#2A2C34', labels: new Set([]), index: 6 },
-    { color: '#ECB5C9', borderColor: '#DA7298', fontColor: '#2A2C34', labels: new Set([]), index: 7 },
-    { color: '#498EDA', borderColor: '#2870C2', fontColor: '#FFF', labels: new Set([]), index: 8 },
-    { color: '#FFC454', borderColor: '#D7A013', fontColor: '#2A2C34', labels: new Set([]), index: 9 },
-    { color: '#DA7194', borderColor: '#CC3C6C', fontColor: '#FFF', labels: new Set([]), index: 10 },
-    { color: '#569480', borderColor: '#447666', fontColor: '#FFF', labels: new Set([]), index: 11 }
+export const nodeLabelColors = [
+    { color: '#604A0E', borderColor: '#423204', fontColor: '#FFF', nodeLabels: new Set([]), index: 0 },
+    { color: '#C990C0', borderColor: '#B261A5', fontColor: '#FFF', nodeLabels: new Set([]), index: 1 },
+    { color: '#F79767', borderColor: '#F36924', fontColor: '#FFF', nodeLabels: new Set([]), index: 2 },
+    { color: '#57C7E3', borderColor: '#23B3D7', fontColor: '#2A2C34', nodeLabels: new Set([]), index: 3 },
+    { color: '#F16667', borderColor: '#EB2728', fontColor: '#FFF', nodeLabels: new Set([]), index: 4 },
+    { color: '#D9C8AE', borderColor: '#C0A378', fontColor: '#2A2C34', nodeLabels: new Set([]), index: 5 },
+    { color: '#8DCC93', borderColor: '#5DB665', fontColor: '#2A2C34', nodeLabels: new Set([]), index: 6 },
+    { color: '#ECB5C9', borderColor: '#DA7298', fontColor: '#2A2C34', nodeLabels: new Set([]), index: 7 },
+    { color: '#498EDA', borderColor: '#2870C2', fontColor: '#FFF', nodeLabels: new Set([]), index: 8 },
+    { color: '#FFC454', borderColor: '#D7A013', fontColor: '#2A2C34', nodeLabels: new Set([]), index: 9 },
+    { color: '#DA7194', borderColor: '#CC3C6C', fontColor: '#FFF', nodeLabels: new Set([]), index: 10 },
+    { color: '#569480', borderColor: '#447666', fontColor: '#FFF', nodeLabels: new Set([]), index: 11 }
 ]
+
+export const edgeLabelColors = [
+    { color: '#604A0E', borderColor: '#423204', fontColor: '#FFF', edgeLabels: new Set([]), index: 0 },
+    { color: '#C990C0', borderColor: '#B261A5', fontColor: '#FFF', edgeLabels: new Set([]), index: 1 },
+    { color: '#F79767', borderColor: '#F36924', fontColor: '#FFF', edgeLabels: new Set([]), index: 2 },
+    { color: '#57C7E3', borderColor: '#23B3D7', fontColor: '#2A2C34', edgeLabels: new Set([]), index: 3 },
+    { color: '#F16667', borderColor: '#EB2728', fontColor: '#FFF', edgeLabels: new Set([]), index: 4 },
+    { color: '#D9C8AE', borderColor: '#C0A378', fontColor: '#2A2C34', edgeLabels: new Set([]), index: 5 },
+    { color: '#8DCC93', borderColor: '#5DB665', fontColor: '#2A2C34', edgeLabels: new Set([]), index: 6 },
+    { color: '#ECB5C9', borderColor: '#DA7298', fontColor: '#2A2C34', edgeLabels: new Set([]), index: 7 },
+    { color: '#498EDA', borderColor: '#2870C2', fontColor: '#FFF', edgeLabels: new Set([]), index: 8 },
+    { color: '#FFC454', borderColor: '#D7A013', fontColor: '#2A2C34', edgeLabels: new Set([]), index: 9 },
+    { color: '#DA7194', borderColor: '#CC3C6C', fontColor: '#FFF', edgeLabels: new Set([]), index: 10 },
+    { color: '#569480', borderColor: '#447666', fontColor: '#FFF', edgeLabels: new Set([]), index: 11 }
+]
+
 
 export const nodeLabelSizes = [
     { size: 11, labels: new Set([]), index: 0 },
@@ -55,22 +71,37 @@ const getCaption = (valType, val) => {
     return caption
 }
 
-const getColor = (labelName) => {
+const getNodeColor = (labelName) => {
     let selectedColor = {}
-    labelColors.forEach((labelColor) => {
-        if (labelColor.labels.has(labelName)) {
+    nodeLabelColors.forEach((labelColor) => {
+        if (labelColor.nodeLabels.has(labelName)) {
             selectedColor = { color: labelColor.color, borderColor : labelColor.borderColor, fontColor : labelColor.fontColor}
         }
     })
 
     if (Object.keys(selectedColor).length === 0) {
         const randomIndex = Math.floor(Math.random() * (11 - 0 + 1)) + 0
-        labelColors[randomIndex].labels.add(labelName)
-        selectedColor = { color: labelColors[randomIndex].color, borderColor : labelColors[randomIndex].borderColor, fontColor : labelColors[randomIndex].fontColor}
+        nodeLabelColors[randomIndex].nodeLabels.add(labelName)
+        selectedColor = { color: nodeLabelColors[randomIndex].color, borderColor : nodeLabelColors[randomIndex].borderColor, fontColor : nodeLabelColors[randomIndex].fontColor}
     }
     return selectedColor
 }
 
+const getEdgeColor = (labelName) => {
+    let selectedColor = {}
+    edgeLabelColors.forEach((labelColor) => {
+        if (labelColor.edgeLabels.has(labelName)) {
+            selectedColor = { color: labelColor.color, borderColor : labelColor.borderColor, fontColor : labelColor.fontColor}
+        }
+    })
+
+    if (Object.keys(selectedColor).length === 0) {
+        const randomIndex = Math.floor(Math.random() * (11 - 0 + 1)) + 0
+        edgeLabelColors[randomIndex].edgeLabels.add(labelName)
+        selectedColor = { color: edgeLabelColors[randomIndex].color, borderColor : edgeLabelColors[randomIndex].borderColor, fontColor : nodeLabelColors[randomIndex].fontColor}
+    }
+    return selectedColor
+}
 const getNodeSize = (labelName) => {
     let selectedSize = 0
 
@@ -116,16 +147,30 @@ const sortByKey = (data) => {
     return sorted;
 }
 
-export const updateLabelColor = (labelName, newLabelColor) => {
-    labelColors.forEach((labelColor) => {
-        if (labelColor.labels.has(labelName)) {
-            labelColor.labels.delete(labelName)
+export const updateLabelColor = (labelType, labelName, newLabelColor) => {
+    
+        
+    if (labelType === 'node') {
+        nodeLabelColors.forEach((labelColor) => {
+        if (labelColor.nodeLabels.has(labelName)) {
+            labelColor.nodeLabels.delete(labelName)
         }
 
         if (labelColor.color === newLabelColor.color) {
-            labelColor.labels.add(labelName)            
+            labelColor.nodeLabels.add(labelName)            
         }
-    })
+        })
+    } else {
+        edgeLabelColors.forEach((labelColor) => {
+        if (labelColor.edgeLabels.has(labelName)) {
+            labelColor.edgeLabels.delete(labelName)
+        }
+
+        if (labelColor.color === newLabelColor.color) {
+            labelColor.edgeLabels.add(labelName)            
+        }
+        })
+    }
 }
 
 export const updateNodeLabelSize = (labelName, newLabelSize) => {
@@ -173,7 +218,7 @@ export const reGenerateCytoscapeElements = (data, labels) => {
             for (const [alias, val] of Object.entries(row)) {
                 let labelName = val['label']
                 if (val['start'] && val['end']) {
-                    if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = { color: '#8C8C8C', borderColor : '#8C8C8C', fontColor:'#2A2C34', size: getEdgeSize(labelName), caption: getCaption('edge', val)  } }
+                    if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({size: getEdgeSize(labelName), caption: getCaption('edge', val)}, getEdgeColor(labelName)) } 
                     if (!edgelabelCaptions.hasOwnProperty(labelName)) {edgelabelCaptions[labelName] = 'label'}
                     edges.push(
                         {
@@ -195,7 +240,7 @@ export const reGenerateCytoscapeElements = (data, labels) => {
                         }
                     )
                 } else {
-                    if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({size: getNodeSize(labelName), caption: getCaption('node', val)}, getColor(labelName)) } 
+                    if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({size: getNodeSize(labelName), caption: getCaption('node', val)}, getNodeColor(labelName)) } 
                     if (!nodelabelCaptions.hasOwnProperty(labelName)) {nodelabelCaptions[labelName] = 'gid'}
                     nodes.push(
                         {
@@ -227,14 +272,13 @@ export const generateCytoscapeElement = (data) => {
     let edges = []
     let nodeLegend = {}
     let edgeLegend = {}
-    console.log("data>> " , data)
 
     if (data) {
         data['rows'].forEach((row, index) => {
             for (const [alias, val] of Object.entries(row)) {
                 let labelName = val['label']
                 if (val['start'] && val['end']) {
-                    if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = { color: '#8C8C8C', borderColor : '#8C8C8C', fontColor:'#2A2C34', size: getEdgeSize(labelName), caption: getCaption('edge', val) } }
+                    if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({size: getEdgeSize(labelName), caption: getCaption('edge', val)}, getEdgeColor(labelName)) } 
                     if (!edgelabelCaptions.hasOwnProperty(labelName)) {edgelabelCaptions[labelName] = 'label'}
                     edges.push(
                         {
@@ -256,7 +300,7 @@ export const generateCytoscapeElement = (data) => {
                         }
                     )
                 } else {
-                    if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({size: getNodeSize(labelName), caption: getCaption('node', val)}, getColor(labelName)) } 
+                    if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({size: getNodeSize(labelName), caption: getCaption('node', val)}, getNodeColor(labelName)) } 
                     if (!nodelabelCaptions.hasOwnProperty(labelName)) {nodelabelCaptions[labelName] = 'gid'}
                     nodes.push(
                         {

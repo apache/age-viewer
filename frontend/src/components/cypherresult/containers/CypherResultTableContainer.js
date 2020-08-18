@@ -4,7 +4,6 @@ import CypherResultTable from '../presentations/CypherResultTable'
 const mapStateToProps = (state, ownProps) => {
     const { refKey } = ownProps
     const generateTableData = (data) => {
-        console.log(">>>>>>>>>>>>> ", data)
         let columns = []
         let rows = []
         let command = null

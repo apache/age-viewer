@@ -1,7 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
 const CypherResultTable = ({data}) => {
-  console.log("????????????", data)
     if (data.command && data.command.toUpperCase() === 'GRAPH') {
       return <span style={{margin:'25px'}}>Affected {data.rowCount === null ? 0 : data.rowCount} </span>
     
