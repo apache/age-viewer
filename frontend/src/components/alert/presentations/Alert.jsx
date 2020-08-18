@@ -34,6 +34,16 @@ const SingleAlert = ({key, alertKey, alertType}) => {
             </Alert>
         );
 
+    } else if (alertType === 'ErrorServerConnectFail') {
+        return (    
+            <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
+                <Alert.Heading>Database Connection Failed</Alert.Heading>
+                <p>
+                Failed to connec to the database. Are you sure the database is running on the server?
+                </p>
+            </Alert>
+        );
+
     } else if (alertType === 'ErrorNoDatabaseConnected') {
         return (    
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>

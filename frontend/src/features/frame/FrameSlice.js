@@ -23,7 +23,6 @@ const FrameSlice = createSlice({
         }
       },
       prepare: (reqString, refKey) => {
-        console.log("reqString, refKey >> ", reqString, refKey)
         return { payload: { reqString, refKey } }
       }
     },
