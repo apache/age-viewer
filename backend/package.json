@@ -1,19 +1,28 @@
 {
-  "name": "agensbrowser",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node ./server/bin/www"
-  },
-  "dependencies": {
-    "agensgraph": "git+https://github.com/bitnine-oss/agensgraph-nodejs.git",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "express-session": "^1.17.1",
-    "morgan": "~1.9.1",
-    "npm-run-all": "^4.1.5",
-    "pegjs": "^0.10.0",
-    "pg": "^8.3.0"
-  }
+    "name": "agensbrowser",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "test": "mocha",
+        "test:connector": "mocha ./test/connector.api.test.js",
+        "test:cypher": "mocha ./test/cypher.api.test.js",
+        "test:query": "mocha ./test/cypher.service.test.js",
+        "start": "node ./server/bin/www"
+    },
+    "dependencies": {
+        "agensgraph": "git+https://github.com/bitnine-oss/agensgraph-nodejs.git",
+        "cookie-parser": "~1.4.4",
+        "debug": "~2.6.9",
+        "express": "~4.16.1",
+        "express-session": "^1.17.1",
+        "morgan": "~1.9.1",
+        "npm-run-all": "^4.1.5",
+        "pegjs": "^0.10.0",
+        "pg": "^8.3.0"
+    },
+    "devDependencies": {
+        "mocha": "^8.1.0",
+        "supertest": "^4.0.2",
+        "supertest-session": "^4.0.0"
+    }
 }

@@ -4,7 +4,11 @@ import Sidebar from '../presentations/Sidebar'
 
 const mapStateToProps = (state) => {
     return {
-        activeMenuName: state.navigator.activeMenu
+        activeMenuName: state.navigator.activeMenu,
+        isActive: state.navigator.isActive,
+        edges : state.metadata.edges,
+        nodes : state.metadata.nodes,
+        propertyKeys : state.metadata.propertyKeys
     }
 }
 

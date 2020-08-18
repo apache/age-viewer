@@ -9,8 +9,12 @@ const mapStateToProps = (state, ownProps) => {
     let data = {}
     if (state.cypher.queryResult[refKey]) {
         database = state.database
-        query = state.cypher.queryResult[refKey].response.query
-        data = state.cypher.queryResult[refKey].response.data
+        query = state.cypher.queryResult[refKey].query
+        data = {columns : state.cypher.queryResult[refKey].columns
+            , command : state.cypher.queryResult[refKey].command
+            , rowCount : state.cypher.queryResult[refKey].rowCount
+            , rows : state.cypher.queryResult[refKey].rows
+        }
     }
 
     return {

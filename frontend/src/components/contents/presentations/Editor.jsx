@@ -1,32 +1,34 @@
 import React, {useRef}  from 'react';
 import {useDispatch} from 'react-redux'
 import AlertContainers from '../../alert/containers/AlertContainers'
+import uuid from 'react-uuid'
 
 
-const Editor = ({ onClick, addAlert, alertList, serverInfo }) => {
+const Editor = ({ addFrame, addAlert, alertList, database, executeCypherQuery }) => {
+
     const dispatch = useDispatch();
     let reqString = useRef()
+
     const clearReqString = () => (reqString.current.value = '' );
     
     const onEnter = (e) => {
         if(e.keyCode === 13){
-            addFrame()
-            clearReqString()
+            onClick()
          }
     }
     
-    const addFrame = () => {
-        if (serverInfo.status === 'disconnected' && reqString.current.value.startsWith('match')) {
+    const onClick = () => {
+        const refKey = uuid()
+        if (database.status === 'disconnected' && reqString.current.value.match('(match|create).*')) {
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            return;
-        } if (serverInfo.status === 'disconnected' && reqString.current.value === ':server status') {
+        } else if (database.status === 'disconnected' && reqString.current.value === ':server status') {
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            return;
         } else {
-            dispatch(() => onClick(reqString.current.value))            
-            return;
+            dispatch(() => [addFrame(reqString.current.value, refKey), executeCypherQuery([refKey, reqString.current.value])])            
         }
+        clearReqString()
     }; 
+
     const alerts = alertList.map((alert) => {
         return <AlertContainers key={alert.alerProps.key} alertKey={alert.alerProps.key} alertType={alert.alertType}/>;
     });
@@ -43,7 +45,7 @@ const Editor = ({ onClick, addAlert, alertList, serverInfo }) => {
                                 aria-hidden="true"></span></button>
                         <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-eraser fa-lg"
                                 aria-hidden="true"></span></button>
-                        <button className="frame-head-button btn btn-link" type="button" onClick={() => [addFrame(), clearReqString()]}><span className="fa fa-play-circle-o fa-lg"
+                        <button className="frame-head-button btn btn-link" type="button" onClick={() => onClick()}><span className="fa fa-play-circle-o fa-lg"
                                 aria-hidden="true"></span></button>
                     </div>
                 </div>

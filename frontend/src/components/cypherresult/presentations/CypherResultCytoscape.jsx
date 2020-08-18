@@ -1,95 +1,148 @@
-import React, {useRef, useLayoutEffect, useEffect, useState} from 'react';
-import Cytoscape from 'cytoscape';
-import COSEBilkent from 'cytoscape-cose-bilkent';
+import React, { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react';
+import { useDispatch } from 'react-redux'
+import { labelColors, nodeLabelSizes, edgeLabelSizes } from '../../../features/cypher/CypherUtil'
+import CypherResultCytoscapeChart from './CypherResultCytoscapeChart'
 import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
-
-Cytoscape.use(COSEBilkent);
-
-const CypherResultCytoscape = ({data}) => {
-
-    const targetRef = useRef();
-    const [dimensions, setDimensions] = useState({width: 0 , height: 0});
-
-    useLayoutEffect(() => {
-        if (targetRef.current) {
-          setDimensions({
-            width: targetRef.current.offsetWidth,
-            height: targetRef.current.offsetHeight
-          });
-        }
-    }, []);  
+import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
 
 
-    const containerRef = useRef();
+const CypherResultCytoscape = forwardRef((props, ref) => {
+  const [footerData, setFooterData] = useState({})
+  const [legendData, setLegendData] = useState({ edgeLegend: {}, nodeLegend: {} })
+  const [elements, setElements] = useState({ edges: [], nodes: [] })
+  const [isReloading, setIsReloading] = useState(false)
+  const dispatch = useDispatch()
+  const chartRef = useRef()
 
-    useEffect(() => {
-      const stylesheet = [
-        {
-          selector: 'node',
-          style: {
-            width: 70,
-            height: 70,
-            label: 'data(label)',
-            'background-color': function( ele ) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
-            "text-valign" : "center",
-            "text-halign" : "center"
-          }
-        },
-        {
-          selector: 'edge',
-          style: {
-            width: 6,
-            'line-color': function( ele ) { return ele == null ? '#FFF' : ele.data('backgroundColor'); }
-          }
-        }
-      ]
+  useEffect(() => {
 
-      const layout = { name : 'cose-bilkent' }
-      
-      const config = {
-        // Common Options
-        container: containerRef.current,
-        style: stylesheet,
-        elements: data['elements'],
-        layout: layout,
-        // Viewport Options
-        zoom: 1,
-        pan: { x: 0, y: 0 },
-        // Interaction Options
-        minZoom: 1e-50,
-        maxZoom: 1e50,
-        zoomingEnabled: true,
-        userZoomingEnabled: true,
-        panningEnabled: true,
-        userPanningEnabled: true,
-        boxSelectionEnabled: true,
-        selectionType: 'single',
-        touchTapThreshold: 8,
-        desktopTapThreshold: 4,
-        autolock: false,
-        autoungrabify: false,
-        autounselectify: false,
-        // Rendering Options
-        headless: false,
-        styleEnabled: true,
-        hideEdgesOnViewport: false,
-        textureOnViewport: false,
-        motionBlur: false,
-        motionBlurOpacity: 0.2,
-        wheelSensitivity: 1,
-        pixelRatio: 'auto'
-      };
-  
-      Cytoscape(config);
-    }, [data]);
+    if (props.data['legend'] !== undefined && Object.keys(props.data['legend']['nodeLegend']).length > 0) {
+
+      setIsReloading(false)
+
+      setLegendData(props.data['legend'])
+
+      setElements(props.data.elements)
+    }
+  })
+
+  const getFooterData = (props) => {
+    if (props.type === 'labels') {
+
+      props.data['captions'] = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(props.data.type, props.data.label)))
+
+      if (props.data.type === 'node') {
+        props.data['selectedCaption'] = legendData.nodeLegend[props.data.label].caption
+      } else {
+        props.data['selectedCaption'] = legendData.edgeLegend[props.data.label].caption
+      }
+    }
+
+    setFooterData(props)
+  }
+
+  const addLegendData = (addedLegendData) => {
+    setIsReloading(false)
+    setLegendData(addedLegendData)
+  }
+
+  const colorChange = (elementType, label, color) => {
+    let footerObj = footerData.data
+    footerObj.backgroundColor = color.color
+    footerObj.fontColor = color.fontColor
+    setIsReloading(false)
+    setFooterData(Object.assign({}, footerData, { data: footerObj }))
+
+    if (elementType === 'node') {
+      let nodeLegendObj = legendData.nodeLegend
 
 
+      if (nodeLegendObj.hasOwnProperty(label)) {
+        nodeLegendObj[label]['color'] = color.color
+        nodeLegendObj[label]['borderColor'] = color.borderColor
+        nodeLegendObj[label]['fontColor'] = color.fontColor
+      }
+      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
+      chartRef.current.colorChange(elementType, label, color);
 
-    return <div className="chart-area" ref={targetRef}>
-            <CypherResultCytoscapeLegend legendData={data['legend']}/>
-            <div ref={containerRef} style={ { width: dimensions.width , height: dimensions.height, position:'absolute', 'zIndex':1 } } />
-          </div>
-}
+    } else if (elementType === 'edge') {
+      let edgeLegendObj = legendData.edgeLegend
+      if (edgeLegendObj.hasOwnProperty(label)) {
+        edgeLegendObj[label]['color'] = color.color
+        edgeLegendObj[label]['borderColor'] = color.borderColor
+        edgeLegendObj[label]['fontColor'] = color.fontColor
+      }
+      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
+      chartRef.current.colorChange(elementType, label, Object.assign(color, { fontColor: '#2A2C34' }));
+    }
+
+    dispatch(() => props.setLabels(elementType, label, { borderColor: color.borderColor, color: color.color, fontColor: color.fontColor }))
+  }
+
+  const sizeChange = (elementType, label, size) => {
+    let footerObj = footerData.data
+    footerObj.size = size
+    setFooterData(Object.assign({}, footerData, { data: footerObj }))
+    setIsReloading(false)
+    chartRef.current.sizeChange(elementType, label, size);
+
+    if (elementType === 'node') {
+      let nodeLegendObj = legendData.nodeLegend
+      if (nodeLegendObj.hasOwnProperty(label)) {
+        nodeLegendObj[label].size = size
+      }
+      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
+    } else if (elementType === 'edge') {
+      let edgeLegendObj = legendData.edgeLegend
+      if (edgeLegendObj.hasOwnProperty(label)) {
+        edgeLegendObj[label].size = size
+      }
+      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
+    }
+    dispatch(() => props.setLabels(elementType, label, { size: size }))
+  }
+
+  const captionChange = (elementType, label, caption) => {
+    chartRef.current.captionChange(elementType, label, caption);
+    let footerObj = footerData.data
+    footerObj.captions = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(elementType, label)))
+    footerObj.selectedCaption = caption
+    setFooterData(Object.assign({}, footerData, { data: footerObj }))
+
+    if (elementType === 'node') {
+      let nodeLegendObj = legendData.nodeLegend
+      if (nodeLegendObj.hasOwnProperty(label)) {
+        nodeLegendObj[label].caption = caption
+      }
+      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
+    } else if (elementType === 'edge') {
+      let edgeLegendObj = legendData.edgeLegend
+      if (edgeLegendObj.hasOwnProperty(label)) {
+        edgeLegendObj[label].caption = caption
+      }
+      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
+    }
+    dispatch(() => props.setLabels(elementType, label, { caption: caption }))
+  }
+
+
+  useImperativeHandle(ref, () => ({
+
+    getCy() {
+      return chartRef.current.getCy();
+    },
+
+    resetChart() {
+      return chartRef.current.resetChart();
+    }
+  }));
+
+  return <div className="chart-frame-area">
+    <CypherResultCytoscapeLegend onLabelClick={getFooterData} isReloading={isReloading} legendData={legendData} />
+    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} />
+    <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} labelColors={labelColors} />
+  </div>
+})
 
 
 export default CypherResultCytoscape

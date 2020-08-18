@@ -1,9 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert} from 'react-bootstrap'
 
 const SingleAlert = ({key, alertKey, alertType}) => {
 
     const [show, setShow] = useState(true)
+
+    useEffect(() => {
+        const timer = setTimeout(() => {setShow(false)} , 5000)
+        return () => clearTimeout(timer);
+    }, [])
 
     if (alertType === 'NoticeServerDisconnected') {
         return (    

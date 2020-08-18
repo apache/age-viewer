@@ -1,30 +1,71 @@
-import React from 'react';
-import {Badge} from 'react-bootstrap'
+import React, { Component } from 'react';
+import { Badge } from 'react-bootstrap'
+import uuid from 'react-uuid'
 
-const CypherResultCytoscapeLegend = ({legendData}) => {
-  const {nodeLegend, edgeLegend} = legendData
-
-  const nodeBadges = []
-  const edgeBadges = []
-
-
-  for (const [label, color] of Object.entries(nodeLegend)) {
-    nodeBadges.push(<Badge className="px-3 mx-1" pill key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
+class CypherResultCytoscapeLegend extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      nodeBadges: new Map(),
+      edgeBadges: new Map()
+    }
   }
 
-  for (const [label, color] of Object.entries(edgeLegend)) {
-    edgeBadges.push(<Badge className="px-3 mx-1" key={label} style={{ backgroundColor : color, fontSize : '0.9rem' }}>{label}</Badge>)
+  componentDidMount() {
   }
-  
-    return <div className="legend-area pt-2" style={{ width: '100%', height:'50px', position:'absolute', 'zIndex':100}}>
-      <div className="nodeLegend" style={{ width: '100%' }}>
-      {nodeBadges}
+
+  shouldComponentUpdate() {
+    return true;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let newNodeBadges = this.state.nodeBadges
+    let newEdgeBadges = this.state.edgeBadges
+    if (nextProps.isReloading) {
+      newNodeBadges =  new Map()
+      newEdgeBadges =  new Map()
+    }
+
+    for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {       
+      newNodeBadges.set(label, <Badge className="nodeLabel px-3 py-2 mx-1 my-2" pill key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'node', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } })} style={{ backgroundColor: legend.color, color: legend.fontColor }}>{label}</Badge>)
+    }
+    
+    for (const [label, legend] of Object.entries(nextProps.legendData.edgeLegend)) {
+      newEdgeBadges.set(label, <Badge className="edgeLabel px-3 py-2 mx-1 my-2" key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'edge', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } })} style={{ backgroundColor: legend.color, color: legend.fontColor }}>{label}</Badge>)
+    }
+
+    this.setState({nodeBadges : newNodeBadges})
+    this.setState({edgeBadges : newEdgeBadges})
+
+
+  }
+
+  componentWillUnmount() {
+  }
+
+
+  render() {
+    let nodeLedgend = []
+    let edgeLedgend = []
+
+    this.state.nodeBadges.forEach((value, key, mapObj) => {
+      return nodeLedgend.push(value)
+    })
+
+    this.state.edgeBadges.forEach((value, key, mapObj) => {
+      return edgeLedgend.push(value)
+    })
+
+    return <div className="legend-area" style={{ width: '100%' }}>
+      <div className="nodeLegend">
+        {nodeLedgend}
       </div>
-      <div className="edgeLegend" style={{ width: '100%' }}>
-      {edgeBadges}
+      <div className="edgeLegend">
+        {edgeLedgend}
       </div>
+
     </div>
+  }
 }
-
-
 export default CypherResultCytoscapeLegend
+

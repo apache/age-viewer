@@ -86,9 +86,8 @@ body {
     width: 70px;
     background-color: var(--navbar-color);
 }
-
 #sidebar {
-    width: 250px;
+    width: 320px;
     position: fixed;
     top: 0;
     left: 70px;
@@ -97,12 +96,27 @@ body {
     background-color: var(--sidebar-color);
     color: #fff;
     transition: all 0.3s;
-    margin-left: -250px;
+    margin-left: -320px;
 }
-
 #sidebar.active {
     margin-left: 0px;
 }
+
+/*
+#sidebar {
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 70px;
+    height: 100vh;
+    background-color: var(--sidebar-color);
+    color: #fff;
+    transition: all 0.3s;
+}
+#sidebar.active {
+    width: 320px;
+}
+*/
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -128,11 +142,17 @@ a[data-toggle="collapse"] {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
+/*
+#sidebar.active~#content{
+    width: calc(100% - 390px);
+}
+*/
 
 #content.active {
-    width: calc(100% - 320px);
+    width: calc(100% - 390px);
     
 }
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -140,7 +160,7 @@ a[data-toggle="collapse"] {
 
 @media (max-width: 768px) {
     #sidebar {
-        margin-left: -250px;
+        margin-left: -320px;
     }
     #sidebar.active {
         margin-left: 0;
@@ -149,7 +169,7 @@ a[data-toggle="collapse"] {
         width: 100%;
     }
     #content.active {
-        width: calc(100% - 250px);
+        width: calc(100% - 320px);
     }
     #sidebarCollapse span {
         display: none;
@@ -160,6 +180,18 @@ a[data-toggle="collapse"] {
     color: gray !important;
 }
 
+.card.fullscreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1040;
+}
+
+.card.fullscreen .chart-area {
+    height: calc(100% - 94px - 35px)
+}
 .card-header {
     border-bottom: 1px solid rgba(0,0,0,.125);    
 }
@@ -212,11 +244,116 @@ a.nav-link {
     margin-bottom: 0px;
 }
 
-.chart-area {
-    height:100%; 
+.chart-frame-area {
     width:100%;
+    height:100%;
+
 }
+.chart-area {
+    height: 317px;
+    width: 100%;
+    display: 'block';
+    overflow:hidden;
+}
+
+.chart-footer-area {
+    vertical-align: middle;
+    line-height: 37px;       
+    min-height: 37px;
+    width: 100%;
+    background-color: rgba(0,0,0,.03);
+    border-top: 1px solid rgba(0,0,0,.125);
+}
+
 
 .frame-head-button:hover {
     color: #212121 !important;
+}
+
+.graph-tabpanel {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.nodeLegend, .edgeLegend {
+    height: 47px;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.nodeLabel, .edgeLabel {
+    cursor: pointer;
+}
+
+.colorSelector {
+    width: 15px; 
+    height: 15px; 
+    padding: 6px 0px; 
+    border-radius: 15px; 
+    font-size: 8px; 
+    text-align: center; 
+    margin-left: 5px;
+    opacity: 0.2; 
+}
+
+.captionSelector {
+    padding: .1rem .2rem;
+    font-size: .575rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+    margin-left: 5px;
+    border-color: darkgrey;
+    opacity: 0.5; 
+}
+
+.sizeSelector.node {
+    background-color: darkgrey;
+    padding: 6px 0px; 
+    border-radius: 15px; 
+    font-size: 8px; 
+    text-align: center; 
+    margin-left: 5px;
+    opacity: 0.2; 
+}
+
+.sizeSelector.edge {
+    background-color: darkgrey;
+    padding: 6px 0px; 
+    font-size: 8px; 
+    text-align: center; 
+    margin-left: 5px;
+    opacity: 0.2; 
+}
+
+.sizeSelector:hover {
+    opacity: 1; 
+}
+
+.sizeSelector.selectedSize {
+    opacity: 1; 
+}
+
+.colorSelector:hover {
+    opacity: 1; 
+}
+
+.colorSelector.selectedColor {
+    opacity: 1; 
+}
+
+.captionSelector.selectedCaption {
+    opacity: 1; 
+}
+
+
+
+
+/* ---------------------------------------------------
+    Cytoscapejs-cxtmenu
+----------------------------------------------------- */
+.cxtmenu-content {
+    font-size: 10px;
 }
