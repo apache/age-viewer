@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux'
-import { labelColors, nodeLabelSizes, edgeLabelSizes } from '../../../features/cypher/CypherUtil'
+import { nodeLabelColors, edgeLabelColors, nodeLabelSizes, edgeLabelSizes } from '../../../features/cypher/CypherUtil'
 import CypherResultCytoscapeChart from './CypherResultCytoscapeChart'
 import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
 import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
@@ -73,7 +73,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         edgeLegendObj[label]['fontColor'] = color.fontColor
       }
       setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
-      chartRef.current.colorChange(elementType, label, Object.assign(color, { fontColor: '#2A2C34' }));
+      chartRef.current.colorChange(elementType, label, color);
     }
 
     dispatch(() => props.setLabels(elementType, label, { borderColor: color.borderColor, color: color.color, fontColor: color.fontColor }))
@@ -140,7 +140,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   return <div className="chart-frame-area">
     <CypherResultCytoscapeLegend onLabelClick={getFooterData} isReloading={isReloading} legendData={legendData} />
     <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} />
-    <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} labelColors={labelColors} />
+    <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} edgeLabelColors={edgeLabelColors} nodeLabelColors={nodeLabelColors} />
   </div>
 })
 

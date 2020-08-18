@@ -377,10 +377,11 @@ class CytoscapeComponent extends Component {
       c = color
     }
 
+
     if (elementType === 'node') {
       this.cy.nodes('[label = "' + label + '"]').data("backgroundColor", c.color).data("borderColor", c.borderColor).data("fontColor", c.fontColor)
     } else if (elementType === 'edge') {
-      this.cy.edges('[label = "' + label + '"]').data("backgroundColor", c.color).data("fontColor", c.fontColor)
+      this.cy.edges('[label = "' + label + '"]').data("backgroundColor", c.color).data("fontColor", c.fontColor).data("fontColor", '#2A2C34')
     }
 
   }
