@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Collapse} from 'react-bootstrap'
 
-const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame, addAlert}) => {
+const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame, addAlert, getMetaData}) => {
     const [formData, setFormData] = useState({})
     const [isExpanded, setIsExpanded] = useState(true)
 
@@ -66,7 +66,7 @@ const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame
                             </fieldset>
                             
                         </form>
-                        <button className="btn btn-info" onClick={() => [connectToAgensGraph(formData), addAlert('NoticeServerConnected')]}>CONNECT</button>
+                        <button className="btn btn-info" onClick={() => [connectToAgensGraph(formData), addAlert('NoticeServerConnected'), getMetaData()]}>CONNECT</button>
                     </div>
                 </div>
             </div>
