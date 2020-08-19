@@ -24,9 +24,10 @@ const Editor = ({ addFrame, addAlert, alertList, database, executeCypherQuery })
         } else if (database.status === 'disconnected' && reqString.current.value === ':server status') {
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
         } else if (reqString.current.value.match('(match|create).*')) {
-            dispatch(() => executeCypherQuery([refKey, reqString.current.value]).then((response) => {
-                if (response.type === 'database/connectToAgensGraph/fulfilled'){
-                    addFrame(reqString.current.value, refKey)
+            const reqStringValue = reqString.current.value
+            dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
+                if (response.type === 'cypher/executeCypherQuery/fulfilled'){
+                    addFrame(reqStringValue, refKey)
                 }                
             }))       
         } else if (reqString.current.value.match('(:server).*')) {
