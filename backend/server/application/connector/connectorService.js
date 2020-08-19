@@ -6,10 +6,15 @@ class ConnectorService {
 
     async getMetaData() {
         let metadata = new Object();
-        metadata.nodes = await this.getNodes();
-        metadata.edges = await this.getEdges();
-        metadata.propertyKeys = await this.getPropertyKeys();
+        try {
+            metadata.nodes = await this.getNodes();
+            metadata.edges = await this.getEdges();
+            metadata.propertyKeys = await this.getPropertyKeys();
+        } catch (error) {
+            throw error;
+        }
         return metadata;
+
     }
 
     async getNodes(label) {
@@ -52,8 +57,9 @@ class ConnectorService {
     async connectDatabase() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let status, data;
+        let isHealth = await agensDatabaseHelper.isHealth();
 
-        if (await agensDatabaseHelper.isHealth()) {
+        if (isHealth) {
             this._session.client = agensDatabaseHelper.toConnectionInfo();
             data = agensDatabaseHelper.toConnectionInfo();
             status = 200;
@@ -69,10 +75,13 @@ class ConnectorService {
     }
 
     disconnectDatabase() {
-        let status = 200,
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let status = 500,
             data = null;
         try {
+            agensDatabaseHelper.releaseConnection();
             this._session.client = null;
+            status = 200;
         } catch (err) {
             console.log("Already Disconnected");
         }

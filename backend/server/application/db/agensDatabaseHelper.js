@@ -8,6 +8,7 @@ class AgensDatabaseHelper {
         this._graph = graph;
         this._user = user;
         this._password = password;
+        console.log("CREATE NEW Helper")
     }
 
     async isHealth() {
@@ -16,17 +17,18 @@ class AgensDatabaseHelper {
             return result;
         }
 
-        let client = await this.getConnection();
+        let client = null;
         try {
+            client = await this.getConnection();
             await client.query('SELECT 1');
+            client.release();
+
             result = true;
         } catch (err) {
-            console.error('Error Occurred!!!: ', err);
+            console.error('isHealth() Error Occurred!!!: ', err.message);
         } finally {
-            client.release();
+            return result;
         }
-
-        return result;
     }
 
     async execute(query) {
@@ -49,6 +51,16 @@ class AgensDatabaseHelper {
             this._pool = new Pool(this.toPoolConnectionInfo());
         }
         return this._pool.connect();
+    }
+
+    releaseConnection() {
+        console.log("this._pool {} ", this._pool != null)
+        try {
+            this._pool.end();
+        } catch(err) {
+            console.error("releaseConnection() {}", err.message);
+            throw err;
+        }
     }
 
     toPoolConnectionInfo() {
