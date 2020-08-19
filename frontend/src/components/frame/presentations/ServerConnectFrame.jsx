@@ -80,7 +80,11 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, r
                         <button className="btn btn-info" onClick={() => connectToAgensGraph(formData).then((response) => {
                                 if (response.type === 'database/connectToAgensGraph/fulfilled'){
                                     addAlert('NoticeServerConnected')
-                                    getMetaData()
+                                    getMetaData().then((response) => {
+                                        if (response.type === 'database/getMetaData/rejected'){
+                                            addAlert('ErrorServerConnectFail')
+                                        } 
+                                    })
                                 } else if (response.type === 'database/connectToAgensGraph/rejected') {
                                     addAlert('ErrorServerConnectFail')
                                 }

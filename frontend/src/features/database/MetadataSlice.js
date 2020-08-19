@@ -3,12 +3,18 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
   async () => {
-    const response = await fetch('/api/v1/db/meta')
-    const res = await response.json();
-    return res
-  }
-)
-
+    await fetch('/api/v1/db/meta').then((response) => {
+      if (response.ok) { return response.json }      
+      throw response
+    }).catch((error) => {      
+      const errorDetail = {
+        name : 'Metadata Load Error'
+        , statusText: error.statusText
+      }
+      throw errorDetail
+    })
+  })
+  
 const MetadataSlice = createSlice({
   name: 'metadata',
   initialState: {
@@ -31,6 +37,9 @@ const MetadataSlice = createSlice({
           propertyKeys: []
         }
       }
+    },
+    [getMetaData.rejected]: (state, action) => {
+      alert(action.error.name)
     }
   }
 })
