@@ -18,6 +18,9 @@ export const getMetaData = createAsyncThunk(
 const MetadataSlice = createSlice({
   name: 'metadata',
   initialState: {
+    edges: [],
+    nodes: [],
+    propertyKeys: [],
     status: 'init'
   },
   reducers: {
@@ -28,13 +31,15 @@ const MetadataSlice = createSlice({
         return {
           edges: action.payload.edges,
           nodes: action.payload.nodes,
-          propertyKeys: action.payload.propertyKeys
+          propertyKeys: action.payload.propertyKeys,
+          status: 'connected'
         }
       } else {
         return {
           edges: [],
           nodes: [],
-          propertyKeys: []
+          propertyKeys: [],
+          status: 'disconnected'
         }
       }
     },

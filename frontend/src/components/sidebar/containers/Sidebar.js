@@ -1,11 +1,16 @@
 import {connect} from 'react-redux'
 import {changeTheme} from '../../../features/setting/SettingSlice'
 import Sidebar from '../presentations/Sidebar'
+import {getMetaData} from '../../../features/database/MetadataSlice'
+import {addFrame} from '../../../features/frame/FrameSlice'
 
 const mapStateToProps = (state) => {
+    console.log(state);
     return {
         activeMenuName: state.navigator.activeMenu,
+        database: state.database,
         isActive: state.navigator.isActive,
+        metadata: state.metadata,
         edges : state.metadata.edges,
         nodes : state.metadata.nodes,
         propertyKeys : state.metadata.propertyKeys
@@ -23,7 +28,7 @@ const  mapDispatchToProps = (dispatch) => {
 }
 */
 
-const mapDispatchToProps = { changeTheme }
+const mapDispatchToProps = { changeTheme, getMetaData, addFrame }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 
