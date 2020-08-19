@@ -31,12 +31,18 @@ router.get('/disconnect', (req, res, next) => {
 });
 
 router.get('/meta', async (req, res, next) => {
+    let status = 200;
+    let metadata = null;
     let agensDatabaseHelper = new AgensDatabaseHelper(req.session.client);
 
     let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
-    let metadata = await connectorService.getMetaData();
+    try {
+        metadata = await connectorService.getMetaData();
+    } catch (error) {
+        status = 500;
+    }
 
-    res.status(200).json(metadata).end();
+    res.status(status).json(metadata).end();
 });
 
 module.exports = router;
