@@ -1,7 +1,9 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { useDispatch } from 'react-redux'
 import uuid from 'react-uuid'
-import { Tab, Nav, Collapse } from 'react-bootstrap';
+import { saveAs } from 'file-saver'
+import { Parser } from 'json2csv'
+import { Tab, Nav, Collapse, Dropdown, DropdownButton } from 'react-bootstrap';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer'
@@ -42,24 +44,83 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
         setCytoscapeContainerKey(uuid())
     }
 
+    const downloadPng = () => {
+        const eleJson = chartAreaRef.current.getCy().elements().jsons()
+        if (eleJson.length === 0 ) {
+            alert("No data to download!")
+            return
+        }
+
+        const pngOption = {
+            output : 'base64uri',
+            bg : 'transparent',
+            full : true
+
+        }
+        saveAs(chartAreaRef.current.getCy().png(pngOption), reqString.replace(/ /g,"_") + ".png")
+    }
+
+    const downloadJson = () => {
+        const eleJson = chartAreaRef.current.getCy().elements().jsons()
+        if (eleJson.length === 0 ) {
+            alert("No data to download!")
+            return
+        }
+        saveAs(new Blob([JSON.stringify(eleJson.map((ele)=>{ 
+            return {label : ele.data.label
+                , gid : ele.data.id
+                , source : ele.data.source
+                , target : ele.data.target
+                , properties : ele.data.properties
+            } }))], {type: "application/json;charset=utf-8"}), reqString.replace(/ /g,"_") + ".json");
+    }
+
+    const downloadCsv = () => {
+        const eleJson = chartAreaRef.current.getCy().elements().jsons()
+        if (eleJson.length === 0 ) {
+            alert("No data to download!")
+            return
+        }
+
+        const dataJson = eleJson.map((ele)=>{ 
+            return {label : ele.data.label
+                , gid : ele.data.id
+                , source : ele.data.source
+                , target : ele.data.target
+                , properties : ele.data.properties
+            } })
+            
+
+        try {
+            const json2csvParser = new Parser()
+            saveAs(new Blob(["\uFEFF" + json2csvParser.parse(dataJson)], {type: "text/csv;charset=utf-8"}), reqString.replace(/ /g,"_") + ".csv");
+        } catch (err) {
+            alert ("Unknown Error.")
+        }
+        
+    }
+
     return (
         <div className={"card " + (isFullScreen ? " fullscreen " : "mt-3")}>
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
-                    <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-download fa-lg"
-                        aria-hidden="true"></span></button>
+                    <div className="mr-auto"><strong> $ {reqString} </strong></div>                    
+                    <DropdownButton variant="link" title={<i class="fas fa-download fa-lg"></i>}>
+                        <Dropdown.Item onClick={() => downloadPng()}>Save as PNG</Dropdown.Item>
+                        <Dropdown.Item onClick={() => downloadJson()}>Save as JSON</Dropdown.Item>
+                        <Dropdown.Item onClick={() => downloadCsv()}>Save as CSV</Dropdown.Item>
+                    </DropdownButton>                    
                     <button className="frame-head-button btn btn-link px-3">
-                        <span className="fa fa-expand fa-lg" aria-hidden="true" onClick={() => expandFrame()}></span></button>
+                        <span className="fas fa-expand-alt fa-lg" aria-hidden="true" onClick={() => expandFrame()}></span></button>
                     <button className="frame-head-button btn btn-link px-3">
-                        <span className="fa fa-refresh fa-lg" aria-hidden="true" onClick={() => refreshFrame()}></span></button>
-                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
+                        <span className="fas fa-sync fa-lg" aria-hidden="true" onClick={() => refreshFrame()}></span></button>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fas fa-paperclip fa-lg"
                         aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
                         aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
-                        <span className="fa fa-lg" aria-hidden="true"></span></button>
+                        <span className="fas fa-angle-up fa-lg" aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
+                        <span className="fas fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
             </div>
             <Collapse in={isExpanded}>
