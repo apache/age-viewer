@@ -9,16 +9,16 @@ import CypherDmlResult from '../../../components/frame/containers/CypherDmlResul
 const Frames = ({ frameList, queryResult }) => {
     const frames = frameList.map((frame) => {
         if (frame.frameName === 'ServerStatus') {
-            return <ServerStatus key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
+            return <ServerStatus key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
         } else if (frame.frameName === 'ServerConnect') {
-            return <ServerConnect key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
+            return <ServerConnect key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
         } else if (frame.frameName === 'ServerDisconnect') {
-            return <ServerDisconnect key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
+            return <ServerDisconnect key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
         } else if (frame.frameName === 'CypherResultFrame') {
             if (queryResult.hasOwnProperty(frame.frameProps.key) && queryResult[frame.frameProps.key]['command'].toUpperCase() === 'GRAPH') {
-                return <CypherDmlResult key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
+                return <CypherDmlResult key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
             } else {
-                return <CypherMatchResult key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString}/>;
+                return <CypherMatchResult key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
             }
             
         }
