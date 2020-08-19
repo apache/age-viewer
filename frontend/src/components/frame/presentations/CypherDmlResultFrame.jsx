@@ -23,14 +23,14 @@ const CypherResultFrame = ({ refKey, reqString, removeFrame, executeCypherQuery 
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
                     <button className="frame-head-button btn btn-link px-3">
-                        <span className="fa fa-expand fa-lg" aria-hidden="true" onClick={() => expandFrame()}></span></button>
-                    <button className="frame-head-button btn btn-link px-3"><span className="fa fa-paperclip fa-lg"
+                        <span className="fas fa-expand-alt fa-lg"aria-hidden="true" onClick={() => expandFrame()}></span></button>
+                    <button className="frame-head-button btn btn-link px-3"><span className="fas fa-paperclip fa-lg"
                         aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
                         aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
-                        <span className="fa fa-lg" aria-hidden="true"></span></button>
+                        <span className="fas fa-angle-up fa-lg" aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link pl-3">
-                        <span className="fa fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
+                        <span className="fas fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
             </div>
             <Collapse in={isExpanded}>

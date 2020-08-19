@@ -4,7 +4,6 @@ import cxtmenu from 'cytoscape-cxtmenu'
 import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil'
 import COSEBilkent from 'cytoscape-cose-bilkent';
 
-
 cytoscape.use(COSEBilkent);
 cytoscape.use(cxtmenu);
 
