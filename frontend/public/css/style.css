@@ -265,6 +265,9 @@ a.nav-link {
     border-top: 1px solid rgba(0,0,0,.125);
 }
 
+.frame-head-button.selected {
+    color: #212121 !important;
+}
 
 .frame-head-button:hover {
     color: #212121 !important;
