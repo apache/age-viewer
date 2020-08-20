@@ -1,48 +1,73 @@
 const express = require('express');
-const ConnectorService = require('./connectorService')
-const AgensDatabaseHelper = require('../db/agensDatabaseHelper');
+const ConnectorService = require('./connectorService');
+const connectorServiceManager = require('../session/sessionManager');
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-    let agensDatabaseHelper = new AgensDatabaseHelper(req.session.client);
-
-    let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
-    let {status, data} = await connectorService.getConnectionStatus();
-
-    res.status(status).json(data).end();
+router.get('', async (req, res, next) => {
+    let connectorService = connectorServiceManager.get(req.sessionID)
+    if (connectorService.isConnected()) {
+        let connectionStatus = await connectorService.getConnectionStatus();
+        if(connectionStatus) {
+            res.status(200).json(connectorService.getConnectionInfo()).end();
+        } else {
+            res.status(500).json(null).end();
+        }
+    } else {
+        let error = new Error('Not connected');
+        error.status = 500;
+        next(error);
+    }
 });
 
 router.post('/connect', async (req, res, next) => {
-    let agensDatabaseHelper = new AgensDatabaseHelper(req.body);
+    let connectorService = connectorServiceManager.get(req.sessionID)
+    if (connectorService.isConnected()) {
+        res.status(200).json(connectorService.getConnectionInfo()).end();
+    } else {
+        let connectorService = new ConnectorService();
+        connectorServiceManager.put(req.sessionID, connectorService);
+        let result = await connectorService.connectDatabase(req.body);
 
-    let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
-    let {status, data} = await connectorService.connectDatabase();
-
-    res.status(status).json(data).end();
+        if (result) {
+            res.status(200).json(connectorService.getConnectionInfo()).end();
+        } else {
+            res.status(500).json(null).end();
+        }
+    }
 });
 
-router.get('/disconnect', (req, res, next) => {
-    let agensDatabaseHelper = new AgensDatabaseHelper(req.session.client);
+router.get('/disconnect', async (req, res, next) => {
+    let connectorService = connectorServiceManager.get(req.sessionID)
+    if (connectorService.isConnected()) {
+        let isDisconnect = await connectorService.disconnectDatabase();
 
-    let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
-    let {status, data} = connectorService.disconnectDatabase();
-
-    res.status(status).json(data).end();
+        if (isDisconnect) {
+            res.status(200).json({ msg: 'Disconnect Successful' }).end();
+        } else {
+            res.status(500).json({ msg: 'Already Disconnected' }).end();
+        }
+    } else {
+        let error = new Error('Not connected');
+        error.status = 500;
+        next(error);
+    }
 });
 
 router.get('/meta', async (req, res, next) => {
-    let status = 200;
-    let metadata = null;
-    let agensDatabaseHelper = new AgensDatabaseHelper(req.session.client);
-
-    let connectorService = new ConnectorService(req.session, agensDatabaseHelper);
-    try {
-        metadata = await connectorService.getMetaData();
-    } catch (error) {
-        status = 500;
+    let connectorService = connectorServiceManager.get(req.sessionID)
+    if (connectorService.isConnected()) {
+        let metadata = null;
+        try {
+            metadata = await connectorService.getMetaData();
+            res.status(200).json(metadata).end();
+        } catch (error) {
+            res.status(500).json(metadata).end();
+        }
+    } else {
+        let error = new Error('Not connected');
+        error.status = 500;
+        next(error);
     }
-
-    res.status(status).json(metadata).end();
 });
 
 module.exports = router;
