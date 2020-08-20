@@ -59,10 +59,20 @@ const FrameSlice = createSlice({
       prepare: (refKey) => {
         return { payload: { refKey } }
       }
+    },
+    trimFrame: {
+      reducer: (state, action) => {
+        const frameName = action.payload.frameName
+        return state.filter((frame, idx, arr) => ( frame.frameName !== frameName ))
+      },
+      prepare: (frameName) => {
+        return { payload: { frameName } }
+      }
+
     }
   }
 })
 
-export const { addFrame, removeFrame, pinFrame } = FrameSlice.actions
+export const { addFrame, removeFrame, pinFrame, trimFrame } = FrameSlice.actions
 
 export default FrameSlice.reducer
