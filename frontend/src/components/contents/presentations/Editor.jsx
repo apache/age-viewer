@@ -4,7 +4,7 @@ import AlertContainers from '../../alert/containers/AlertContainers'
 import uuid from 'react-uuid'
 
 
-const Editor = ({ addFrame, addAlert, alertList, database, executeCypherQuery }) => {
+const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery }) => {
 
     const dispatch = useDispatch();
     let reqString = useRef()
@@ -19,19 +19,38 @@ const Editor = ({ addFrame, addAlert, alertList, database, executeCypherQuery })
     
     const onClick = () => {
         const refKey = uuid()
-        if (database.status === 'disconnected' && reqString.current.value.match('(match|create).*')) {
+        if (reqString.current.value === ':server status') {
+            dispatch(() => trimFrame('ServerStatus'))
+            dispatch(() => addFrame(reqString.current.value))
+        } else if (database.status === 'disconnected' && reqString.current.value === ':server disconnect') {
+            dispatch(() => trimFrame('ServerDisconnect'))
+            dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-        } else if (database.status === 'disconnected' && reqString.current.value === ':server status') {
+            dispatch(() => addFrame(reqString.current.value))
+        } else if (database.status === 'disconnected' && reqString.current.value === ':server connect') {
+            dispatch(() => trimFrame('ServerConnect'))
+            dispatch(() => addFrame(reqString.current.value))
+        } else if (database.status === 'disconnected' && reqString.current.value.match('(match|create).*')) {
+            dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-        } else if (reqString.current.value.match('(match|create).*')) {
+            dispatch(() => addFrame(':server connect'))
+        } else if (database.status === 'connected' && reqString.current.value === ':server disconnect') {
+            dispatch(() => trimFrame('ServerDisconnect'))
+            dispatch(() => addAlert('NoticeServerDisconnected'))
+            dispatch(() => addFrame(':server disconnect'))
+        } else if (database.status === 'connected' && reqString.current.value === ':server connect') {
+            dispatch(() => trimFrame('ServerStatus'))
+            dispatch(() => addAlert('NoticeAlreadyConnected'))
+            dispatch(() => addFrame(':server status'))
+        } else if (database.status === 'connected' && reqString.current.value.match('(match|create).*')) {
             const reqStringValue = reqString.current.value
             dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
                 if (response.type === 'cypher/executeCypherQuery/fulfilled'){
                     addFrame(reqStringValue, refKey)
                 }                
-            }))       
-        } else if (reqString.current.value.match('(:server).*')) {
-            dispatch(() => addFrame(reqString.current.value, refKey))            
+            }))      
+        } else {
+            alert("Sorry, I Can't understand your command")
         }
         clearReqString()
     }; 

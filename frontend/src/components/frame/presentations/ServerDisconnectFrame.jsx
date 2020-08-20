@@ -9,7 +9,7 @@ const ServerDisconnectFrame = ({ refKey, isPinned, reqString, disconnectToAgensG
     useEffect(() => {
         dispatch(() => disconnectToAgensGraph())
         /*dispatch(() => addFrame(':server connect'));*/
-        dispatch(() => addAlert('NoticeServerDisconnected'));
+        /*dispatch(() => addAlert('NoticeServerDisconnected'));*/
     }, [dispatch, disconnectToAgensGraph, addFrame, addAlert])
 
 

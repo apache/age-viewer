@@ -15,7 +15,9 @@ const AlertSlice = createSlice({
         } else if (alertType === 'ErrorServerConnectFail') {
           state.push({alertType : 'ErrorServerConnectFail', alerProps : {key : uuid(), alertType : 'Error'}})
         } else if (alertType === 'ErrorNoDatabaseConnected') {
-          state.push({alertType : 'ErrorNoDatabaseConnected', alerProps : {key : uuid(), alertType : 'Error'}})
+          state.push({alertType : 'ErrorNoDatabaseConnected', alerProps : {key : uuid(), alertType : 'Error'}})          
+        } else if (alertType === 'NoticeAlreadyConnected') {
+          state.push({alertType : 'NoticeAlreadyConnected', alerProps : {key : uuid(), alertType : 'notice'}})          
         } else {
           alert("Can't find proper alert name")
           return;
