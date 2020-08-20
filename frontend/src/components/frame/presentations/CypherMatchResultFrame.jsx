@@ -144,7 +144,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
                 </div>
             </div>
             <Collapse in={isExpanded}>
-                <div className="card-body card-body-graph collapse" id={refKey}>
+                <div className="card-body card-body-graph" id={refKey}>
                     <div className="d-flex h-100">
                         <Tab.Container defaultActiveKey="graph">
 
@@ -173,15 +173,15 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
                                     <CypherResultCytoscapeContainer key={cytoscapeContainerKey} forwardedRef={chartAreaRef} refKey={refKey} isFullScreen={isFullScreen} />
                                 </Tab.Pane>
 
-                                <Tab.Pane eventKey="table">
+                                <Tab.Pane eventKey="table" style={{height: '450px'}}>
                                     <CypherResultTableContainer refKey={refKey} />
                                 </Tab.Pane>
 
-                                <Tab.Pane eventKey="text">
+                                <Tab.Pane eventKey="text" style={{height: '450px'}}>
                                     <CypherResultTextContainer refKey={refKey} />
                                 </Tab.Pane>
 
-                                <Tab.Pane eventKey="code">
+                                <Tab.Pane eventKey="code" style={{height: '450px'}}>
                                     <CypherResultMetaContainer refKey={refKey} />
                                 </Tab.Pane>
 

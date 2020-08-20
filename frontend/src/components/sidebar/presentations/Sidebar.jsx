@@ -6,12 +6,17 @@ import SidebarSetting from './SidebarSetting'
 const Sidebar = ({ activeMenuName, isActive, changeTheme, edges, nodes, propertyKeys, database, metadata, getMetaData, addFrame }) => {
     const dispatch = useDispatch();
 
+    /*
     if (database.status === 'connected' && (metadata.status === 'init' || metadata.status === 'disconnected')) {
         dispatch(() => getMetaData())
     }
     else if (database.status === 'disconnected') {
         dispatch(() => addFrame(':server connect'))
     }
+    */
+   if (database.status === 'disconnected') {
+    dispatch(() => addFrame(':server connect'))
+   }
     return (
         <div id="sidebar" className={isActive ? " active " : ""} style={{overflowY: 'scroll'}}>
             <div className="tab-content">

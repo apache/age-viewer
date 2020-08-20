@@ -7,7 +7,7 @@ const CypherResultTable = ({data}) => {
     
   } else {
     return (      
-      <Table className="table table-hover">
+      <Table className="table table-hover" style={{marginBottom:'initial'}}>
         <thead>
           <tr >
             {

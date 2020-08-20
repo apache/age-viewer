@@ -210,14 +210,13 @@ a[data-toggle="collapse"] {
 
 
 .card-body.card-body-graph {
-    height: 450px;
     padding: 0;
+    min-height: 448px;
 }
 
 .graph-card-nav {
     text-align: center;
     width: 70px;
-    height: 100%;
     border-right: 1px solid rgba(0,0,0,.125);    
 }
 
@@ -279,7 +278,7 @@ a.nav-link {
 }
 
 .nodeLegend, .edgeLegend {
-    height: 47px;
+    min-height: 47px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
