@@ -37,7 +37,7 @@ const NodeList = ({nodes}) => {
 
 const NodeItems = ({label, cnt}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em'}}><span className="badge badge-pill badge-light">{label}({cnt})</span></h5>
+        <h5 style={{paddingRight: '0.3em'}}><span className="badge badge-pill badge-dark">{label}({cnt})</span></h5>
     </Fragment>
 );
 
@@ -75,7 +75,7 @@ const PropertyList = ({propertyKeys}) => {
             <PropertyItems
                 key={uuid()}
                 propertyName={item.key}
-                classNames={item.key_type === 'v' ? 'badge badge-dark' : 'badge badge-light'}
+                classNames={item.key_type === 'v' ? 'badge badge-pill badge-dark' : 'badge badge-light'}
             />
         ));
         return (

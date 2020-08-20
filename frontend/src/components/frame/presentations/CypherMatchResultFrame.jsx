@@ -9,7 +9,7 @@ import CypherResultTableContainer from '../../cypherresult/containers/CypherResu
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer'
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer'
 
-const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame, executeCypherQuery }) => {
+const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame }) => {
     const chartAreaRef = createRef()
     const [isExpanded, setIsExpanded] = useState(true)
     const [isFullScreen, setIsFullScreen] = useState(false)
@@ -24,7 +24,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame,
         //dispatch(() => executeCypherQuery([refKey, reqString]));       
         setZoomRate(chartAreaRef.current.getCy().zoom())
         setPan(chartAreaRef.current.getCy().pan())
-    }, [refKey, reqString, executeCypherQuery, dispatch])
+    }, [refKey, reqString, dispatch])
 
 
     const expandFrame = () => {

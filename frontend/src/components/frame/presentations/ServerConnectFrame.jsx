@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {Collapse} from 'react-bootstrap'
 
-const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, removeFrame, pinFrame, addAlert, getMetaData}) => {
+const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame,removeFrame, pinFrame, addAlert, getMetaData}) => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({})
     const [isExpanded, setIsExpanded] = useState(true)
@@ -80,7 +80,13 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, r
                         <button className="btn btn-info" onClick={() => connectToAgensGraph(formData).then((response) => {
                                 if (response.type === 'database/connectToAgensGraph/fulfilled'){
                                     addAlert('NoticeServerConnected')
-                                    getMetaData()
+                                    trimFrame('ServerConnect')
+                                    getMetaData().then((response) => {
+                                        if (response.type === 'database/getMetaData/rejected'){
+                                            addAlert('ErrorServerConnectFail')
+                                        } 
+                                    })
+                                    addFrame(':server status')
                                 } else if (response.type === 'database/connectToAgensGraph/rejected') {
                                     addAlert('ErrorServerConnectFail')
                                 }
