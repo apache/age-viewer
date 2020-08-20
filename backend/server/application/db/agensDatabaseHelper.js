@@ -1,4 +1,4 @@
-const { Pool } = require('agensgraph');
+const ag = require('agensgraph');
 
 class AgensDatabaseHelper {
     constructor({ host, port, database, graph, user, password } = {}) {
@@ -8,12 +8,11 @@ class AgensDatabaseHelper {
         this._graph = graph;
         this._user = user;
         this._password = password;
-        console.log("CREATE NEW Helper")
     }
 
     async isHealth() {
         let result = false;
-        if(this.toPoolConnectionInfo() == null) {
+        if (this.toPoolConnectionInfo() == null) {
             return result;
         }
 
@@ -38,8 +37,8 @@ class AgensDatabaseHelper {
             await client.query(`set graph_path=${this._graph}`);
             result = await client.query(query);
         } catch (err) {
-            console.error('Error Occurred!!!: ', err);
-            next(err);
+            console.error('Execute Error: ', err.message);
+            throw err;
         } finally {
             client.release();
         }
@@ -48,23 +47,24 @@ class AgensDatabaseHelper {
 
     getConnection() {
         if (!this._pool) {
-            this._pool = new Pool(this.toPoolConnectionInfo());
+            console.log("CREATE")
+            this._pool = new ag.Pool(this.toPoolConnectionInfo());
         }
         return this._pool.connect();
     }
 
-    releaseConnection() {
-        console.log("this._pool {} ", this._pool != null)
+    async releaseConnection() {
         try {
-            this._pool.end();
-        } catch(err) {
-            console.error("releaseConnection() {}", err.message);
+            await this._pool.end();
+            return true;
+        } catch (err) {
+            console.error('releaseConnection() {}', err.message);
             throw err;
         }
     }
 
     toPoolConnectionInfo() {
-        if(!this._host || !this._port || !this._database) {
+        if (!this._host || !this._port || !this._database) {
             return null;
         }
         return {
@@ -80,7 +80,7 @@ class AgensDatabaseHelper {
     }
 
     toConnectionInfo() {
-        if(!this._host || !this._port || !this._database) {
+        if (!this._host || !this._port || !this._database) {
             return null;
         }
         return {

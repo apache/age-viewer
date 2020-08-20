@@ -5,25 +5,16 @@ class CypherService {
 
     async executeCypher(query) {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let result = {
-            status: 200,
-            data: null,
-        };
+        let data;
 
         if (!query) {
-            result.status = 400;
-            result.data = { cmd: query };
+            data = { cmd: query };
+            throw new Error("Query Not Valid");
         } else {
-            if (await agensDatabaseHelper.isHealth()) {
-                result.status = 200;
-                result.data = await this.getExecuteResult(query);
-            } else {
-                result.data = agensDatabaseHelper.toConnectionInfo();
-                result.status = 500;
-            }
+            data = await this.getExecuteResult(query);
         }
 
-        return result;
+        return data;
     }
 
     async getExecuteResult(query) {
@@ -53,7 +44,6 @@ class CypherService {
 
             return result;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }

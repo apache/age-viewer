@@ -1,8 +1,8 @@
+const sessionManager = require('../session/sessionManager');
+const AgensDatabaseHelper = require('../db/agensDatabaseHelper');
+
 class ConnectorService {
-    constructor(session, agensDatabaseHelper) {
-        this._session = session;
-        this._agensDatabaseHelper = agensDatabaseHelper;
-    }
+    constructor() {}
 
     async getMetaData() {
         let metadata = new Object();
@@ -14,7 +14,6 @@ class ConnectorService {
             throw error;
         }
         return metadata;
-
     }
 
     async getNodes(label) {
@@ -54,59 +53,57 @@ class ConnectorService {
         return queryResult.rows;
     }
 
-    async connectDatabase() {
+    async connectDatabase(connectionInfo) {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status, data;
-        let isHealth = await agensDatabaseHelper.isHealth();
-
-        if (isHealth) {
-            this._session.client = agensDatabaseHelper.toConnectionInfo();
-            data = agensDatabaseHelper.toConnectionInfo();
-            status = 200;
-        } else {
-            data = null;
-            status = 500;
+        if (agensDatabaseHelper == null) {
+            this._agensDatabaseHelper = new AgensDatabaseHelper(connectionInfo);
+            agensDatabaseHelper = this._agensDatabaseHelper;
         }
 
-        return {
-            status: status,
-            data: data,
-        };
+        if (await agensDatabaseHelper.isHealth()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    disconnectDatabase() {
+    async disconnectDatabase() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status = 500,
-            data = null;
-        try {
-            agensDatabaseHelper.releaseConnection();
-            this._session.client = null;
-            status = 200;
-        } catch (err) {
-            console.log("Already Disconnected");
+        if (agensDatabaseHelper == null) {
+            console.log('Already Disconnected');
+            return false;
+        } else {
+            let isRelease = await this._agensDatabaseHelper.releaseConnection();
+            if (isRelease) {
+                this._agensDatabaseHelper = null;
+                return true;
+            } else {
+                console.log('Failed releaseConnection()');
+                return false;
+            }
         }
-        return {
-            status: status,
-            data: data,
-        };
     }
 
     async getConnectionStatus() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status, data;
 
-        if (await agensDatabaseHelper.isHealth()) {
-            data = agensDatabaseHelper.toConnectionInfo();
-            status = 200;
+        if (agensDatabaseHelper != null && await agensDatabaseHelper.isHealth()) {
+            return true;
         } else {
-            data = null;
-            status = 500;
+            return false;
         }
+    }
 
-        return {
-            status: status,
-            data: data,
-        };
+    getConnectionInfo() {
+        return this._agensDatabaseHelper.toConnectionInfo();
+    }
+
+    isConnected() {
+        return this._agensDatabaseHelper != null;
+    }
+
+    get agensDatabaseHelper() {
+        return this._agensDatabaseHelper;
     }
 
     convertEdge({ label, id, start, end, props }) {
