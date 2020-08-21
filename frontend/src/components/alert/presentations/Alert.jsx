@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Alert} from 'react-bootstrap'
 
-const SingleAlert = ({key, alertKey, alertType}) => {
+const SingleAlert = ({key, alertKey, alertName}) => {
 
     const [show, setShow] = useState(true)
 
@@ -10,7 +10,7 @@ const SingleAlert = ({key, alertKey, alertType}) => {
         return () => clearTimeout(timer);
     }, [])
 
-    if (alertType === 'NoticeServerDisconnected') {
+    if (alertName === 'NoticeServerDisconnected') {
         return (    
             <Alert show={show} variant="warning" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Disconnected</Alert.Heading>
@@ -22,7 +22,7 @@ const SingleAlert = ({key, alertKey, alertType}) => {
             </Alert>
         );
 
-    } else if (alertType === 'NoticeServerConnected') {
+    } else if (alertName === 'NoticeServerConnected') {
         return (    
             <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Connected</Alert.Heading>
@@ -34,7 +34,7 @@ const SingleAlert = ({key, alertKey, alertType}) => {
             </Alert>
         );
 
-    } else if (alertType === 'ErrorServerConnectFail') {
+    } else if (alertName === 'ErrorServerConnectFail') {
         return (    
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Connection Failed</Alert.Heading>
@@ -44,7 +44,7 @@ const SingleAlert = ({key, alertKey, alertType}) => {
             </Alert>
         );
 
-    } else if (alertType === 'ErrorNoDatabaseConnected') {
+    } else if (alertName === 'ErrorNoDatabaseConnected') {
         return (    
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>No Database Connected</Alert.Heading>
@@ -56,7 +56,27 @@ const SingleAlert = ({key, alertKey, alertType}) => {
             </Alert>
         );
 
-    } else if (alertType === 'NoticeAlreadyConnected') {
+    } else if (alertName === 'ErrorMetaFail') {
+        return (    
+            <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
+                <Alert.Heading>Metadata Load Error</Alert.Heading>
+                <p>
+                Unexpectable error occured while getting metadata.
+                </p>
+            </Alert>
+        );
+         
+    } else if (alertName === 'ErrorCypherQuery') {
+        return (    
+            <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
+                <Alert.Heading>Query Error</Alert.Heading>
+                <p>
+                Your query wansn't executed properly. Refer the below error message.
+                </p>
+            </Alert>
+        );
+
+    } else if (alertName === 'NoticeAlreadyConnected') {
         return (    
             <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Alredy Connected to Database</Alert.Heading>

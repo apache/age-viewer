@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import {removeFrame, pinFrame} from '../../../features/frame/FrameSlice'
-import CypherMatchResultFrame from '../presentations/CypherMatchResultFrame'
+import CypherGraphResultFrame from '../presentations/CypherGraphResultFrame'
 
 const mapStateToProps = (state) => {
     return {
@@ -9,4 +9,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { removeFrame, pinFrame }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CypherMatchResultFrame);
+export default connect(mapStateToProps, mapDispatchToProps)(CypherGraphResultFrame);

@@ -21,33 +21,36 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
         const refKey = uuid()
         if (reqString.current.value === ':server status') {
             dispatch(() => trimFrame('ServerStatus'))
-            dispatch(() => addFrame(reqString.current.value))
+            dispatch(() => addFrame(reqString.current.value, 'ServerStatus', refKey))
         } else if (database.status === 'disconnected' && reqString.current.value === ':server disconnect') {
             dispatch(() => trimFrame('ServerDisconnect'))
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            dispatch(() => addFrame(reqString.current.value))
+            dispatch(() => addFrame(reqString.current.value, 'ServerDisconnect', refKey))
         } else if (database.status === 'disconnected' && reqString.current.value === ':server connect') {
             dispatch(() => trimFrame('ServerConnect'))
-            dispatch(() => addFrame(reqString.current.value))
+            dispatch(() => addFrame(reqString.current.value, 'ServerConnect', refKey))
         } else if (database.status === 'disconnected' && reqString.current.value.match('(match|create).*')) {
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            dispatch(() => addFrame(':server connect'))
+            dispatch(() => addFrame(':server connect', 'ServerConnect', refKey))
         } else if (database.status === 'connected' && reqString.current.value === ':server disconnect') {
             dispatch(() => trimFrame('ServerDisconnect'))
             dispatch(() => addAlert('NoticeServerDisconnected'))
-            dispatch(() => addFrame(':server disconnect'))
+            dispatch(() => addFrame(':server disconnect', 'ServerDisconnect', refKey))
         } else if (database.status === 'connected' && reqString.current.value === ':server connect') {
             dispatch(() => trimFrame('ServerStatus'))
             dispatch(() => addAlert('NoticeAlreadyConnected'))
-            dispatch(() => addFrame(':server status'))
+            dispatch(() => addFrame(':server status', 'ServerStatus', refKey))
         } else if (database.status === 'connected' && reqString.current.value.match('(match|create).*')) {
             const reqStringValue = reqString.current.value
             dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
                 if (response.type === 'cypher/executeCypherQuery/fulfilled'){
-                    addFrame(reqStringValue, refKey)
-                }                
+                    addFrame(reqStringValue, 'CypherResultFrame', refKey)
+                } else if (response.type === 'cypher/executeCypherQuery/rejected'){
+                    addFrame(reqStringValue, 'CypherResultFrame', refKey)
+                    dispatch(() => addAlert('ErrorCypherQuery'))
+                }
             }))      
         } else {
             alert("Sorry, I Can't understand your command")
@@ -56,7 +59,7 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
     }; 
 
     const alerts = alertList.map((alert) => {
-        return <AlertContainers key={alert.alerProps.key} alertKey={alert.alerProps.key} alertType={alert.alertType}/>;
+        return <AlertContainers key={alert.alerProps.key} alertKey={alert.alerProps.key} alertName={alert.alertName}/>;
     });
    
     return (
