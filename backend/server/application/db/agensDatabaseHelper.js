@@ -45,6 +45,21 @@ class AgensDatabaseHelper {
         return result;
     }
 
+    async execute(query, params) {
+        let client = await this.getConnection();
+        let result = null;
+        try {
+            await client.query(`set graph_path=${this._graph}`);
+            result = await client.query(query, params);
+        } catch (err) {
+            console.error('Execute Error: ', err.message);
+            throw err;
+        } finally {
+            client.release();
+        }
+        return result;
+    }
+
     getConnection() {
         if (!this._pool) {
             console.log("CREATE")

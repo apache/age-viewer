@@ -7,16 +7,20 @@ class ConnectorService {
     async getMetaData() {
         let metadata = new Object();
         try {
+            let connectionInfo = this.getConnectionInfo();
             metadata.nodes = await this.getNodes();
             metadata.edges = await this.getEdges();
             metadata.propertyKeys = await this.getPropertyKeys();
+            metadata.graph = connectionInfo.graph;
+            metadata.database = connectionInfo.database;
+            metadata.role = await this.getRole();
         } catch (error) {
             throw error;
         }
         return metadata;
     }
 
-    async getNodes(label) {
+    async getNodes() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let query = [];
         query.push("MATCH(v) RETURN DISTINCT '*' AS label, count(v) AS cnt");
@@ -28,7 +32,7 @@ class ConnectorService {
         return queryResult.rows;
     }
 
-    async getEdges(label) {
+    async getEdges() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let query = [];
         query.push("MATCH(v) - [e] - (v2) RETURN DISTINCT '*' AS label, count(e) AS cnt");
@@ -51,6 +55,21 @@ class ConnectorService {
 
         let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
         return queryResult.rows;
+    }
+
+    async getRole() {
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let query = [];
+        query.push('SELECT usename as user_name,');
+        query.push('CASE WHEN usesuper THEN ');
+        query.push("CAST('admin' AS pg_catalog.text)");
+        query.push('ELSE');
+        query.push("CAST('user' AS pg_catalog.text)");
+        query.push('END role_name');
+        query.push('FROM pg_catalog.pg_user');
+        query.push('WHERE usename = $1');
+        let queryResult = await agensDatabaseHelper.execute(query.join('\n'), [this.getConnectionInfo().user]);
+        return queryResult.rows[0];
     }
 
     async connectDatabase(connectionInfo) {
