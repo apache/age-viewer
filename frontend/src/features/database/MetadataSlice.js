@@ -42,9 +42,6 @@ const MetadataSlice = createSlice({
           status: 'disconnected'
         }
       }
-    },
-    [getMetaData.rejected]: (state, action) => {
-      alert(action.error.name)
     }
   }
 })

@@ -8,13 +8,19 @@ const mapStateToProps = (state, ownProps) => {
         let rows = []
         let command = null
         let rowCount = null
-        if (data) {
+        let message = ''
+        console.log("data><>>", data)
+
+        if (data && data.command !== 'ERROR') {
             columns = data['columns']
             rows = data['rows']
             command = data['command']
             rowCount = data['rowCount']
+        } else {
+            command = data['command']
+            message = data['message']
         }
-        return { command : command, rowCount : rowCount, columns: columns, rows: rows }
+        return { command : command, rowCount : rowCount, columns: columns, rows: rows, message : message }
     }
     return {
         data : generateTableData(state.cypher.queryResult[refKey])

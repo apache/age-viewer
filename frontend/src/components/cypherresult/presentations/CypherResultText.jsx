@@ -12,7 +12,7 @@ const CypherResultText = ({data}) => {
     })
   }
   
-  var table = AsciiTable.factory({
+  const table = AsciiTable.factory({
     heading: data['columns']
   , rows: extractRows()
   })

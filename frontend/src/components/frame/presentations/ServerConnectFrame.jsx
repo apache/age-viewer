@@ -83,10 +83,10 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, a
                                     trimFrame('ServerConnect')
                                     getMetaData().then((response) => {
                                         if (response.type === 'database/getMetaData/rejected'){
-                                            addAlert('ErrorServerConnectFail')
+                                            addAlert('ErrorMetaFail')
                                         } 
                                     })
-                                    addFrame(':server status')
+                                    addFrame(':server status', 'ServerStatus')
                                 } else if (response.type === 'database/connectToAgensGraph/rejected') {
                                     addAlert('ErrorServerConnectFail')
                                 }

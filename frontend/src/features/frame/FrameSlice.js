@@ -8,27 +8,15 @@ const FrameSlice = createSlice({
     addFrame: {
       reducer: (state, action) => {
         const reqString = action.payload.reqString.trim().toLowerCase()
-        let refKey = action.payload.refKey ? action.payload.refKey : uuid()
-
+        const frameName = action.payload.frameName
+        const refKey = action.payload.refKey ? action.payload.refKey : uuid()
         const fistNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false))
-        let frameName = ''
-        if (reqString === ':server status') {
-          frameName = 'ServerStatus'
-        } else if (reqString === ':server connect') {
-          frameName = 'ServerConnect'
-        } else if (reqString === ':server disconnect') {
-          frameName = 'ServerDisconnect'
-        } else if (reqString.match("(match|create).*")) {
-          frameName = 'CypherResultFrame'
-        } else {
-          alert("Can't understand your command")
-          return;
-        }
         state.splice(fistNotPinnedIndex, 0, { frameName: frameName, frameProps: { key: refKey, reqString: reqString }, isPinned : false })
         state.map((frame) => {if (frame['orgIndex']) {frame['orgIndex'] = frame['orgIndex'] + 1}; return frame})
       },
-      prepare: (reqString, refKey) => {
-        return { payload: { reqString, refKey } }
+      prepare: (reqString, frameName, refKey) => {
+        console.log("reqString, frameName, refKey>>> ", reqString, frameName, refKey)
+        return { payload: { reqString, frameName, refKey } }
       }
     },
     removeFrame: {
