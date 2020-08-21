@@ -24,8 +24,6 @@ router.post('/connect', async (req, res, next) => {
     if (connectorService.isConnected()) {
         res.status(200).json(connectorService.getConnectionInfo()).end();
     } else {
-        let connectorService = new ConnectorService();
-        connectorServiceManager.put(req.sessionID, connectorService);
         let result = await connectorService.connectDatabase(req.body);
 
         if (result) {
