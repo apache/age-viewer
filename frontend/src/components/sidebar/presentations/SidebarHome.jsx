@@ -1,5 +1,4 @@
 import React, { useReducer } from 'react'
-import { Badge } from 'react-bootstrap'
 import { Fragment } from 'react';
 import uuid from 'react-uuid';
 
@@ -14,7 +13,7 @@ const ColoredLine = () => (
     />
 );
 
-const NodeList = ({nodes}) => {
+const NodeList = ({nodes, queryStr}) => {
     let list;
     if(nodes) {
         list = nodes.map(item => (
@@ -22,6 +21,7 @@ const NodeList = ({nodes}) => {
                 key={uuid()}
                 label={item.label}
                 cnt={item.cnt}
+                queryStr={queryStr}
             />
         ));
         return (
@@ -35,13 +35,13 @@ const NodeList = ({nodes}) => {
     }
 };
 
-const NodeItems = ({label, cnt}) => (
+const NodeItems = ({label, cnt, queryStr}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em'}}><span className="badge badge-pill badge-light">{label}({cnt})</span></h5>
+        <h5 style={{paddingRight: '0.3em', cursor: 'pointer'}}><span className="badge badg-pill badge-dark" onClick={() => queryStr({label}, 'v')}>{label}({cnt})</span></h5>
     </Fragment>
 );
 
-const EdgeList = ({edges}) => {
+const EdgeList = ({edges, queryStr}) => {
     let list;
     if(edges) {
         list = edges.map(item => (
@@ -49,6 +49,7 @@ const EdgeList = ({edges}) => {
                 key={uuid()}
                 label={item.label}
                 cnt={item.cnt}
+                queryStr={queryStr}
             />
         ));
         return (
@@ -62,20 +63,21 @@ const EdgeList = ({edges}) => {
     }
 };
 
-const EdgeItems = ({label, cnt}) => (
+const EdgeItems = ({label, cnt, queryStr}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em'}}><span className="badge badge-light">{label}({cnt})</span></h5>
+        <h5 style={{paddingRight: '0.3em', cursor: 'pointer'}}><span className="badge badge-light" onClick={() => queryStr({label}, 'e')}>{label}({cnt})</span></h5>
     </Fragment>
 );
 
-const PropertyList = ({propertyKeys}) => {
+const PropertyList = ({propertyKeys, queryStr}) => {
     let list;
     if(propertyKeys) {
         list = propertyKeys.map(item => (
             <PropertyItems
                 key={uuid()}
                 propertyName={item.key}
-                classNames={item.key_type === 'v' ? 'badge badge-dark' : 'badge badge-light'}
+                classNames={item.key_type === 'v' ? 'badge badge-pill badge-dark' : 'badge badge-light'}
+                queryStr={queryStr}
             />
         ));
         return (
@@ -89,9 +91,9 @@ const PropertyList = ({propertyKeys}) => {
     }
 };
 
-const PropertyItems =({propertyName, classNames}) => (
+const PropertyItems =({propertyName, classNames, queryStr}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em'}}><span className={classNames}>{propertyName}</span></h5>
+        <h5 style={{paddingRight: '0.3em', cursor: 'pointer'}}><span className={classNames} onClick={() => queryStr({propertyName}, 'p')}>{propertyName}</span></h5>
     </Fragment>
 );
 
@@ -113,7 +115,7 @@ const DBMSText =() => (
     </div>
 );
 
-const SidebarHome = ({edges, nodes, propertyKeys}) => {
+const SidebarHome = ({edges, nodes, propertyKeys, queryStr}) => {
     return (
         <div className="sidebar-home">
             <div className="sidebar sidebar-header">
@@ -123,17 +125,17 @@ const SidebarHome = ({edges, nodes, propertyKeys}) => {
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Vertex Label</b></label>
                     <ColoredLine />
-                    <NodeList nodes={nodes} />
+                    <NodeList nodes={nodes} queryStr={queryStr} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Edge Label</b></label>
                     <ColoredLine />
-                    <EdgeList edges={edges} />
+                    <EdgeList edges={edges} queryStr={queryStr} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Properties</b></label>
                     <ColoredLine />
-                    <PropertyList propertyKeys={propertyKeys} />
+                    <PropertyList propertyKeys={propertyKeys} queryStr={queryStr} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Connected as</b></label>
