@@ -1,4 +1,5 @@
 import React  from 'react';
+import Contents from '../../../components/frame/containers/ContentsFrameContainer'
 import ServerStatus from '../../../components/frame/containers/ServerStatusContainer'
 import ServerConnect from '../../../components/frame/containers/ServerConnectContainer'
 import ServerDisconnect from '../../../components/frame/containers/ServerDisconnectContainer'
@@ -8,7 +9,9 @@ import CypherResult from '../../../components/frame/containers/CypherResultConta
 
 const Frames = ({ frameList, queryResult }) => {
     const frames = frameList.map((frame) => {
-        if (frame.frameName === 'ServerStatus') {
+        if (frame.frameName === 'Contents') {
+            return <Contents key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} playTarget={frame.frameProps.playTarget} isPinned={frame.isPinned}/>;
+        } else if (frame.frameName === 'ServerStatus') {
             return <ServerStatus key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
         } else if (frame.frameName === 'ServerConnect') {
             return <ServerConnect key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;

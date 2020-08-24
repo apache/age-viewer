@@ -8,14 +8,22 @@ const FrameSlice = createSlice({
     addFrame: {
       reducer: (state, action) => {
         const reqString = action.payload.reqString.trim().toLowerCase()
+        const firstNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false))        
         const frameName = action.payload.frameName
-        const refKey = action.payload.refKey ? action.payload.refKey : uuid()
-        const fistNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false))
-        state.splice(fistNotPinnedIndex, 0, { frameName: frameName, frameProps: { key: refKey, reqString: reqString }, isPinned : false })
+
+        let frameProps = {
+          reqString : reqString
+          , key : action.payload.refKey ? action.payload.refKey : uuid()
+        }
+
+        if (reqString.startsWith(':play')) {
+          frameProps['playTarget'] = reqString.split(/\s+/).pop()
+        }
+
+        state.splice(firstNotPinnedIndex, 0, { frameName: frameName, frameProps: frameProps, isPinned : false })
         state.map((frame) => {if (frame['orgIndex']) {frame['orgIndex'] = frame['orgIndex'] + 1}; return frame})
       },
       prepare: (reqString, frameName, refKey) => {
-        console.log("reqString, frameName, refKey>>> ", reqString, frameName, refKey)
         return { payload: { reqString, frameName, refKey } }
       }
     },
