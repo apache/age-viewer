@@ -3,16 +3,19 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
   async () => {
-    await fetch('/api/v1/db/meta').then((response) => {
-      if (response.ok) { return response.json }      
+    try {
+      
+      const response = await fetch('/api/v1/db/meta')
+      console.log(response)
+      if (response.ok) { return await response.json(); }
       throw response
-    }).catch((error) => {      
+    } catch (error) {
       const errorDetail = {
-        name : 'Metadata Load Error'
+        name: 'Database Connection Failed'
         , statusText: error.statusText
       }
       throw errorDetail
-    })
+    }
   })
   
 const MetadataSlice = createSlice({
