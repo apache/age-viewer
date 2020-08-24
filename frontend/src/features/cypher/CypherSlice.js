@@ -58,7 +58,6 @@ const CypherSlice = createSlice({
       Object.assign(state.queryResult[action.payload.key], action.payload)
     },
     [executeCypherQuery.rejected]: (state, action) => {
-      console.log(action)
       state.queryResult[action.meta.arg[0]] = {}
       state.queryResult[action.meta.arg[0]]['command'] = 'ERROR'
       state.queryResult[action.meta.arg[0]]['query'] = action.meta.arg[1]

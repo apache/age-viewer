@@ -19,30 +19,32 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
     
     const onClick = () => {
         const refKey = uuid()
-        if (reqString.current.value === ':server status') {
+        if (reqString.current.value.toUpperCase().startsWith(':PLAY')) {
+            dispatch(() => addFrame(reqString.current.value, 'Contents', refKey))
+        } else if (reqString.current.value.toUpperCase() === ':SERVER STATUS') {
             dispatch(() => trimFrame('ServerStatus'))
             dispatch(() => addFrame(reqString.current.value, 'ServerStatus', refKey))
-        } else if (database.status === 'disconnected' && reqString.current.value === ':server disconnect') {
+        } else if (database.status === 'disconnected' && reqString.current.value.toUpperCase() === ':SERVER DISCONNECT') {
             dispatch(() => trimFrame('ServerDisconnect'))
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
             dispatch(() => addFrame(reqString.current.value, 'ServerDisconnect', refKey))
-        } else if (database.status === 'disconnected' && reqString.current.value === ':server connect') {
+        } else if (database.status === 'disconnected' && reqString.current.value.toUpperCase() === ':SERVER CONNECT') {
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addFrame(reqString.current.value, 'ServerConnect', refKey))
-        } else if (database.status === 'disconnected' && reqString.current.value.match('(match|create).*')) {
+        } else if (database.status === 'disconnected' && reqString.current.value.toUpperCase().match('(MATCH|CREATE).*')) {
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            dispatch(() => addFrame(':server connect', 'ServerConnect', refKey))
-        } else if (database.status === 'connected' && reqString.current.value === ':server disconnect') {
+            dispatch(() => addFrame(reqString.current.value, 'ServerConnect', refKey))
+        } else if (database.status === 'connected' && reqString.current.value.toUpperCase() === ':SERVER DISCONNECT') {
             dispatch(() => trimFrame('ServerDisconnect'))
             dispatch(() => addAlert('NoticeServerDisconnected'))
-            dispatch(() => addFrame(':server disconnect', 'ServerDisconnect', refKey))
-        } else if (database.status === 'connected' && reqString.current.value === ':server connect') {
+            dispatch(() => addFrame(reqString.current.value, 'ServerDisconnect', refKey))
+        } else if (database.status === 'connected' && reqString.current.value.toUpperCase() === ':SERVER CONNECT') {
             dispatch(() => trimFrame('ServerStatus'))
             dispatch(() => addAlert('NoticeAlreadyConnected'))
-            dispatch(() => addFrame(':server status', 'ServerStatus', refKey))
-        } else if (database.status === 'connected' && reqString.current.value.match('(match|create).*')) {
+            dispatch(() => addFrame(reqString.current.value, 'ServerStatus', refKey))
+        } else if (database.status === 'connected' && reqString.current.value.toUpperCase().match('(MATCH|CREATE).*')) {
             const reqStringValue = reqString.current.value
             dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
                 if (response.type === 'cypher/executeCypherQuery/fulfilled'){

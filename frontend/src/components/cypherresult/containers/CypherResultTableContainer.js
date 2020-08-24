@@ -9,7 +9,6 @@ const mapStateToProps = (state, ownProps) => {
         let command = null
         let rowCount = null
         let message = ''
-        console.log("data><>>", data)
 
         if (data && data.command !== 'ERROR') {
             columns = data['columns']
