@@ -454,3 +454,26 @@ a.nav-link {
     max-width: 100%;
     height: auto;
 }
+
+textarea.editorTextarea
+{
+ background: url(http://i.imgur.com/2cOaJ.png);
+ background-attachment: local;
+ background-repeat: no-repeat;
+ padding-left: 35px;
+ padding-top: 10px;
+ border-color:#ccc;
+ line-height:16px;
+}
+
+.CodeMirror {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.CodeMirror-line {
+    padding: 5px !important;
+}
+
+.CodeMirror-linenumber {
+    padding: 5px 3px 0 5px !important;
+}
