@@ -9,15 +9,18 @@ const AlertSlice = createSlice({
       reducer: (state, action) => {
         let alertName = action.payload.alertName 
         let alertType = 'Notice'
+        let errorMessage = ''
 
-        if (['ErrorServerConnectFail', 'ErrorNoDatabaseConnected'].includes(alertType)) {
+        if (['ErrorServerConnectFail', 'ErrorNoDatabaseConnected'].includes(alertName)) {
           alertType = 'Error'
+          errorMessage = action.payload.message 
         }
 
-        state.push({alertName : alertName, alerProps : {key : uuid(), alertType : alertType}})
+        state.push({alertName : alertName, alertProps : {key : uuid(), alertType : alertType, errorMessage : errorMessage}})
       },
-      prepare: (alertName) => {
-        return { payload: { alertName } }
+      prepare: (alertName, message) => {
+        console.log("alertName, message" , alertName, message)
+        return { payload: { alertName, message } }
       }
     }
   }

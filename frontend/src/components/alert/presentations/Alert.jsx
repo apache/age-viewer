@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Alert} from 'react-bootstrap'
 
-const SingleAlert = ({key, alertKey, alertName}) => {
+const SingleAlert = ({key, alertKey, alertName, errorMessage}) => {
 
     const [show, setShow] = useState(true)
 
@@ -41,6 +41,7 @@ const SingleAlert = ({key, alertKey, alertName}) => {
                 <p>
                 Failed to connect to the database. Are you sure the database is running on the server?
                 </p>
+                {errorMessage}
             </Alert>
         );
 
@@ -53,6 +54,7 @@ const SingleAlert = ({key, alertKey, alertName}) => {
                         className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connect</a> to
                         estableish connection. There's a graph waiting for you.
                 </p>
+                {errorMessage}
             </Alert>
         );
 
