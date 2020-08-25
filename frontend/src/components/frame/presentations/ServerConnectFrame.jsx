@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {Collapse} from 'react-bootstrap'
 
-const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame, addAlert, getMetaData}) => {
+const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame,removeFrame, pinFrame, addAlert, getMetaData}) => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({})
     const [isExpanded, setIsExpanded] = useState(true)
@@ -13,17 +13,26 @@ const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame
             [e.target.name]: e.target.value.trim()
           });
     }
+    
+
+    const setIconForIsExpanded = (isExpanded) => {
+        if (isExpanded) {
+            return <span className="fas fa-angle-up fa-lg" aria-hidden="true"></span>
+        } else {
+            return <span className="fas fa-angle-down fa-lg" aria-hidden="true"></span>
+        }
+    }
 
     return (
         < div className="card mt-3" >
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <button className="frame-head-button btn btn-link px-3"><span className="fas fa-paperclip fa-lg"
+                    <button className={"frame-head-button btn btn-link px-3" + (isPinned ? " selected " : "")} onClick={() => pinFrame(refKey)}><span className="fas fa-paperclip fa-lg"
                         aria-hidden="true"></span></button>
                     <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
                         aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
-                        <span className="fas fa-angle-up fa-lg" aria-hidden="true"></span></button>
+                        {setIconForIsExpanded(isExpanded)}</button>
                     <button className="frame-head-button btn btn-link pl-3">
                         <span className="fas fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
                 </div>
@@ -71,9 +80,16 @@ const ServerConnectFrame = ({refKey, reqString, connectToAgensGraph, removeFrame
                         <button className="btn btn-info" onClick={() => connectToAgensGraph(formData).then((response) => {
                                 if (response.type === 'database/connectToAgensGraph/fulfilled'){
                                     addAlert('NoticeServerConnected')
-                                    getMetaData()
+                                    trimFrame('ServerConnect')
+                                    getMetaData().then((response) => {
+                                        if (response.type === 'database/getMetaData/rejected'){
+                                            addAlert('ErrorMetaFail')
+                                        } 
+                                    })
+                                    addFrame(':server status', 'ServerStatus')
                                 } else if (response.type === 'database/connectToAgensGraph/rejected') {
-                                    addAlert('ErrorServerConnectFail')
+                                    console.log(response.error.message)
+                                    addAlert('ErrorServerConnectFail', response.error.message)
                                 }
                             })}>CONNECT</button>
                     </div>

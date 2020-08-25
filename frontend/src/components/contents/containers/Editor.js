@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import {addFrame} from '../../../features/frame/FrameSlice'
+import {addFrame, trimFrame} from '../../../features/frame/FrameSlice'
 import {addAlert} from '../../../features/alert/AlertSlice'
 import {getConnectionStatus} from '../../../features/database/DatabaseSlice'
 import {executeCypherQuery} from '../../../features/cypher/CypherSlice'
@@ -12,6 +12,7 @@ const mapStateToProps = (state)  => {
     }
 }
 
-const mapDispatchToProps = { addFrame, addAlert, getConnectionStatus, executeCypherQuery }
+
+const mapDispatchToProps = { addFrame, trimFrame, addAlert, getConnectionStatus, executeCypherQuery }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

@@ -3,15 +3,27 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
   async () => {
-    const response = await fetch('/api/v1/db/meta')
-    const res = await response.json();
-    return res
-  }
-)
-
+    try {
+      
+      const response = await fetch('/api/v1/db/meta')
+      console.log(response)
+      if (response.ok) { return await response.json(); }
+      throw response
+    } catch (error) {
+      const errorDetail = {
+        name: 'Database Connection Failed'
+        , statusText: error.statusText
+      }
+      throw errorDetail
+    }
+  })
+  
 const MetadataSlice = createSlice({
   name: 'metadata',
   initialState: {
+    edges: [],
+    nodes: [],
+    propertyKeys: [],
     status: 'init'
   },
   reducers: {
@@ -22,13 +34,15 @@ const MetadataSlice = createSlice({
         return {
           edges: action.payload.edges,
           nodes: action.payload.nodes,
-          propertyKeys: action.payload.propertyKeys
+          propertyKeys: action.payload.propertyKeys,
+          status: 'connected'
         }
       } else {
         return {
           edges: [],
           nodes: [],
-          propertyKeys: []
+          propertyKeys: [],
+          status: 'disconnected'
         }
       }
     }
