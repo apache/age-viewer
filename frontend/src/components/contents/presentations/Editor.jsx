@@ -56,7 +56,7 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
     }; 
 
     const alerts = alertList.map((alert) => {
-        return <AlertContainers key={alert.alerProps.key} alertKey={alert.alerProps.key} alertName={alert.alertName}/>;
+        return <AlertContainers key={alert.alertProps.key} alertKey={alert.alertProps.key} alertName={alert.alertName} errorMessage={alert.alertProps.errorMessage}/>;
     });
    
     return (

@@ -16,12 +16,13 @@ export const connectToAgensGraph = createAsyncThunk(
       if (response.ok) { return await response.json(); }
       throw response
     } catch (error) {
+      const errorJson = await error.json()
       const errorDetail = {
-        name: 'Database Connection Failed'
+        name: 'Failed to Retrieve Connection Information'
+        , message: errorJson.message
         , statusText: error.statusText
       }
       throw errorDetail
-
     }
   }
 )
@@ -72,7 +73,6 @@ const DatabaseSlice = createSlice({
       }
     },
     [connectToAgensGraph.rejected]: (state, action) => {
-      alert(action.error.name)
       return {
         host: ''
         , port: ''

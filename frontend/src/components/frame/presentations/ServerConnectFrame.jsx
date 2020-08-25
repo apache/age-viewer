@@ -88,7 +88,8 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, a
                                     })
                                     addFrame(':server status', 'ServerStatus')
                                 } else if (response.type === 'database/connectToAgensGraph/rejected') {
-                                    addAlert('ErrorServerConnectFail')
+                                    console.log(response.error.message)
+                                    addAlert('ErrorServerConnectFail', response.error.message)
                                 }
                             })}>CONNECT</button>
                     </div>
