@@ -1,51 +1,46 @@
-import React, {useRef}  from 'react';
+import React, {useRef, useState}  from 'react';
 import {useDispatch} from 'react-redux'
 import AlertContainers from '../../alert/containers/AlertContainers'
+import CodeMirror from '@uiw/react-codemirror'
 import uuid from 'react-uuid'
-
+import 'codemirror/keymap/sublime';
+import 'codemirror/theme/ambiance-mobile.css';
 
 const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery }) => {
-
     const dispatch = useDispatch();
-    let reqString = useRef()
+    const [reqString, setReqString] = useState()
 
-    const clearReqString = () => (reqString.current.value = '' );
-    
-    const onEnter = (e) => {
-        if(e.keyCode === 13){
-            onClick()
-         }
-    }
+    const clearReqString = () => (setReqString(''));
     
     const onClick = () => {
         const refKey = uuid()
-        if (reqString.current.value.toUpperCase().startsWith(':PLAY')) {
-            dispatch(() => addFrame(reqString.current.value, 'Contents', refKey))
-        } else if (reqString.current.value.toUpperCase() === ':SERVER STATUS') {
+        if (reqString.toUpperCase().startsWith(':PLAY')) {
+            dispatch(() => addFrame(reqString, 'Contents', refKey))
+        } else if (reqString.toUpperCase() === ':SERVER STATUS') {
             dispatch(() => trimFrame('ServerStatus'))
-            dispatch(() => addFrame(reqString.current.value, 'ServerStatus', refKey))
-        } else if (database.status === 'disconnected' && reqString.current.value.toUpperCase() === ':SERVER DISCONNECT') {
+            dispatch(() => addFrame(reqString, 'ServerStatus', refKey))
+        } else if (database.status === 'disconnected' && reqString.toUpperCase() === ':SERVER DISCONNECT') {
             dispatch(() => trimFrame('ServerDisconnect'))
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            dispatch(() => addFrame(reqString.current.value, 'ServerDisconnect', refKey))
-        } else if (database.status === 'disconnected' && reqString.current.value.toUpperCase() === ':SERVER CONNECT') {
+            dispatch(() => addFrame(reqString, 'ServerDisconnect', refKey))
+        } else if (database.status === 'disconnected' && reqString.toUpperCase() === ':SERVER CONNECT') {
             dispatch(() => trimFrame('ServerConnect'))
-            dispatch(() => addFrame(reqString.current.value, 'ServerConnect', refKey))
-        } else if (database.status === 'disconnected' && reqString.current.value.toUpperCase().match('(MATCH|CREATE).*')) {
+            dispatch(() => addFrame(reqString, 'ServerConnect', refKey))
+        } else if (database.status === 'disconnected' && reqString.toUpperCase().match('(MATCH|CREATE).*')) {
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            dispatch(() => addFrame(reqString.current.value, 'ServerConnect', refKey))
-        } else if (database.status === 'connected' && reqString.current.value.toUpperCase() === ':SERVER DISCONNECT') {
+            dispatch(() => addFrame(reqString, 'ServerConnect', refKey))
+        } else if (database.status === 'connected' && reqString.toUpperCase() === ':SERVER DISCONNECT') {
             dispatch(() => trimFrame('ServerDisconnect'))
             dispatch(() => addAlert('NoticeServerDisconnected'))
-            dispatch(() => addFrame(reqString.current.value, 'ServerDisconnect', refKey))
-        } else if (database.status === 'connected' && reqString.current.value.toUpperCase() === ':SERVER CONNECT') {
+            dispatch(() => addFrame(reqString, 'ServerDisconnect', refKey))
+        } else if (database.status === 'connected' && reqString.toUpperCase() === ':SERVER CONNECT') {
             dispatch(() => trimFrame('ServerStatus'))
             dispatch(() => addAlert('NoticeAlreadyConnected'))
-            dispatch(() => addFrame(reqString.current.value, 'ServerStatus', refKey))
-        } else if (database.status === 'connected' && reqString.current.value.toUpperCase().match('(MATCH|CREATE).*')) {
-            const reqStringValue = reqString.current.value
+            dispatch(() => addFrame(reqString, 'ServerStatus', refKey))
+        } else if (database.status === 'connected' && reqString.toUpperCase().match('(MATCH|CREATE|COPY).*')) {
+            const reqStringValue = reqString
             dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
                 if (response.type === 'cypher/executeCypherQuery/fulfilled'){
                     addFrame(reqStringValue, 'CypherResultFrame', refKey)
@@ -69,8 +64,31 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
         <div className="card">
             <div className="container-fluid editor-area card-header">
                 <div className="input-group">
-                    <input type="text" className="form-control col-11" placeholder="$"
-                        aria-label="AgensBrowser Editor" aria-describedby="editor-buttons" onKeyDown={onEnter} ref={reqString}/>
+                    <div className="form-control col-11" style={{padding:'0px'}}>
+                    <CodeMirror
+                    value={reqString}
+                    options={{
+                        keyMap: 'sublime',
+                        mode: 'cypher',
+                        tabSize: 4,
+                        lineNumbers: true,
+                        lineNumberFormatter: () => '$',
+                        extraKeys: {
+                            'Shift-Enter': (cm) => {
+                                onClick()
+                            },
+                            'Ctrl-Enter': (cm) => {
+                                onClick()
+                            },
+                        }
+                    }}
+                    onChange={(editor, change) => {
+                        setReqString(editor.getValue());
+                        editor.lineCount() <= 1 ? editor.setOption('lineNumberFormatter', (number) => '$') : editor.setOption('lineNumberFormatter', (number) => number)
+                        editor.lineCount() <= 5 ? editor.setSize(null, (editor.lineCount() * 39) + 'px') : editor.setSize(null, '190px')
+                    }}
+                    />
+                    </div>
                     <div className="input-group-append ml-auto" id="editor-buttons">
                         <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-star-o fa-lg"
                                 aria-hidden="true"></span></button>
