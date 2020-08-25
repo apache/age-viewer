@@ -4,13 +4,15 @@ const connectorServiceManager = require('../session/sessionManager');
 const router = express.Router();
 
 router.get('', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID)
+    let connectorService = connectorServiceManager.get(req.sessionID);
     if (connectorService.isConnected()) {
-        let connectionStatus = await connectorService.getConnectionStatus();
-        if(connectionStatus) {
+        try {
+            await connectorService.getConnectionStatus();
             res.status(200).json(connectorService.getConnectionInfo()).end();
-        } else {
-            res.status(500).json(null).end();
+        } catch (err) {
+            let error = new Error(err.message);
+            error.status = 500;
+            next(error);
         }
     } else {
         let error = new Error('Not connected');
@@ -20,22 +22,23 @@ router.get('', async (req, res, next) => {
 });
 
 router.post('/connect', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID)
+    let connectorService = connectorServiceManager.get(req.sessionID);
     if (connectorService.isConnected()) {
         res.status(200).json(connectorService.getConnectionInfo()).end();
     } else {
-        let result = await connectorService.connectDatabase(req.body);
-
-        if (result) {
+        try {
+            await connectorService.connectDatabase(req.body);
             res.status(200).json(connectorService.getConnectionInfo()).end();
-        } else {
-            res.status(500).json(null).end();
+        } catch (err) {
+            let error = new Error(err.message);
+            error.status = 500;
+            next(error);
         }
     }
 });
 
 router.get('/disconnect', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID)
+    let connectorService = connectorServiceManager.get(req.sessionID);
     if (connectorService.isConnected()) {
         let isDisconnect = await connectorService.disconnectDatabase();
 
@@ -52,7 +55,7 @@ router.get('/disconnect', async (req, res, next) => {
 });
 
 router.get('/meta', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID)
+    let connectorService = connectorServiceManager.get(req.sessionID);
     if (connectorService.isConnected()) {
         let metadata = null;
         try {

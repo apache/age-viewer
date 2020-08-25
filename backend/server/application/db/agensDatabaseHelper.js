@@ -19,14 +19,13 @@ class AgensDatabaseHelper {
         let client = null;
         try {
             client = await this.getConnection();
-            await client.query('SELECT 1');
+            await client.query(`set graph_path = ${this._graph}`);
             client.release();
 
             result = true;
         } catch (err) {
             console.error('isHealth() Error Occurred!!!: ', err.message);
-        } finally {
-            return result;
+            throw err;
         }
     }
 
@@ -34,7 +33,7 @@ class AgensDatabaseHelper {
         let client = await this.getConnection();
         let result = null;
         try {
-            await client.query(`set graph_path=${this._graph}`);
+            await client.query(`set graph_path = ${this._graph}`);
             result = await client.query(query);
         } catch (err) {
             console.error('Execute Error: ', err.message);
@@ -49,7 +48,7 @@ class AgensDatabaseHelper {
         let client = await this.getConnection();
         let result = null;
         try {
-            await client.query(`set graph_path=${this._graph}`);
+            await client.query(`set graph_path = ${this._graph}`);
             result = await client.query(query, params);
         } catch (err) {
             console.error('Execute Error: ', err.message);
@@ -62,7 +61,6 @@ class AgensDatabaseHelper {
 
     getConnection() {
         if (!this._pool) {
-            console.log("CREATE")
             this._pool = new ag.Pool(this.toPoolConnectionInfo());
         }
         return this._pool.connect();

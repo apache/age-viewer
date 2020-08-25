@@ -79,11 +79,12 @@ class ConnectorService {
             agensDatabaseHelper = this._agensDatabaseHelper;
         }
 
-        if (await agensDatabaseHelper.isHealth()) {
+        try {
+            await agensDatabaseHelper.isHealth();
             return true;
-        } else {
+        } catch(err) {
             this._agensDatabaseHelper = null;
-            return false;
+            throw err;
         }
     }
 
@@ -106,11 +107,15 @@ class ConnectorService {
 
     async getConnectionStatus() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-
-        if (agensDatabaseHelper != null && (await agensDatabaseHelper.isHealth())) {
-            return true;
-        } else {
+        if(agensDatabaseHelper == null) {
             return false;
+        }
+
+        try {
+            await agensDatabaseHelper.isHealth()
+            return true;
+        } catch (err) {
+            throw err;
         }
     }
 
