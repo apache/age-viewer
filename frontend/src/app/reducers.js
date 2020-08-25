@@ -6,7 +6,6 @@ import MenuReducer from '../features/menu/MenuSlice'
 import SettingReducer from '../features/setting/SettingSlice'
 import CypherReducer from '../features/cypher/CypherSlice'
 import AlertReducer from '../features/alert/AlertSlice'
-import QuerySlice from '../features/query/QuerySlice'
 
 
 const rootReducer = combineReducers({
@@ -16,8 +15,7 @@ const rootReducer = combineReducers({
     metadata : MetadataReducer,
     frames : FrameReducer,
     cypher: CypherReducer,
-    alerts: AlertReducer,
-    query : QuerySlice
+    alerts: AlertReducer
 })
 
 export default rootReducer

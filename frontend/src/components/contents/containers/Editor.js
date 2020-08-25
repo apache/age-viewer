@@ -7,8 +7,7 @@ import Editor from '../presentations/Editor'
 const mapStateToProps = (state)  => {
     return {
         alertList: state.alerts,
-        database: state.database,
-        query: state.query.queryStr
+        database: state.database
     }
 }
 
