@@ -12,18 +12,6 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
 
     const clearReqString = () => (setReqString(''));
     
-    if(query !== '') {
-        reqString.current.value = query;
-        const refKey = uuid()
-        if (database.status === 'disconnected' && reqString.current.value.match('(match|create).*')) {
-            dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-        } else if (database.status === 'disconnected' && reqString.current.value === ':server status') {
-            dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-        } else {
-            dispatch(() => [addFrame(reqString.current.value, refKey), executeCypherQuery([refKey, reqString.current.value])])            
-        }
-    }
-
     const onClick = () => {
         const refKey = uuid()
         if (reqString.toUpperCase().startsWith(':PLAY')) {
