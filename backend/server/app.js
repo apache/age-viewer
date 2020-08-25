@@ -4,6 +4,7 @@ const uuid = require('node-uuid');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const { stream } = require('./config/winston');
 const cypherRouter = require('./application/cypher/cypherController');
 const databaseRouter = require('./application/connector/connectorController');
 const sessionRouter = require('./application/session/sessionRouter');
@@ -27,7 +28,7 @@ app.use(
         },
     })
 );
-app.use(logger('dev'));
+app.use(logger('combined', { stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -42,7 +43,7 @@ process.on('uncaughtException', function (exception) {
 });
 
 function errorHandler(err, req, res, next) {
-    res.status(err.status).json({message: err.message}).end();
+    res.status(err.status).json({ message: err.message }).end();
 }
 
 module.exports = app;
