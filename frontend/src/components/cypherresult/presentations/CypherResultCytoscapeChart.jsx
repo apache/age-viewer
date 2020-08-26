@@ -120,11 +120,6 @@ const coseBilkentLayout = {
   }
 }
 
-const ciseLayout = {
-  name: 'cise',
-  animate: true
-}
-
 const d3Layout = {
   name: 'd3-force',
   animate: true, // whether to show the layout as it's running; special 'end' value makes the layout animate like a discrete layout
@@ -199,9 +194,12 @@ class CytoscapeComponent extends Component {
       alert("No data to extend.")
       return
     }
+
+    this.cy.elements().lock()
     this.cy.add(generatedData.elements, generatedData.legend)
     this.cy.layout(coseBilkentLayout).run()
-
+    this.cy.elements().unlock()
+    
     this.handleUserAction(this.props)
     this.props.addLegendData(generatedData.legend)
   }

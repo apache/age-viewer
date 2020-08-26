@@ -18,11 +18,14 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
 
     if (props.data['legend'] !== undefined && Object.keys(props.data['legend']['nodeLegend']).length > 0) {
 
-      setIsReloading(false)
-
-      setLegendData(props.data['legend'])
-
-      setElements(props.data.elements)
+      if (Object.keys(legendData.edgeLegend).length === 0 && Object.keys(legendData.nodeLegend).length === 0) {
+        setIsReloading(false)
+        setLegendData(props.data['legend'])
+      }
+      
+      if (elements.edges.length === 0 && elements.nodes.length === 0) {
+        setElements(props.data.elements)
+      }      
     }
   })
 
@@ -43,7 +46,13 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
 
   const addLegendData = (addedLegendData) => {
     setIsReloading(false)
-    setLegendData(addedLegendData)
+    setLegendData({edgeLegend : addedLegendData.edgeLegend, nodeLegend : addedLegendData.nodeLegend})
+    console.log("========================================")
+    console.log("legendData >> ", legendData)
+    console.log("addedLegendData >> ", addedLegendData)
+    console.log("Object.assign({}, footerData, addedLegendData) >> ", Object.assign({}, legendData, addedLegendData))
+    console.log("legendData >> ", legendData)
+    console.log("========================================")
   }
 
   const colorChange = (elementType, label, color) => {
@@ -62,6 +71,10 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         nodeLegendObj[label]['borderColor'] = color.borderColor
         nodeLegendObj[label]['fontColor'] = color.fontColor
       }
+
+      console.log("legendData >> ", legendData)
+      console.log("nodeLegendObj >> ", nodeLegendObj)
+      console.log("Object.assign(legendData, { nodeLegend: nodeLegendObj }) >> ", Object.assign(legendData, { nodeLegend: nodeLegendObj }))
       setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
       chartRef.current.colorChange(elementType, label, color);
 
