@@ -177,7 +177,7 @@ CREATE TABLE territories (TerritoryID varchar(20), TerritoryDescription char(50)
     Description,
     Picture
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/categories.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/categories.csv' csv header delimiter ',';
 
 COPY customers (
     CustomerID,
@@ -192,7 +192,7 @@ COPY customers (
     Phone,
     Fax
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/customers.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/customers.csv' csv header delimiter ',';
 
 COPY employees (
     EmployeeID,
@@ -214,13 +214,13 @@ COPY employees (
     ReportTo,
     PhotoPath
 )  
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/employees.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/employees.csv' csv header delimiter ',';
 
 COPY employee_territories (
     EmployeeID,
     TerritoryID
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/employee_territories.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/employee_territories.csv' csv header delimiter ',';
 
 COPY orders_details (
     orderID,
@@ -229,7 +229,7 @@ COPY orders_details (
     Quantity,
     Discount
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/orders_details.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/orders_details.csv' csv header delimiter ',';
 
 COPY orders (
     orderID,
@@ -247,7 +247,7 @@ COPY orders (
     ShipPostalCode,                
     ShipCountry                 
 )                          
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/orders.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/orders.csv' csv header delimiter ',';
                         
 COPY products (
     ProductID,
@@ -261,20 +261,20 @@ COPY products (
     ReorderLevel, 
     Discontinued
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/products.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/products.csv' csv header delimiter ',';
 
 COPY regions (
     RegionID,
     RegionDescription
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/regions.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/regions.csv' csv header delimiter ',';
 
 COPY shippers (
     ShipperID,
     CompanyName,
     Phone
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/shippers.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/shippers.csv' csv header delimiter ',';
 
 COPY suppliers (
     SupplierID,
@@ -290,14 +290,14 @@ COPY suppliers (
     Fax,
     HomePage
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/suppliers.csv' csv header delimiter ',';
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/suppliers.csv' csv header delimiter ',';
 
 COPY territories (
     TerritoryID,
     TerritoryDescription,
     RegionID
 ) 
-FROM northwind 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/territories.csv' csv header delimiter ',';`}
+FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/territories.csv' csv header delimiter ',';`}
                 </pre>
             </figure>
         </div>
@@ -419,8 +419,8 @@ CREATE (n)-[r:SOLD]->(m);`}
             <h4>전체 데이터 중 100개를 조회해보기</h4>
             <figure>
                 <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-{`MATCH path=(c:customer)-[:purchased]->(o:"order")-[r:orders]->(p:product) 
-RETURN path
+{`MATCH (c:customer)-[pc:purchased]->(o:"order")-[r:orders]->(p:product) 
+RETURN *
 LIMIT 100;`}
                 </pre>
                 <aside className="warn">
@@ -430,41 +430,13 @@ LIMIT 100;`}
             <h4>특정 고객의 데이터만 조회해보기</h4>
             <figure>
                 <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-{`MATCH path=(c:customer)-[:PURCHASED]->(o:"order")-[:ORDERS]->(p:product)-[:PART_OF]->(:category)
+{`MATCH (c:customer)-[pc:PURCHASED]->(o:"order")-[r:ORDERS]->(p:product)-[po:PART_OF]->(ct:category)
 WHERE c.customerid = 'ANTON' 
-RETURN path
+RETURN *
 LIMIT 100;`}
                 </pre>
                 <aside className="warn">
                 여러 고객 중 'ANTON'이라는 이름을 가진 고객의 구매 데이터를 조회해보겠습니다.
-                </aside>
-            </figure>
-        </div>
-    </div>,
-    <div class="row content-row" key="s12">
-        <div className="col-sm-3">
-            <h3>Querying Graph Data</h3>
-            <p>
-                AgensGraph에 Northwind 데이터 적재가 완료되었다면 Cypher 쿼리로 데이터를 조회하여 데이터가 정상적으로 적재되었는지 확인합니다. 
-                이 튜토리얼에서는 이해를 돕기 위해 OpenBroswer에서 쿼리를 실행해 그래프를 시각화하여 제공합니다.
-            </p>
-            <hr />
-            <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
-            </p>
-        </div>
-        <div className="col-sm-9">
-            <h4>특정 상품의 데이터만 조회해보기</h4>
-            <figure>
-                <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-{`MATCH path1=((:supplier)-[:supplies]->(:product {productname:'Chai'})-[:part_of]->(:category))
-MATCH path2=((:customer)-[:purchased]->(:"order")-[:orders]->(:product {productname:'Chai'}))
-MATCH path3=((:employee)-[:sold]->(:"order")-[:orders]->(:product {productname:'Chai'}))
-RETURN path1, path2, path3; `}
-                </pre>
-                <aside className="warn">
-                여러 상품 중 "Chai"라는 특정 상품에 대한 모든 주문 데이터를 조회해보겠습니다.
                 </aside>
             </figure>
         </div>
