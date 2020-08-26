@@ -50,7 +50,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
                 </div>
             </div>
             <Collapse in={isExpanded}>
-                <div className="card-body card-body-graph collapse" id={refKey}>
+                <div className="card-body card-body-graph" id={refKey}>
                     <div className="d-flex h-100">
                         <Tab.Container defaultActiveKey="table">
 

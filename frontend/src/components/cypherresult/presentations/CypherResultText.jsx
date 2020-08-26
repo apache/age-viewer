@@ -18,7 +18,7 @@ const CypherResultText = ({data}) => {
   })
 
   return (
-  <div><pre>{table.toString()}</pre></div>
+  <div style={{height:'100%'}}><pre style={{height:'inherit', marginBottom:'initial'}}>{table.toString()}</pre></div>
   )
 }
 
