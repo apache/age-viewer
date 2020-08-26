@@ -264,6 +264,16 @@ a.nav-link {
     border-top: 1px solid rgba(0,0,0,.125);
 }
 
+.chart-footer-area .graphFrameFooter {
+    height: 37px;
+    overflow: hidden;
+}
+
+.chart-footer-area .graphFrameFooter.expandedGraphFrameFooter {
+    height: initial !important;
+    overflow: initial !important;
+}
+
 .frame-head-button.selected {
     color: #212121 !important;
 }
@@ -285,6 +295,27 @@ a.nav-link {
     background-color: rgba(0,0,0,.03);
     border-bottom: 1px solid rgba(0,0,0,.125);
 }
+
+.nodeLegend .legend {
+    height: 47px;
+    overflow: hidden;
+}
+
+.nodeLegend .legend.expandedLegend {
+    height: initial !important;
+    overflow: initial !important;
+}
+
+.edgeLegend .legend {
+    height: 47px;
+    overflow: hidden;
+}
+
+.edgeLegend .legend.expandedLegend {
+    height: initial !important;
+    overflow: initial !important;
+}
+
 
 .nodeLabel, .edgeLabel {
     cursor: pointer;

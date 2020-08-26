@@ -7,7 +7,9 @@ class CypherResultCytoscapeLegend extends Component {
     super(props);
     this.state = {
       nodeBadges: new Map(),
-      edgeBadges: new Map()
+      edgeBadges: new Map(),
+      nodeLegendExpanded: false,
+      edgeLegendExpanded: false
     }
   }
 
@@ -37,11 +39,12 @@ class CypherResultCytoscapeLegend extends Component {
 
     this.setState({nodeBadges : newNodeBadges})
     this.setState({edgeBadges : newEdgeBadges})
-
-
   }
 
   componentWillUnmount() {
+  }
+
+  componentDidUpdate() {
   }
 
 
@@ -58,11 +61,21 @@ class CypherResultCytoscapeLegend extends Component {
     })
 
     return <div className="legend-area" style={{ width: '100%' }}>
-      <div className="nodeLegend">
+      <div className="d-flex nodeLegend">
+        <div className={"mr-auto legends legend " + (this.state.nodeLegendExpanded ? "expandedLegend" : "" )}>
         {nodeLedgend}
+        </div>
+        <button class="frame-head-button btn btn-link px-3" onClick={() => this.setState({nodeLegendExpanded : !this.state.nodeLegendExpanded})}>
+          <span class={"fas " + ((this.state.nodeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+        </button>
       </div>
-      <div className="edgeLegend">
+      <div className="d-flex edgeLegend">
+        <div className={"mr-auto legends legend " + (this.state.edgeLegendExpanded ? "expandedLegend" : "" )}>
         {edgeLedgend}
+        </div>
+        <button class="frame-head-button btn btn-link px-3" onClick={() => this.setState({edgeLegendExpanded : !this.state.edgeLegendExpanded})}>
+          <span class={"fas " + ((this.state.edgeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+        </button>
       </div>
 
     </div>
