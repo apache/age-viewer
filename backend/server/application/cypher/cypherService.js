@@ -1,3 +1,4 @@
+const ag = require('agensgraph');
 class CypherService {
     constructor(agensDatabaseHelper) {
         this._agensDatabaseHelper = agensDatabaseHelper;
@@ -54,16 +55,31 @@ class CypherService {
         return resultSet.rows.map((row) => {
             let convetedObject = {};
             for (let k in row) {
-                if (row[k].hasOwnProperty('start')) {
-                    convetedObject[k] = this.convertEdge(row[k]);
+                if (row[k].hasOwnProperty('vertices')) {
+                    convetedObject[k] = this.convertPath(row[k]);
                 } else if (row[k].hasOwnProperty('id')) {
                     convetedObject[k] = this.convertVertex(row[k]);
+                } else if (row[k].hasOwnProperty('start')) {
+                    convetedObject[k] = this.convertEdge(row[k]);
                 } else {
                     convetedObject[k] = row[k];
                 }
             }
             return convetedObject;
         });
+    }
+    convertPath({ vertices, edges, start, end, len }) {
+        let result = [];
+        // vertex
+        for(let idx in vertices) {
+            result.push(this.convertVertex(vertices[idx]));
+        }
+        // edge
+        for(let idx in edges) {
+            result.push(this.convertEdge(edges[idx]));
+        }
+
+        return result;
     }
 
     convertEdge({ label, id, start, end, props }) {
