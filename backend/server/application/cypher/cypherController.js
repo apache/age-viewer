@@ -1,6 +1,5 @@
 const express = require('express');
 const CypherService = require('./cypherService')
-const AgensDatabaseHelper = require('../db/agensDatabaseHelper')
 const connectorServiceManager = require('../session/sessionManager');
 let router = express.Router();
 

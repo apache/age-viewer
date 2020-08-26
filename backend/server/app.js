@@ -28,7 +28,7 @@ app.use(
         },
     })
 );
-app.use(logger('combined', { stream }));
+app.use(logger('common', { stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
