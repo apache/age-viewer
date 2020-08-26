@@ -1,5 +1,4 @@
 const express = require('express');
-const ConnectorService = require('./connectorService');
 const connectorServiceManager = require('../session/sessionManager');
 const router = express.Router();
 
