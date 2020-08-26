@@ -8,27 +8,23 @@ const FrameSlice = createSlice({
     addFrame: {
       reducer: (state, action) => {
         const reqString = action.payload.reqString.trim().toLowerCase()
-        let refKey = action.payload.refKey ? action.payload.refKey : uuid()
+        const firstNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false))        
+        const frameName = action.payload.frameName
 
-        const fistNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false))
-        let frameName = ''
-        if (reqString === ':server status') {
-          frameName = 'ServerStatus'
-        } else if (reqString === ':server connect') {
-          frameName = 'ServerConnect'
-        } else if (reqString === ':server disconnect') {
-          frameName = 'ServerDisconnect'
-        } else if (reqString.match("(match|create).*")) {
-          frameName = 'CypherResultFrame'
-        } else {
-          alert("Can't understand your command")
-          return;
+        let frameProps = {
+          reqString : reqString
+          , key : action.payload.refKey ? action.payload.refKey : uuid()
         }
-        state.splice(fistNotPinnedIndex, 0, { frameName: frameName, frameProps: { key: refKey, reqString: reqString }, isPinned : false })
+
+        if (reqString.startsWith(':play')) {
+          frameProps['playTarget'] = reqString.split(/\s+/).pop()
+        }
+
+        state.splice(firstNotPinnedIndex, 0, { frameName: frameName, frameProps: frameProps, isPinned : false })
         state.map((frame) => {if (frame['orgIndex']) {frame['orgIndex'] = frame['orgIndex'] + 1}; return frame})
       },
-      prepare: (reqString, refKey) => {
-        return { payload: { reqString, refKey } }
+      prepare: (reqString, frameName, refKey) => {
+        return { payload: { reqString, frameName, refKey } }
       }
     },
     removeFrame: {
@@ -59,10 +55,20 @@ const FrameSlice = createSlice({
       prepare: (refKey) => {
         return { payload: { refKey } }
       }
+    },
+    trimFrame: {
+      reducer: (state, action) => {
+        const frameName = action.payload.frameName
+        return state.filter((frame, idx, arr) => ( frame.frameName !== frameName ))
+      },
+      prepare: (frameName) => {
+        return { payload: { frameName } }
+      }
+
     }
   }
 })
 
-export const { addFrame, removeFrame, pinFrame } = FrameSlice.actions
+export const { addFrame, removeFrame, pinFrame, trimFrame } = FrameSlice.actions
 
 export default FrameSlice.reducer

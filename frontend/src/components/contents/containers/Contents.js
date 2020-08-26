@@ -13,7 +13,8 @@ import CypherResultFrame from '../../frame/presentations/CypherResultFrame'
 const mapStateToProps = (state)  => {
     return {
         database: state.database,
-        isActive: state.navigator.isActive
+        isActive: state.navigator.isActive,
+        frames: state.frames
     }
 }
 

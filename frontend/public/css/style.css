@@ -390,3 +390,120 @@ a.nav-link {
 .cxtmenu-content {
     font-size: 10px;
 }
+
+
+
+
+/* ---------------------------------------------------
+    Play Contents
+----------------------------------------------------- */
+.carousel.slide {
+    height: 500px;
+    width: 100%;
+}
+
+.carousel-control-prev {
+    width: 20px !important;
+    background-color: rgba(0,0,0,.13) !important;
+    color: #6c757d!important;
+}
+
+.carousel-control-next{
+    width: 20px !important;
+    background-color: rgba(0,0,0,.13) !important;
+    color: #6c757d!important;
+}
+
+.carousel-inner {
+    margin: 0px 25px 10px 25px;
+    width: initial;
+    height: 100%;
+    overflow:auto;
+}
+
+.carousel-indicators {
+    bottom: 0px;
+}
+
+.carousel-indicators li {
+    background-color: #6c757d;
+}
+
+.carousel-indicators .active {
+    background-color: rgba(0,0,0,.13);
+}
+
+.slide pre.code.runnable {
+    cursor: pointer;
+    border: transparent;
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.slide pre.code.pre-scrollable {
+    max-height: 230px;
+    overflow-y: auto
+}
+
+.slide pre.code {
+    padding: 0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.slide code, .slide .code, .slide kbd, .slide pre, .slide samp, .slide figure pre {
+    font-family: 'Fira Code', 'Monaco', 'Lucida Console', Courier, monospace;
+    background-color: rgba(228, 161, 161, 0.1);
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    white-space: pre-wrap;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.slide pre {
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    padding: 10px !important;
+}
+
+.code {
+    font-family: 'Fira Mono',monospace;
+    background-color: #f3f4f5;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+.content-row {
+    margin-right: initial !important;
+}
+
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+textarea.editorTextarea
+{
+ background: url(http://i.imgur.com/2cOaJ.png);
+ background-attachment: local;
+ background-repeat: no-repeat;
+ padding-left: 35px;
+ padding-top: 10px;
+ border-color:#ccc;
+ line-height:16px;
+}
+
+.CodeMirror {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.CodeMirror-line {
+    padding: 5px !important;
+}
+
+.CodeMirror-linenumber {
+    padding: 5px 3px 0 5px !important;
+}

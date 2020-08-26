@@ -7,22 +7,20 @@ const AlertSlice = createSlice({
   reducers: {
     addAlert: {
       reducer: (state, action) => {
-        let alertType = action.payload.alertType 
-        if (alertType === 'NoticeServerDisconnected') {
-          state.push({alertType : 'NoticeServerDisconnected', alerProps : {key : uuid(), alertType : 'notice'}})
-        } else if (alertType === 'NoticeServerConnected') {
-          state.push({alertType : 'NoticeServerConnected', alerProps : {key : uuid(), alertType : 'notice'}})
-        } else if (alertType === 'ErrorServerConnectFail') {
-          state.push({alertType : 'ErrorServerConnectFail', alerProps : {key : uuid(), alertType : 'Error'}})
-        } else if (alertType === 'ErrorNoDatabaseConnected') {
-          state.push({alertType : 'ErrorNoDatabaseConnected', alerProps : {key : uuid(), alertType : 'Error'}})
-        } else {
-          alert("Can't find proper alert name")
-          return;
+        let alertName = action.payload.alertName 
+        let alertType = 'Notice'
+        let errorMessage = ''
+
+        if (['ErrorServerConnectFail', 'ErrorNoDatabaseConnected'].includes(alertName)) {
+          alertType = 'Error'
+          errorMessage = action.payload.message 
         }
+
+        state.push({alertName : alertName, alertProps : {key : uuid(), alertType : alertType, errorMessage : errorMessage}})
       },
-      prepare: (alertType) => {
-        return { payload: { alertType } }
+      prepare: (alertName, message) => {
+        console.log("alertName, message" , alertName, message)
+        return { payload: { alertName, message } }
       }
     }
   }

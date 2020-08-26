@@ -4,58 +4,66 @@ class CypherService {
     }
 
     async executeCypher(query) {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        let result = {
-            status: 200,
-            data: null,
-        };
-
         if (!query) {
-            result.status = 400;
-            result.data = { cmd: query };
+            throw new Error(`Query Not Valid (Query: ${query})`);
         } else {
-            if (await agensDatabaseHelper.isHealth()) {
-                result.status = 200;
-                result.data = await this.getExecuteResult(query);
-            } else {
-                result.data = agensDatabaseHelper.toConnectionInfo();
-                result.status = 500;
+            try {
+                let resultSet = await this._agensDatabaseHelper.execute(query);
+                return this.createResult(resultSet);
+            } catch (err) {
+                throw err;
             }
         }
+    }
 
+    createResult(resultSet) {
+        let result = {
+            rows: null,
+            columns: null,
+            rowCount: null,
+            command: null,
+        };
+
+        let targetItem = resultSet;
+        if (Array.isArray(resultSet)) {
+            targetItem = resultSet.pop();
+        }
+
+        result = {
+            rows: this._convertRowToResult(targetItem),
+            columns: this._getColumns(targetItem),
+            rowCount: this._getRowCount(targetItem),
+            command: this._getCommand(targetItem),
+        };
         return result;
     }
 
-    async getExecuteResult(query) {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        try {
-            let queryResult = await agensDatabaseHelper.execute(query);
-            let result = {
-                rows: null,
-                columns: queryResult.fields.map((field) => field.name),
-                rowCount: queryResult.rowCount,
-                command: queryResult.command
-            }
+    _getColumns(resultSet) {
+        return resultSet.fields.map((field) => field.name);
+    }
 
-            result.rows = queryResult.rows.map((row) => {
-                let convetedObject = {};
-                for (let k in row) {
-                    if (row[k].hasOwnProperty('start')) {
-                        convetedObject[k] = this.convertEdge(row[k]);
-                    } else if (row[k].hasOwnProperty('id')) {
-                        convetedObject[k] = this.convertVertex(row[k]);
-                    } else {
-                        convetedObject[k] = row[k];
-                    }
+    _getRowCount(resultSet) {
+        return resultSet.rowCount;
+    }
+
+    _getCommand(resultSet) {
+        return resultSet.command;
+    }
+
+    _convertRowToResult(resultSet) {
+        return resultSet.rows.map((row) => {
+            let convetedObject = {};
+            for (let k in row) {
+                if (row[k].hasOwnProperty('start')) {
+                    convetedObject[k] = this.convertEdge(row[k]);
+                } else if (row[k].hasOwnProperty('id')) {
+                    convetedObject[k] = this.convertVertex(row[k]);
+                } else {
+                    convetedObject[k] = row[k];
                 }
-                return convetedObject;
-            });
-
-            return result;
-        } catch (err) {
-            console.log(err);
-            throw err;
-        }
+            }
+            return convetedObject;
+        });
     }
 
     convertEdge({ label, id, start, end, props }) {

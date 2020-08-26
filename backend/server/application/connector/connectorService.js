@@ -1,23 +1,26 @@
+const sessionManager = require('../session/sessionManager');
+const AgensDatabaseHelper = require('../db/agensDatabaseHelper');
+
 class ConnectorService {
-    constructor(session, agensDatabaseHelper) {
-        this._session = session;
-        this._agensDatabaseHelper = agensDatabaseHelper;
-    }
+    constructor() {}
 
     async getMetaData() {
         let metadata = new Object();
         try {
+            let connectionInfo = this.getConnectionInfo();
             metadata.nodes = await this.getNodes();
             metadata.edges = await this.getEdges();
             metadata.propertyKeys = await this.getPropertyKeys();
+            metadata.graph = connectionInfo.graph;
+            metadata.database = connectionInfo.database;
+            metadata.role = await this.getRole();
         } catch (error) {
             throw error;
         }
         return metadata;
-
     }
 
-    async getNodes(label) {
+    async getNodes() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let query = [];
         query.push("MATCH(v) RETURN DISTINCT '*' AS label, count(v) AS cnt");
@@ -29,7 +32,7 @@ class ConnectorService {
         return queryResult.rows;
     }
 
-    async getEdges(label) {
+    async getEdges() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let query = [];
         query.push("MATCH(v) - [e] - (v2) RETURN DISTINCT '*' AS label, count(e) AS cnt");
@@ -54,59 +57,78 @@ class ConnectorService {
         return queryResult.rows;
     }
 
-    async connectDatabase() {
+    async getRole() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status, data;
-        let isHealth = await agensDatabaseHelper.isHealth();
-
-        if (isHealth) {
-            this._session.client = agensDatabaseHelper.toConnectionInfo();
-            data = agensDatabaseHelper.toConnectionInfo();
-            status = 200;
-        } else {
-            data = null;
-            status = 500;
-        }
-
-        return {
-            status: status,
-            data: data,
-        };
+        let query = [];
+        query.push('SELECT usename as user_name,');
+        query.push('CASE WHEN usesuper THEN ');
+        query.push("CAST('admin' AS pg_catalog.text)");
+        query.push('ELSE');
+        query.push("CAST('user' AS pg_catalog.text)");
+        query.push('END role_name');
+        query.push('FROM pg_catalog.pg_user');
+        query.push('WHERE usename = $1');
+        let queryResult = await agensDatabaseHelper.execute(query.join('\n'), [this.getConnectionInfo().user]);
+        return queryResult.rows[0];
     }
 
-    disconnectDatabase() {
+    async connectDatabase(connectionInfo) {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status = 500,
-            data = null;
-        try {
-            agensDatabaseHelper.releaseConnection();
-            this._session.client = null;
-            status = 200;
-        } catch (err) {
-            console.log("Already Disconnected");
+        if (agensDatabaseHelper == null) {
+            this._agensDatabaseHelper = new AgensDatabaseHelper(connectionInfo);
+            agensDatabaseHelper = this._agensDatabaseHelper;
         }
-        return {
-            status: status,
-            data: data,
-        };
+
+        try {
+            await agensDatabaseHelper.isHealth();
+            return true;
+        } catch(err) {
+            this._agensDatabaseHelper = null;
+            throw err;
+        }
+    }
+
+    async disconnectDatabase() {
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        if (agensDatabaseHelper == null) {
+            console.log('Already Disconnected');
+            return false;
+        } else {
+            let isRelease = await this._agensDatabaseHelper.releaseConnection();
+            if (isRelease) {
+                this._agensDatabaseHelper = null;
+                return true;
+            } else {
+                console.log('Failed releaseConnection()');
+                return false;
+            }
+        }
     }
 
     async getConnectionStatus() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let status, data;
-
-        if (await agensDatabaseHelper.isHealth()) {
-            data = agensDatabaseHelper.toConnectionInfo();
-            status = 200;
-        } else {
-            data = null;
-            status = 500;
+        if(agensDatabaseHelper == null) {
+            return false;
         }
 
-        return {
-            status: status,
-            data: data,
-        };
+        try {
+            await agensDatabaseHelper.isHealth()
+            return true;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    getConnectionInfo() {
+        return this._agensDatabaseHelper.toConnectionInfo();
+    }
+
+    isConnected() {
+        return this._agensDatabaseHelper != null;
+    }
+
+    get agensDatabaseHelper() {
+        return this._agensDatabaseHelper;
     }
 
     convertEdge({ label, id, start, end, props }) {

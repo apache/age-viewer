@@ -19,12 +19,8 @@ export const executeCypherQuery = createAsyncThunk(
       }
       throw response
     } catch (error) {
-      const errorDetail = {
-        name: 'Cypher Query Error'
-        , statusText: error.statusText
-      }
-      throw errorDetail
-
+      const errorJson = await error.json()
+      throw errorJson.message
     }
   }
 
@@ -61,8 +57,12 @@ const CypherSlice = createSlice({
       //state.queryResult[action.payload.key].response = action.payload
       Object.assign(state.queryResult[action.payload.key], action.payload)
     },
-    [executeCypherQuery.rejectd]: (state, action) => {
-      alert(action.error.name)
+    [executeCypherQuery.rejected]: (state, action) => {
+      state.queryResult[action.meta.arg[0]] = {}
+      state.queryResult[action.meta.arg[0]]['command'] = 'ERROR'
+      state.queryResult[action.meta.arg[0]]['query'] = action.meta.arg[1]
+      state.queryResult[action.meta.arg[0]]['key'] = action.meta.arg[0]
+      state.queryResult[action.meta.arg[0]]['message'] = action.error.message
     }
   }
 })

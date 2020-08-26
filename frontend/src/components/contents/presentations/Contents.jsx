@@ -3,14 +3,17 @@ import {useDispatch} from 'react-redux'
 import EditorContainer from '../containers/Editor'
 import FramesContainer from '../containers/Frames'
 
-const Contents = ({ database, isActive, getConnectionStatus, addFrame }) => {
+const Contents = ({ database, isActive, getConnectionStatus, addFrame, frames }) => {
     const dispatch = useDispatch();
 
     if (database.status === 'init') {
         dispatch(() => getConnectionStatus())
     }
     else if (database.status === 'disconnected') {
-        dispatch(() => addFrame(':server connect'))
+        const serverConnectFrames = frames.filter((frame) => (frame.frameName === 'ServerConnect'))
+        if ( serverConnectFrames.length === 0) {
+            dispatch(() => addFrame(':server connect', 'ServerConnect'))
+        }
     }
 
     return (
