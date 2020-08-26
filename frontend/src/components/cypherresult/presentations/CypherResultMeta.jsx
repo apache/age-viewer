@@ -2,7 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 const CypherResultMeta = ({ database , query, data}) => {
   return (
-    <Table className="table table-hover">
+    <Table className="table table-hover" style={{marginBottom:'initial'}}>
       <tbody>
         <tr>
           <th className="w-25">Server Version</th>

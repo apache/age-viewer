@@ -210,14 +210,13 @@ a[data-toggle="collapse"] {
 
 
 .card-body.card-body-graph {
-    height: 450px;
     padding: 0;
+    min-height: 448px;
 }
 
 .graph-card-nav {
     text-align: center;
     width: 70px;
-    height: 100%;
     border-right: 1px solid rgba(0,0,0,.125);    
 }
 
@@ -265,6 +264,16 @@ a.nav-link {
     border-top: 1px solid rgba(0,0,0,.125);
 }
 
+.chart-footer-area .graphFrameFooter {
+    height: 37px;
+    overflow: hidden;
+}
+
+.chart-footer-area .graphFrameFooter.expandedGraphFrameFooter {
+    height: initial !important;
+    overflow: initial !important;
+}
+
 .frame-head-button.selected {
     color: #212121 !important;
 }
@@ -279,13 +288,34 @@ a.nav-link {
 }
 
 .nodeLegend, .edgeLegend {
-    height: 47px;
+    min-height: 47px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
     background-color: rgba(0,0,0,.03);
     border-bottom: 1px solid rgba(0,0,0,.125);
 }
+
+.nodeLegend .legend {
+    height: 47px;
+    overflow: hidden;
+}
+
+.nodeLegend .legend.expandedLegend {
+    height: initial !important;
+    overflow: initial !important;
+}
+
+.edgeLegend .legend {
+    height: 47px;
+    overflow: hidden;
+}
+
+.edgeLegend .legend.expandedLegend {
+    height: initial !important;
+    overflow: initial !important;
+}
+
 
 .nodeLabel, .edgeLabel {
     cursor: pointer;
