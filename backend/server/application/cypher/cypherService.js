@@ -55,11 +55,12 @@ class CypherService {
         return resultSet.rows.map((row) => {
             let convetedObject = {};
             for (let k in row) {
-                if (row[k].hasOwnProperty('vertices')) {
+                let typeName = row[k].constructor.name;
+                if (typeName == 'Path') {
                     convetedObject[k] = this.convertPath(row[k]);
-                } else if (row[k].hasOwnProperty('id')) {
+                } else if (typeName == 'Vertex') {
                     convetedObject[k] = this.convertVertex(row[k]);
-                } else if (row[k].hasOwnProperty('start')) {
+                } else if (typeName == 'Edge') {
                     convetedObject[k] = this.convertEdge(row[k]);
                 } else {
                     convetedObject[k] = row[k];
@@ -71,11 +72,11 @@ class CypherService {
     convertPath({ vertices, edges, start, end, len }) {
         let result = [];
         // vertex
-        for(let idx in vertices) {
+        for (let idx in vertices) {
             result.push(this.convertVertex(vertices[idx]));
         }
         // edge
-        for(let idx in edges) {
+        for (let idx in edges) {
             result.push(this.convertEdge(edges[idx]));
         }
 
