@@ -6,12 +6,24 @@ import uuid from 'react-uuid'
 import 'codemirror/keymap/sublime';
 import 'codemirror/theme/ambiance-mobile.css';
 
-const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery }) => {
+const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery, query }) => {
     const dispatch = useDispatch();
     const [reqString, setReqString] = useState()
-
     const clearReqString = () => (setReqString(''));
     
+    if(query !== '') {
+        const refKey = uuid()
+        const reqStringValue = query
+        dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
+            if (response.type === 'cypher/executeCypherQuery/fulfilled'){
+                addFrame(reqStringValue, 'CypherResultFrame', refKey)
+            } else if (response.type === 'cypher/executeCypherQuery/rejected'){
+                addFrame(reqStringValue, 'CypherResultFrame', refKey)
+                dispatch(() => addAlert('ErrorCypherQuery'))
+            }
+        }))
+    }
+
     const onClick = () => {
         const refKey = uuid()
         if (reqString.toUpperCase().startsWith(':PLAY')) {

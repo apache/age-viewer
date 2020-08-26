@@ -3,9 +3,9 @@ import {changeTheme} from '../../../features/setting/SettingSlice'
 import Sidebar from '../presentations/Sidebar'
 import {getMetaData} from '../../../features/database/MetadataSlice'
 import {addFrame} from '../../../features/frame/FrameSlice'
+import {setQuery} from '../../../features/query/QuerySlice'
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
         activeMenuName: state.navigator.activeMenu,
         database: state.database,
@@ -13,7 +13,8 @@ const mapStateToProps = (state) => {
         metadata: state.metadata,
         edges : state.metadata.edges,
         nodes : state.metadata.nodes,
-        propertyKeys : state.metadata.propertyKeys
+        propertyKeys : state.metadata.propertyKeys,
+        query : state.query.queryStr
     }
 }
 
@@ -28,7 +29,7 @@ const  mapDispatchToProps = (dispatch) => {
 }
 */
 
-const mapDispatchToProps = { changeTheme, getMetaData, addFrame }
+const mapDispatchToProps = { changeTheme, getMetaData, addFrame, setQuery }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 
