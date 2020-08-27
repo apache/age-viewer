@@ -4,10 +4,10 @@ export const getMetaData = createAsyncThunk(
   'database/getMetaData',
   async () => {
     try {
-      
       const response = await fetch('/api/v1/db/meta')
-      console.log(response)
-      if (response.ok) { return await response.json(); }
+      if(response.ok) {
+        return await response.json();
+      }
       throw response
     } catch (error) {
       const errorDetail = {
@@ -24,7 +24,13 @@ const MetadataSlice = createSlice({
     edges: [],
     nodes: [],
     propertyKeys: [],
-    status: 'init'
+    status: 'init',
+    dbname: '',
+    graph: '',
+    role: {
+      user_name: '',
+      role_name: ''
+    }
   },
   reducers: {
   },
@@ -35,14 +41,20 @@ const MetadataSlice = createSlice({
           edges: action.payload.edges,
           nodes: action.payload.nodes,
           propertyKeys: action.payload.propertyKeys,
-          status: 'connected'
+          status: 'connected',
+          dbname: action.payload.database,
+          graph: action.payload.graph,
+          role: action.payload.role
         }
       } else {
         return {
           edges: [],
           nodes: [],
           propertyKeys: [],
-          status: 'disconnected'
+          status: 'disconnected',
+          dbname: action.payload.database,
+          graph: action.payload.graph,
+          role: action.payload.role
         }
       }
     }
