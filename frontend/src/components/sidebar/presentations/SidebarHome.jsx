@@ -14,6 +14,12 @@ const ColoredLine = () => (
     />
 );
 
+const StyleWrap = {display: 'flex', flexWrap: 'wrap'};
+const StyleItem = {paddingRight: '0.3em', cursor: 'pointer'};
+const StyleJustifyCenter = {display: 'flex', justifyContent: 'center'};
+const StyleTextright = {marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold'};
+const StyleTextLeft = {fontSize: '13px', fontWeight: 'bold'}
+
 const NodeList = ({nodes, queryStr}) => {
     let list;
     if(nodes) {
@@ -26,7 +32,7 @@ const NodeList = ({nodes, queryStr}) => {
             />
         ));
         return (
-            <div style={{display: 'flex', flexWrap: 'wrap'}}>
+            <div style={StyleWrap}>
                 {list}
             </div>
         )
@@ -38,7 +44,7 @@ const NodeList = ({nodes, queryStr}) => {
 
 const NodeItems = ({label, cnt, queryStr}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em', cursor: 'pointer'}}><span className="badge badg-pill badge-dark" onClick={() => queryStr({label}, 'v')}>{label}({cnt})</span></h5>
+        <h5 style={StyleItem}><span className="badge badg-pill badge-dark" onClick={() => queryStr({label}, 'v')}>{label}({cnt})</span></h5>
     </Fragment>
 );
 
@@ -54,7 +60,7 @@ const EdgeList = ({edges, queryStr}) => {
             />
         ));
         return (
-        <div style={{display: 'flex', flexWrap: 'wrap'}}>
+        <div style={StyleWrap}>
             {list}
         </div>
         )
@@ -66,7 +72,7 @@ const EdgeList = ({edges, queryStr}) => {
 
 const EdgeItems = ({label, cnt, queryStr}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em', cursor: 'pointer'}}><span className="badge badge-light" onClick={() => queryStr({label}, 'e')}>{label}({cnt})</span></h5>
+        <h5 style={StyleItem}><span className="badge badge-light" onClick={() => queryStr({label}, 'e')}>{label}({cnt})</span></h5>
     </Fragment>
 );
 
@@ -82,7 +88,7 @@ const PropertyList = ({propertyKeys, queryStr}) => {
             />
         ));
         return (
-        <div style={{display: 'flex', flexWrap: 'wrap'}}>
+        <div style={StyleWrap}>
             {list}
         </div>
         )
@@ -94,29 +100,52 @@ const PropertyList = ({propertyKeys, queryStr}) => {
 
 const PropertyItems =({propertyName, classNames, queryStr}) => (
     <Fragment>
-        <h5 style={{paddingRight: '0.3em', cursor: 'pointer'}}><span className={classNames} onClick={() => queryStr({propertyName}, 'p')}>{propertyName}</span></h5>
+        <h5 style={StyleItem}><span className={classNames} onClick={() => queryStr({propertyName}, 'p')}>{propertyName}</span></h5>
     </Fragment>
 );
 
-const ConnectedText =() => (
+const ConnectedText =({userName, roleName}) => (
     <div>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Username:</div><div className="col-sm-6"></div></h6>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Roles:</div><div className="col-sm-6"></div></h6>
+        <h6>
+        <div style={StyleJustifyCenter}>
+            <div className="col-sm-6" style={StyleTextright}>Username:</div><div className="col-sm-6" style={StyleTextLeft}>{userName}</div>
+        </div>
+        <div style={StyleJustifyCenter}>
+            <div className="col-sm-6" style={StyleTextright}>Roles:</div><div className="col-sm-6" style={StyleTextLeft}>{roleName}</div>
+        </div>
+        </h6>
     </div>
 );
 
-const DBMSText =() => (
+const DBMSText =({dbname, graph}) => (
     <div>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Version:</div><div className="col-sm-6"></div></h6>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Edition:</div><div className="col-sm-6"></div></h6>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Name:</div><div className="col-sm-6"></div></h6>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Databases:</div><div className="col-sm-6"></div></h6>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Information:</div><div className="col-sm-6"></div></h6>
-        <h6><div className="col-sm-6" style={{textAlign:'right'}}>Query List:</div><div className="col-sm-6"></div></h6>
+        <h6>
+            <div style={StyleJustifyCenter}>
+                <div className="col-sm-6" style={StyleTextright}>Version:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+            </div>
+            <div style={StyleJustifyCenter}>
+                <div className="col-sm-6" style={StyleTextright}>Edition:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+            </div>
+            <div style={StyleJustifyCenter}>
+                <div className="col-sm-6" style={StyleTextright}>Name:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+            </div>
+            <div style={StyleJustifyCenter}>
+                <div className="col-sm-6" style={StyleTextright}>Databases:</div><div className="col-sm-6" style={StyleTextLeft}>{dbname}</div>
+            </div>
+            <div style={StyleJustifyCenter}>
+                <div className="col-sm-6" style={StyleTextright}>Graph Path:</div><div className="col-sm-6" style={StyleTextLeft}>{graph}</div>
+            </div>
+            <div style={StyleJustifyCenter}>
+                <div className="col-sm-6" style={StyleTextright}>Information:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+            </div>
+            <div style={StyleJustifyCenter}>
+                <div className="col-sm-6" style={StyleTextright}>Query List:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+            </div>
+        </h6>
     </div>
 );
 
-const SidebarHome = ({edges, nodes, propertyKeys, queryStr}) => {
+const SidebarHome = ({edges, nodes, propertyKeys, dbname, graph, role, queryStr}) => {
     return (
         <div className="sidebar-home">
             <div className="sidebar sidebar-header">
@@ -141,12 +170,12 @@ const SidebarHome = ({edges, nodes, propertyKeys, queryStr}) => {
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Connected as</b></label>
                     <ColoredLine />
-                    <ConnectedText />
+                    <ConnectedText userName={role.user_name} roleName={role.role_name} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>DBMS</b></label>
                     <ColoredLine />
-                    <DBMSText />
+                    <DBMSText  dbname={dbname} graph={graph} />
                 </div>
             </div>
         </div>

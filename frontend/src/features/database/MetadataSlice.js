@@ -24,7 +24,13 @@ const MetadataSlice = createSlice({
     edges: [],
     nodes: [],
     propertyKeys: [],
-    status: 'init'
+    status: 'init',
+    dbname: '',
+    graph: '',
+    role: {
+      user_name: '',
+      role_name: ''
+    }
   },
   reducers: {
   },
@@ -35,14 +41,20 @@ const MetadataSlice = createSlice({
           edges: action.payload.edges,
           nodes: action.payload.nodes,
           propertyKeys: action.payload.propertyKeys,
-          status: 'connected'
+          status: 'connected',
+          dbname: action.payload.database,
+          graph: action.payload.graph,
+          role: action.payload.role
         }
       } else {
         return {
           edges: [],
           nodes: [],
           propertyKeys: [],
-          status: 'disconnected'
+          status: 'disconnected',
+          dbname: action.payload.database,
+          graph: action.payload.graph,
+          role: action.payload.role
         }
       }
     }

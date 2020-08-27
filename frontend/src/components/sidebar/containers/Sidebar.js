@@ -14,6 +14,9 @@ const mapStateToProps = (state) => {
         edges : state.metadata.edges,
         nodes : state.metadata.nodes,
         propertyKeys : state.metadata.propertyKeys,
+        dbname: state.metadata.dbname,
+        graph: state.metadata.graph,
+        role: state.metadata.role,
         query : state.query.queryStr
     }
 }
