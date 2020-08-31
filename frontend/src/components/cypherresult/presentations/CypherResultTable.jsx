@@ -1,12 +1,14 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
-const CypherResultTable = ({data}) => {
-    if (data.command && data.command.toUpperCase() === 'GRAPH') {
-      return <span style={{margin:'25px'}}>Affected {data.rowCount === null ? 0 : data.rowCount} </span>
-    
-    
+const CypherResultTable = ({ data }) => {
+  if (data.command && data.command.toUpperCase().match('(GRAPH|COPY).*')) {
+    return <span style={{ margin: '25px' }}>Affected {data.rowCount === null ? 0 : data.rowCount} </span>
+  } else if (data.command && data.command.toUpperCase() === 'CREATE') {
+    return <span style={{ margin: '25px' }}>{data.command.toUpperCase()}</span>
+  } else if (data.command && data.command.toUpperCase() === 'ERROR') {
+    return <span style={{ margin: '25px' }}>{data.message}</span>
   } else {
-    return (      
+    return (
       <Table className="table table-hover">
         <thead>
           <tr >
@@ -18,14 +20,14 @@ const CypherResultTable = ({data}) => {
           </tr>
         </thead>
         <tbody>
-            {
-              data['rows'].map((d, rIndex) => {
-                const rows = data['columns'].map((alias, cIndex) => {
-                  return <td key={cIndex}>{JSON.stringify(d[alias])}</td>
-                })
-                return <tr key={rIndex}>{rows}</tr>
+          {
+            data['rows'].map((d, rIndex) => {
+              const rows = data['columns'].map((alias, cIndex) => {
+                return <td key={cIndex}>{JSON.stringify(d[alias])}</td>
               })
-            }
+              return <tr key={rIndex}>{rows}</tr>
+            })
+          }
         </tbody>
       </Table>
     )

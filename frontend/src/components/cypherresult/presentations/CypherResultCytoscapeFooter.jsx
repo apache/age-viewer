@@ -4,6 +4,8 @@ import uuid from 'react-uuid'
 import { updateLabelColor, updateNodeLabelSize, updateEdgeLabelSize, updateLabelCaption } from '../../../features/cypher/CypherUtil'
 
 const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelColors, nodeLabelSizes, edgeLabelSizes, colorChange, sizeChange, captionChange }) => {
+  const [footerExpanded, setFooterExpanded] = useState(false)
+
   const extractData = (d) => {
     let extractedData = []
     for (const [alias, val] of Object.entries(d)) {
@@ -18,10 +20,15 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
       const isEdge = footerData.data.source ? {} : { pill: true }
 
       return (
-        <div className="pl-3">
-          <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, color: footerData.data.fontColor }}>{footerData.data.label}</Badge>
-          <span className="label"><strong className="pl-3">&lt;gid&gt; : </strong> {footerData.data.id}</span>
-          {extractData(footerData.data.properties)}
+        <div className="d-flex pl-3">
+            <div className={"mr-auto graphFrameFooter "+ (footerExpanded ? "expandedGraphFrameFooter" : "" )}> 
+              <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, color: footerData.data.fontColor }}>{footerData.data.label}</Badge>
+              <span className="label"><strong className="pl-3">&lt;gid&gt; : </strong> {footerData.data.id}</span>
+              {extractData(footerData.data.properties)}
+            </div>
+            <button class="frame-head-button btn btn-link px-3" onClick={() => setFooterExpanded(!footerExpanded)}>
+              <span class={"fas " + ((footerExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+            </button>
         </div>
       )
 
@@ -82,7 +89,8 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
     }
 
       return (
-        <div className="pl-3">
+        <div className="d-flex pl-3">
+          <div className={"mr-auto graphFrameFooter "+ (footerExpanded ? "expandedGraphFrameFooter" : "" )}> 
           <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, color: footerData.data.fontColor }}>{footerData.data.label}</Badge>
           <span className="label">
             <span className="pl-3">Color : </span> 
@@ -99,6 +107,10 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
             })}
 
           </span>
+            </div>
+            <button class="frame-head-button btn btn-link px-3" onClick={() => setFooterExpanded(!footerExpanded)}>
+              <span class={"fas " + ((footerExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+            </button>
         </div>
       )
     }

@@ -1,5 +1,6 @@
 import {connect} from 'react-redux'
 import {getConnectionStatus} from '../../../features/database/DatabaseSlice'
+import {getMetaData} from '../../../features/database/MetadataSlice'
 import {addFrame} from '../../../features/frame/FrameSlice'
 import Contents from '../presentations/Contents'
 /*
@@ -13,7 +14,8 @@ import CypherResultFrame from '../../frame/presentations/CypherResultFrame'
 const mapStateToProps = (state)  => {
     return {
         database: state.database,
-        isActive: state.navigator.isActive
+        isActive: state.navigator.isActive,
+        frames: state.frames
     }
 }
 
@@ -50,7 +52,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 */
 
-const mapDispatchToProps = { getConnectionStatus, addFrame }
+const mapDispatchToProps = { getConnectionStatus, addFrame, getMetaData }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contents);
 

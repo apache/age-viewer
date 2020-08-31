@@ -1,4 +1,4 @@
-const { Pool } = require('agensgraph');
+const ag = require('agensgraph');
 
 class AgensDatabaseHelper {
     constructor({ host, port, database, graph, user, password } = {}) {
@@ -12,32 +12,47 @@ class AgensDatabaseHelper {
 
     async isHealth() {
         let result = false;
-        if(this.toPoolConnectionInfo() == null) {
+        if (this.toPoolConnectionInfo() == null) {
             return result;
         }
 
-        let client = await this.getConnection();
+        let client = null;
         try {
-            await client.query('SELECT 1');
+            client = await this.getConnection();
+            await client.query(`set graph_path = ${this._graph}`);
+            client.release();
+
             result = true;
         } catch (err) {
-            console.error('Error Occurred!!!: ', err);
-        } finally {
-            client.release();
+            console.error('isHealth() Error Occurred!!!: ', err.message);
+            throw err;
         }
-
-        return result;
     }
 
     async execute(query) {
         let client = await this.getConnection();
         let result = null;
         try {
-            await client.query(`set graph_path=${this._graph}`);
+            await client.query(`set graph_path = ${this._graph}`);
             result = await client.query(query);
         } catch (err) {
-            console.error('Error Occurred!!!: ', err);
-            next(err);
+            console.error('Execute Error: ', err.message);
+            throw err;
+        } finally {
+            client.release();
+        }
+        return result;
+    }
+
+    async execute(query, params) {
+        let client = await this.getConnection();
+        let result = null;
+        try {
+            await client.query(`set graph_path = ${this._graph}`);
+            result = await client.query(query, params);
+        } catch (err) {
+            console.error('Execute Error: ', err.message);
+            throw err;
         } finally {
             client.release();
         }
@@ -46,13 +61,23 @@ class AgensDatabaseHelper {
 
     getConnection() {
         if (!this._pool) {
-            this._pool = new Pool(this.toPoolConnectionInfo());
+            this._pool = new ag.Pool(this.toPoolConnectionInfo());
         }
         return this._pool.connect();
     }
 
+    async releaseConnection() {
+        try {
+            await this._pool.end();
+            return true;
+        } catch (err) {
+            console.error('releaseConnection() {}', err.message);
+            throw err;
+        }
+    }
+
     toPoolConnectionInfo() {
-        if(!this._host || !this._port || !this._database) {
+        if (!this._host || !this._port || !this._database) {
             return null;
         }
         return {
@@ -68,7 +93,7 @@ class AgensDatabaseHelper {
     }
 
     toConnectionInfo() {
-        if(!this._host || !this._port || !this._database) {
+        if (!this._host || !this._port || !this._database) {
             return null;
         }
         return {

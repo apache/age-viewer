@@ -12,13 +12,13 @@ const CypherResultText = ({data}) => {
     })
   }
   
-  var table = AsciiTable.factory({
+  const table = AsciiTable.factory({
     heading: data['columns']
   , rows: extractRows()
   })
 
   return (
-  <div><pre>{table.toString()}</pre></div>
+  <div style={{height:'100%'}}><pre style={{height:'inherit', marginBottom:'initial'}}>{table.toString()}</pre></div>
   )
 }
 
