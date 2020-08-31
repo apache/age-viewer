@@ -10,14 +10,7 @@ const mapStateToProps = (state) => {
         activeMenuName: state.navigator.activeMenu,
         database: state.database,
         isActive: state.navigator.isActive,
-        metadata: state.metadata,
-        edges : state.metadata.edges,
-        nodes : state.metadata.nodes,
-        propertyKeys : state.metadata.propertyKeys,
-        dbname: state.metadata.dbname,
-        graph: state.metadata.graph,
-        role: state.metadata.role,
-        query : state.query.queryStr
+        metadata: state.metadata
     }
 }
 

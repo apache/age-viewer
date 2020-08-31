@@ -5,9 +5,7 @@ export const getMetaData = createAsyncThunk(
   async () => {
     try {
       const response = await fetch('/api/v1/db/meta')
-      if(response.ok) {
-        return await response.json();
-      }
+      if (response.ok) { return await response.json(); }
       throw response
     } catch (error) {
       const errorDetail = {
@@ -45,6 +43,7 @@ const MetadataSlice = createSlice({
           dbname: action.payload.database,
           graph: action.payload.graph,
           role: action.payload.role
+
         }
       } else {
         return {
@@ -55,6 +54,7 @@ const MetadataSlice = createSlice({
           dbname: action.payload.database,
           graph: action.payload.graph,
           role: action.payload.role
+
         }
       }
     }

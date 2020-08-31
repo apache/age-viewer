@@ -3,6 +3,25 @@ import { Badge } from 'react-bootstrap'
 import { Fragment } from 'react';
 import uuid from 'react-uuid';
 
+
+const genLabelQuery = (eleType, labelName) => {
+    if (eleType === 'node') {
+        return "MATCH (V) WHERE LABEL(V) = '" + labelName + "' RETURN V"
+    }
+    else if (eleType === 'edge') {
+        return "MATCH (V)-[R]->(V2) WHERE LABEL(R) = '" + labelName + "' RETURN *"
+    }
+}
+
+const genPropQuery = (eleType, propertyName) => {
+    if (eleType === 'v') {
+        return "MATCH (V) WHERE V." + propertyName + " IS NOT NULL RETURN V"
+    }
+    else if (eleType === 'e') {
+        return "MATCH (V)-[R]->(V2) WHERE R." + propertyName + " IS NOT NULL RETURN *"
+    }
+}
+
 const ColoredLine = () => (
     <hr
         style={{
@@ -20,7 +39,8 @@ const StyleJustifyCenter = {display: 'flex', justifyContent: 'center'};
 const StyleTextright = {marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold'};
 const StyleTextLeft = {fontSize: '13px', fontWeight: 'bold'}
 
-const NodeList = ({nodes, queryStr}) => {
+
+const NodeList = ({nodes, setCommand}) => {
     let list;
     if(nodes) {
         list = nodes.map(item => (
@@ -28,7 +48,7 @@ const NodeList = ({nodes, queryStr}) => {
                 key={uuid()}
                 label={item.label}
                 cnt={item.cnt}
-                queryStr={queryStr}
+                setCommand={setCommand}
             />
         ));
         return (
@@ -42,13 +62,13 @@ const NodeList = ({nodes, queryStr}) => {
     }
 };
 
-const NodeItems = ({label, cnt, queryStr}) => (
+const NodeItems = ({label, cnt, setCommand}) => (
     <Fragment>
-        <h5 style={StyleItem}><span className="badge badg-pill badge-dark" onClick={() => queryStr({label}, 'v')}>{label}({cnt})</span></h5>
+        <span className="nodeLabel px-3 py-2 mx-1 my-1 badge badge-pill badge-dark" onClick={() => setCommand(genLabelQuery("node", label))}>{label}({cnt})</span>
     </Fragment>
 );
 
-const EdgeList = ({edges, queryStr}) => {
+const EdgeList = ({edges, setCommand}) => {
     let list;
     if(edges) {
         list = edges.map(item => (
@@ -56,7 +76,7 @@ const EdgeList = ({edges, queryStr}) => {
                 key={uuid()}
                 label={item.label}
                 cnt={item.cnt}
-                queryStr={queryStr}
+                setCommand={setCommand}
             />
         ));
         return (
@@ -70,21 +90,21 @@ const EdgeList = ({edges, queryStr}) => {
     }
 };
 
-const EdgeItems = ({label, cnt, queryStr}) => (
+const EdgeItems = ({label, cnt, setCommand}) => (
     <Fragment>
-        <h5 style={StyleItem}><span className="badge badge-light" onClick={() => queryStr({label}, 'e')}>{label}({cnt})</span></h5>
+        <span className="edgeLabel px-3 py-2 mx-1 my-1 badge badge-light" onClick={() => setCommand(genLabelQuery("edge", label))}>{label}({cnt})</span>
     </Fragment>
 );
 
-const PropertyList = ({propertyKeys, queryStr}) => {
+const PropertyList = ({propertyKeys, setCommand}) => {
     let list;
     if(propertyKeys) {
         list = propertyKeys.map(item => (
             <PropertyItems
                 key={uuid()}
                 propertyName={item.key}
-                classNames={item.key_type === 'v' ? 'badge badge-pill badge-dark' : 'badge badge-light'}
-                queryStr={queryStr}
+                keyType={item.key_type}
+                setCommand={setCommand}
             />
         ));
         return (
@@ -98,9 +118,9 @@ const PropertyList = ({propertyKeys, queryStr}) => {
     }
 };
 
-const PropertyItems =({propertyName, classNames, queryStr}) => (
+const PropertyItems =({propertyName, keyType, setCommand}) => (
     <Fragment>
-        <h5 style={StyleItem}><span className={classNames} onClick={() => queryStr({propertyName}, 'p')}>{propertyName}</span></h5>
+        <span className={keyType === 'v' ? 'nodeLabel px-3 py-2 mx-1 my-1 badge badge-pill badge-dark' : 'edgeLabel px-3 py-2 mx-1 my-1 badge badge-light'} onClick={() => setCommand(genPropQuery(keyType, propertyName))}>{propertyName}</span>
     </Fragment>
 );
 
@@ -117,17 +137,15 @@ const ConnectedText =({userName, roleName}) => (
     </div>
 );
 
+
 const DBMSText =({dbname, graph}) => (
     <div>
         <h6>
             <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Version:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+                <div className="col-sm-6" style={StyleTextright}>Version:</div><div className="col-sm-6" style={StyleTextLeft}>-</div>
             </div>
             <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Edition:</div><div className="col-sm-6" style={StyleTextLeft}></div>
-            </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Name:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+                <div className="col-sm-6" style={StyleTextright}>Edition:</div><div className="col-sm-6" style={StyleTextLeft}>-</div>
             </div>
             <div style={StyleJustifyCenter}>
                 <div className="col-sm-6" style={StyleTextright}>Databases:</div><div className="col-sm-6" style={StyleTextLeft}>{dbname}</div>
@@ -145,27 +163,28 @@ const DBMSText =({dbname, graph}) => (
     </div>
 );
 
-const SidebarHome = ({edges, nodes, propertyKeys, dbname, graph, role, queryStr}) => {
+
+const SidebarHome = ({edges, nodes, propertyKeys, setCommand, dbname, graph, role }) => {
     return (
         <div className="sidebar-home">
             <div className="sidebar sidebar-header">
-                <h3>Database Information</h3>
+                <h4>Database Information</h4>
             </div>
             <div className="sidebar sidebar-body">
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Vertex Label</b></label>
                     <ColoredLine />
-                    <NodeList nodes={nodes} queryStr={queryStr} />
+                    <NodeList nodes={nodes} setCommand={setCommand}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Edge Label</b></label>
                     <ColoredLine />
-                    <EdgeList edges={edges} queryStr={queryStr} />
+                    <EdgeList edges={edges} setCommand={setCommand}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Properties</b></label>
                     <ColoredLine />
-                    <PropertyList propertyKeys={propertyKeys} queryStr={queryStr} />
+                    <PropertyList propertyKeys={propertyKeys} setCommand={setCommand}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1"><b>Connected as</b></label>
@@ -177,6 +196,7 @@ const SidebarHome = ({edges, nodes, propertyKeys, dbname, graph, role, queryStr}
                     <ColoredLine />
                     <DBMSText  dbname={dbname} graph={graph} />
                 </div>
+
             </div>
         </div>
     );

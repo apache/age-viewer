@@ -3,8 +3,10 @@ import cytoscape from 'cytoscape';
 import cxtmenu from 'cytoscape-cxtmenu'
 import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil'
 import COSEBilkent from 'cytoscape-cose-bilkent';
+import cola from 'cytoscape-cola'
 
 cytoscape.use(COSEBilkent);
+cytoscape.use(cola);
 cytoscape.use(cxtmenu);
 
 const getLabel = (ele, captionProp) => {
@@ -110,9 +112,12 @@ const stylesheet = [
 const coseBilkentLayout = {
   name: 'cose-bilkent'
   , idealEdgeLength: 100
+  , refresh: 300
   , nodeDimensionsIncludeLabels: true
   , fit: true
+  , randomize: true
   , padding: 10
+  , nodeRepulsion: 9500
   , stop: function (event) {
     event.cy.nodes().forEach(function (ele) {
       initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
@@ -120,32 +125,24 @@ const coseBilkentLayout = {
   }
 }
 
-const d3Layout = {
-  name: 'd3-force',
-  animate: true, // whether to show the layout as it's running; special 'end' value makes the layout animate like a discrete layout
-  fit: false,
-  fixedAfterDragging: true,
-  linkId: function id(d) {
-    return d.id;
-  },
-  linkDistance: 80,
-  linkStrength: -300,
-  manyBodyStrength: 0,
-  ready: function () { },
-  stop: function (event) {
+const colaLayout = {
+  name: 'cola'
+  , animate: false
+  , refresh: 1
+  , avoidOverlap: true  
+  , stop: function (event) {
     event.cy.nodes().forEach(function (ele) {
       initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
     });
-  },
-  randomize: true,
-  infinite: false
-  // some more options here...
+  }
 }
+
+const defaultLayout = coseBilkentLayout
 
 const conf = {
   // Common Options
   style: stylesheet,
-  layout: coseBilkentLayout,
+  layout: defaultLayout,
   // Viewport Options
   zoom: 1,
   // Interaction Options
@@ -188,17 +185,26 @@ class CytoscapeComponent extends Component {
     this.menu.destroy()
   }
 
-  addElements(d) {
+  addElements(centerId, d) {
     const generatedData = generateCytoscapeElement( d )
     if (generatedData.elements.nodes.length === 0) {
       alert("No data to extend.")
       return
     }
 
-    this.cy.elements().lock()
+    console.log("====================================")
+    console.log(this.cy.elements())
+    this.cy.elements().lock()    
     this.cy.add(generatedData.elements, generatedData.legend)
-    this.cy.layout(coseBilkentLayout).run()
-    this.cy.elements().unlock()
+
+    //let neighborhood = this.cy.nodes().getElementById(centerId).neighborhood().nodes()
+
+    //neighborhood = neighborhood.union(this.cy.nodes().getElementById(centerId))
+    //neighborhood.layout(coseBilkentLayout).run()
+    this.cy.layout(defaultLayout).run()
+    this.cy.elements().unlock()    
+    console.log(this.cy.elements())
+    console.log("====================================")
     
     this.handleUserAction(this.props)
     this.props.addLegendData(generatedData.legend)
@@ -265,7 +271,7 @@ class CytoscapeComponent extends Component {
               })
               .then(res => res.json())
               .then(data => {
-                this.addElements(data)
+                this.addElements(ele.id(), data)
               })
           }.bind(this)
         },
@@ -307,7 +313,7 @@ class CytoscapeComponent extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.elements.nodes.length === 0) {
       this.cy.add(nextProps.elements)
-      this.cy.layout(coseBilkentLayout).run()
+      this.cy.layout(defaultLayout).run()
 
       this.handleUserAction(nextProps)
 
