@@ -42,8 +42,8 @@ const ContentFrame = ({ refKey, isPinned, reqString, playTarget, removeFrame, pi
 
                 <div className="card-body" id={refKey} style={{padding: 'initial'}}>
                         <Carousel interval={null} fade={true} wrap={false}
-                        prevIcon={<span aria-hidden="true"><i class="fas fa-angle-left fa-lg"></i></span>} 
-                        nextIcon={<span aria-hidden="true"><i class="fas fa-angle-right fa-lg"></i></span>}>
+                        prevIcon={<span aria-hidden="true"><i className="fas fa-angle-left fa-lg"></i></span>} 
+                        nextIcon={<span aria-hidden="true"><i className="fas fa-angle-right fa-lg"></i></span>}>
                             {slides.map((slide)=>(
                             <Carousel.Item>
                                 <div style={{paddingTop:'10px'}}>

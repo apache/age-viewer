@@ -26,8 +26,8 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
               <span className="label"><strong className="pl-3">&lt;gid&gt; : </strong> {footerData.data.id}</span>
               {extractData(footerData.data.properties)}
             </div>
-            <button class="frame-head-button btn btn-link px-3" onClick={() => setFooterExpanded(!footerExpanded)}>
-              <span class={"fas " + ((footerExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+            <button className="frame-head-button btn btn-link px-3" onClick={() => setFooterExpanded(!footerExpanded)}>
+              <span className={"fas " + ((footerExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
             </button>
         </div>
       )
@@ -108,8 +108,8 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
 
           </span>
             </div>
-            <button class="frame-head-button btn btn-link px-3" onClick={() => setFooterExpanded(!footerExpanded)}>
-              <span class={"fas " + ((footerExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+            <button className="frame-head-button btn btn-link px-3" onClick={() => setFooterExpanded(!footerExpanded)}>
+              <span className={"fas " + ((footerExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
             </button>
         </div>
       )
