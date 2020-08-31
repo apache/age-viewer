@@ -3,7 +3,6 @@ import {changeTheme} from '../../../features/setting/SettingSlice'
 import Sidebar from '../presentations/Sidebar'
 import {getMetaData} from '../../../features/database/MetadataSlice'
 import {addFrame} from '../../../features/frame/FrameSlice'
-import {setQuery} from '../../../features/query/QuerySlice'
 
 const mapStateToProps = (state) => {
     return {
@@ -25,7 +24,7 @@ const  mapDispatchToProps = (dispatch) => {
 }
 */
 
-const mapDispatchToProps = { changeTheme, getMetaData, addFrame, setQuery }
+const mapDispatchToProps = { changeTheme, getMetaData, addFrame }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 

@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import SidebarHome from '../containers/SidebarHome'
 import SidebarSetting from './SidebarSetting'
 
-const Sidebar = ({ activeMenuName, isActive, changeTheme, edges, nodes, propertyKeys, dbname, graph, role, database, metadata, getMetaData, addFrame, setQuery }) => {
+const Sidebar = ({ activeMenuName, isActive, changeTheme, database, metadata, getMetaData }) => {
     const dispatch = useDispatch();
 
     if (database.status === 'connected' && (metadata.status === 'init' || metadata.status === 'disconnected')) {
