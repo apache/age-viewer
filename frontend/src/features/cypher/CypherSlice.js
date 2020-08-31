@@ -4,6 +4,17 @@ export const executeCypherQuery = createAsyncThunk(
   'cypher/executeCypherQuery',
   async (args) => {
     try {
+      const cypherPathValidator = new RegExp("^match\\s(.*[a-zA-Z0-9])\\s*=", "i");
+
+      if (cypherPathValidator.test(args[1])) {
+        const pathAlias = RegExp.$1
+        const returnPathAliasValidator = new RegExp("^match\\s.*\\s*=.*return\\s" + pathAlias + ".*", "i");
+
+        if (!returnPathAliasValidator.test(args[1])) {
+          throw { message: "Only Path variable should be returned.\n Modify the return clause to ' RETURN "+pathAlias+" '" }
+        }
+      }
+
       const response = await fetch('/api/v1/cypher',
         {
           method: 'POST',
@@ -19,8 +30,11 @@ export const executeCypherQuery = createAsyncThunk(
       }
       throw response
     } catch (error) {
-      const errorJson = await error.json()
-      throw errorJson.message
+      if (error.json === undefined) {
+        throw error
+      } else {
+        throw error.json().message
+      }
     }
   }
 
@@ -58,6 +72,7 @@ const CypherSlice = createSlice({
       Object.assign(state.queryResult[action.payload.key], action.payload)
     },
     [executeCypherQuery.rejected]: (state, action) => {
+      console.log("action >>> ", action)
       state.queryResult[action.meta.arg[0]] = {}
       state.queryResult[action.meta.arg[0]]['command'] = 'ERROR'
       state.queryResult[action.meta.arg[0]]['query'] = action.meta.arg[1]
