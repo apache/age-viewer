@@ -4,7 +4,7 @@ export const title = 'Northwind Graph'
 export const category = 'graphExamples'
 export const description = 'Northwind graph tutorial!!'
 export const slides = [
-    <div class="row content-row">
+    <div className="row content-row">
         <div className="col-sm-3">
             <h3>Northwind Graph</h3>
             <p className="lead">AgensGraph Tutorial: Import, Query, and Modify Graph Data </p>
@@ -25,7 +25,7 @@ export const slides = [
             Enterprise 제품에 관한 자세한 사항은 Bitnine 홈페이지를 참조하시기 바랍니다.</p>
         </div>
     </div>,
-    <div class="row content-row" key="s2">
+    <div className="row content-row" key="s2">
         <div className="col-sm-3">
             <h3>Dataset Overview: Northwind</h3>
             <p>
@@ -33,8 +33,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -51,7 +51,7 @@ export const slides = [
             </p>
         </div>
     </div>,
-    <div class="row content-row" key="s3">
+    <div className="row content-row" key="s3">
         <div className="col-sm-3">
             <h3>What is, and How to Generate Graph Model</h3>
             <p>
@@ -59,8 +59,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -85,7 +85,7 @@ export const slides = [
 
         </div>
     </div>,
-    <div class="row content-row" key="s6">
+    <div className="row content-row" key="s6">
         <div className="col-sm-3">
             <h3>Import CSV to AgensGraph</h3>
             <p>
@@ -93,8 +93,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -102,7 +102,7 @@ export const slides = [
             <p>
                 FDW와 COPY명령어 모두, CSV파일을 Table화 하는데에 사용 되며 각 특징은 아래와 같습니다.
             </p>
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                         <th scope="col"></th>
@@ -133,7 +133,7 @@ export const slides = [
 
         </div>
     </div>,
-    <div class="row content-row" key="s7">
+    <div className="row content-row" key="s7">
         <div className="col-sm-3">
             <h3>Import CSV to AgensGraph via COPY</h3>
             <p>
@@ -141,8 +141,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -302,7 +302,7 @@ FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset
             </figure>
         </div>
     </div>,
-    <div class="row content-row" key="s9">
+    <div className="row content-row" key="s9">
         <div className="col-sm-3">
             <h3>Import CSV to AgensGraph via COPY</h3>
             <p>
@@ -310,8 +310,8 @@ FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -353,7 +353,7 @@ CREATE PROPERTY INDEX ON territory(territoryid);`}
 
         </div>
     </div>,
-    <div class="row content-row" key="s10">
+    <div className="row content-row" key="s10">
         <div className="col-sm-3">
             <h3>Import CSV to AgensGraph via COPY</h3>
             <p>
@@ -361,8 +361,8 @@ CREATE PROPERTY INDEX ON territory(territoryid);`}
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -402,7 +402,7 @@ CREATE (n)-[r:SOLD]->(m);`}
             </figure>
         </div>
     </div>,
-    <div class="row content-row" key="s11">
+    <div className="row content-row" key="s11">
         <div className="col-sm-3">
             <h3>Querying Graph Data</h3>
             <p>
@@ -411,8 +411,8 @@ CREATE (n)-[r:SOLD]->(m);`}
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" class="badge badge-light"><span class="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">

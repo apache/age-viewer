@@ -125,7 +125,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <DropdownButton bsPrefix="frame-head-button btn btn-link" title={<i class="fas fa-download fa-lg"></i>}>
+                    <DropdownButton bsPrefix="frame-head-button btn btn-link" title={<i className="fas fa-download fa-lg"></i>}>
                         <Dropdown.Item onClick={() => downloadPng()}>Save as PNG</Dropdown.Item>
                         <Dropdown.Item onClick={() => downloadJson()}>Save as JSON</Dropdown.Item>
                         <Dropdown.Item onClick={() => downloadCsv()}>Save as CSV</Dropdown.Item>
