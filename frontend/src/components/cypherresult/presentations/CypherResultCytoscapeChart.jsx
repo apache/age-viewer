@@ -186,7 +186,7 @@ class CytoscapeComponent extends Component {
   }
 
   addElements(centerId, d) {
-    const generatedData = generateCytoscapeElement( d )
+    const generatedData = generateCytoscapeElement( d, true )
     if (generatedData.elements.nodes.length === 0) {
       alert("No data to extend.")
       return
@@ -195,15 +195,29 @@ class CytoscapeComponent extends Component {
     console.log("====================================")
     console.log(this.cy.elements())
     this.cy.elements().lock()    
-    this.cy.add(generatedData.elements, generatedData.legend)
+
+    console.log("generatedData.elements>>> ", generatedData.elements, generatedData.legend)
+    this.cy.add(generatedData.elements)
 
     //let neighborhood = this.cy.nodes().getElementById(centerId).neighborhood().nodes()
 
     //neighborhood = neighborhood.union(this.cy.nodes().getElementById(centerId))
     //neighborhood.layout(coseBilkentLayout).run()
-    this.cy.layout(defaultLayout).run()
+    //this.cy.layout(defaultLayout).run()
+
+
+    //Edge + 중심점
+    //const newlyAddedEdges = this.cy.edges('.new')
+    //const newlyAddedTargets = newlyAddedEdges.targets()
+    //const newlyAddedSources = newlyAddedEdges.sources()
+    //let rerenderEles = newlyAddedEdges.union(newlyAddedTargets).union(newlyAddedSources)
+    //Edge + 중심점
+
+    const rerenderEles = this.cy.nodes('.new')
+
+    rerenderEles.layout(defaultLayout).run()
     this.cy.elements().unlock()    
-    console.log(this.cy.elements())
+    rerenderEles.removeClass('new')
     console.log("====================================")
     
     this.handleUserAction(this.props)
