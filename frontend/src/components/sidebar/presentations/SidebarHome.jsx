@@ -52,7 +52,7 @@ const NodeList = ({nodes, setCommand}) => {
             />
         ));
         return (
-            <div style={{display: 'flex', flexWrap: 'wrap'}}>
+            <div style={StyleWrap}>
                 {list}
             </div>
         )
@@ -80,7 +80,7 @@ const EdgeList = ({edges, setCommand}) => {
             />
         ));
         return (
-        <div style={{display: 'flex', flexWrap: 'wrap'}}>
+        <div style={StyleWrap}>
             {list}
         </div>
         )
@@ -108,7 +108,7 @@ const PropertyList = ({propertyKeys, setCommand}) => {
             />
         ));
         return (
-        <div style={{display: 'flex', flexWrap: 'wrap'}}>
+        <div style={StyleWrap}>
             {list}
         </div>
         )

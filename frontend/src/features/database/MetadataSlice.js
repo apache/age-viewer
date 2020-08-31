@@ -4,7 +4,6 @@ export const getMetaData = createAsyncThunk(
   'database/getMetaData',
   async () => {
     try {
-      
       const response = await fetch('/api/v1/db/meta')
       if (response.ok) { return await response.json(); }
       throw response
