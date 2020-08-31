@@ -19,7 +19,6 @@ const AlertSlice = createSlice({
         state.push({alertName : alertName, alertProps : {key : uuid(), alertType : alertType, errorMessage : errorMessage}})
       },
       prepare: (alertName, message) => {
-        console.log("alertName, message" , alertName, message)
         return { payload: { alertName, message } }
       }
     }

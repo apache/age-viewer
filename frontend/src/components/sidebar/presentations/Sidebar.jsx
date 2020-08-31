@@ -6,10 +6,6 @@ import SidebarSetting from './SidebarSetting'
 const Sidebar = ({ activeMenuName, isActive, changeTheme, database, metadata, getMetaData }) => {
     const dispatch = useDispatch();
 
-    if (database.status === 'connected' && (metadata.status === 'init' || metadata.status === 'disconnected')) {
-        dispatch(() => getMetaData())
-    }
-
     return (
         <div id="sidebar" className={isActive ? " active " : ""} style={{overflowY: 'scroll'}}>
             <div className="tab-content">
