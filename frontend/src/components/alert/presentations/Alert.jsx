@@ -1,9 +1,16 @@
 import React, {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux'
 import {Alert} from 'react-bootstrap'
 
-const SingleAlert = ({key, alertKey, alertName, errorMessage}) => {
+const SingleAlert = ({alertName, errorMessage, setCommand}) => {
+    const dispatch = useDispatch();
 
     const [show, setShow] = useState(true)
+
+    const setAlertConnect = (e, command) => {
+        e.preventDefault()
+        dispatch(() => {setCommand(command)})
+    }
 
     useEffect(() => {
         const timer = setTimeout(() => {setShow(false)} , 10000)
@@ -15,7 +22,7 @@ const SingleAlert = ({key, alertKey, alertName, errorMessage}) => {
             <Alert show={show} variant="warning" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Disconnected</Alert.Heading>
                 <p>
-                Database is Disconnected. You may use <a href="/#" className="badge badge-light"><span
+                Database is Disconnected. You may use <a href="#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server connect")}><span
                         className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connect</a> to
                 estableish connection. There's a graph waiting for you.
                 </p>
@@ -27,8 +34,8 @@ const SingleAlert = ({key, alertKey, alertName, errorMessage}) => {
             <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Connected</Alert.Heading>
                 <p>
-                Successfully database is connected. You may use <a href="/#" className="badge badge-light"><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server status</a> to
+                Successfully database is connected. You may use <a href="#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server status")}><span
+                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true" ></span>:server status</a> to
                 confirm connected database information.
                 </p>
             </Alert>
@@ -50,8 +57,8 @@ const SingleAlert = ({key, alertKey, alertName, errorMessage}) => {
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>No Database Connected</Alert.Heading>
                 <p>
-                You haven't set database connection. You may use <a href="/#" className="badge badge-light"><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connect</a> to
+                You haven't set database connection. You may use <a href="#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server connect")}><span
+                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true" ></span>:server connect</a> to
                         estableish connection. There's a graph waiting for you.
                 </p>
                 {errorMessage}
@@ -84,8 +91,8 @@ const SingleAlert = ({key, alertKey, alertName, errorMessage}) => {
                 <Alert.Heading>Alredy Connected to Database</Alert.Heading>
                 <p>
                     You are currently connected to a database. If you want to access to another database, you may execute 
-                    <a href="/#" className="badge badge-light"><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server disconnect</a> to disconnect from current database first.
+                    <a href="#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server disconnect")}><span
+                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true" ></span>:server disconnect</a> to disconnect from current database first.
                 </p>
             </Alert>
         );

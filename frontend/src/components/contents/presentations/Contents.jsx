@@ -15,7 +15,7 @@ const Contents = ({ database, isActive, getConnectionStatus, getMetaData, addFra
         })})
     }
     else if (database.status === 'disconnected') {
-        const serverConnectFrames = frames.filter((frame) => (frame.frameName === 'ServerConnect'))
+        const serverConnectFrames = frames.filter((frame) => (frame.frameName.toUpperCase() === 'SERVERCONNECT'))
         if ( serverConnectFrames.length === 0) {
             dispatch(() => addFrame(':server connect', 'ServerConnect'))
         }

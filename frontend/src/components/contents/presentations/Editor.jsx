@@ -23,7 +23,6 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
             dispatch(() => addFrame(reqString, 'ServerDisconnect', refKey))
         } else if (database.status === 'disconnected' && reqString.toUpperCase() === ':SERVER CONNECT') {
             dispatch(() => trimFrame('ServerConnect'))
-            dispatch(() => addFrame(reqString, 'ServerConnect', refKey))
         } else if (database.status === 'disconnected' && reqString.toUpperCase().match('(MATCH|CREATE).*')) {
             dispatch(() => trimFrame('ServerConnect'))
             dispatch(() => addAlert('ErrorNoDatabaseConnected'))
