@@ -5,15 +5,11 @@ import {getMetaData} from '../../../features/database/MetadataSlice'
 import {addFrame} from '../../../features/frame/FrameSlice'
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
         activeMenuName: state.navigator.activeMenu,
         database: state.database,
         isActive: state.navigator.isActive,
-        metadata: state.metadata,
-        edges : state.metadata.edges,
-        nodes : state.metadata.nodes,
-        propertyKeys : state.metadata.propertyKeys
+        metadata: state.metadata
     }
 }
 

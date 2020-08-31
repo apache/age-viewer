@@ -1,10 +1,8 @@
 import React, {useRef, useState}  from 'react';
 import {useDispatch} from 'react-redux'
-import AlertContainers from '../../alert/containers/AlertContainers'
-import CodeMirror from '@uiw/react-codemirror'
 import uuid from 'react-uuid'
-import 'codemirror/keymap/sublime';
-import 'codemirror/theme/ambiance-mobile.css';
+import AlertContainers from '../../alert/containers/AlertContainers'
+import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer'
 
 const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery }) => {
     const dispatch = useDispatch();
@@ -65,29 +63,7 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
             <div className="container-fluid editor-area card-header">
                 <div className="input-group">
                     <div className="form-control col-11" style={{padding:'0px'}}>
-                    <CodeMirror
-                    value={reqString}
-                    options={{
-                        keyMap: 'sublime',
-                        mode: 'cypher',
-                        tabSize: 4,
-                        lineNumbers: true,
-                        lineNumberFormatter: () => '$',
-                        extraKeys: {
-                            'Shift-Enter': (cm) => {
-                                onClick()
-                            },
-                            'Ctrl-Enter': (cm) => {
-                                onClick()
-                            },
-                        }
-                    }}
-                    onChange={(editor, change) => {
-                        setReqString(editor.getValue());
-                        editor.lineCount() <= 1 ? editor.setOption('lineNumberFormatter', (number) => '$') : editor.setOption('lineNumberFormatter', (number) => number)
-                        editor.lineCount() <= 5 ? editor.setSize(null, (editor.lineCount() * 39) + 'px') : editor.setSize(null, '190px')
-                    }}
-                    />
+                    <CodeMirror onClick={onClick} setReqString={setReqString}/>
                     </div>
                     <div className="input-group-append ml-auto" id="editor-buttons">
                         <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-star-o fa-lg"
