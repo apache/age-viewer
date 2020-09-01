@@ -218,19 +218,21 @@ class CytoscapeComponent extends Component {
       ele.position({ x : pos.x - xGap, y : pos.y - yGap })
     })
     
-    this.handleUserAction(this.props)
+    this.handleUserAction(this.props, true)
     this.props.addLegendData(generatedData.legend)
     
     rerenderEles.removeClass('new')
   }
 
-  handleUserAction(props) {
-    this.cy.elements('.new').bind('mouseover', (e) => {
+  handleUserAction(props, areNewElements) {
+    const targetElements = areNewElements ? this.cy.elements('.new') : this.cy.elements()
+
+    targetElements.bind('mouseover', (e) => {
       props.onElementsMouseover({ type: 'elements', data: e.target.data() })
       e.target.addClass('highlight')
     })
 
-    this.cy.elements().bind('mouseout', (e) => {
+    targetElements.bind('mouseout', (e) => {
       if (this.cy.elements(':selected').length === 0) {
         props.onElementsMouseover({ type: 'background', data: { nodeCount: this.cy.nodes().size(), edgeCount: this.cy.edges().size() } })
       } else {
@@ -240,7 +242,7 @@ class CytoscapeComponent extends Component {
       e.target.removeClass('highlight')
     })
 
-    this.cy.elements('.new').bind('click', (e) => {
+    targetElements.bind('click', (e) => {
       const ele = e.target
       if (ele.selected() && ele.isNode()) {
         if (this.cy.nodes(':selected').size() === 1) {
@@ -337,7 +339,7 @@ class CytoscapeComponent extends Component {
       this.cy.add(nextProps.elements)
       this.cy.layout(defaultLayout).run()
 
-      this.handleUserAction(nextProps)
+      this.handleUserAction(nextProps, false)
 
     } else {
       if (nextProps.legendData !== undefined) {
