@@ -8,7 +8,8 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
 
   const extractData = (d) => {
     let extractedData = []
-    for (const [alias, val] of Object.entries(d)) {
+    for (let [alias, val] of Object.entries(d)) {
+      val = typeof val === 'object' ? JSON.stringify(val) : val
       extractedData.push(<span key={uuid()} className="label"><strong className="pl-3">{alias} : </strong> {val}</span>)
     }
     return extractedData
