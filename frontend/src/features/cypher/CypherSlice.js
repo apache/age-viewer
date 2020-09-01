@@ -1,19 +1,37 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
+const validateSamePathVariableReturn = (cypherQuery) => {  
+  const cypherPathValidator = new RegExp("^match\\s(.*[a-zA-Z0-9])\\s*=", "i");
+
+  if (cypherPathValidator.test(cypherQuery)) {
+    const pathAlias = RegExp.$1
+    const returnPathAliasValidator = new RegExp("^match\\s.*\\s*=.*return\\s" + pathAlias + ".*", "i");
+
+    if (!returnPathAliasValidator.test(cypherQuery)) {
+      throw { message: "Only Path variable should be returned.\n Modify the return clause to ' RETURN "+pathAlias+" '" }
+    }
+  }
+}
+
+const validateVlePathVariableReturn = (cypherQuery) =>{
+  const cypherVleValidator = new RegExp("^match\\s.*[.*\\*[0-9]*\\s*\\.\\.\\s*[0-9]*\\]", "i");
+
+  if (cypherVleValidator.test(cypherQuery)) {
+    const cypherPathValidator = new RegExp("^match\\s(.*[a-zA-Z0-9])\\s*=", "i");
+    const pathAlias = RegExp.$1
+
+    if (!cypherPathValidator.test(cypherQuery)) {
+      throw { message: "Path variable is required to be used with VLE query. Refer the below proper cypher query with VLE. \n 'MATCH pathvariable = (v)-[r*1..5]->(v2) return pathvariable;" }
+    }
+  }  
+}
+
 export const executeCypherQuery = createAsyncThunk(
   'cypher/executeCypherQuery',
   async (args) => {
     try {
-      const cypherPathValidator = new RegExp("^match\\s(.*[a-zA-Z0-9])\\s*=", "i");
-
-      if (cypherPathValidator.test(args[1])) {
-        const pathAlias = RegExp.$1
-        const returnPathAliasValidator = new RegExp("^match\\s.*\\s*=.*return\\s" + pathAlias + ".*", "i");
-
-        if (!returnPathAliasValidator.test(args[1])) {
-          throw { message: "Only Path variable should be returned.\n Modify the return clause to ' RETURN "+pathAlias+" '" }
-        }
-      }
+      validateSamePathVariableReturn(args[1])
+      validateVlePathVariableReturn(args[1])
 
       const response = await fetch('/api/v1/cypher',
         {
@@ -72,7 +90,6 @@ const CypherSlice = createSlice({
       Object.assign(state.queryResult[action.payload.key], action.payload)
     },
     [executeCypherQuery.rejected]: (state, action) => {
-      console.log("action >>> ", action)
       state.queryResult[action.meta.arg[0]] = {}
       state.queryResult[action.meta.arg[0]]['command'] = 'ERROR'
       state.queryResult[action.meta.arg[0]]['query'] = action.meta.arg[1]
