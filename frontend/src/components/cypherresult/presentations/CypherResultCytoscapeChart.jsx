@@ -114,7 +114,7 @@ const coseBilkentLayout = {
   , idealEdgeLength: 100
   , refresh: 300
   , nodeDimensionsIncludeLabels: true
-  , fit: true
+  , fit: false
   , randomize: true
   , padding: 10
   , nodeRepulsion: 9500
@@ -135,6 +135,13 @@ const colaLayout = {
       initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
     });
   }
+}
+
+const concentricLayout = {
+  name: 'concentric'
+  , fit: false
+  , height: 100
+  , width: 100
 }
 
 const defaultLayout = coseBilkentLayout
@@ -192,33 +199,26 @@ class CytoscapeComponent extends Component {
       return
     }
 
-    console.log("====================================")
-    console.log(this.cy.elements())
     this.cy.elements().lock()    
-
-    console.log("generatedData.elements>>> ", generatedData.elements, generatedData.legend)
     this.cy.add(generatedData.elements)
+    const newlyAddedEdges = this.cy.edges('.new')
+    const newlyAddedTargets = newlyAddedEdges.targets()
+    const newlyAddedSources = newlyAddedEdges.sources()
+    let rerenderEles = newlyAddedEdges.union(newlyAddedTargets).union(newlyAddedSources)
 
-    //let neighborhood = this.cy.nodes().getElementById(centerId).neighborhood().nodes()
-
-    //neighborhood = neighborhood.union(this.cy.nodes().getElementById(centerId))
-    //neighborhood.layout(coseBilkentLayout).run()
-    //this.cy.layout(defaultLayout).run()
-
-
-    //Edge + 중심점
-    //const newlyAddedEdges = this.cy.edges('.new')
-    //const newlyAddedTargets = newlyAddedEdges.targets()
-    //const newlyAddedSources = newlyAddedEdges.sources()
-    //let rerenderEles = newlyAddedEdges.union(newlyAddedTargets).union(newlyAddedSources)
-    //Edge + 중심점
-
-    const rerenderEles = this.cy.nodes('.new')
-
-    rerenderEles.layout(defaultLayout).run()
+    const certerPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
     this.cy.elements().unlock()    
+    rerenderEles.layout(concentricLayout).run()
+
+    const certerMovedPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
+    const xGap = certerMovedPosition.x - certerPosition.x
+    const yGap = certerMovedPosition.y - certerPosition.y
+    rerenderEles.forEach((ele) => {
+      const pos = ele.position()
+      ele.position({ x : pos.x - xGap, y : pos.y - yGap })
+    })
+    
     rerenderEles.removeClass('new')
-    console.log("====================================")
     
     this.handleUserAction(this.props)
     this.props.addLegendData(generatedData.legend)
