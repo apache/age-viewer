@@ -242,12 +242,16 @@ class CytoscapeComponent extends Component {
 
     this.cy.elements().bind('click', (e) => {
       const ele = e.target
-      this.cy.elements(':selected').unselect()
-      ele.select()
+      if (ele.selected()) {
+        this.cy.elements(':selected').neighborhood().union(ele).selectify().select().unselectify()
+      } else {
+        this.cy.elements(':selected').unselect().selectify()
+      }
     })
 
     this.cy.bind('click', (e) => {
       if (e.target === this.cy) {
+        this.cy.elements(':selected').unselect().selectify()
         props.onElementsMouseover({ type: 'background', data: { nodeCount: this.cy.nodes().size(), edgeCount: this.cy.edges().size() } })
       }
     })
@@ -311,7 +315,7 @@ class CytoscapeComponent extends Component {
       spotlightPadding: 3,
       minSpotlightRadius: 11,
       maxSpotlightRadius: 99,
-      openMenuEvents: 'click',
+      openMenuEvents: 'cxttap',
       itemColor: '#2A2C34',
       itemTextShadowColor: 'transparent',
       zIndex: 9999,
