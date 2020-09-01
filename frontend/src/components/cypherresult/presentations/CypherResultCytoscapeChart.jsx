@@ -218,14 +218,14 @@ class CytoscapeComponent extends Component {
       ele.position({ x : pos.x - xGap, y : pos.y - yGap })
     })
     
-    rerenderEles.removeClass('new')
-    
     this.handleUserAction(this.props)
     this.props.addLegendData(generatedData.legend)
+    
+    rerenderEles.removeClass('new')
   }
 
   handleUserAction(props) {
-    this.cy.elements().bind('mouseover', (e) => {
+    this.cy.elements('.new').bind('mouseover', (e) => {
       props.onElementsMouseover({ type: 'elements', data: e.target.data() })
       e.target.addClass('highlight')
     })
@@ -240,10 +240,14 @@ class CytoscapeComponent extends Component {
       e.target.removeClass('highlight')
     })
 
-    this.cy.elements().bind('click', (e) => {
+    this.cy.elements('.new').bind('click', (e) => {
       const ele = e.target
-      if (ele.selected()) {
-        this.cy.elements(':selected').neighborhood().union(ele).selectify().select().unselectify()
+      if (ele.selected() && ele.isNode()) {
+        if (this.cy.nodes(':selected').size() === 1) {
+          ele.neighborhood().selectify().select().unselectify()
+        } else {
+          this.cy.nodes(':selected').filter('[id != "'+ele.id()+'"]').neighborhood().selectify().select().unselectify()
+        }
       } else {
         this.cy.elements(':selected').unselect().selectify()
       }
