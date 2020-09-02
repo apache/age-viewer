@@ -20,6 +20,11 @@ cytoscape.use(avsdf);
 cytoscape.use(spread);
 cytoscape.use(cxtmenu);
 
+let selectedLabel = {
+  node: {},
+  edge: {}
+}
+
 const getLabel = (ele, captionProp) => {
   if (captionProp === 'gid') {
     ele.isNode() ? selectedLabel.node[ele.data('label')] = 'gid' : selectedLabel.edge[ele.data('label')] = 'gid'
@@ -38,13 +43,8 @@ const getLabel = (ele, captionProp) => {
       return props[captionProp] 
     }
   }
-
 }
 
-let selectedLabel = {
-  node: {},
-  edge: {}
-}
 const stylesheet = [
   {
     selector: 'node',
@@ -127,7 +127,7 @@ const conf = {
   zoom: 1,
   // Interaction Options
   minZoom: 0.5,
-  maxZoom: 4,
+  maxZoom: 2,
   zoomingEnabled: false, //true
   userZoomingEnabled: false, //true
   panningEnabled: true,

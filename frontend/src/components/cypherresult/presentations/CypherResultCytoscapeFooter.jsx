@@ -125,7 +125,7 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
           <span className="label">
             <span className="pl-3">Caption : </span> 
             {footerData.data.captions.map((caption) => {
-              return <button onClick={() => [updateLabelCaption(footerData.data.type, footerData.data.label, caption), captionChange(footerData.data.type, footerData.data.label, caption)]} key={uuid()} type="button" class={"btn captionSelector " + (footerData.data.selectedCaption === caption ? " btn-secondary " : " btn-outline-dark ")}><strong>&lt;{caption}&gt;</strong></button>
+              return <button onClick={() => [updateLabelCaption(footerData.data.type, footerData.data.label, caption), captionChange(footerData.data.type, footerData.data.label, caption)]} key={uuid()} type="button" className={"btn captionSelector " + (footerData.data.selectedCaption === caption ? " btn-secondary " : " btn-outline-dark ")}><strong>&lt;{caption}&gt;</strong></button>
             })}
 
           </span>

@@ -11,7 +11,7 @@ const AlertSlice = createSlice({
         let alertType = 'Notice'
         let errorMessage = ''
 
-        if (['ErrorServerConnectFail', 'ErrorNoDatabaseConnected'].includes(alertName)) {
+        if (['ErrorServerConnectFail', 'ErrorNoDatabaseConnected', 'ErrorPlayLoadFail'].includes(alertName)) {
           alertType = 'Error'
           errorMessage = action.payload.message 
         }
