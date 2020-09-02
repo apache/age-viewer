@@ -85,6 +85,16 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
             </Alert>
         );
 
+    } else if (alertName === 'ErrorPlayLoadFail') {
+        return (    
+            <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
+                <Alert.Heading>Failed to Load Play Target</Alert.Heading>
+                <p>
+                '{errorMessage}' does not exists.
+                </p>
+            </Alert>
+        );
+
     } else if (alertName === 'NoticeAlreadyConnected') {
         return (    
             <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
