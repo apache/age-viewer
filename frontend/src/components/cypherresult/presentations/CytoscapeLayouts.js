@@ -1,14 +1,14 @@
 export let initLocation = {}
 const coseBilkentLayout = {
-    name: 'cose-bilkent'
-    , idealEdgeLength: 100
-    , refresh: 300
-    , nodeDimensionsIncludeLabels: true
-    , fit: false
-    , randomize: true
-    , padding: 10
-    , nodeRepulsion: 9500
-    , stop: function (event) {
+    name: 'cose-bilkent',
+    idealEdgeLength: 100,
+    refresh: 300,
+    nodeDimensionsIncludeLabels: true,
+    fit: false,
+    randomize: true,
+    padding: 10,
+    nodeRepulsion: 9500,
+    stop: function (event) {
         event.cy.nodes().forEach(function (ele) {
             initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
         });
@@ -16,11 +16,11 @@ const coseBilkentLayout = {
 }
 
 const colaLayout = {
-    name: 'cola'
-    , animate: true
-    , fit: false
-    , avoidOverlap: true
-    , stop: function (event) {
+    name: 'cola',
+    animate: true,
+    fit: false,
+    avoidOverlap: true,
+    stop: function (event) {
         event.cy.nodes().forEach(function (ele) {
             initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
         });
@@ -28,10 +28,15 @@ const colaLayout = {
 }
 
 const concentricLayout = {
-    name: 'concentric'
-    , fit: false
-    , height: 100
-    , width: 100
+    name: 'concentric',
+    fit: false,
+    height: 100,
+    width: 100,
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    }
 }
 
 const randomLayout = {
@@ -44,7 +49,11 @@ const randomLayout = {
     animationEasing: undefined, // easing of animation if enabled
     animateFilter: function (node, i) { return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
     ready: undefined, // callback on layoutready
-    stop: undefined, // callback on layoutstop
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    },
     transform: function (node, position) { return position; } // transform a given node position. Useful for changing flow direction in discrete layouts 
 };
 
@@ -66,8 +75,12 @@ const gridLayout = {
     animationDuration: 500, // duration of animation in ms if enabled
     animationEasing: undefined, // easing of animation if enabled
     animateFilter: function (node, i) { return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
-    ready: undefined, // callback on layoutready
-    stop: undefined, // callback on layoutstop
+    ready: undefined, // callback on layoutready    
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    },
     transform: function (node, position) { return position; } // transform a given node position. Useful for changing flow direction in discrete layouts 
 };
 
@@ -88,8 +101,12 @@ const breadthFirstLayout = {
     animationDuration: 500, // duration of animation in ms if enabled
     animationEasing: undefined, // easing of animation if enabled,
     animateFilter: function (node, i) { return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
-    ready: undefined, // callback on layoutready
-    stop: undefined, // callback on layoutstop
+    ready: undefined, // callback on layoutready    
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    },
     transform: function (node, position) { return position; } // transform a given node position. Useful for changing flow direction in discrete layouts
 };
 
@@ -98,8 +115,12 @@ const coseLayout = {
     // Called on `layoutready`
     ready: function(){},
   
-    // Called on `layoutstop`
-    stop: function(){},
+    // Called on `layoutstop`        
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    },
   
     // Whether to animate while running the layout
     // true : Animate continuously as the layout is running
@@ -197,8 +218,12 @@ const dagreLayout = {
     animationEasing: undefined, // easing of animation if enabled
     boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
     transform: function( node, pos ){ return pos; }, // a function that applies a transform to the final node position
-    ready: function(){}, // on layoutready
-    stop: function(){} // on layoutstop
+    ready: function(){}, // on layoutready        
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    }, // on layoutstop
   };
 
 const klayLayout = {
@@ -211,8 +236,12 @@ const klayLayout = {
     animationDuration: 500, // Duration of animation in ms if enabled
     animationEasing: undefined, // Easing of animation if enabled
     transform: function( node, pos ){ return pos; }, // A function that applies a transform to the final node position
-    ready: undefined, // Callback on layoutready
-    stop: undefined, // Callback on layoutstop
+    ready: undefined, // Callback on layoutready  
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    }, // Callback on layoutstop
     klay: {
       // Following descriptions taken from http://layout.rtsys.informatik.uni-kiel.de:9444/Providedlayout.html?algorithm=de.cau.cs.kieler.klay.layered
       addUnnecessaryBendpoints: false, // Adds bend points even if an edge does not change direction.
@@ -345,8 +374,12 @@ const klayLayout = {
     boundingBox: undefined,
   
     // Layout event callbacks; equivalent to `layout.one('layoutready', callback)` for example
-    ready: function(){}, // on layoutready
-    stop: function(){}, // on layoutstop
+    ready: function(){}, // on layoutready  
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    }, // on layoutstop
   
     // Whether to randomize the initial positions of the nodes
     // true : Use random positions within the bounding box
@@ -359,8 +392,11 @@ const klayLayout = {
     // Called on `layoutready`
     ready: function () {
     },
-    // Called on `layoutstop`
-    stop: function () {
+    // Called on `layoutstop`    
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
     },
     // number of ticks per frame; higher is faster but more jerky
     refresh: 30,
@@ -381,8 +417,12 @@ const klayLayout = {
 const spreadLayout = {
     name: 'spread',
     animate: true, // Whether to show the layout as it's running
-    ready: undefined, // Callback on layoutready
-    stop: undefined, // Callback on layoutstop
+    ready: undefined, // Callback on layoutready  
+    stop: function (event) {
+        event.cy.nodes().forEach(function (ele) {
+            initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
+        });
+    }, // Callback on layoutstop
     fit: true, // Reset viewport to fit default simulationBounds
     minDist: 20, // Minimum distance between nodes
     padding: 20, // Padding
@@ -398,16 +438,16 @@ const spreadLayout = {
   };
 
 export const seletableLayouts = {
-    random: randomLayout
-    , grid: gridLayout
-    , breadthFirst: breadthFirstLayout
-    , concentric: concentricLayout
-    , cola: colaLayout
-    , cose : coseLayout
-    , coseBilkent: coseBilkentLayout
-    , dagre: dagreLayout
-    , klay: klayLayout
-    , euler: eulerLayout
-    , avsdf: avsdfLayout
-    , spread: spreadLayout
+    random: randomLayout,
+    grid: gridLayout,
+    breadthFirst: breadthFirstLayout,
+    concentric: concentricLayout,
+    cola: colaLayout,
+    cose : coseLayout,
+    coseBilkent: coseBilkentLayout,
+    dagre: dagreLayout,
+    klay: klayLayout,
+    euler: eulerLayout,
+    avsdf: avsdfLayout,
+    spread: spreadLayout
 }
