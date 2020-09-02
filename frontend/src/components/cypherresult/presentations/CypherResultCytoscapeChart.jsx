@@ -4,9 +4,20 @@ import cxtmenu from 'cytoscape-cxtmenu'
 import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil'
 import COSEBilkent from 'cytoscape-cose-bilkent';
 import cola from 'cytoscape-cola'
+import dagre from 'cytoscape-dagre'
+import klay from 'cytoscape-klay'
+import euler from 'cytoscape-euler'
+import avsdf from 'cytoscape-avsdf'
+import spread from 'cytoscape-spread'
+import  { initLocation, seletableLayouts} from './CytoscapeLayouts'
 
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
+cytoscape.use(dagre);
+cytoscape.use(klay);
+cytoscape.use(euler);
+cytoscape.use(avsdf);
+cytoscape.use(spread);
 cytoscape.use(cxtmenu);
 
 const getLabel = (ele, captionProp) => {
@@ -34,9 +45,6 @@ let selectedLabel = {
   node: {},
   edge: {}
 }
-
-let initLocation = {}
-
 const stylesheet = [
   {
     selector: 'node',
@@ -109,42 +117,7 @@ const stylesheet = [
   }
 ]
 
-const coseBilkentLayout = {
-  name: 'cose-bilkent'
-  , idealEdgeLength: 100
-  , refresh: 300
-  , nodeDimensionsIncludeLabels: true
-  , fit: false
-  , randomize: true
-  , padding: 10
-  , nodeRepulsion: 9500
-  , stop: function (event) {
-    event.cy.nodes().forEach(function (ele) {
-      initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
-    });
-  }
-}
-
-const colaLayout = {
-  name: 'cola'
-  , animate: false
-  , refresh: 1
-  , avoidOverlap: true  
-  , stop: function (event) {
-    event.cy.nodes().forEach(function (ele) {
-      initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
-    });
-  }
-}
-
-const concentricLayout = {
-  name: 'concentric'
-  , fit: false
-  , height: 100
-  , width: 100
-}
-
-const defaultLayout = coseBilkentLayout
+const defaultLayout = seletableLayouts.coseBilkent
 
 const conf = {
   // Common Options
@@ -208,7 +181,7 @@ class CytoscapeComponent extends Component {
 
     const certerPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
     this.cy.elements().unlock()    
-    rerenderEles.layout(concentricLayout).run()
+    rerenderEles.layout(seletableLayouts.concentric).run()
 
     const certerMovedPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
     const xGap = certerMovedPosition.x - certerPosition.x
@@ -430,6 +403,14 @@ class CytoscapeComponent extends Component {
       this.cy.elements(elementType + '[label = "' + label + '"]').style('label', function (ele) { return ele == null ? '' : "[ :" + ele.data('label') + " ]"; })
     } else {
       this.cy.elements(elementType + '[label = "' + label + '"]').style('label', function (ele) { return ele == null ? '' : (ele.data('properties')[caption] == null ? '' : ele.data('properties')[caption]) })
+    }
+  }
+
+  layoutChange(layoutName) {
+    if (seletableLayouts.hasOwnProperty(layoutName)) {
+      const selectedLayout = seletableLayouts[layoutName]
+      selectedLayout.animate = true
+      this.cy.layout(selectedLayout).run()
     }
   }
 

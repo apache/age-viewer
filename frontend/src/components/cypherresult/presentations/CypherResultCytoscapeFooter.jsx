@@ -3,8 +3,9 @@ import { Badge } from 'react-bootstrap'
 import uuid from 'react-uuid'
 import { updateLabelColor, updateNodeLabelSize, updateEdgeLabelSize, updateLabelCaption } from '../../../features/cypher/CypherUtil'
 
-const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelColors, nodeLabelSizes, edgeLabelSizes, colorChange, sizeChange, captionChange }) => {
+const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelColors, nodeLabelSizes, edgeLabelSizes, colorChange, sizeChange, captionChange, layoutChange }) => {
   const [footerExpanded, setFooterExpanded] = useState(false)
+  const [layout, setLayout] = useState('coseBilkent')
 
   const extractData = (d) => {
     let extractedData = []
@@ -34,7 +35,27 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
       )
 
     } else if (footerData.type === 'background') {
-      return <span className="label pl-3">Displaying <strong>{footerData.data.nodeCount}</strong> nodes, <strong>{footerData.data.edgeCount}</strong> edges</span>
+      return (
+        <div className="d-flex pl-3">
+          <div className="mr-auto label pl-3">Displaying <strong>{footerData.data.nodeCount}</strong> nodes, <strong>{footerData.data.edgeCount}</strong> edges</div>          
+          <label htmlFor="selectLayout" className="col-form-label px-1">Layout : </label>
+          <select id="selectLayout" className="col-1 custom-select custom-select-sm layout-select" defaultValue={layout} onChange={(e) => [setLayout(e.target.value), layoutChange(e.target.value)]}>
+            <option value="random">Random</option>
+            <option value="grid">Grid</option>
+            <option value="breadthFirst">Breadth-First</option>
+            <option value="concentric">Concentric</option>
+            <option value="cola">Cola</option>
+            <option value="cose">Cose</option>
+            <option value="coseBilkent">Cose-Bilkent</option>
+            <option value="dagre">Dagre</option>
+            <option value="klay">Klay</option>
+            <option value="euler">Euler</option>
+            <option value="avsdf">Avsdf</option>
+            <option value="spread">Spread</option>
+          </select>
+        </div>
+      )
+      
     } else if (footerData.type === 'labels') {
       const isEdge = footerData.data.type === 'edge' ? {} : { pill: true }
 
@@ -112,6 +133,27 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
             <button className="frame-head-button btn btn-link px-3" onClick={() => setFooterExpanded(!footerExpanded)}>
               <span className={"fas " + ((footerExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
             </button>
+        </div>
+      )
+    } else {
+      return (
+        <div className="d-flex pl-3">
+          <div className="mr-auto label pl-3"></div>          
+          <label htmlFor="selectLayout" className="col-form-label px-1">Layout : </label>
+          <select id="selectLayout" className="col-1 custom-select custom-select-sm layout-select" defaultValue={layout} onChange={(e) => [setLayout(e.target.value), layoutChange(e.target.value)]}>
+            <option value="random">Random</option>
+            <option value="grid">Grid</option>
+            <option value="breadthFirst">Breadth-First</option>
+            <option value="concentric">Concentric</option>
+            <option value="cola">Cola</option>
+            <option value="cose">Cose</option>
+            <option value="coseBilkent">Cose-Bilkent</option>
+            <option value="dagre">Dagre</option>
+            <option value="klay">Klay</option>
+            <option value="euler">Euler</option>
+            <option value="avsdf">Avsdf</option>
+            <option value="spread">Spread</option>
+          </select>
         </div>
       )
     }
