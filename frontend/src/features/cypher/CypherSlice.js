@@ -51,7 +51,8 @@ export const executeCypherQuery = createAsyncThunk(
       if (error.json === undefined) {
         throw error
       } else {
-        throw error.json().message
+        const errorJson = await error.json()
+        throw errorJson.message
       }
     }
   }
