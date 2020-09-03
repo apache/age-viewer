@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const validateSamePathVariableReturn = (cypherQuery) => {  
-  const cypherPathValidator = new RegExp("^match\\s(.*[a-zA-Z0-9])\\s*=", "i");
+  const cypherPathValidator = new RegExp("^match\\s([a-zA-Z0-9].*)\\s*=", "i");
 
   if (cypherPathValidator.test(cypherQuery)) {
     const pathAlias = RegExp.$1
