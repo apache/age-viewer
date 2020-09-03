@@ -1,9 +1,7 @@
 import React, {useState} from 'react'
-import {useDispatch} from 'react-redux'
 import {Collapse} from 'react-bootstrap'
 
 const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame,removeFrame, pinFrame, addAlert, getMetaData}) => {
-    const dispatch = useDispatch();
     const [formData, setFormData] = useState({})
     const [isExpanded, setIsExpanded] = useState(true)
 
@@ -73,7 +71,7 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, a
                             <fieldset className="form-group">
                                 <label htmlFor="password">Password</label>
                                 <input type="password" className="form-control" id="password"
-                                    name="password" onChange={handleChange}/>
+                                    name="password" autoComplete="on" onChange={handleChange}/>
                             </fieldset>
                             
                         </form>
