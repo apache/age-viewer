@@ -14,7 +14,6 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
     const [isExpanded, setIsExpanded] = useState(true)
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [zoomRate, setZoomRate] = useState(0)
-    const [pan, setPan] = useState({ x: 0, y: 0 })
     const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false)
     const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid())
 
@@ -23,8 +22,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
     useEffect(() => {
         //dispatch(() => executeCypherQuery([refKey, reqString]));       
         setZoomRate(chartAreaRef.current.getCy().zoom())
-        setPan(chartAreaRef.current.getCy().pan())
-    }, [refKey, reqString, dispatch])
+    }, [refKey, reqString, dispatch, chartAreaRef])
 
 
     const expandFrame = () => {

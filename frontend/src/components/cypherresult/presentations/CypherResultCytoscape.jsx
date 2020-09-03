@@ -27,7 +27,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         setElements(props.data.elements)
       }      
     }
-  })
+  }, [setIsReloading, elements.edges.length, elements.nodes.length, legendData.edgeLegend, legendData.nodeLegend, props.data])
 
   const getFooterData = (props) => {
     if (props.type === 'labels') {

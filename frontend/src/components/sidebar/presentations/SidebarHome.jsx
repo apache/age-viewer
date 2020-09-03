@@ -1,5 +1,4 @@
-import React, { useReducer } from 'react'
-import { Badge } from 'react-bootstrap'
+import React from 'react'
 import { Fragment } from 'react';
 import uuid from 'react-uuid';
 
@@ -34,7 +33,6 @@ const ColoredLine = () => (
 );
 
 const StyleWrap = {display: 'flex', flexWrap: 'wrap'};
-const StyleItem = {paddingRight: '0.3em', cursor: 'pointer'};
 const StyleJustifyCenter = {display: 'flex', justifyContent: 'center'};
 const StyleTextright = {marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold'};
 const StyleTextLeft = {fontSize: '13px', fontWeight: 'bold'}

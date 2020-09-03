@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Carousel, Collapse } from 'react-bootstrap';
 
 
 
 const ContentFrame = ({ refKey, isPinned, reqString, playTarget, removeFrame, pinFrame, addAlert }) => {
     const [isExpanded, setIsExpanded] = useState(true)
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
     const [slides, setSlides] = useState([])
 
     import('../../../documents/tutorial/' + playTarget.toLowerCase()).then(content => {
-        setTitle(content.title)
-        setDescription(content.description)
         setSlides(content.slides)
     }).catch((error) => {
         addAlert('ErrorPlayLoadFail', playTarget)

@@ -12,14 +12,14 @@ export const slides = [
         <div className="col-sm-9">
             <h4>Before Getting Started!</h4>
             <p>본 튜토리얼은 사용자들이 AgensGraph에 샘플 데이터를 적재하고 적재된 데이터를 조회하거나 원하는 정보를 추출하는 과정을 따라할 수 있도록 안내하기 위해 제작되었습니다.</p>
-            <p>본 튜토리얼을 따라 데이터를 적재하고 활용하시려면 반드시 AgensGraph를 먼저 설치하셔야 하며 시각화 도구인 AgensBrowser를 함께 설치해 사용하신다면 더 쉽고 빠르게 샘플 데이터를 이해하고 분석하실 수 있습니다.</p>
+            <p>본 튜토리얼을 따라 데이터를 적재하고 활용하시려면 반드시 AgensGraph를 먼저 설치하셔야 하며 시각화 도구인 OpenBrowser 함께 설치해 사용하신다면 더 쉽고 빠르게 샘플 데이터를 이해하고 분석하실 수 있습니다.</p>
             <p>AgensGraph에 데이터를 적재하는 방법은 크게 2가지가 존재합니다.</p>
             <ol className="big">
                 <li>데이터셋 파일을 AgensGraph로 Import</li>
                 <li>AgensGraph 상에서 쿼리를 실행해 데이터를 생성</li>
             </ol>
             <p>이 튜토리얼에서는 데이터셋 파일(CSV)을 AgensGraph로 Import하는 방법을 설명할 것이며, 쿼리로 데이터를 생성하는 방법이 궁금하시다면 Bitnine 홈페이지를 방문해
-            <a target="_blank" rel="noreferrer" href="http://bitnine.net/learn/"> Basic Cypher & Advanced Cypher</a>백서를 참조하시기 바랍니다.
+            <a target="_blank" rel="noopener noreferrer" href="http://bitnine.net/learn/"> Basic Cypher & Advanced Cypher</a>백서를 참조하시기 바랍니다.
             본 튜토리얼은 AgensGraph의 데이터 생성, 읽기, 업데이트, 삭제(CRUD) 결과를 시각화 도구인 OpenBrowser를 통해 안내합니다.
             또한 본 튜토리얼에서 안내하는 제품 일부 기능은 오직 AgensGraph Enterprise Edition에서만 제공됩니다.
             Enterprise 제품에 관한 자세한 사항은 Bitnine 홈페이지를 참조하시기 바랍니다.</p>
@@ -47,6 +47,7 @@ export const slides = [
             <img
                     src="images/northwind/Entity-Relationship-Diagram.png"
                     className="img-responsive"
+                    alt="Entity-Relationship-Diagram"
                 />
             </p>
         </div>
@@ -77,6 +78,7 @@ export const slides = [
                 <img
                     src="images/northwind/Graphmodel.png"
                     className="img-responsive"
+                    alt="Graphmodel"
                 />
             </p>
             <p>그래프 모델과 관계형 모델의 가장 큰 차이 중 하나는 그래프 모델이 관계형 모델과 다르게 현실 모델(비즈니스 모델)을 있는 그대로 반영한다는 점입니다. </p>
@@ -128,7 +130,7 @@ export const slides = [
             </table>
             <p>이 튜토리얼에서는 OpenBrowser와 AgensGraph가 다른 서버에 설치되어 있다고 가정합니다. 따라서 사용자가 AgensGraph에서 Import할 CSV파일을 업로드 할 수도, 절대 경로를
             제공 할 수도 없다는 상황을 가정하기에, COPY명령어를 통하여 Import하는 튜토리얼을 진행합니다. FDW를 사용한 Import방식이 궁금하시면 Bitnine 홈페지이를 방문해
-                <a target="_blank" rel="noreferrer" href="https://bitnine.net/tutorial/tutorial_kor.html">튜토리얼</a> 를 참조하시기 바랍니다.</p>
+                <a target="_blank" rel="noopener noreferrer" href="https://bitnine.net/tutorial/tutorial_kor.html">튜토리얼</a> 를 참조하시기 바랍니다.</p>
 
 
         </div>
