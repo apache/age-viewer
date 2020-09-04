@@ -65,16 +65,16 @@ class CypherResultCytoscapeLegend extends Component {
         <div className={"mr-auto legends legend " + (this.state.nodeLegendExpanded ? "expandedLegend" : "" )}>
         {nodeLedgend}
         </div>
-        <button class="frame-head-button btn btn-link px-3" onClick={() => this.setState({nodeLegendExpanded : !this.state.nodeLegendExpanded})}>
-          <span class={"fas " + ((this.state.nodeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+        <button className="frame-head-button btn btn-link px-3" onClick={() => this.setState({nodeLegendExpanded : !this.state.nodeLegendExpanded})}>
+          <span className={"fas " + ((this.state.nodeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
         </button>
       </div>
       <div className="d-flex edgeLegend">
         <div className={"mr-auto legends legend " + (this.state.edgeLegendExpanded ? "expandedLegend" : "" )}>
         {edgeLedgend}
         </div>
-        <button class="frame-head-button btn btn-link px-3" onClick={() => this.setState({edgeLegendExpanded : !this.state.edgeLegendExpanded})}>
-          <span class={"fas " + ((this.state.edgeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
+        <button className="frame-head-button btn btn-link px-3" onClick={() => this.setState({edgeLegendExpanded : !this.state.edgeLegendExpanded})}>
+          <span className={"fas " + ((this.state.edgeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
         </button>
       </div>
 

@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Carousel, Collapse } from 'react-bootstrap';
 
 
 
-const ContentFrame = ({ refKey, isPinned, reqString, playTarget, removeFrame, pinFrame }) => {
+const ContentFrame = ({ refKey, isPinned, reqString, playTarget, removeFrame, pinFrame, addAlert }) => {
     const [isExpanded, setIsExpanded] = useState(true)
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
     const [slides, setSlides] = useState([])
 
     import('../../../documents/tutorial/' + playTarget.toLowerCase()).then(content => {
-        setTitle(content.title)
-        setDescription(content.description)
         setSlides(content.slides)
+    }).catch((error) => {
+        addAlert('ErrorPlayLoadFail', playTarget)
+        removeFrame(refKey)
     })
     
     const setIconForIsExpanded = (isExpanded) => {
@@ -42,8 +41,8 @@ const ContentFrame = ({ refKey, isPinned, reqString, playTarget, removeFrame, pi
 
                 <div className="card-body" id={refKey} style={{padding: 'initial'}}>
                         <Carousel interval={null} fade={true} wrap={false}
-                        prevIcon={<span aria-hidden="true"><i class="fas fa-angle-left fa-lg"></i></span>} 
-                        nextIcon={<span aria-hidden="true"><i class="fas fa-angle-right fa-lg"></i></span>}>
+                        prevIcon={<span aria-hidden="true"><i className="fas fa-angle-left fa-lg"></i></span>} 
+                        nextIcon={<span aria-hidden="true"><i className="fas fa-angle-right fa-lg"></i></span>}>
                             {slides.map((slide)=>(
                             <Carousel.Item>
                                 <div style={{paddingTop:'10px'}}>

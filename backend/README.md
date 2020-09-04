@@ -1,1 +1,1 @@
-AgensBrowser Backend Project
+OpenBrowser Backend Project

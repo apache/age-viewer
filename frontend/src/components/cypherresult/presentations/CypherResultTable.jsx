@@ -2,11 +2,11 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 const CypherResultTable = ({ data }) => {
   if (data.command && data.command.toUpperCase().match('(GRAPH|COPY).*')) {
-    return <span style={{ margin: '25px' }}>Affected {data.rowCount === null ? 0 : data.rowCount} </span>
+    return <div style={{margin: '25px', }}><span style={{ whiteSpace: 'pre-line' }}>Affected {data.rowCount === null ? 0 : data.rowCount}</span></div>
   } else if (data.command && data.command.toUpperCase() === 'CREATE') {
-    return <span style={{ margin: '25px' }}>{data.command.toUpperCase()}</span>
+    return <div style={{margin: '25px', }}><span style={{ whiteSpace: 'pre-line' }}>{data.command.toUpperCase()}</span></div>
   } else if (data.command && data.command.toUpperCase() === 'ERROR') {
-    return <span style={{ margin: '25px' }}>{data.message}</span>
+    return <div style={{margin: '25px', }}><span style={{ whiteSpace: 'pre-line' }}>{data.message}</span></div>
   } else {
     return (
       <Table className="table table-hover">

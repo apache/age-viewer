@@ -14,7 +14,6 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
     const [isExpanded, setIsExpanded] = useState(true)
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [zoomRate, setZoomRate] = useState(0)
-    const [pan, setPan] = useState({ x: 0, y: 0 })
     const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false)
     const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid())
 
@@ -23,8 +22,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
     useEffect(() => {
         //dispatch(() => executeCypherQuery([refKey, reqString]));       
         setZoomRate(chartAreaRef.current.getCy().zoom())
-        setPan(chartAreaRef.current.getCy().pan())
-    }, [refKey, reqString, dispatch])
+    }, [refKey, reqString, dispatch, chartAreaRef])
 
 
     const expandFrame = () => {
@@ -125,7 +123,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <DropdownButton bsPrefix="frame-head-button btn btn-link" title={<i class="fas fa-download fa-lg"></i>}>
+                    <DropdownButton bsPrefix="frame-head-button btn btn-link" title={<i className="fas fa-download fa-lg"></i>}>
                         <Dropdown.Item onClick={() => downloadPng()}>Save as PNG</Dropdown.Item>
                         <Dropdown.Item onClick={() => downloadJson()}>Save as JSON</Dropdown.Item>
                         <Dropdown.Item onClick={() => downloadCsv()}>Save as CSV</Dropdown.Item>

@@ -507,3 +507,7 @@ textarea.editorTextarea
 .CodeMirror-linenumber {
     padding: 5px 3px 0 5px !important;
 }
+
+.layout-select {
+    margin-top: .15rem !important;
+}

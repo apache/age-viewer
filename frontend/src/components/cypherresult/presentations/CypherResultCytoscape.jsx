@@ -27,7 +27,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         setElements(props.data.elements)
       }      
     }
-  })
+  }, [setIsReloading, elements.edges.length, elements.nodes.length, legendData.edgeLegend, legendData.nodeLegend, props.data])
 
   const getFooterData = (props) => {
     if (props.type === 'labels') {
@@ -129,6 +129,10 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     dispatch(() => props.setLabels(elementType, label, { caption: caption }))
   }
 
+  const layoutChange = (layoutName) => {
+    chartRef.current.layoutChange(layoutName);
+  }
+
 
   useImperativeHandle(ref, () => ({
 
@@ -144,7 +148,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   return <div className="chart-frame-area">
     <CypherResultCytoscapeLegend onLabelClick={getFooterData} isReloading={isReloading} legendData={legendData} />
     <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} />
-    <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} edgeLabelColors={edgeLabelColors} nodeLabelColors={nodeLabelColors} />
+    <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} layoutChange={layoutChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} edgeLabelColors={edgeLabelColors} nodeLabelColors={nodeLabelColors} />
   </div>
 })
 

@@ -56,17 +56,17 @@ export let edgelabelCaptions = {}
 const getCaption = (valType, val) => {
     if (valType === 'node' && nodelabelCaptions.hasOwnProperty(val.label)) {
         return nodelabelCaptions[val.label]
-    } else if (valType === 'edge' && nodelabelCaptions.hasOwnProperty(val.label)) {
+    } else if (valType === 'edge' && edgelabelCaptions.hasOwnProperty(val.label)) {
         return edgelabelCaptions[val.label]
-        
+
     }
 
     let caption = valType === 'node' ? 'gid' : 'label'
     const properties = val.properties
     if (properties !== undefined) {
-        if (properties.hasOwnProperty('name')) {caption = 'name'}
-        else if (properties.hasOwnProperty('id')) {caption = 'id'}
-    } 
+        if (properties.hasOwnProperty('name')) { caption = 'name' }
+        else if (properties.hasOwnProperty('id')) { caption = 'id' }
+    }
 
     return caption
 }
@@ -75,14 +75,14 @@ const getNodeColor = (labelName) => {
     let selectedColor = {}
     nodeLabelColors.forEach((labelColor) => {
         if (labelColor.nodeLabels.has(labelName)) {
-            selectedColor = { color: labelColor.color, borderColor : labelColor.borderColor, fontColor : labelColor.fontColor}
+            selectedColor = { color: labelColor.color, borderColor: labelColor.borderColor, fontColor: labelColor.fontColor }
         }
     })
 
     if (Object.keys(selectedColor).length === 0) {
         const randomIndex = Math.floor(Math.random() * (11 - 0 + 1)) + 0
         nodeLabelColors[randomIndex].nodeLabels.add(labelName)
-        selectedColor = { color: nodeLabelColors[randomIndex].color, borderColor : nodeLabelColors[randomIndex].borderColor, fontColor : nodeLabelColors[randomIndex].fontColor}
+        selectedColor = { color: nodeLabelColors[randomIndex].color, borderColor: nodeLabelColors[randomIndex].borderColor, fontColor: nodeLabelColors[randomIndex].fontColor }
     }
     return selectedColor
 }
@@ -91,14 +91,14 @@ const getEdgeColor = (labelName) => {
     let selectedColor = {}
     edgeLabelColors.forEach((labelColor) => {
         if (labelColor.edgeLabels.has(labelName)) {
-            selectedColor = { color: labelColor.color, borderColor : labelColor.borderColor, fontColor : labelColor.fontColor}
+            selectedColor = { color: labelColor.color, borderColor: labelColor.borderColor, fontColor: labelColor.fontColor }
         }
     })
 
     if (Object.keys(selectedColor).length === 0) {
         const randomIndex = Math.floor(Math.random() * (11 - 0 + 1)) + 0
         edgeLabelColors[randomIndex].edgeLabels.add(labelName)
-        selectedColor = { color: edgeLabelColors[randomIndex].color, borderColor : edgeLabelColors[randomIndex].borderColor, fontColor : nodeLabelColors[randomIndex].fontColor}
+        selectedColor = { color: edgeLabelColors[randomIndex].color, borderColor: edgeLabelColors[randomIndex].borderColor, fontColor: nodeLabelColors[randomIndex].fontColor }
     }
     return selectedColor
 }
@@ -110,11 +110,11 @@ const getNodeSize = (labelName) => {
             selectedSize = labelSize.size
         }
     })
-    
-    if (selectedSize === 0 ) {
+
+    if (selectedSize === 0) {
         nodeLabelSizes[2].labels.add(labelName)
         selectedSize = nodeLabelSizes[2].size
-    }   
+    }
 
     return selectedSize
 }
@@ -127,48 +127,48 @@ const getEdgeSize = (labelName) => {
             selectedSize = labelSize.size
         }
     })
-    
-    if (selectedSize === 0 ) {
+
+    if (selectedSize === 0) {
         edgeLabelSizes[0].labels.add(labelName)
         selectedSize = edgeLabelSizes[0].size
-    }   
+    }
 
     return selectedSize
 }
 
-const sortByKey = (data) => {    
+const sortByKey = (data) => {
     const sorted = {};
     if (data === undefined) {
         return sorted
     }
-    Object.keys(data).sort().forEach(function(key) {
+    Object.keys(data).sort().forEach(function (key) {
         sorted[key] = data[key];
     });
     return sorted;
 }
 
 export const updateLabelColor = (labelType, labelName, newLabelColor) => {
-    
-        
+
+
     if (labelType === 'node') {
         nodeLabelColors.forEach((labelColor) => {
-        if (labelColor.nodeLabels.has(labelName)) {
-            labelColor.nodeLabels.delete(labelName)
-        }
+            if (labelColor.nodeLabels.has(labelName)) {
+                labelColor.nodeLabels.delete(labelName)
+            }
 
-        if (labelColor.color === newLabelColor.color) {
-            labelColor.nodeLabels.add(labelName)            
-        }
+            if (labelColor.color === newLabelColor.color) {
+                labelColor.nodeLabels.add(labelName)
+            }
         })
     } else {
         edgeLabelColors.forEach((labelColor) => {
-        if (labelColor.edgeLabels.has(labelName)) {
-            labelColor.edgeLabels.delete(labelName)
-        }
+            if (labelColor.edgeLabels.has(labelName)) {
+                labelColor.edgeLabels.delete(labelName)
+            }
 
-        if (labelColor.color === newLabelColor.color) {
-            labelColor.edgeLabels.add(labelName)            
-        }
+            if (labelColor.color === newLabelColor.color) {
+                labelColor.edgeLabels.add(labelName)
+            }
         })
     }
 }
@@ -180,7 +180,7 @@ export const updateNodeLabelSize = (labelName, newLabelSize) => {
         }
 
         if (labelSize.size === newLabelSize) {
-            labelSize.labels.add(labelName)            
+            labelSize.labels.add(labelName)
         }
     })
 }
@@ -193,7 +193,7 @@ export const updateEdgeLabelSize = (labelName, newLabelSize) => {
         }
 
         if (labelSize.size === newLabelSize) {
-            labelSize.labels.add(labelName)            
+            labelSize.labels.add(labelName)
         }
     })
 }
@@ -207,7 +207,7 @@ export const updateLabelCaption = (labelType, labelName, newLabelCaption) => {
     }
 }
 
-export const reGenerateCytoscapeElements = (data, labels) => {
+export const generateCytoscapeElement = (data, isNew) => {
     let nodes = []
     let edges = []
     let nodeLegend = {}
@@ -216,114 +216,68 @@ export const reGenerateCytoscapeElements = (data, labels) => {
     if (data) {
         data['rows'].forEach((row, index) => {
             for (const [alias, val] of Object.entries(row)) {
-                let labelName = val['label']
-                if (val['start'] && val['end']) {
-                    if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({size: getEdgeSize(labelName), caption: getCaption('edge', val)}, getEdgeColor(labelName)) } 
-                    if (!edgelabelCaptions.hasOwnProperty(labelName)) {edgelabelCaptions[labelName] = 'label'}
-                    edges.push(
-                        {
-                            group: 'edges'
-                            , data: {
-                                id: val.id
-                                , source: val.start
-                                , target: val.end
-                                , label: val.label
-                                , backgroundColor: edgeLegend[labelName].color
-                                , borderColor: edgeLegend[labelName].borderColor
-                                , fontColor: edgeLegend[labelName].fontColor
-                                , size: edgeLegend[labelName].size
-                                , properties: val.properties
-                                , caption: edgeLegend[labelName].caption
-                            }
-                            , alias: alias
-                            , classes: ['node']
-                        }
-                    )
+                if (Array.isArray(val)) {
+                    // val이 Path인 경우 ex) MATCH P = (V)-[R]->(V2) RETURN P;
+                    for (const [pathAlias, pathVal] of Object.entries(val)) {
+                        generateElements(nodeLegend, edgeLegend, nodes, edges, pathAlias, pathVal, isNew)
+                    }
                 } else {
-                    if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({size: getNodeSize(labelName), caption: getCaption('node', val)}, getNodeColor(labelName)) } 
-                    if (!nodelabelCaptions.hasOwnProperty(labelName)) {nodelabelCaptions[labelName] = 'gid'}
-                    nodes.push(
-                        {
-                            group: 'nodes'
-                            , data: {
-                                id: val.id
-                                , label: val.label
-                                , backgroundColor: nodeLegend[labelName].color
-                                , borderColor: nodeLegend[labelName].borderColor
-                                , fontColor: nodeLegend[labelName].fontColor
-                                , size: nodeLegend[labelName].size
-                                , properties: val.properties
-                                , caption: nodeLegend[labelName].caption
-                            }
-                            , alias: alias
-                            , classes: ['node']
-                        }
-                    )
+                    generateElements(nodeLegend, edgeLegend, nodes, edges, alias, val, isNew)
                 }
+
+
             }
         });
     }
-  
+
     return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
+
 }
 
-export const generateCytoscapeElement = (data) => {
-    let nodes = []
-    let edges = []
-    let nodeLegend = {}
-    let edgeLegend = {}
-
-    if (data) {
-        data['rows'].forEach((row, index) => {
-            for (const [alias, val] of Object.entries(row)) {
-                let labelName = val['label']
-                if (val['start'] && val['end']) {
-                    if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({size: getEdgeSize(labelName), caption: getCaption('edge', val)}, getEdgeColor(labelName)) } 
-                    if (!edgelabelCaptions.hasOwnProperty(labelName)) {edgelabelCaptions[labelName] = 'label'}
-                    edges.push(
-                        {
-                            group: 'edges'
-                            , data: {
-                                id: val.id
-                                , source: val.start
-                                , target: val.end
-                                , label: val.label
-                                , backgroundColor: edgeLegend[labelName].color
-                                , borderColor: edgeLegend[labelName].borderColor
-                                , fontColor: edgeLegend[labelName].fontColor
-                                , size: edgeLegend[labelName].size
-                                , properties: val.properties
-                                , caption: edgeLegend[labelName].caption
-                            }
-                            , alias: alias
-                            , classes: ['node']
-                        }
-                    )
-                } else {
-                    if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({size: getNodeSize(labelName), caption: getCaption('node', val)}, getNodeColor(labelName)) } 
-                    if (!nodelabelCaptions.hasOwnProperty(labelName)) {nodelabelCaptions[labelName] = 'gid'}
-                    nodes.push(
-                        {
-                            group: 'nodes'
-                            , data: {
-                                id: val.id
-                                , label: val.label
-                                , backgroundColor: nodeLegend[labelName].color
-                                , borderColor: nodeLegend[labelName].borderColor
-                                , fontColor: nodeLegend[labelName].fontColor
-                                , size: nodeLegend[labelName].size
-                                , properties: val.properties
-                                , caption: nodeLegend[labelName].caption
-                            }
-                            , alias: alias
-                            , classes: ['node']
-                        }
-                    )
+const generateElements = (nodeLegend, edgeLegend, nodes, edges, alias, val, isNew) => {
+    let labelName = val['label']
+    if (val['start'] && val['end']) {
+        if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({ size: getEdgeSize(labelName), caption: getCaption('edge', val) }, getEdgeColor(labelName)) }
+        if (!edgelabelCaptions.hasOwnProperty(labelName)) { edgelabelCaptions[labelName] = 'label' }
+        edges.push(
+            {
+                group: 'edges'
+                , data: {
+                    id: val.id
+                    , source: val.start
+                    , target: val.end
+                    , label: val.label
+                    , backgroundColor: edgeLegend[labelName].color
+                    , borderColor: edgeLegend[labelName].borderColor
+                    , fontColor: edgeLegend[labelName].fontColor
+                    , size: edgeLegend[labelName].size
+                    , properties: val.properties
+                    , caption: edgeLegend[labelName].caption
                 }
+                , alias: alias
+                , classes: isNew ? 'new node' : 'edge'
             }
-        });
+        )
+    } else {
+        if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({ size: getNodeSize(labelName), caption: getCaption('node', val) }, getNodeColor(labelName)) }
+        if (!nodelabelCaptions.hasOwnProperty(labelName)) { nodelabelCaptions[labelName] = 'gid' }
+        nodes.push(
+            {
+                group: 'nodes'
+                , data: {
+                    id: val.id
+                    , label: val.label
+                    , backgroundColor: nodeLegend[labelName].color
+                    , borderColor: nodeLegend[labelName].borderColor
+                    , fontColor: nodeLegend[labelName].fontColor
+                    , size: nodeLegend[labelName].size
+                    , properties: val.properties
+                    , caption: nodeLegend[labelName].caption
+                    , parent: isNew ? 'new node' : 'node'
+                }
+                , alias: alias
+                , classes: isNew ? 'new node' : 'node'
+            }
+        )
     }
-  
-    return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
-
 }

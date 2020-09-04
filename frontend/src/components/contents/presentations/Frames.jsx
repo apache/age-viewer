@@ -1,4 +1,5 @@
 import React  from 'react';
+import {useDispatch} from 'react-redux'
 import Contents from '../../../components/frame/containers/ContentsFrameContainer'
 import ServerStatus from '../../../components/frame/containers/ServerStatusContainer'
 import ServerConnect from '../../../components/frame/containers/ServerConnectContainer'
@@ -7,7 +8,18 @@ import CypherGraphResult from '../../../components/frame/containers/CypherGraphR
 import CypherResult from '../../../components/frame/containers/CypherResultContainers'
 
 
-const Frames = ({ frameList, queryResult }) => {
+const Frames = ({ database, frameList, addFrame, queryResult }) => {
+    const dispatch = useDispatch();
+    
+    if (database.status === 'disconnected') {
+        const serverConnectFrames = frameList.filter((frame) => (frame.frameName.toUpperCase() === 'SERVERCONNECT'))
+        if ( serverConnectFrames.length === 0) {
+            dispatch(() => addFrame(':server connect', 'ServerConnect'))
+        }
+    }
+
+
+
     const frames = frameList.map((frame) => {
         if (frame.frameName === 'Contents') {
             return <Contents key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} playTarget={frame.frameProps.playTarget} isPinned={frame.isPinned}/>;
