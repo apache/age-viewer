@@ -1,5 +1,6 @@
 import {connect} from 'react-redux'
 import Frames from '../presentations/Frames'
+import {addFrame} from '../../../features/frame/FrameSlice'
 const mapStateToProps = (state)  => {
     return {
         frameList: state.frames,
@@ -8,6 +9,6 @@ const mapStateToProps = (state)  => {
     }
 }
 
-const mapDispatchToProps = { }
+const mapDispatchToProps = { addFrame }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Frames);

@@ -1,15 +1,22 @@
-import React, { useReducer } from 'react'
-import { Badge } from 'react-bootstrap'
+import React from 'react'
 import { Fragment } from 'react';
 import uuid from 'react-uuid';
 
 
 const genLabelQuery = (eleType, labelName) => {
     if (eleType === 'node') {
-        return "MATCH (V) WHERE LABEL(V) = '" + labelName + "' RETURN V"
+        if (labelName === '*') {
+            return "MATCH (V) RETURN V"    
+        } else {
+            return "MATCH (V) WHERE LABEL(V) = '" + labelName + "' RETURN V"
+        }
     }
     else if (eleType === 'edge') {
-        return "MATCH (V)-[R]->(V2) WHERE LABEL(R) = '" + labelName + "' RETURN *"
+        if (labelName === '*') {
+            return "MATCH (V)-[R]->(V2) RETURN *"
+        } else {
+            return "MATCH (V)-[R]->(V2) WHERE LABEL(R) = '" + labelName + "' RETURN *"
+        }
     }
 }
 
@@ -34,7 +41,6 @@ const ColoredLine = () => (
 );
 
 const StyleWrap = {display: 'flex', flexWrap: 'wrap'};
-const StyleItem = {paddingRight: '0.3em', cursor: 'pointer'};
 const StyleJustifyCenter = {display: 'flex', justifyContent: 'center'};
 const StyleTextright = {marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold'};
 const StyleTextLeft = {fontSize: '13px', fontWeight: 'bold'}

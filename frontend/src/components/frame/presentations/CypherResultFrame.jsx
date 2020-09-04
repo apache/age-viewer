@@ -1,14 +1,9 @@
-import React, { useEffect, useState, createRef } from 'react';
-import { useDispatch } from 'react-redux'
-import uuid from 'react-uuid'
+import React, { useState } from 'react';
 import { Tab, Nav, Collapse } from 'react-bootstrap';
-import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer'
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer'
-import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer'
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer'
 
 const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame }) => {
-    const chartAreaRef = createRef()
     const [isExpanded, setIsExpanded] = useState(true)
     const [isFullScreen, setIsFullScreen] = useState(false)
 

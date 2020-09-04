@@ -4,10 +4,26 @@ import cxtmenu from 'cytoscape-cxtmenu'
 import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil'
 import COSEBilkent from 'cytoscape-cose-bilkent';
 import cola from 'cytoscape-cola'
+import dagre from 'cytoscape-dagre'
+import klay from 'cytoscape-klay'
+import euler from 'cytoscape-euler'
+import avsdf from 'cytoscape-avsdf'
+import spread from 'cytoscape-spread'
+import  { initLocation, seletableLayouts} from './CytoscapeLayouts'
 
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
+cytoscape.use(dagre);
+cytoscape.use(klay);
+cytoscape.use(euler);
+cytoscape.use(avsdf);
+cytoscape.use(spread);
 cytoscape.use(cxtmenu);
+
+let selectedLabel = {
+  node: {},
+  edge: {}
+}
 
 const getLabel = (ele, captionProp) => {
   if (captionProp === 'gid') {
@@ -27,15 +43,7 @@ const getLabel = (ele, captionProp) => {
       return props[captionProp] 
     }
   }
-
 }
-
-let selectedLabel = {
-  node: {},
-  edge: {}
-}
-
-let initLocation = {}
 
 const stylesheet = [
   {
@@ -109,35 +117,7 @@ const stylesheet = [
   }
 ]
 
-const coseBilkentLayout = {
-  name: 'cose-bilkent'
-  , idealEdgeLength: 100
-  , refresh: 300
-  , nodeDimensionsIncludeLabels: true
-  , fit: true
-  , randomize: true
-  , padding: 10
-  , nodeRepulsion: 9500
-  , stop: function (event) {
-    event.cy.nodes().forEach(function (ele) {
-      initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
-    });
-  }
-}
-
-const colaLayout = {
-  name: 'cola'
-  , animate: false
-  , refresh: 1
-  , avoidOverlap: true  
-  , stop: function (event) {
-    event.cy.nodes().forEach(function (ele) {
-      initLocation[ele.id()] = { x: ele.position().x, y: ele.position().y }
-    });
-  }
-}
-
-const defaultLayout = coseBilkentLayout
+const defaultLayout = seletableLayouts.coseBilkent
 
 const conf = {
   // Common Options
@@ -147,7 +127,7 @@ const conf = {
   zoom: 1,
   // Interaction Options
   minZoom: 0.5,
-  maxZoom: 4,
+  maxZoom: 2,
   zoomingEnabled: false, //true
   userZoomingEnabled: false, //true
   panningEnabled: true,
@@ -186,37 +166,46 @@ class CytoscapeComponent extends Component {
   }
 
   addElements(centerId, d) {
-    const generatedData = generateCytoscapeElement( d )
+    const generatedData = generateCytoscapeElement( d, true )
     if (generatedData.elements.nodes.length === 0) {
       alert("No data to extend.")
       return
     }
 
-    console.log("====================================")
-    console.log(this.cy.elements())
     this.cy.elements().lock()    
-    this.cy.add(generatedData.elements, generatedData.legend)
+    this.cy.add(generatedData.elements)
+    const newlyAddedEdges = this.cy.edges('.new')
+    const newlyAddedTargets = newlyAddedEdges.targets()
+    const newlyAddedSources = newlyAddedEdges.sources()
+    let rerenderEles = newlyAddedEdges.union(newlyAddedTargets).union(newlyAddedSources)
 
-    //let neighborhood = this.cy.nodes().getElementById(centerId).neighborhood().nodes()
-
-    //neighborhood = neighborhood.union(this.cy.nodes().getElementById(centerId))
-    //neighborhood.layout(coseBilkentLayout).run()
-    this.cy.layout(defaultLayout).run()
+    const certerPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
     this.cy.elements().unlock()    
-    console.log(this.cy.elements())
-    console.log("====================================")
+    rerenderEles.layout(seletableLayouts.concentric).run()
+
+    const certerMovedPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
+    const xGap = certerMovedPosition.x - certerPosition.x
+    const yGap = certerMovedPosition.y - certerPosition.y
+    rerenderEles.forEach((ele) => {
+      const pos = ele.position()
+      ele.position({ x : pos.x - xGap, y : pos.y - yGap })
+    })
     
-    this.handleUserAction(this.props)
+    this.handleUserAction(this.props, true)
     this.props.addLegendData(generatedData.legend)
+    
+    rerenderEles.removeClass('new')
   }
 
-  handleUserAction(props) {
-    this.cy.elements().bind('mouseover', (e) => {
+  handleUserAction(props, areNewElements) {
+    const targetElements = areNewElements ? this.cy.elements('.new') : this.cy.elements()
+
+    targetElements.bind('mouseover', (e) => {
       props.onElementsMouseover({ type: 'elements', data: e.target.data() })
       e.target.addClass('highlight')
     })
 
-    this.cy.elements().bind('mouseout', (e) => {
+    targetElements.bind('mouseout', (e) => {
       if (this.cy.elements(':selected').length === 0) {
         props.onElementsMouseover({ type: 'background', data: { nodeCount: this.cy.nodes().size(), edgeCount: this.cy.edges().size() } })
       } else {
@@ -226,14 +215,22 @@ class CytoscapeComponent extends Component {
       e.target.removeClass('highlight')
     })
 
-    this.cy.elements().bind('click', (e) => {
+    targetElements.bind('click', (e) => {
       const ele = e.target
-      this.cy.elements(':selected').unselect()
-      ele.select()
+      if (ele.selected() && ele.isNode()) {
+        if (this.cy.nodes(':selected').size() === 1) {
+          ele.neighborhood().selectify().select().unselectify()
+        } else {
+          this.cy.nodes(':selected').filter('[id != "'+ele.id()+'"]').neighborhood().selectify().select().unselectify()
+        }
+      } else {
+        this.cy.elements(':selected').unselect().selectify()
+      }
     })
 
     this.cy.bind('click', (e) => {
       if (e.target === this.cy) {
+        this.cy.elements(':selected').unselect().selectify()
         props.onElementsMouseover({ type: 'background', data: { nodeCount: this.cy.nodes().size(), edgeCount: this.cy.edges().size() } })
       }
     })
@@ -297,7 +294,7 @@ class CytoscapeComponent extends Component {
       spotlightPadding: 3,
       minSpotlightRadius: 11,
       maxSpotlightRadius: 99,
-      openMenuEvents: 'click',
+      openMenuEvents: 'cxttap',
       itemColor: '#2A2C34',
       itemTextShadowColor: 'transparent',
       zIndex: 9999,
@@ -315,7 +312,7 @@ class CytoscapeComponent extends Component {
       this.cy.add(nextProps.elements)
       this.cy.layout(defaultLayout).run()
 
-      this.handleUserAction(nextProps)
+      this.handleUserAction(nextProps, false)
 
     } else {
       if (nextProps.legendData !== undefined) {
@@ -406,6 +403,14 @@ class CytoscapeComponent extends Component {
       this.cy.elements(elementType + '[label = "' + label + '"]').style('label', function (ele) { return ele == null ? '' : "[ :" + ele.data('label') + " ]"; })
     } else {
       this.cy.elements(elementType + '[label = "' + label + '"]').style('label', function (ele) { return ele == null ? '' : (ele.data('properties')[caption] == null ? '' : ele.data('properties')[caption]) })
+    }
+  }
+
+  layoutChange(layoutName) {
+    if (seletableLayouts.hasOwnProperty(layoutName)) {
+      const selectedLayout = seletableLayouts[layoutName]
+      selectedLayout.animate = true
+      this.cy.layout(selectedLayout).run()
     }
   }
 

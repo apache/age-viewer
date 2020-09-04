@@ -1,9 +1,37 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
+const validateSamePathVariableReturn = (cypherQuery) => {  
+  const cypherPathValidator = new RegExp("^match\\s([a-zA-Z0-9].*)\\s*=", "i");
+
+  if (cypherPathValidator.test(cypherQuery)) {
+    const pathAlias = RegExp.$1
+    const returnPathAliasValidator = new RegExp("^match\\s.*\\s*=.*return\\s" + pathAlias + ".*", "i");
+
+    if (!returnPathAliasValidator.test(cypherQuery)) {
+      throw Object.assign(new Error("Only Path variable should be returned.\n Modify the return clause to ' RETURN "+pathAlias+" '"), {code: 500})
+    }
+  }
+}
+
+const validateVlePathVariableReturn = (cypherQuery) => {
+  const cypherVleValidator = new RegExp("^match\\s.*[.*\\*[0-9]*\\s*\\.\\.\\s*[0-9]*\\]", "i");
+
+  if (cypherVleValidator.test(cypherQuery)) {
+    const cypherPathValidator = new RegExp("^match\\s(.*[a-zA-Z0-9])\\s*=", "i");
+
+    if (!cypherPathValidator.test(cypherQuery)) {
+      throw Object.assign(new Error("Path variable is required to be used with VLE query. Refer the below proper cypher query with VLE. \n 'MATCH pathvariable = (v)-[r*1..5]->(v2) return pathvariable;"), {code: 500})
+    }
+  }  
+}
+
 export const executeCypherQuery = createAsyncThunk(
   'cypher/executeCypherQuery',
   async (args) => {
     try {
+      validateSamePathVariableReturn(args[1])
+      validateVlePathVariableReturn(args[1])
+
       const response = await fetch('/api/v1/cypher',
         {
           method: 'POST',
@@ -19,8 +47,12 @@ export const executeCypherQuery = createAsyncThunk(
       }
       throw response
     } catch (error) {
-      const errorJson = await error.json()
-      throw errorJson.message
+      if (error.json === undefined) {
+        throw error
+      } else {
+        const errorJson = await error.json()
+        throw errorJson.message
+      }
     }
   }
 

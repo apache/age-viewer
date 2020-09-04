@@ -1,11 +1,8 @@
 import React from 'react'
-import {useDispatch} from 'react-redux'
 import SidebarHome from '../containers/SidebarHome'
 import SidebarSetting from './SidebarSetting'
 
 const Sidebar = ({ activeMenuName, isActive, changeTheme, database, metadata, getMetaData }) => {
-    const dispatch = useDispatch();
-
     return (
         <div id="sidebar" className={isActive ? " active " : ""} style={{overflowY: 'scroll'}}>
             <div className="tab-content">
