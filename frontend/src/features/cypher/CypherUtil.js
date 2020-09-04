@@ -56,7 +56,7 @@ export let edgelabelCaptions = {}
 const getCaption = (valType, val) => {
     if (valType === 'node' && nodelabelCaptions.hasOwnProperty(val.label)) {
         return nodelabelCaptions[val.label]
-    } else if (valType === 'edge' && nodelabelCaptions.hasOwnProperty(val.label)) {
+    } else if (valType === 'edge' && edgelabelCaptions.hasOwnProperty(val.label)) {
         return edgelabelCaptions[val.label]
 
     }
