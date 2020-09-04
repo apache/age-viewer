@@ -5,10 +5,18 @@ import uuid from 'react-uuid';
 
 const genLabelQuery = (eleType, labelName) => {
     if (eleType === 'node') {
-        return "MATCH (V) WHERE LABEL(V) = '" + labelName + "' RETURN V"
+        if (labelName === '*') {
+            return "MATCH (V) RETURN V"    
+        } else {
+            return "MATCH (V) WHERE LABEL(V) = '" + labelName + "' RETURN V"
+        }
     }
     else if (eleType === 'edge') {
-        return "MATCH (V)-[R]->(V2) WHERE LABEL(R) = '" + labelName + "' RETURN *"
+        if (labelName === '*') {
+            return "MATCH (V)-[R]->(V2) RETURN *"
+        } else {
+            return "MATCH (V)-[R]->(V2) WHERE LABEL(R) = '" + labelName + "' RETURN *"
+        }
     }
 }
 
