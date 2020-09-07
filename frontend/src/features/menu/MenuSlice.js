@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const MenuSlice = createSlice({
   name: 'navigator',
   initialState: {
-    menuList: [['home', 'home'], ['setting', 'cog']],
+    menuList: [['home', 'home'], ['setting', 'cog'], ['about', 'info-circle']],
     activeMenu: 'init',
     isActive: false
   },

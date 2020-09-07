@@ -1,6 +1,7 @@
 import React from 'react'
 import { Fragment } from 'react';
 import uuid from 'react-uuid';
+import { ColoredLine, SubLabelRight, SubLabelLeft } from './SidebarComponents'
 
 
 const genLabelQuery = (eleType, labelName) => {
@@ -29,23 +30,6 @@ const genPropQuery = (eleType, propertyName) => {
     }
 }
 
-const ColoredLine = () => (
-    <hr
-        style={{
-            color: '#B0B0B0',
-            backgroundColor: '#B0B0B0',
-            marginTop: 0,
-            height: 0.3
-        }}
-    />
-);
-
-const StyleWrap = {display: 'flex', flexWrap: 'wrap'};
-const StyleJustifyCenter = {display: 'flex', justifyContent: 'center'};
-const StyleTextright = {marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold'};
-const StyleTextLeft = {fontSize: '13px', fontWeight: 'bold'}
-
-
 const NodeList = ({nodes, setCommand}) => {
     let list;
     if(nodes) {
@@ -58,7 +42,7 @@ const NodeList = ({nodes, setCommand}) => {
             />
         ));
         return (
-            <div style={StyleWrap}>
+            <div style={{display:'flex', flexWrap:'wrap'}}>
                 {list}
             </div>
         )
@@ -86,7 +70,7 @@ const EdgeList = ({edges, setCommand}) => {
             />
         ));
         return (
-        <div style={StyleWrap}>
+        <div style={{display:'flex', flexWrap:'wrap'}}>
             {list}
         </div>
         )
@@ -114,7 +98,7 @@ const PropertyList = ({propertyKeys, setCommand}) => {
             />
         ));
         return (
-        <div style={StyleWrap}>
+        <div style={{display:'flex', flexWrap:'wrap'}}>
             {list}
         </div>
         )
@@ -133,11 +117,13 @@ const PropertyItems =({propertyName, keyType, setCommand}) => (
 const ConnectedText =({userName, roleName}) => (
     <div>
         <h6>
-        <div style={StyleJustifyCenter}>
-            <div className="col-sm-6" style={StyleTextright}>Username:</div><div className="col-sm-6" style={StyleTextLeft}>{userName}</div>
+        <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+            <SubLabelRight label="Username :" classes="col-sm-6"></SubLabelRight>
+            <SubLabelLeft label={userName} classes="col-sm-6"></SubLabelLeft>
         </div>
-        <div style={StyleJustifyCenter}>
-            <div className="col-sm-6" style={StyleTextright}>Roles:</div><div className="col-sm-6" style={StyleTextLeft}>{roleName}</div>
+        <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+            <SubLabelRight label="Roles :" classes="col-sm-6"></SubLabelRight>
+            <SubLabelLeft label={roleName} classes="col-sm-6"></SubLabelLeft>
         </div>
         </h6>
     </div>
@@ -147,23 +133,29 @@ const ConnectedText =({userName, roleName}) => (
 const DBMSText =({dbname, graph}) => (
     <div>
         <h6>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Version:</div><div className="col-sm-6" style={StyleTextLeft}>-</div>
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+                <SubLabelRight label="Version :" classes="col-sm-6"></SubLabelRight>
+                <SubLabelLeft label="-" classes="col-sm-6"></SubLabelLeft>
             </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Edition:</div><div className="col-sm-6" style={StyleTextLeft}>-</div>
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+                <SubLabelRight label="Edition :" classes="col-sm-6"></SubLabelRight>
+                <SubLabelLeft label="-" classes="col-sm-6"></SubLabelLeft>
             </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Databases:</div><div className="col-sm-6" style={StyleTextLeft}>{dbname}</div>
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+                <SubLabelRight label="Databases :" classes="col-sm-6"></SubLabelRight>
+                <SubLabelLeft label={dbname} classes="col-sm-6"></SubLabelLeft>
             </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Graph Path:</div><div className="col-sm-6" style={StyleTextLeft}>{graph}</div>
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+                <SubLabelRight label="Graph Path :" classes="col-sm-6"></SubLabelRight>
+                <SubLabelLeft label={graph} classes="col-sm-6"></SubLabelLeft>
             </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Information:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+                <SubLabelRight label="Information :" classes="col-sm-6"></SubLabelRight>
+                <SubLabelLeft label="-" classes="col-sm-6"></SubLabelLeft>
             </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Query List:</div><div className="col-sm-6" style={StyleTextLeft}></div>
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
+                <SubLabelRight label="Query List :" classes="col-sm-6"></SubLabelRight>
+                <SubLabelLeft label="-" classes="col-sm-6"></SubLabelLeft>
             </div>
         </h6>
     </div>
