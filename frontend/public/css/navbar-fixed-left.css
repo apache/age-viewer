@@ -30,7 +30,13 @@
         width: 100%
     }
 
-    .navbar.fixed-left .navbar-collapse .navbar-nav li.nav-item:last-child {
+    .navbar.fixed-left .navbar-collapse .navbar-nav li.nav-item:nth-last-child(2) {
+        width: 100%;
+        position: absolute;
+        bottom: 72px;
+    }
+
+    .navbar.fixed-left .navbar-collapse .navbar-nav li.nav-item:nth-last-child(1) {
         width: 100%;
         position: absolute;
         bottom: 10px;
