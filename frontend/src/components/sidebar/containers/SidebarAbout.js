@@ -3,7 +3,9 @@ import SidebarAbout from '../presentations/SidebarAbout'
 
 const mapStateToProps = (state) => {
     return {
-
+        releaseDate: state.setting.releaseDate,
+        version: state.setting.version,
+        license: state.setting.license
     }
 }
 

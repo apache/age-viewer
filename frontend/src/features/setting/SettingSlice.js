@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { about } from '../../about'
 
 const SidebarSettingSlice = createSlice({
   name: 'setting',
@@ -7,7 +8,10 @@ const SidebarSettingSlice = createSlice({
     maxNumOfFrames: '30',
     maxNumOfHistories: '30',
     maxDataOfGraph: '100',
-    maxDataOfTable: '300'
+    maxDataOfTable: '300',
+    releaseDate: about.releaseDate,
+    version: about.version,
+    license: about.license
   },
   reducers: {
     changeTheme: {
