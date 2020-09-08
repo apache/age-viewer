@@ -1,5 +1,5 @@
 import React from 'react'
-import { ColoredLine, SubLabelRight, SubLabelLeft, SubLabelLeftWithLink } from './SidebarComponents'
+import { ColoredLine, SubLabelRight, SubLabelLeft } from './SidebarComponents'
 
 const SidebarAbout = () => {
     return (

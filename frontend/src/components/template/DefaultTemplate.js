@@ -1,13 +1,21 @@
 import {connect} from 'react-redux'
 import DefaultTemplate from './presentations/DefaultTemplate'
+import {changeSettings} from '../../features/setting/SettingSlice'
+
+
 
 const mapStateToProps = (state)  => {
     return {
-        theme: state.setting.theme
+        theme: state.setting.theme,
+        maxNumOfFrames: state.setting.maxNumOfFrames,
+        maxNumOfHistories: state.setting.maxNumOfHistories,
+        maxDataOfGraph: state.setting.maxDataOfGraph,
+        maxDataOfTable: state.setting.maxDataOfTable
     }
 }
 
-export default connect(mapStateToProps)(DefaultTemplate);
+const mapDispatchToProps = { changeSettings }
+export default connect(mapStateToProps, mapDispatchToProps)(DefaultTemplate);
 
 
 /*
