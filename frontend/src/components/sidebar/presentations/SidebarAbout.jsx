@@ -1,7 +1,7 @@
 import React from 'react'
-import { ColoredLine, SubLabelRight, SubLabelLeft, SubLabelLeftWithLink } from './SidebarComponents'
+import { ColoredLine, SubLabelRight, SubLabelLeft } from './SidebarComponents'
 
-const SidebarAbout = () => {
+const SidebarAbout = ({releaseDate, version, license}) => {
     return (
         <div className="sidebar-setting">
             <div className="sidebar sidebar-header">
@@ -20,15 +20,15 @@ const SidebarAbout = () => {
                         <h6>
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 <SubLabelRight label="OpenBrowser :" classes="col-sm-6"></SubLabelRight>
-                                <SubLabelLeft label="v0.5.0-Beta" classes="col-sm-6"></SubLabelLeft>
+                                <SubLabelLeft label={version} classes="col-sm-6"></SubLabelLeft>
                             </div>
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 <SubLabelRight label="Released at :" classes="col-sm-6"></SubLabelRight>
-                                <SubLabelLeft label="2020 SEP 07" classes="col-sm-6"></SubLabelLeft>
+                                <SubLabelLeft label={releaseDate} classes="col-sm-6"></SubLabelLeft>
                             </div>
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 <SubLabelRight label="License :" classes="col-sm-6"></SubLabelRight>
-                                <SubLabelLeft label="MIT License" classes="col-sm-6"></SubLabelLeft>
+                                <SubLabelLeft label={license} classes="col-sm-6"></SubLabelLeft>
                             </div>
                         </h6>
                     </div>
