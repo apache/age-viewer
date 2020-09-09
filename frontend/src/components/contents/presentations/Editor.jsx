@@ -4,7 +4,7 @@ import uuid from 'react-uuid'
 import AlertContainers from '../../alert/containers/AlertContainers'
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer'
 
-const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery, query }) => {
+const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery, setCommand, addCommandHistory }) => {
     const dispatch = useDispatch();
     const [reqString, setReqString] = useState()
     const clearReqString = () => (setReqString(''));
@@ -12,7 +12,7 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
     const onClick = () => {
         const refKey = uuid()
         if (reqString.toUpperCase().startsWith(':PLAY')) {
-            dispatch(() => addFrame(reqString, 'Contents', refKey))
+            dispatch(() => addFrame(reqString, 'Contents', refKey))            
         } else if (reqString.toUpperCase() === ':SERVER STATUS') {
             dispatch(() => trimFrame('ServerStatus'))
             dispatch(() => addFrame(reqString, 'ServerStatus', refKey))
@@ -48,6 +48,7 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
         } else {
             alert("Sorry, I Can't understand your command")
         }
+        dispatch(() => addCommandHistory(reqString))
         clearReqString()
     }; 
 

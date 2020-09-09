@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const EditorSlice = createSlice({
   name: 'editor',
   initialState: {
-    reqString : ''
+    reqString : '',
+    commandHistroy : []
   },
   reducers: {
     setCommand: {
@@ -13,10 +14,18 @@ const EditorSlice = createSlice({
       prepare: (reqString) => {
         return { payload : {reqString}}
       }
+    },
+    addCommandHistory: {
+      reducer: (state, action) => {
+        state.commandHistroy.push(action.payload.command)
+      },
+      prepare: (command) => {
+        return { payload : {command}}
+      }
     }
   }
 })
 
-export const { setCommand } = EditorSlice.actions
+export const { setCommand, addCommandHistory } = EditorSlice.actions
 
 export default EditorSlice.reducer
