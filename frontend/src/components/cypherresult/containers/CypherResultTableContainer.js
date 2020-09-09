@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
 
         if (data && data.command !== 'ERROR') {
             columns = data['columns']
-            rows = data['rows']
+            rows = data['rows'].slice(0, state.setting.maxDataOfTable)
             command = data['command']
             rowCount = data['rowCount']
         } else {
