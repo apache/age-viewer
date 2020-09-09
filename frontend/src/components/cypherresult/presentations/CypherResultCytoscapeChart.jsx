@@ -166,7 +166,8 @@ class CytoscapeComponent extends Component {
   }
 
   addElements(centerId, d) {
-    const generatedData = generateCytoscapeElement( d, true )
+    console.log("this.props.maxDataOfGraph>>> ", this.props.maxDataOfGraph)
+    const generatedData = generateCytoscapeElement( d['rows'], this.props.maxDataOfGraph, true )
     if (generatedData.elements.nodes.length === 0) {
       alert("No data to extend.")
       return

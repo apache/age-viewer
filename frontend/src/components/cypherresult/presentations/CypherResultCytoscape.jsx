@@ -11,6 +11,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   const [legendData, setLegendData] = useState({ edgeLegend: {}, nodeLegend: {} })
   const [elements, setElements] = useState({ edges: [], nodes: [] })
   const [isReloading, setIsReloading] = useState(false)
+  const [maxDataOfGraph, setMaxDataOfGraph] = useState(props.maxDataOfGraph)
   const dispatch = useDispatch()
   const chartRef = useRef()
 
@@ -147,7 +148,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
 
   return <div className="chart-frame-area">
     <CypherResultCytoscapeLegend onLabelClick={getFooterData} isReloading={isReloading} legendData={legendData} />
-    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} />
+    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} maxDataOfGraph={maxDataOfGraph} />
     <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} layoutChange={layoutChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} edgeLabelColors={edgeLabelColors} nodeLabelColors={nodeLabelColors} />
   </div>
 })

@@ -207,14 +207,15 @@ export const updateLabelCaption = (labelType, labelName, newLabelCaption) => {
     }
 }
 
-export const generateCytoscapeElement = (data, isNew) => {
+export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
     let nodes = []
     let edges = []
     let nodeLegend = {}
     let edgeLegend = {}
 
     if (data) {
-        data['rows'].forEach((row, index) => {
+        data.forEach((row, index) => {
+            if (index >= maxDataOfGraph) { return }
             for (const [alias, val] of Object.entries(row)) {
                 if (Array.isArray(val)) {
                     // val이 Path인 경우 ex) MATCH P = (V)-[R]->(V2) RETURN P;
