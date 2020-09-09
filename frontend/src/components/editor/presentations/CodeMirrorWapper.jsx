@@ -1,9 +1,10 @@
-import React, {}  from 'react';
+import React, {useState}  from 'react';
 import CodeMirror from '@uiw/react-codemirror'
 import 'codemirror/keymap/sublime';
 import 'codemirror/theme/ambiance-mobile.css';
 
-const CodeMirrorWapper = ({ reqString, onClick, setReqString }) => {
+const CodeMirrorWapper = ({ reqString, onClick, setReqString, commandHistroy}) => {
+    const [commandHistoryIndex, setCommandHistoryIndex] = useState(commandHistroy.length)
     return (
         <CodeMirror id="test"
                     value={reqString}
@@ -17,11 +18,50 @@ const CodeMirrorWapper = ({ reqString, onClick, setReqString }) => {
                             'Shift-Enter': (editor) => {
                                 onClick()
                                 editor.setValue('')
+                                setCommandHistoryIndex(-1)
                             },
                             'Ctrl-Enter': (editor) => {
                                 onClick()
                                 editor.setValue('')
+                                setCommandHistoryIndex(-1)
                             },
+                            'Ctrl-Up': (editor) => {    
+                                if (commandHistroy.length === 0) {
+                                    return
+                                }                
+                                else if (commandHistoryIndex === -1) {
+                                    const currentIdx = commandHistroy.length -1
+                                    editor.setValue(commandHistroy[currentIdx])
+                                    setCommandHistoryIndex(currentIdx)
+                                    return
+                                } 
+                                else if (commandHistoryIndex === 0){
+                                    editor.setValue(commandHistroy[0])
+                                    setCommandHistoryIndex(0)
+                                    return
+                                }
+                                
+                                editor.setValue(commandHistroy[commandHistoryIndex -1])
+                                setCommandHistoryIndex(commandHistoryIndex -1)
+                            },
+                            'Ctrl-Down': (editor) => {                             
+                                if (commandHistroy.length === 0) {
+                                    return
+                                }                
+                                else if (commandHistoryIndex === -1) {
+                                    editor.setValue('')
+                                    return
+                                } 
+
+                                else if (commandHistoryIndex === (commandHistroy.length -1)) {
+                                    editor.setValue('')
+                                    setCommandHistoryIndex(-1)
+                                    return
+                                }
+
+                                editor.setValue(commandHistroy[commandHistoryIndex +1])
+                                setCommandHistoryIndex(commandHistoryIndex +1)
+                            }
                         }
                     }}
                     onChange={(editor, change) => {
