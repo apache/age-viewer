@@ -235,6 +235,11 @@ a.nav-link {
     padding: 0.8rem 0.5rem;
 }
 
+a.nav-link.active {
+    color: #FFF;
+    padding: 0.8rem 0.5rem;
+}
+
 .graph-card-content {
     overflow: auto;
 }

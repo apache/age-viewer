@@ -37,7 +37,7 @@ const SidebarAbout = ({releaseDate, version, license}) => {
                     <label><b>You Have Feedback for us?</b></label>
                     <ColoredLine />
                     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <SubLabelLeft label={<span>Leave your feedback at <a target="_blank" rel="noopener noreferrer" href="http://bitnine.net"> Here!</a> <br />Your feedback help us provide you better experience!</span>} classes="py-1"></SubLabelLeft>
+                        <SubLabelLeft label={<span>Leave your feedback at <a target="_blank" rel="noopener noreferrer" href="http://jira.bitnine.net:9080/projects/OBFB/summary"> Here!</a> <br />Your feedback help us provide you better experience!</span>} classes="py-1"></SubLabelLeft>
                     </div>
                 </div>
 
