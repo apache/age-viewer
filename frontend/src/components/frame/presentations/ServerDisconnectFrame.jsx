@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Collapse } from 'react-bootstrap';
 
-const ServerDisconnectFrame = ({ refKey, isPinned, reqString, disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand }) => {
+const ServerDisconnectFrame = ({ refKey, isPinned, reqString, disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand, resetMetaData }) => {
     const [isExpanded, setIsExpanded] = useState(true)
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(() => disconnectToAgensGraph())
+        dispatch(() => disconnectToAgensGraph().then((response)=>{
+            if (response.type === 'database/disconnectToAgensGraph/fulfilled'){
+                resetMetaData()
+            }
+        }))
         /*dispatch(() => addFrame(':server connect'));*/
         /*dispatch(() => addAlert('NoticeServerDisconnected'));*/
     }, [dispatch, disconnectToAgensGraph, addFrame, addAlert])
