@@ -31,6 +31,21 @@ const MetadataSlice = createSlice({
     }
   },
   reducers: {
+    resetMetaData: (state) => {
+      return {
+        edges: [],
+        nodes: [],
+        propertyKeys: [],
+        status: 'init',
+        dbname: '',
+        graph: '',
+        role: {
+      user_name: '',
+      role_name: ''
+    }
+
+      }
+    }
   },
   extraReducers: {
     [getMetaData.fulfilled]: (state, action) => {
@@ -60,5 +75,7 @@ const MetadataSlice = createSlice({
     }
   }
 })
+
+export const { resetMetaData } = MetadataSlice.actions
 
 export default MetadataSlice.reducer
