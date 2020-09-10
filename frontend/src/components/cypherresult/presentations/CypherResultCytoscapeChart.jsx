@@ -245,7 +245,7 @@ class CytoscapeComponent extends Component {
 
 
     this.cxtMenuConf = {
-      menuRadius: 75,
+      menuRadius: function (ele) {return ele.cy().zoom() <= 1 ? 55 : 70},
       selector: 'node',
       commands: [
         {
