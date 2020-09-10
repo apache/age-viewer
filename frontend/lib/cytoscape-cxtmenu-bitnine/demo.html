@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>cytoscape-cxtmenu.js demo</title>
+
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+
+		<link href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+		<!-- for testing with local version of cytoscape.js -->
+		<!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
+
+		<script src="cytoscape-cxtmenu.js"></script>
+
+		<style>
+			body {
+				font-family: helvetica;
+				font-size: 14px;
+				overflow: hidden;
+			}
+
+			#cy {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				z-index: 999;
+			}
+
+			h1 {
+				opacity: 0.5;
+				font-size: 1em;
+			}
+
+			/* you can set the disabled style how you like on the text/icon */
+			.cxtmenu-disabled {
+				opacity: 0.333;
+			}
+		</style>
+
+		<script>
+			window.addEventListener('DOMContentLoaded', function(){
+
+				var cy = window.cy = cytoscape({
+					container: document.getElementById('cy'),
+
+					ready: function(){
+					},
+
+					style: [
+						{
+							selector: 'node',
+							css: {
+								'content': 'data(name)'
+							}
+						},
+
+						{
+							selector: 'edge',
+							css: {
+								'curve-style': 'bezier',
+								'target-arrow-shape': 'triangle'
+							}
+						}
+					],
+
+					elements: {
+						nodes: [
+							{ data: { id: 'j', name: 'Jerry' } },
+							{ data: { id: 'e', name: 'Elaine' } },
+							{ data: { id: 'k', name: 'Kramer' } },
+							{ data: { id: 'g', name: 'George' } }
+						],
+						edges: [
+							{ data: { source: 'j', target: 'e' } },
+							{ data: { source: 'j', target: 'k' } },
+							{ data: { source: 'j', target: 'g' } },
+							{ data: { source: 'e', target: 'j' } },
+							{ data: { source: 'e', target: 'k' } },
+							{ data: { source: 'k', target: 'j' } },
+							{ data: { source: 'k', target: 'e' } },
+							{ data: { source: 'k', target: 'g' } },
+							{ data: { source: 'g', target: 'j' } }
+						]
+					}
+				});
+
+				cy.cxtmenu({
+					selector: 'node, edge',
+
+					commands: [
+						{
+							content: '<span class="fa fa-flash fa-2x"></span>',
+							select: function(ele){
+								console.log( ele.id() );
+							}
+						},
+
+						{
+							content: '<span class="fa fa-star fa-2x"></span>',
+							select: function(ele){
+								console.log( ele.data('name') );
+							},
+							enabled: false
+						},
+
+						{
+							content: 'Text',
+							select: function(ele){
+								console.log( ele.position() );
+							}
+						}
+					]
+				});
+
+				cy.cxtmenu({
+					selector: 'core',
+
+					commands: [
+						{
+							content: 'bg1',
+							select: function(){
+								console.log( 'bg1' );
+							}
+						},
+
+						{
+							content: 'bg2',
+							select: function(){
+								console.log( 'bg2' );
+							}
+						}
+					]
+				});
+
+			});
+		</script>
+	</head>
+
+	<body>
+		<h1>cytoscape-cxtmenu demo</h1>
+
+		<div id="cy"></div>
+
+	</body>
+
+</html>
