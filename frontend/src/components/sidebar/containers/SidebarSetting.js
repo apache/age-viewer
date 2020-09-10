@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import {changeTheme, changeMaxNumOfFrames, changeMaxNumOfHistories, changeMaxDataOfGraph, changeMaxDataOfTable} from '../../../features/setting/SettingSlice'
+import {changeTheme, changeMaxNumOfFrames, changeMaxNumOfHistories, changeMaxDataOfGraph, changeMaxDataOfTable, resetSetting} from '../../../features/setting/SettingSlice'
 import SidebarSetting from '../presentations/SidebarSetting'
 
 const mapStateToProps = (state) => {
@@ -12,6 +12,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = { changeTheme, changeMaxNumOfFrames, changeMaxNumOfHistories, changeMaxDataOfGraph, changeMaxDataOfTable }
+const mapDispatchToProps = { changeTheme, changeMaxNumOfFrames, changeMaxNumOfHistories, changeMaxDataOfGraph, changeMaxDataOfTable, resetSetting }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SidebarSetting);
