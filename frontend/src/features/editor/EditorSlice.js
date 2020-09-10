@@ -9,7 +9,7 @@ const EditorSlice = createSlice({
   reducers: {
     setCommand: {
       reducer: (state, action) => {
-        return { reqString: action.payload.reqString}
+        state.reqString =  action.payload.reqString
       },
       prepare: (reqString) => {
         return { payload : {reqString}}
