@@ -179,8 +179,6 @@ class CytoscapeComponent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("this.props >>>>>>>>>", this.props.elements.nodes.length)
-    console.log("nextProps >>>>>>>>>>>", nextProps.elements)
     if (this.props.elements.nodes.length === 0) {
       this.cy.add(nextProps.elements)
       this.cy.layout(defaultLayout).run()
