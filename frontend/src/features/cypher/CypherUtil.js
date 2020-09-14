@@ -293,10 +293,13 @@ export const generateCytoscapeMetadataElement = (data) => {
     if (data) {
         data.forEach((val, index) => {
             if (!val.hasOwnProperty('la_count')) { return }
+            if (val.hasOwnProperty('la_count') && val['la_count'] <= 0 ) { return }
             generateMetadataElements(nodeLegend, edgeLegend, nodes, edges, val)
         });
     }
 
+    console.log(">>> nodes", nodes)
+    console.log(">>> edges", edges)
     return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
 
 }
