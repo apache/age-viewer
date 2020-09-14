@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux'
 import { nodeLabelColors, edgeLabelColors, nodeLabelSizes, edgeLabelSizes } from '../../../features/cypher/CypherUtil'
-import CypherResultCytoscapeChart from './CypherResultCytoscapeChart'
+import CypherResultCytoscapeChart from '../../cytoscape/CypherResultCytoscapeChart'
 import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
 import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
 

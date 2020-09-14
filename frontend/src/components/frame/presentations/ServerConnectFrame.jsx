@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Collapse} from 'react-bootstrap'
 
-const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame,removeFrame, pinFrame, addAlert, getMetaData}) => {
+const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame,removeFrame, pinFrame, addAlert, getMetaData, getMetaChartData}) => {
     const [formData, setFormData] = useState({})
     const [isExpanded, setIsExpanded] = useState(true)
 
@@ -80,6 +80,7 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, a
                                             addAlert('ErrorMetaFail')
                                         } 
                                     })
+                                    getMetaChartData()
                                     addFrame(':server status', 'ServerStatus')
                                 } else if (response.type === 'database/connectToAgensGraph/rejected') {
                                     addAlert('ErrorServerConnectFail', response.error.message)

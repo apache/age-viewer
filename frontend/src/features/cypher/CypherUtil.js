@@ -274,10 +274,71 @@ const generateElements = (nodeLegend, edgeLegend, nodes, edges, alias, val, isNe
                     , size: nodeLegend[labelName].size
                     , properties: val.properties
                     , caption: nodeLegend[labelName].caption
-                    , parent: isNew ? 'new node' : 'node'
                 }
                 , alias: alias
                 , classes: isNew ? 'new node' : 'node'
+            }
+        )
+    }
+}
+
+
+
+export const generateCytoscapeMetadataElement = (data) => {
+    let nodes = []
+    let edges = []
+    let nodeLegend = {}
+    let edgeLegend = {}
+
+    if (data) {
+        data.forEach((val, index) => {
+            if (!val.hasOwnProperty('la_count')) { return }
+            generateMetadataElements(nodeLegend, edgeLegend, nodes, edges, val)
+        });
+    }
+
+    return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
+
+}
+
+const generateMetadataElements = (nodeLegend, edgeLegend, nodes, edges, val) => {
+    let labelName = val['la_name']
+    if (val['la_start'] && val['la_end']) {
+        if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({ size: Math.log10(val['la_count']) * 10, caption: 'name' }, getEdgeColor(labelName)) }
+        edges.push(
+            {
+                group: 'edges'
+                , data: {
+                    id: val.la_oid
+                    , source: val.la_start
+                    , target: val.la_end
+                    , label: val.la_name
+                    , backgroundColor: edgeLegend[labelName].color
+                    , borderColor: edgeLegend[labelName].borderColor
+                    , fontColor: edgeLegend[labelName].fontColor
+                    , size: edgeLegend[labelName].size
+                    , properties: {count : val.la_count, id : val.la_oid, name : val.la_name}
+                    , caption: edgeLegend[labelName].caption
+                }
+                , classes: 'edge'
+            }
+        )
+    } else {
+        if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({ size: Math.log10(val['la_count']) * 30, caption: 'name' }, getNodeColor(labelName)) }
+        nodes.push(
+            {
+                group: 'nodes'
+                , data: {
+                    id: val.la_oid
+                    , label: val.la_name
+                    , backgroundColor: nodeLegend[labelName].color
+                    , borderColor: nodeLegend[labelName].borderColor
+                    , fontColor: nodeLegend[labelName].fontColor
+                    , size: nodeLegend[labelName].size
+                    , properties: {count : val.la_count, id : val.la_oid, name : val.la_name}
+                    , caption: nodeLegend[labelName].caption
+                }
+                , classes: 'node'
             }
         )
     }

@@ -1,10 +1,17 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Collapse } from 'react-bootstrap';
+import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart'
 
-const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame, pinFrame }) => {
+const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame, pinFrame, data }) => {
     const [isExpanded, setIsExpanded] = useState(true)
+    const [elements, setElements] = useState({ edges: [], nodes: [] })
     const { host, port, user, database, graph, status } = serverInfo;
 
+    useEffect(() => {
+        if (elements.edges.length === 0 && elements.nodes.length === 0) {
+            setElements(data.elements)
+          }
+    })
     const setIconForIsExpanded = (isExpanded) => {
         if (isExpanded) {
             return <span className="fas fa-angle-up fa-lg" aria-hidden="true"></span>
@@ -26,6 +33,9 @@ const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame
                     <p>to <strong>{host}:{port}/{database}</strong></p>
                     <p>Graph path has been set to <strong>{graph}</strong></p>
                 </div>
+            </div>
+            <div className="row">
+            <MetadataCytoscapeChart className="col-12" elements={elements} />
             </div>
         </div>
         } else if (status === 'disconnected') {
