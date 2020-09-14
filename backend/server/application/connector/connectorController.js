@@ -70,4 +70,26 @@ router.get('/meta', async (req, res, next) => {
     }
 });
 
+router.get('/metaChart', async (req, res, next) => {
+    let connectorService = connectorServiceManager.get(req.sessionID);
+    if (connectorService.isConnected()) {
+        let metadata = [];
+        try {
+            graphLabels = await connectorService.getGraphLabels();
+            for (const labels of graphLabels) {
+                let countResult = await connectorService.getGraphLabelCount(labels.la_name, labels.la_kind)
+                Object.assign(labels, countResult)
+                metadata.push(labels)
+            }
+            res.status(200).json(metadata).end();
+        } catch (error) {
+            res.status(500).json(metadata).end();
+        }
+    } else {
+        let error = new Error('Not connected');
+        error.status = 500;
+        next(error);
+    }
+});
+
 module.exports = router;
