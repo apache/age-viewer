@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import {getConnectionStatus} from '../../../features/database/DatabaseSlice'
-import {getMetaData} from '../../../features/database/MetadataSlice'
+import {getMetaData, getMetaChartData} from '../../../features/database/MetadataSlice'
 import Contents from '../presentations/Contents'
 /*
 import React from 'react'
@@ -50,7 +50,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 */
 
-const mapDispatchToProps = { getConnectionStatus, getMetaData }
+const mapDispatchToProps = { getConnectionStatus, getMetaData, getMetaChartData }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contents);
 

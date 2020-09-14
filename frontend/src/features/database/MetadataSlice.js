@@ -15,7 +15,23 @@ export const getMetaData = createAsyncThunk(
       throw errorDetail
     }
   })
-  
+
+  export const getMetaChartData = createAsyncThunk(
+    'database/getMetaChartData',
+    async () => {
+      try {
+        const response = await fetch('/api/v1/db/metaChart')
+        if (response.ok) { return await response.json(); }
+        throw response
+      } catch (error) {
+        const errorDetail = {
+          name: 'Database Connection Failed'
+          , statusText: error.statusText
+        }
+        throw errorDetail
+      }
+    })
+
 const MetadataSlice = createSlice({
   name: 'metadata',
   initialState: {
@@ -28,7 +44,8 @@ const MetadataSlice = createSlice({
     role: {
       user_name: '',
       role_name: ''
-    }
+    },
+    rows: []
   },
   reducers: {
     resetMetaData: (state) => {
@@ -50,7 +67,7 @@ const MetadataSlice = createSlice({
   extraReducers: {
     [getMetaData.fulfilled]: (state, action) => {
       if (action.payload) {
-        return {
+        return Object.assign(state, {
           edges: action.payload.edges,
           nodes: action.payload.nodes,
           propertyKeys: action.payload.propertyKeys,
@@ -58,10 +75,9 @@ const MetadataSlice = createSlice({
           dbname: action.payload.database,
           graph: action.payload.graph,
           role: action.payload.role
-
-        }
+        })
       } else {
-        return {
+        return Object.assign(state, {
           edges: [],
           nodes: [],
           propertyKeys: [],
@@ -69,8 +85,14 @@ const MetadataSlice = createSlice({
           dbname: action.payload.database,
           graph: action.payload.graph,
           role: action.payload.role
-
-        }
+        })
+      }
+    },    
+    [getMetaChartData.fulfilled]: (state, action) => {
+      if (action.payload) {
+        return Object.assign(state, {rows : action.payload})
+      } else {
+        return Object.assign(state, {rows : []})
       }
     }
   }

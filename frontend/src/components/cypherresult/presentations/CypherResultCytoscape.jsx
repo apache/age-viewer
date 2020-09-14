@@ -1,10 +1,9 @@
 import React, { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux'
 import { nodeLabelColors, edgeLabelColors, nodeLabelSizes, edgeLabelSizes } from '../../../features/cypher/CypherUtil'
-import CypherResultCytoscapeChart from './CypherResultCytoscapeChart'
-import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
-import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
-
+import CypherResultCytoscapeChart from '../../cytoscape/CypherResultCytoscapeChart'
+import CypherResultCytoscapeLegend from '../../cytoscape/CypherResultCytoscapeLegend'
+import CypherResultCytoscapeFooter from '../../cytoscape/CypherResultCytoscapeFooter'
 
 const CypherResultCytoscape = forwardRef((props, ref) => {
   const [footerData, setFooterData] = useState({})

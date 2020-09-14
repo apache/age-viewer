@@ -1,9 +1,29 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Collapse } from 'react-bootstrap';
+import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart'
+import MetadataCytoscapeFooter from '../../cytoscape/MetadataCytoscapeFooter'
 
-const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame, pinFrame }) => {
+const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame, pinFrame, data }) => {
     const [isExpanded, setIsExpanded] = useState(true)
+    const [elements, setElements] = useState({ edges: [], nodes: [] })
+    const [footerData, setFooterData] = useState({})
     const { host, port, user, database, graph, status } = serverInfo;
+    const chartRef = useRef()
+
+    useEffect(() => {
+        if (elements.edges.length === 0 && elements.nodes.length === 0) {
+            setElements(data.elements)
+          }
+    })
+
+    const getFooterData = (props) => {
+        if (props.type === 'labels') {
+    
+          props.data['captions'] = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(props.data.type, props.data.label)))
+        }
+    
+        setFooterData(props)
+      }
 
     const setIconForIsExpanded = (isExpanded) => {
         if (isExpanded) {
@@ -15,8 +35,8 @@ const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame
 
     const setContent = () => {
         if (status === 'connected') {
-            return <div className="card-body collapse" id="connectStatusCardBody">
-            <div className="row">
+            return <div className="card-body card-body-graph collapse" id="connectStatusCardBody">
+            <div className="row" style={{padding: "15px 30px"}}>
                 <div className="col-3">
                     <h3>Connection Status</h3>
                     <p>This is your current connection information.</p>
@@ -26,6 +46,12 @@ const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame
                     <p>to <strong>{host}:{port}/{database}</strong></p>
                     <p>Graph path has been set to <strong>{graph}</strong></p>
                 </div>
+            </div>
+            
+            <hr style={{color: "rgba(0,0,0,.125)", backgroundColor: "#fff", margin: "0px 10px 0px 10px", height: "0.3px"}}></hr>
+            <div className="chart-frame-area">
+            <MetadataCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} elements={elements} />
+            <MetadataCytoscapeFooter footerData={footerData} />
             </div>
         </div>
         } else if (status === 'disconnected') {
@@ -63,9 +89,6 @@ const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame
             <Collapse in={isExpanded}>
                 {setContent()}
             </Collapse>
-            <div className="card-footer">
-
-            </div>
         </div>
     );
 }
