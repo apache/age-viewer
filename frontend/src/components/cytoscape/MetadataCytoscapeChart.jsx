@@ -53,7 +53,7 @@ class CytoscapeComponent extends Component {
   }
 
   render() {
-    return <div id="cyto" className="chart-area" ref="cyelement" />
+    return <div className="chart-area metachart-area" ref="cyelement" />
   }
 }
 

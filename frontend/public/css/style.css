@@ -254,10 +254,14 @@ a.nav-link.active {
 
 }
 .chart-area {
-    height: 317px;
+    height: 417px;
     width: 100%;
     display: 'block';
     overflow:hidden;
+}
+
+.metachart-area {
+    height: 517px !important;
 }
 
 .chart-footer-area {
