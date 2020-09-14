@@ -5,6 +5,7 @@
     "scripts": {
         "test": "mocha",
         "test:connector": "mocha --exit --timeout 10000 ./test/connector.api.test.js",
+        "test:metachart": "mocha --exit --timeout 10000 ./test/meta.api.test.js",
         "test:cypher": "mocha --exit --timeout 10000 ./test/cypher.api.test.js",
         "test:session": "mocha --exit --timeout 10000 ./test/session.api.test.js",
         "test:query": "mocha --exit --timeout 10000 ./test/cypher.service.test.js",
