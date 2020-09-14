@@ -98,7 +98,7 @@ const getEdgeColor = (labelName) => {
     if (Object.keys(selectedColor).length === 0) {
         const randomIndex = Math.floor(Math.random() * (11 - 0 + 1)) + 0
         edgeLabelColors[randomIndex].edgeLabels.add(labelName)
-        selectedColor = { color: edgeLabelColors[randomIndex].color, borderColor: edgeLabelColors[randomIndex].borderColor, fontColor: nodeLabelColors[randomIndex].fontColor }
+        selectedColor = { color: edgeLabelColors[randomIndex].color, borderColor: edgeLabelColors[randomIndex].borderColor, fontColor: edgeLabelColors[randomIndex].fontColor }
     }
     return selectedColor
 }
