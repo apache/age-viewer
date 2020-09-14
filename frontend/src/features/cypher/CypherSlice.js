@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const validateSamePathVariableReturn = (cypherQuery) => {  
-  const cypherPathValidator = new RegExp("^match\\s([a-zA-Z0-9].*)\\s*=", "i");
+  const cypherPathValidator = new RegExp("^match\\s([a-zA-Z0-9].*)\\s*=\\s*\\(", "i");
 
   if (cypherPathValidator.test(cypherQuery)) {
     const pathAlias = RegExp.$1
     const returnPathAliasValidator = new RegExp("^match\\s.*\\s*=.*return\\s" + pathAlias + ".*", "i");
-
     if (!returnPathAliasValidator.test(cypherQuery)) {
       throw Object.assign(new Error("Only Path variable should be returned.\n Modify the return clause to ' RETURN "+pathAlias+" '"), {code: 500})
     }
