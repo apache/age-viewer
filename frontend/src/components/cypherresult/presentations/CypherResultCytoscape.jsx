@@ -15,17 +15,14 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   const chartRef = useRef()
 
   useEffect(() => {
-
     if (props.data['legend'] !== undefined && Object.keys(props.data['legend']['nodeLegend']).length > 0) {
 
       if (Object.keys(legendData.edgeLegend).length === 0 && Object.keys(legendData.nodeLegend).length === 0) {
         setIsReloading(false)
-        setLegendData(props.data['legend'])
       }
-      
-      if (elements.edges.length === 0 && elements.nodes.length === 0) {
-        setElements(props.data.elements)
-      }      
+
+      setLegendData(props.data['legend'])
+      setElements(props.data.elements)
     }
   }, [setIsReloading, elements.edges.length, elements.nodes.length, legendData.edgeLegend, legendData.nodeLegend, props.data])
 
@@ -54,7 +51,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     footerObj.backgroundColor = color.color
     footerObj.fontColor = color.fontColor
     setIsReloading(false)
-    setFooterData(Object.assign({}, footerData, { data: footerObj }))
+    setFooterData(Object.assign(footerData, { data: footerObj }))
 
     if (elementType === 'node') {
       let nodeLegendObj = legendData.nodeLegend
@@ -66,7 +63,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         nodeLegendObj[label]['fontColor'] = color.fontColor
       }
       
-      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
+      setLegendData(Object.assign(legendData, { nodeLegend: nodeLegendObj }))
       chartRef.current.colorChange(elementType, label, color);
 
     } else if (elementType === 'edge') {
@@ -76,7 +73,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         edgeLegendObj[label]['borderColor'] = color.borderColor
         edgeLegendObj[label]['fontColor'] = color.fontColor
       }
-      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
+      setLegendData(Object.assign(legendData, { edgeLegend: edgeLegendObj }))
       chartRef.current.colorChange(elementType, label, color);
     }
 
