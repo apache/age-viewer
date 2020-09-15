@@ -148,8 +148,6 @@ const sortByKey = (data) => {
 }
 
 export const updateLabelColor = (labelType, labelName, newLabelColor) => {
-
-
     if (labelType === 'node') {
         nodeLabelColors.forEach((labelColor) => {
             if (labelColor.nodeLabels.has(labelName)) {
@@ -298,8 +296,6 @@ export const generateCytoscapeMetadataElement = (data) => {
         });
     }
 
-    console.log(">>> nodes", nodes)
-    console.log(">>> edges", edges)
     return { legend: { nodeLegend: sortByKey(nodeLegend), edgeLegend: sortByKey(edgeLegend) }, elements: { nodes: nodes, edges: edges } }
 
 }
