@@ -48,7 +48,8 @@ class ConnectorService {
         }        
                 
         let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
-        return queryResult.rows[0];
+
+        return queryResult
     }
 
     async getNodes() {

@@ -77,9 +77,14 @@ router.get('/metaChart', async (req, res, next) => {
         try {
             graphLabels = await connectorService.getGraphLabels();
             for (const labels of graphLabels) {
-                let countResult = await connectorService.getGraphLabelCount(labels.la_name, labels.la_kind)
-                Object.assign(labels, countResult)
-                metadata.push(labels)
+                let countResults = await connectorService.getGraphLabelCount(labels.la_name, labels.la_kind)
+                for (const idx in countResults.rows) {
+                    if (idx > 0) {
+                        labels.la_name = labels.la_name + "-" + idx 
+                        labels.la_oid = labels.la_oid + (idx * 0.1)
+                    }
+                    metadata.push(Object.assign({}, labels, countResults.rows[idx]))
+                }
             }
             res.status(200).json(metadata).end();
         } catch (error) {

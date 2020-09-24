@@ -303,7 +303,8 @@ export const generateCytoscapeMetadataElement = (data) => {
 const generateMetadataElements = (nodeLegend, edgeLegend, nodes, edges, val) => {
     let labelName = val['la_name']
     if (val['la_start'] && val['la_end']) {
-        if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({ size: Math.log10(val['la_count']) * 10, caption: 'name' }, getEdgeColor(labelName)) }
+        //if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({ size: Math.log10(val['la_count']) * 10, caption: 'name' }, getEdgeColor(labelName)) }
+        if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({ size: 15, caption: 'name' }, getEdgeColor(labelName)) }
         edges.push(
             {
                 group: 'edges'
@@ -323,7 +324,8 @@ const generateMetadataElements = (nodeLegend, edgeLegend, nodes, edges, val) => 
             }
         )
     } else {
-        if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({ size: Math.log10(val['la_count']) * 30, caption: 'name' }, getNodeColor(labelName)) }
+        //if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({ size: Math.log10(val['la_count']) * 30, caption: 'name' }, getNodeColor(labelName)) }
+        if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({ size: 70, caption: 'name' }, getNodeColor(labelName)) }
         nodes.push(
             {
                 group: 'nodes'
