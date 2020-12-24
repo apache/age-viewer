@@ -9,10 +9,6 @@ const CypherResultMeta = ({ database , query, data}) => {
           <td className="w-75">TBD</td>
         </tr>
         <tr>
-          <th className="w-25">Database Version</th>
-          <td className="w-75">TBD</td>
-        </tr>
-        <tr>
           <th className="w-25">Database URI</th>
           <td className="w-75">{database.host}:{database.port}</td>
         </tr>
