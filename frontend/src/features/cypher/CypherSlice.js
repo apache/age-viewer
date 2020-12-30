@@ -1,6 +1,22 @@
+/*
+ * Copyright 2020 Bitnine Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-const validateSamePathVariableReturn = (cypherQuery) => {  
+const validateSamePathVariableReturn = (cypherQuery) => {
   const cypherPathValidator = new RegExp("^match\\s([a-zA-Z0-9].*)\\s*=", "i");
 
   if (cypherPathValidator.test(cypherQuery)) {
@@ -22,7 +38,7 @@ const validateVlePathVariableReturn = (cypherQuery) => {
     if (!cypherPathValidator.test(cypherQuery)) {
       throw Object.assign(new Error("Path variable is required to be used with VLE query. Refer the below proper cypher query with VLE. \n 'MATCH pathvariable = (v)-[r*1..5]->(v2) return pathvariable;"), {code: 500})
     }
-  }  
+  }
 }
 
 export const executeCypherQuery = createAsyncThunk(

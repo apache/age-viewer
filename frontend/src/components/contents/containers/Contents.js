@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Bitnine Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {connect} from 'react-redux'
 import {getConnectionStatus} from '../../../features/database/DatabaseSlice'
 import {getMetaData} from '../../../features/database/MetadataSlice'
@@ -25,16 +41,16 @@ const mapDispatchToProps = (dispatch) => {
             if (reqString === ':server status') {
                 dispatch({type: 'ADD_FRAME', frames : [<ServerStatusFrame serverInfo={database} key={frameList.length}/>, ...frameList]})
             } else if (reqString === ':server connect') {
-                dispatch({type: 'ADD_FRAME', frames : [<ServerConnectFrame key={frameList.length}/>, ...frameList]})            
+                dispatch({type: 'ADD_FRAME', frames : [<ServerConnectFrame key={frameList.length}/>, ...frameList]})
             } else if (reqString === ':server disconnect') {
-                dispatch({type: 'ADD_FRAME', frames : [<ServerDisconnectFrame key={frameList.length}/>, ...frameList]})            
+                dispatch({type: 'ADD_FRAME', frames : [<ServerDisconnectFrame key={frameList.length}/>, ...frameList]})
             } else if (reqString.startsWith('match')) {
-                dispatch({type: 'ADD_FRAME', frames : [<CypherResultFrame key={frameList.length}/>, ...frameList]})      
+                dispatch({type: 'ADD_FRAME', frames : [<CypherResultFrame key={frameList.length}/>, ...frameList]})
             } else {
                 alert("Can't understand your command")
                 return;
             }
-            
+
         }
     }
 }
@@ -61,7 +77,7 @@ class ContentsContainer extends Component {
     constructor(props) {
         super(props);
         this.state = store.getState()
-    } 
+    }
 
     componentDidMount() {
         store.subscribe(function() {
@@ -78,16 +94,16 @@ class ContentsContainer extends Component {
         if (reqString === ':server status') {
             store.dispatch({type: 'ADD_FRAME', frames : [<ServerStatusFrame serverInfo={this.state.database} key={this.state.frames.length}/>, ...this.state.frames]})
         } else if (reqString === ':server connect') {
-            store.dispatch({type: 'ADD_FRAME', frames : [<ServerConnectFrame key={this.state.frames.length}/>, ...this.state.frames]})            
+            store.dispatch({type: 'ADD_FRAME', frames : [<ServerConnectFrame key={this.state.frames.length}/>, ...this.state.frames]})
         } else if (reqString === ':server disconnect') {
-            store.dispatch({type: 'ADD_FRAME', frames : [<ServerDisconnectFrame key={this.state.frames.length}/>, ...this.state.frames]})            
+            store.dispatch({type: 'ADD_FRAME', frames : [<ServerDisconnectFrame key={this.state.frames.length}/>, ...this.state.frames]})
         } else if (reqString.startsWith('match')) {
-            store.dispatch({type: 'ADD_FRAME', frames : [<CypherResultFrame key={this.state.frames.length}/>, ...this.state.frames]})      
+            store.dispatch({type: 'ADD_FRAME', frames : [<CypherResultFrame key={this.state.frames.length}/>, ...this.state.frames]})
         } else {
             alert("Can't understand your command")
             return;
         }
-        
+
     }
 
     render() {

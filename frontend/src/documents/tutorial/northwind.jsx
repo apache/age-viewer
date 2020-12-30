@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Bitnine Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React from 'react'
 
 export const title = 'Northwind Graph'
@@ -159,7 +175,7 @@ CREATE TABLE customers (CustomerID char(5), CompanyName varchar(40), ContactName
 CREATE TABLE employees (EmployeeID int, LastName varchar(20), FirstName varchar(10), Title varchar(30), TitleOfCourtesy varchar(25), BirthDate date, HireDate date, Address varchar(60), City varchar(15), Region varchar(15), PostalCode varchar(10), Country varchar(15), HomePhone varchar(24), Extension varchar(4), Photo bytea, Notes text, ReportTo int, PhotoPath varchar(255));
 CREATE TABLE employee_territories (EmployeeID int, TerritoryID varchar(20));
 CREATE TABLE orders_details (orderID int, ProductID int, UnitPrice money, Quantity smallint, Discount real);
-CREATE TABLE orders (orderID int, CustomerID char(5), EmployeeID int, orderDate date, RequiredDate date, ShippedDate date, ShipVia int, Freight money, ShipName varchar(40), ShipAddress varchar(60), ShipCity varchar(15), ShipRegion varchar(15), ShipPostalCode varchar(10), ShipCountry varchar(15));           
+CREATE TABLE orders (orderID int, CustomerID char(5), EmployeeID int, orderDate date, RequiredDate date, ShippedDate date, ShipVia int, Freight money, ShipName varchar(40), ShipAddress varchar(60), ShipCity varchar(15), ShipRegion varchar(15), ShipPostalCode varchar(10), ShipCountry varchar(15));
 CREATE TABLE products (ProductID int, ProductName varchar(40), SupplierID int, CategoryID int, QuantityPerUnit varchar(20), UnitPrice money, UnitsInStock smallint, UnitsOnorder smallint, ReorderLevel smallint, Discontinued bit);
 CREATE TABLE regions (RegionID int, RegionDescription char(50));
 CREATE TABLE shippers (ShipperID int, CompanyName varchar(40), Phone varchar(24));
@@ -178,7 +194,7 @@ CREATE TABLE territories (TerritoryID varchar(20), TerritoryDescription char(50)
     CategoryName,
     Description,
     Picture
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/categories.csv' csv header delimiter ',';
 
 COPY customers (
@@ -193,7 +209,7 @@ COPY customers (
     Country,
     Phone,
     Fax
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/customers.csv' csv header delimiter ',';
 
 COPY employees (
@@ -215,13 +231,13 @@ COPY employees (
     Notes,
     ReportTo,
     PhotoPath
-)  
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/employees.csv' csv header delimiter ',';
 
 COPY employee_territories (
     EmployeeID,
     TerritoryID
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/employee_territories.csv' csv header delimiter ',';
 
 COPY orders_details (
@@ -230,7 +246,7 @@ COPY orders_details (
     UnitPrice,
     Quantity,
     Discount
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/orders_details.csv' csv header delimiter ',';
 
 COPY orders (
@@ -245,37 +261,37 @@ COPY orders (
     ShipName,
     ShipAddress,
     ShipCity,
-    ShipRegion,                
-    ShipPostalCode,                
-    ShipCountry                 
-)                          
+    ShipRegion,
+    ShipPostalCode,
+    ShipCountry
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/orders.csv' csv header delimiter ',';
-                        
+
 COPY products (
     ProductID,
     ProductName,
-    SupplierID,        
-    CategoryID,        
+    SupplierID,
+    CategoryID,
     QuantityPerUnit,
-    UnitPrice,       
-    UnitsInStock, 
-    UnitsOnorder, 
-    ReorderLevel, 
+    UnitPrice,
+    UnitsInStock,
+    UnitsOnorder,
+    ReorderLevel,
     Discontinued
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/products.csv' csv header delimiter ',';
 
 COPY regions (
     RegionID,
     RegionDescription
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/regions.csv' csv header delimiter ',';
 
 COPY shippers (
     ShipperID,
     CompanyName,
     Phone
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/shippers.csv' csv header delimiter ',';
 
 COPY suppliers (
@@ -291,14 +307,14 @@ COPY suppliers (
     Phone,
     Fax,
     HomePage
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/suppliers.csv' csv header delimiter ',';
 
 COPY territories (
     TerritoryID,
     TerritoryDescription,
     RegionID
-) 
+)
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/territories.csv' csv header delimiter ',';`}
                 </pre>
             </figure>
@@ -408,7 +424,7 @@ CREATE (n)-[r:SOLD]->(m);`}
         <div className="col-sm-3">
             <h3>Querying Graph Data</h3>
             <p>
-                AgensGraph에 Northwind 데이터 적재가 완료되었다면 Cypher 쿼리로 데이터를 조회하여 데이터가 정상적으로 적재되었는지 확인합니다. 
+                AgensGraph에 Northwind 데이터 적재가 완료되었다면 Cypher 쿼리로 데이터를 조회하여 데이터가 정상적으로 적재되었는지 확인합니다.
                 이 튜토리얼에서는 이해를 돕기 위해 OpenBroswer에서 쿼리를 실행해 그래프를 시각화하여 제공합니다.
             </p>
             <hr />
@@ -421,7 +437,7 @@ CREATE (n)-[r:SOLD]->(m);`}
             <h4>전체 데이터 중 100개를 조회해보기</h4>
             <figure>
                 <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-{`MATCH (c:customer)-[pc:purchased]->(o:"order")-[r:orders]->(p:product) 
+{`MATCH (c:customer)-[pc:purchased]->(o:"order")-[r:orders]->(p:product)
 RETURN *
 LIMIT 100;`}
                 </pre>
@@ -433,7 +449,7 @@ LIMIT 100;`}
             <figure>
                 <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
 {`MATCH (c:customer)-[pc:PURCHASED]->(o:"order")-[r:ORDERS]->(p:product)-[po:PART_OF]->(ct:category)
-WHERE c.customerid = 'ANTON' 
+WHERE c.customerid = 'ANTON'
 RETURN *
 LIMIT 100;`}
                 </pre>

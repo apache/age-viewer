@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Bitnine Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import cxtmenu from 'cytoscape-cxtmenu'
@@ -34,13 +50,13 @@ const getLabel = (ele, captionProp) => {
     return "[ :" + ele.data('label') + " ]"
   } else {
     const props = ele.data('properties')
-    if (props[captionProp] === undefined) { 
+    if (props[captionProp] === undefined) {
       ele.isNode() ? selectedLabel.node[ele.data('label')] = 'gid' : selectedLabel.edge[ele.data('label')] = 'gid'
       return "[ " + ele.data('id') + " ]"
     }
-    else { 
+    else {
       ele.isNode() ? selectedLabel.node[ele.data('label')] = captionProp : selectedLabel.edge[ele.data('label')] = captionProp
-      return props[captionProp] 
+      return props[captionProp]
     }
   }
 }
@@ -172,7 +188,7 @@ class CytoscapeComponent extends Component {
       return
     }
 
-    this.cy.elements().lock()    
+    this.cy.elements().lock()
     this.cy.add(generatedData.elements)
     const newlyAddedEdges = this.cy.edges('.new')
     const newlyAddedTargets = newlyAddedEdges.targets()
@@ -180,7 +196,7 @@ class CytoscapeComponent extends Component {
     let rerenderEles = newlyAddedEdges.union(newlyAddedTargets).union(newlyAddedSources)
 
     const certerPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
-    this.cy.elements().unlock()    
+    this.cy.elements().unlock()
     rerenderEles.layout(seletableLayouts.concentric).run()
 
     const certerMovedPosition = Object.assign({}, this.cy.nodes().getElementById(centerId).position())
@@ -190,10 +206,10 @@ class CytoscapeComponent extends Component {
       const pos = ele.position()
       ele.position({ x : pos.x - xGap, y : pos.y - yGap })
     })
-    
+
     this.handleUserAction(this.props, true)
     this.props.addLegendData(generatedData.legend)
-    
+
     rerenderEles.removeClass('new')
   }
 
@@ -317,12 +333,12 @@ class CytoscapeComponent extends Component {
     } else {
       if (nextProps.legendData !== undefined) {
 
-        for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {  
+        for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {
           this.colorChange('node', label, {color : legend.color, borderColor : legend.borderColor, fontColor : legend.fontColor})
           this.sizeChange('node', label, legend.size)
           this.captionChange('node', label, legend.caption)
         }
-        
+
         for (const [label, legend] of Object.entries(nextProps.legendData.edgeLegend)) {
           this.colorChange('edge', label, {color : legend.color, borderColor : legend.borderColor, fontColor : legend.fontColor})
           this.sizeChange('edge', label, legend.size)

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Bitnine Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, {useState} from 'react';
 import { Badge } from 'react-bootstrap'
 import uuid from 'react-uuid'
@@ -15,7 +31,7 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
     }
     return extractedData
   }
-  
+
   const displayFooterData = () => {
 
     if (footerData.type === 'elements') {
@@ -23,7 +39,7 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
 
       return (
         <div className="d-flex pl-3">
-            <div className={"mr-auto graphFrameFooter "+ (footerExpanded ? "expandedGraphFrameFooter" : "" )}> 
+            <div className={"mr-auto graphFrameFooter "+ (footerExpanded ? "expandedGraphFrameFooter" : "" )}>
               <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, color: footerData.data.fontColor }}>{footerData.data.label}</Badge>
               <span className="label"><strong className="pl-3">&lt;gid&gt; : </strong> {footerData.data.id}</span>
               {extractData(footerData.data.properties)}
@@ -37,7 +53,7 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
     } else if (footerData.type === 'background') {
       return (
         <div className="d-flex pl-3">
-          <div className="mr-auto label pl-3">Displaying <strong>{footerData.data.nodeCount}</strong> nodes, <strong>{footerData.data.edgeCount}</strong> edges</div>          
+          <div className="mr-auto label pl-3">Displaying <strong>{footerData.data.nodeCount}</strong> nodes, <strong>{footerData.data.edgeCount}</strong> edges</div>
           <label htmlFor="selectLayout" className="col-form-label px-1">Layout : </label>
           <select id="selectLayout" className="col-1 custom-select custom-select-sm layout-select" defaultValue={layout} onChange={(e) => [setLayout(e.target.value), layoutChange(e.target.value)]}>
             <option value="random">Random</option>
@@ -55,7 +71,7 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
           </select>
         </div>
       )
-      
+
     } else if (footerData.type === 'labels') {
       const isEdge = footerData.data.type === 'edge' ? {} : { pill: true }
 
@@ -69,61 +85,61 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
             return edgeLabelSizes.map((labelSize, i) => {
               return edgeSizeButton(labelSize.size, i)
             })
-          }           
+          }
       }
-      
+
       const nodeSizeButton = (nodeSize, i) => {
-        let size = (i * 3) + 12; 
-        return <button onClick={() => [updateNodeLabelSize(footerData.data.label, nodeSize), sizeChange(footerData.data.type, footerData.data.label, nodeSize)]} 
-        key={uuid()} 
-        type="button" 
-        className={"btn sizeSelector node " + (footerData.data.size >= nodeSize ? " selectedSize " : "")} 
+        let size = (i * 3) + 12;
+        return <button onClick={() => [updateNodeLabelSize(footerData.data.label, nodeSize), sizeChange(footerData.data.type, footerData.data.label, nodeSize)]}
+        key={uuid()}
+        type="button"
+        className={"btn sizeSelector node " + (footerData.data.size >= nodeSize ? " selectedSize " : "")}
         style={{width: size+'px', height: size+'px'}} />
       }
 
       const edgeSizeButton = (edgeSize, i) => {
-        let size = (i * 3) + 12; 
-        return <button onClick={() => [updateEdgeLabelSize(footerData.data.label, edgeSize), sizeChange(footerData.data.type, footerData.data.label, edgeSize)]} 
-        key={uuid()} 
-        type="button" 
-        className={"btn sizeSelector edge " + (footerData.data.size >= edgeSize ? " selectedSize " : "")} 
+        let size = (i * 3) + 12;
+        return <button onClick={() => [updateEdgeLabelSize(footerData.data.label, edgeSize), sizeChange(footerData.data.type, footerData.data.label, edgeSize)]}
+        key={uuid()}
+        type="button"
+        className={"btn sizeSelector edge " + (footerData.data.size >= edgeSize ? " selectedSize " : "")}
         style={{width: size+18+'px', height: size+'px'}} />
       }
 
       const generateColors = () => {
         if (footerData.data.type === 'node') {
           return nodeLabelColors.map((color, i) => {
-            return <button onClick={() => [updateLabelColor(footerData.data.type, footerData.data.label, color), colorChange(footerData.data.type, footerData.data.label, color)]} 
-              key={uuid()} 
-              type="button" 
-              className={"btn colorSelector " + (footerData.data.backgroundColor === color.color ? " selectedColor " : "")} 
-              style={{backgroundColor:color.color}}></button> 
+            return <button onClick={() => [updateLabelColor(footerData.data.type, footerData.data.label, color), colorChange(footerData.data.type, footerData.data.label, color)]}
+              key={uuid()}
+              type="button"
+              className={"btn colorSelector " + (footerData.data.backgroundColor === color.color ? " selectedColor " : "")}
+              style={{backgroundColor:color.color}}></button>
           })
-        } else if (footerData.data.type === 'edge') {          
+        } else if (footerData.data.type === 'edge') {
           return edgeLabelColors.map((color, i) => {
-            return <button onClick={() => [updateLabelColor(footerData.data.type, footerData.data.label, color), colorChange(footerData.data.type, footerData.data.label, color)]} 
-              key={uuid()} 
-              type="button" 
-              className={"btn colorSelector " + (footerData.data.backgroundColor === color.color ? " selectedColor " : "")} 
-              style={{backgroundColor:color.color}}></button> 
+            return <button onClick={() => [updateLabelColor(footerData.data.type, footerData.data.label, color), colorChange(footerData.data.type, footerData.data.label, color)]}
+              key={uuid()}
+              type="button"
+              className={"btn colorSelector " + (footerData.data.backgroundColor === color.color ? " selectedColor " : "")}
+              style={{backgroundColor:color.color}}></button>
           })
-        }           
+        }
     }
 
       return (
         <div className="d-flex pl-3">
-          <div className={"mr-auto graphFrameFooter "+ (footerExpanded ? "expandedGraphFrameFooter" : "" )}> 
+          <div className={"mr-auto graphFrameFooter "+ (footerExpanded ? "expandedGraphFrameFooter" : "" )}>
           <Badge className="px-3 py-1" {...isEdge} style={{ backgroundColor: footerData.data.backgroundColor, color: footerData.data.fontColor }}>{footerData.data.label}</Badge>
           <span className="label">
-            <span className="pl-3">Color : </span> 
+            <span className="pl-3">Color : </span>
             {generateColors()}
           </span>
           <span className="label">
-            <span className="pl-3">Size : </span> 
+            <span className="pl-3">Size : </span>
             {generateButton()}
           </span>
           <span className="label">
-            <span className="pl-3">Caption : </span> 
+            <span className="pl-3">Caption : </span>
             {footerData.data.captions.map((caption) => {
               return <button onClick={() => [updateLabelCaption(footerData.data.type, footerData.data.label, caption), captionChange(footerData.data.type, footerData.data.label, caption)]} key={uuid()} type="button" className={"btn captionSelector " + (footerData.data.selectedCaption === caption ? " btn-secondary " : " btn-outline-dark ")}><strong>&lt;{caption}&gt;</strong></button>
             })}
@@ -138,7 +154,7 @@ const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelCol
     } else {
       return (
         <div className="d-flex pl-3">
-          <div className="mr-auto label pl-3"></div>          
+          <div className="mr-auto label pl-3"></div>
           <label htmlFor="selectLayout" className="col-form-label px-1">Layout : </label>
           <select id="selectLayout" className="col-1 custom-select custom-select-sm layout-select" defaultValue={layout} onChange={(e) => [setLayout(e.target.value), layoutChange(e.target.value)]}>
             <option value="random">Random</option>

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Bitnine Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux'
 import {Alert} from 'react-bootstrap'
@@ -18,7 +34,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
     }, [])
 
     if (alertName === 'NoticeServerDisconnected') {
-        return (    
+        return (
             <Alert show={show} variant="warning" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Disconnected</Alert.Heading>
                 <p>
@@ -30,7 +46,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
         );
 
     } else if (alertName === 'NoticeServerConnected') {
-        return (    
+        return (
             <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Connected</Alert.Heading>
                 <p>
@@ -42,7 +58,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
         );
 
     } else if (alertName === 'ErrorServerConnectFail') {
-        return (    
+        return (
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Database Connection Failed</Alert.Heading>
                 <p>
@@ -53,7 +69,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
         );
 
     } else if (alertName === 'ErrorNoDatabaseConnected') {
-        return (    
+        return (
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>No Database Connected</Alert.Heading>
                 <p>
@@ -66,7 +82,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
         );
 
     } else if (alertName === 'ErrorMetaFail') {
-        return (    
+        return (
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Metadata Load Error</Alert.Heading>
                 <p>
@@ -74,9 +90,9 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
                 </p>
             </Alert>
         );
-         
+
     } else if (alertName === 'ErrorCypherQuery') {
-        return (    
+        return (
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Query Error</Alert.Heading>
                 <p>
@@ -86,7 +102,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
         );
 
     } else if (alertName === 'ErrorPlayLoadFail') {
-        return (    
+        return (
             <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Failed to Load Play Target</Alert.Heading>
                 <p>
@@ -96,11 +112,11 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
         );
 
     } else if (alertName === 'NoticeAlreadyConnected') {
-        return (    
+        return (
             <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Alredy Connected to Database</Alert.Heading>
                 <p>
-                    You are currently connected to a database. If you want to access to another database, you may execute 
+                    You are currently connected to a database. If you want to access to another database, you may execute
                     <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server disconnect")}><span
                         className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true" ></span>:server disconnect</a> to disconnect from current database first.
                 </p>
@@ -108,8 +124,8 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
         );
 
     }
-    
-    
+
+
 }
 
 export default SingleAlert
