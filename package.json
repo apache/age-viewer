@@ -1,0 +1,18 @@
+{
+    "name": "openbrowser",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "setup": "npm install && npm-run-all setup-front setup-backend",
+        "setup-front": "cd frontend && npm install",
+        "setup-backend": "cd backend && npm install",
+        "front": "cd frontend && npm run start",
+        "build-front": "cd frontend && yarn build",
+        "backend": "cd backend && npm run start",
+        "deploy": "npm-run-all build-front backend",
+        "start": "npm-run-all --parallel backend front"
+    },
+    "dependencies": {
+        "npm-run-all": "^4.1.5"
+    }
+}
