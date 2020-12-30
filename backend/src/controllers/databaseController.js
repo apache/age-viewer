@@ -1,9 +1,10 @@
 const express = require('express');
-const connectorServiceManager = require('../services/sessionService');
+const sessionService = require('../services/sessionService');
 const router = express.Router();
 
+// Get connection status
 router.get('', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID);
+    let connectorService = sessionService.get(req.sessionID);
     if (connectorService.isConnected()) {
         try {
             await connectorService.getConnectionStatus();
@@ -20,8 +21,9 @@ router.get('', async (req, res, next) => {
     }
 });
 
+// Connect Database
 router.post('/connect', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID);
+    let connectorService = sessionService.get(req.sessionID);
     if (connectorService.isConnected()) {
         res.status(200).json(connectorService.getConnectionInfo()).end();
     } else {
@@ -36,8 +38,9 @@ router.post('/connect', async (req, res, next) => {
     }
 });
 
+// Disconnect Database
 router.get('/disconnect', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID);
+    let connectorService = sessionService.get(req.sessionID);
     if (connectorService.isConnected()) {
         let isDisconnect = await connectorService.disconnectDatabase();
 
@@ -53,8 +56,9 @@ router.get('/disconnect', async (req, res, next) => {
     }
 });
 
+// Get database meta information
 router.get('/meta', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID);
+    let connectorService = sessionService.get(req.sessionID);
     if (connectorService.isConnected()) {
         let metadata = null;
         try {

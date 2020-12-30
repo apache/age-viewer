@@ -10,6 +10,7 @@ class AgensGraphRepository {
         this._password = password;
     }
 
+    // Check connection status
     async isHealth() {
         let result = false;
         if (this.getPoolConnectionInfo() == null) {
@@ -29,6 +30,7 @@ class AgensGraphRepository {
         }
     }
 
+    // Execute cypher query
     async execute(query) {
         let client = await this.getConnection();
         let result = null;
@@ -44,6 +46,7 @@ class AgensGraphRepository {
         return result;
     }
 
+    // Execute cypher query with params
     async execute(query, params) {
         let client = await this.getConnection();
         let result = null;
@@ -59,6 +62,9 @@ class AgensGraphRepository {
         return result;
     }
 
+    /**
+     * Get connectionInfo
+     */
     getConnection() {
         if (!this._pool) {
             this._pool = new ag.Pool(this.getPoolConnectionInfo());
@@ -66,6 +72,9 @@ class AgensGraphRepository {
         return this._pool.connect();
     }
 
+    /**
+     * Release connection
+     */
     async releaseConnection() {
         try {
             await this._pool.end();
@@ -76,6 +85,9 @@ class AgensGraphRepository {
         }
     }
 
+    /**
+     * Get connection pool information
+     */
     getPoolConnectionInfo() {
         if (!this._host || !this._port || !this._database) {
             return null;
@@ -92,6 +104,9 @@ class AgensGraphRepository {
         };
     }
 
+    /**
+     * Get connection info
+     */
     getConnectionInfo() {
         if (!this._host || !this._port || !this._database) {
             return null;
