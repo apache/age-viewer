@@ -4,10 +4,10 @@ const uuid = require('node-uuid');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const { stream } = require('./config/winston');
-const cypherRouter = require('./application/cypher/cypherController');
-const databaseRouter = require('./application/connector/connectorController');
-const sessionRouter = require('./application/session/sessionRouter');
+const { stream } = require('./src/config/winston');
+const cypherRouter = require('./src/controllers/cypherController');
+const databaseRouter = require('./src/controllers/databaseController');
+const sessionRouter = require('./src/routes/sessionRouter');
 
 let app = express();
 

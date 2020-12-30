@@ -1,5 +1,5 @@
 const express = require('express');
-const connectorServiceManager = require('../session/sessionManager');
+const connectorServiceManager = require('../services/sessionService');
 const router = express.Router();
 
 router.get('', async (req, res, next) => {

@@ -1,5 +1,5 @@
-const sessionManager = require('../session/sessionManager');
-const AgensDatabaseHelper = require('../db/agensDatabaseHelper');
+const sessionManager = require('./sessionService');
+const AgensGraphRepository = require('../models/agensgraph/agensGraphRepository');
 
 class ConnectorService {
     constructor() {}
@@ -75,7 +75,7 @@ class ConnectorService {
     async connectDatabase(connectionInfo) {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         if (agensDatabaseHelper == null) {
-            this._agensDatabaseHelper = new AgensDatabaseHelper(connectionInfo);
+            this._agensDatabaseHelper = new AgensGraphRepository(connectionInfo);
             agensDatabaseHelper = this._agensDatabaseHelper;
         }
 
@@ -120,7 +120,7 @@ class ConnectorService {
     }
 
     getConnectionInfo() {
-        return this._agensDatabaseHelper.toConnectionInfo();
+        return this._agensDatabaseHelper.getConnectionInfo();
     }
 
     isConnected() {

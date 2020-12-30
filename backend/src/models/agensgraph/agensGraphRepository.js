@@ -1,6 +1,6 @@
 const ag = require('agensgraph');
 
-class AgensDatabaseHelper {
+class AgensGraphRepository {
     constructor({ host, port, database, graph, user, password } = {}) {
         this._host = host;
         this._port = port;
@@ -12,7 +12,7 @@ class AgensDatabaseHelper {
 
     async isHealth() {
         let result = false;
-        if (this.toPoolConnectionInfo() == null) {
+        if (this.getPoolConnectionInfo() == null) {
             return result;
         }
 
@@ -61,7 +61,7 @@ class AgensDatabaseHelper {
 
     getConnection() {
         if (!this._pool) {
-            this._pool = new ag.Pool(this.toPoolConnectionInfo());
+            this._pool = new ag.Pool(this.getPoolConnectionInfo());
         }
         return this._pool.connect();
     }
@@ -76,7 +76,7 @@ class AgensDatabaseHelper {
         }
     }
 
-    toPoolConnectionInfo() {
+    getPoolConnectionInfo() {
         if (!this._host || !this._port || !this._database) {
             return null;
         }
@@ -92,7 +92,7 @@ class AgensDatabaseHelper {
         };
     }
 
-    toConnectionInfo() {
+    getConnectionInfo() {
         if (!this._host || !this._port || !this._database) {
             return null;
         }
@@ -107,4 +107,4 @@ class AgensDatabaseHelper {
     }
 }
 
-module.exports = AgensDatabaseHelper;
+module.exports = AgensGraphRepository;

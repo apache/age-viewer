@@ -1,10 +1,10 @@
 const express = require('express');
-const CypherService = require('./cypherService')
-const connectorServiceManager = require('../session/sessionManager');
+const CypherService = require('../services/cypherService')
+const sessionManager = require('../services/sessionService');
 let router = express.Router();
 
 router.post('', async (req, res, next) => {
-    let connectorService = connectorServiceManager.get(req.sessionID)
+    let connectorService = sessionManager.get(req.sessionID)
     if (connectorService.isConnected()) {
         try {
             let cypherService = new CypherService(connectorService.agensDatabaseHelper);

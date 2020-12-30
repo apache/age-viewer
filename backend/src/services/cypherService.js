@@ -1,4 +1,3 @@
-const ag = require('agensgraph');
 class CypherService {
     constructor(agensDatabaseHelper) {
         this._agensDatabaseHelper = agensDatabaseHelper;
@@ -69,6 +68,7 @@ class CypherService {
             return convetedObject;
         });
     }
+
     convertPath({ vertices, edges, start, end, len }) {
         let result = [];
         // vertex
