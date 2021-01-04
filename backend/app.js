@@ -22,7 +22,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const { stream } = require('./src/config/winston');
 const cypherRouter = require('./src/controllers/cypherController');
-const databaseRouter = require('./src/controllers/databaseController');
+const databaseRouter = require('./src/routes/databaseRouter');
 const sessionRouter = require('./src/routes/sessionRouter');
 
 let app = express();

@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import DefaultTemplate from '../../components/template/DefaultTemplate'
-
+import React from "react";
+import DefaultTemplate from "../../components/template/DefaultTemplate";
 
 const MainPage = () => {
-    return (
-        <DefaultTemplate />
-    );
-}
+    return <DefaultTemplate />;
+};
 
-export default MainPage
+export default MainPage;

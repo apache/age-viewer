@@ -14,33 +14,36 @@
  * limitations under the License.
  */
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const MenuSlice = createSlice({
-  name: 'navigator',
-  initialState: {
-    menuList: [['home', 'home'], ['setting', 'cog']],
-    activeMenu: 'init',
-    isActive: false
-  },
-  reducers: {
-    toggleMenu: {
-      reducer: (state, action) => {
-        let isActive = true
-        if (state.activeMenu === action.payload.selectedMenuName) {
-          action.payload.selectedMenuName = ''
-          isActive = false
-        }
-        state.activeMenu = action.payload.selectedMenuName
-        state.isActive = isActive
-      },
-      prepare: (selectedMenuName) => {
-        return { payload : {selectedMenuName}}
-      }
-    }
-  }
-})
+    name: "navigator",
+    initialState: {
+        menuList: [
+            ["home", "home"],
+            ["setting", "cog"],
+        ],
+        activeMenu: "init",
+        isActive: false,
+    },
+    reducers: {
+        toggleMenu: {
+            reducer: (state, action) => {
+                let isActive = true;
+                if (state.activeMenu === action.payload.selectedMenuName) {
+                    action.payload.selectedMenuName = "";
+                    isActive = false;
+                }
+                state.activeMenu = action.payload.selectedMenuName;
+                state.isActive = isActive;
+            },
+            prepare: (selectedMenuName) => {
+                return { payload: { selectedMenuName } };
+            },
+        },
+    },
+});
 
-export const { toggleMenu } = MenuSlice.actions
+export const { toggleMenu } = MenuSlice.actions;
 
-export default MenuSlice.reducer
+export default MenuSlice.reducer;

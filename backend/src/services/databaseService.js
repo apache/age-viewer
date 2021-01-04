@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-const sessionManager = require('./sessionService');
 const AgensGraphRepository = require('../models/agensgraph/agensGraphRepository');
-
 class ConnectorService {
     constructor() {}
 

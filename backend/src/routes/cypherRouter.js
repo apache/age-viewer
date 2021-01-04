@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const express = require("express");
-const DatabaseController = require('../controllers/databaseController')
-const router = express.Router();
-const databaseController = new DatabaseController();
 
-// Get connection status
-router.get("/", databaseController.getStatus)
-router.post("/connect", databaseController.connectDatabase)
-router.get("/disconnect", databaseController.disconnectDatabase)
-router.get("/meta", databaseController.getMetadata)
+const express = require("express");
+const CypherController = require("../controllers/cypherController");
+
+const router = express.Router();
+const cypherController = new CypherController();
+
+// Execute Cypher Query
+router.post("/", cypherController.executeCypher);
 
 module.exports = router;
