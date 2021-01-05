@@ -1,5 +1,3 @@
-OpenGraphBrowser
-
 # Command
 1. **npm run setup**
    1. Install backend & frontend dependencies
