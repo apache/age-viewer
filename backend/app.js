@@ -21,11 +21,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const { stream } = require('./src/config/winston');
-const cypherRouter = require('./src/controllers/cypherController');
+const cypherRouter = require('./src/routes/cypherRouter');
 const databaseRouter = require('./src/routes/databaseRouter');
 const sessionRouter = require('./src/routes/sessionRouter');
-
-let app = express();
+const app = express();
 
 app.use(express.static(path.join(__dirname, '../../frontend/build')));
 app.get('/', function (req, res) {
@@ -49,9 +48,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/v1/*', sessionRouter);
-app.use('/api/v1/cypher', cypherRouter);
-app.use('/api/v1/db', databaseRouter);
+app.use('/api/v1/cypher', sessionRouter, cypherRouter);
+app.use('/api/v1/db', sessionRouter, databaseRouter);
 app.use(errorHandler);
 
 process.on('uncaughtException', function (exception) {
