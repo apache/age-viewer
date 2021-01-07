@@ -17,7 +17,7 @@
 import React, {useState} from 'react';
 import { Badge } from 'react-bootstrap'
 import uuid from 'react-uuid'
-import { updateLabelColor, updateNodeLabelSize, updateEdgeLabelSize, updateLabelCaption } from '../../../features/cypher/CypherUtil'
+import { updateLabelColor, updateNodeLabelSize, updateEdgeLabelSize, updateLabelCaption } from '../../features/cypher/CypherUtil'
 
 const CypherResultCytoscapeFooter = ({ footerData, edgeLabelColors, nodeLabelColors, nodeLabelSizes, edgeLabelSizes, colorChange, sizeChange, captionChange, layoutChange }) => {
   const [footerExpanded, setFooterExpanded] = useState(false)

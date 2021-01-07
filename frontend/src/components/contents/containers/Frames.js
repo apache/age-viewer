@@ -21,7 +21,8 @@ const mapStateToProps = (state)  => {
     return {
         frameList: state.frames,
         queryResult : state.cypher.queryResult,
-        database: state.database
+        database: state.database,
+        maxNumOfFrames: state.setting.maxNumOfFrames
     }
 }
 

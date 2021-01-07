@@ -19,7 +19,7 @@ import {useDispatch} from 'react-redux'
 import EditorContainer from '../containers/Editor'
 import FramesContainer from '../containers/Frames'
 
-const Contents = ({ database, isActive, getConnectionStatus, getMetaData }) => {
+const Contents = ({ database, isActive, getConnectionStatus, getMetaData, getMetaChartData }) => {
     const dispatch = useDispatch();
 
     if (database.status === 'init') {
@@ -27,6 +27,7 @@ const Contents = ({ database, isActive, getConnectionStatus, getMetaData }) => {
         dispatch(() => {getConnectionStatus().then((response) => {
             if (response.type === 'database/getConnectionStatus/fulfilled'){
                 getMetaData()
+                getMetaChartData()
             }
         })})
     }

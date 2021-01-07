@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-import React, {useState}  from 'react';
+import React, {useState, useRef}  from 'react';
 import {useDispatch} from 'react-redux'
 import uuid from 'react-uuid'
 import AlertContainers from '../../alert/containers/AlertContainers'
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer'
 
-const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery, query }) => {
+const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery, setCommand, addCommandHistory }) => {
     const dispatch = useDispatch();
     const [reqString, setReqString] = useState()
-    const clearReqString = () => (setReqString(''));
+    const codeMirrorRef = useRef()
+    const resetCodeMirror = () => {
+        codeMirrorRef.current.resetReqString()
+        //codeMirrorRef.current.resetReqString()
+    }
 
     const onClick = () => {
         const refKey = uuid()
@@ -64,7 +68,7 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
         } else {
             alert("Sorry, I Can't understand your command")
         }
-        clearReqString()
+        dispatch(() => addCommandHistory(reqString))
     };
 
     const alerts = alertList.map((alert) => {
@@ -77,12 +81,12 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
             <div className="container-fluid editor-area card-header">
                 <div className="input-group">
                     <div className="form-control col-11" style={{padding:'0px'}}>
-                    <CodeMirror onClick={onClick} setReqString={setReqString}/>
+                    <CodeMirror onClick={onClick} setReqString={setReqString} forwardedRef={codeMirrorRef} />
                     </div>
                     <div className="input-group-append ml-auto" id="editor-buttons">
                         <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-star-o fa-lg"
                                 aria-hidden="true"></span></button>
-                        <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-eraser fa-lg"
+                        <button className="frame-head-button btn btn-link" type="button" onClick={() => resetCodeMirror()}><span className="fa fa-eraser fa-lg"
                                 aria-hidden="true"></span></button>
                         <button className="frame-head-button btn btn-link" type="button" onClick={() => onClick()}><span className="fa fa-play-circle-o fa-lg"
                                 aria-hidden="true"></span></button>

@@ -83,5 +83,32 @@ class DatabseController {
             next(error);
         }
     }
+
+    async getMetaChart(req, res, next) {
+        let connectorService = connectorServiceManager.get(req.sessionID);
+        if (connectorService.isConnected()) {
+            let metadata = [];
+            try {
+                graphLabels = await connectorService.getGraphLabels();
+                for (const labels of graphLabels) {
+                    let countResults = await connectorService.getGraphLabelCount(labels.la_name, labels.la_kind)
+                    for (const idx in countResults.rows) {
+                        if (idx > 0) {
+                            labels.la_name = labels.la_name + "-" + idx
+                            labels.la_oid = labels.la_oid + (idx * 0.1)
+                        }
+                        metadata.push(Object.assign({}, labels, countResults.rows[idx]))
+                    }
+                }
+                res.status(200).json(metadata).end();
+            } catch (error) {
+                res.status(500).json(metadata).end();
+            }
+        } else {
+            let error = new Error('Not connected');
+            error.status = 500;
+            next(error);
+        }
+    }
 }
 module.exports = DatabseController;

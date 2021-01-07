@@ -28,8 +28,8 @@ const FrameSlice = createSlice({
         const frameName = action.payload.frameName
 
         let frameProps = {
-          reqString : reqString
-          , key : action.payload.refKey ? action.payload.refKey : uuid()
+          reqString : reqString,
+          key : action.payload.refKey ? action.payload.refKey : uuid()
         }
 
         if (reqString.startsWith(':play')) {

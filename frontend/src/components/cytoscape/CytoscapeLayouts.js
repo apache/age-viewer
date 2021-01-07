@@ -15,6 +15,7 @@
  */
 
 export let initLocation = {}
+
 const coseBilkentLayout = {
     name: 'cose-bilkent',
     idealEdgeLength: 100,
@@ -467,3 +468,5 @@ export const seletableLayouts = {
     avsdf: avsdfLayout,
     spread: spreadLayout
 }
+
+export const defaultLayout = seletableLayouts.coseBilkent

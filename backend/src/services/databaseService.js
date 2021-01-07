@@ -34,6 +34,37 @@ class ConnectorService {
         return metadata;
     }
 
+    async getGraphLabels() {
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let query = [];
+        query.push("SELECT l.labid as la_oid, l.labname as la_name, l.labkind as la_kind");
+        query.push('FROM PG_CATALOG.AG_LABEL l');
+        query.push('INNER JOIN PG_CATALOG.AG_GRAPH g ON g.oid = l.graphid');
+        query.push('WHERE g.graphname = $1');
+        query.push('and l.labname not in (\'ag_vertex\', \'ag_edge\')');
+
+        let queryResult = await agensDatabaseHelper.execute(query.join('\n'), [this.getConnectionInfo().graph]);
+        return queryResult.rows;
+    }
+
+    async getGraphLabelCount(labelName, labelKind) {
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let query = [];
+
+        if (labelKind === 'v') {
+            query.push('SELECT COUNT(1) AS la_count');
+            query.push('FROM ' + this.getConnectionInfo().graph + "." + labelName);
+        } else if (labelKind === 'e') {
+            query.push('SELECT SPLIT_PART(start::text, \'.\', 1) AS la_start, SPLIT_PART("end"::text, \'.\', 1) AS la_end, COUNT(1) AS la_count');
+            query.push('FROM ' + this.getConnectionInfo().graph + "." + labelName);
+            query.push('GROUP BY SPLIT_PART(start::text, \'.\', 1), SPLIT_PART("end"::text, \'.\', 1)');
+        }
+
+        let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
+
+        return queryResult
+    }
+
     async getNodes() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let query = [];

@@ -17,31 +17,28 @@
 import React, { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux'
 import { nodeLabelColors, edgeLabelColors, nodeLabelSizes, edgeLabelSizes } from '../../../features/cypher/CypherUtil'
-import CypherResultCytoscapeChart from './CypherResultCytoscapeChart'
-import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
-import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
-
+import CypherResultCytoscapeChart from '../../cytoscape/CypherResultCytoscapeChart'
+import CypherResultCytoscapeLegend from '../../cytoscape/CypherResultCytoscapeLegend'
+import CypherResultCytoscapeFooter from '../../cytoscape/CypherResultCytoscapeFooter'
 
 const CypherResultCytoscape = forwardRef((props, ref) => {
   const [footerData, setFooterData] = useState({})
   const [legendData, setLegendData] = useState({ edgeLegend: {}, nodeLegend: {} })
   const [elements, setElements] = useState({ edges: [], nodes: [] })
   const [isReloading, setIsReloading] = useState(false)
+  const [maxDataOfGraph, setMaxDataOfGraph] = useState(props.maxDataOfGraph)
   const dispatch = useDispatch()
   const chartRef = useRef()
 
   useEffect(() => {
-
     if (props.data['legend'] !== undefined && Object.keys(props.data['legend']['nodeLegend']).length > 0) {
 
       if (Object.keys(legendData.edgeLegend).length === 0 && Object.keys(legendData.nodeLegend).length === 0) {
         setIsReloading(false)
-        setLegendData(props.data['legend'])
       }
 
-      if (elements.edges.length === 0 && elements.nodes.length === 0) {
-        setElements(props.data.elements)
-      }
+      setLegendData(props.data['legend'])
+      setElements(props.data.elements)
     }
   }, [setIsReloading, elements.edges.length, elements.nodes.length, legendData.edgeLegend, legendData.nodeLegend, props.data])
 
@@ -70,7 +67,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     footerObj.backgroundColor = color.color
     footerObj.fontColor = color.fontColor
     setIsReloading(false)
-    setFooterData(Object.assign({}, footerData, { data: footerObj }))
+    setFooterData(Object.assign(footerData, { data: footerObj }))
 
     if (elementType === 'node') {
       let nodeLegendObj = legendData.nodeLegend
@@ -82,7 +79,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         nodeLegendObj[label]['fontColor'] = color.fontColor
       }
 
-      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
+      setLegendData(Object.assign(legendData, { nodeLegend: nodeLegendObj }))
       chartRef.current.colorChange(elementType, label, color);
 
     } else if (elementType === 'edge') {
@@ -92,7 +89,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         edgeLegendObj[label]['borderColor'] = color.borderColor
         edgeLegendObj[label]['fontColor'] = color.fontColor
       }
-      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
+      setLegendData(Object.assign(legendData, { edgeLegend: edgeLegendObj }))
       chartRef.current.colorChange(elementType, label, color);
     }
 
@@ -163,7 +160,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
 
   return <div className="chart-frame-area">
     <CypherResultCytoscapeLegend onLabelClick={getFooterData} isReloading={isReloading} legendData={legendData} />
-    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} />
+    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} maxDataOfGraph={maxDataOfGraph} />
     <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} layoutChange={layoutChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} edgeLabelColors={edgeLabelColors} nodeLabelColors={nodeLabelColors} />
   </div>
 })

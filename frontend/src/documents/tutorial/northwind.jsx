@@ -61,7 +61,7 @@ export const slides = [
             <p>
                 데이터셋의 Entity-Relationship Diagram은 아래와 같습니다.
             <img
-                    src="images/northwind/Entity-Relationship-Diagram.png"
+                    src="resources/images/northwind/Entity-Relationship-Diagram.png"
                     className="img-responsive"
                     alt="Entity-Relationship-Diagram"
                 />
@@ -92,7 +92,7 @@ export const slides = [
             <p>
                 Northwind 데이터셋의 그래프 모델은 다음과 같습니다.
                 <img
-                    src="images/northwind/Graphmodel.png"
+                    src="resources/images/northwind/Graphmodel.png"
                     className="img-responsive"
                     alt="Graphmodel"
                 />

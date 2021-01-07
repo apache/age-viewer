@@ -17,7 +17,7 @@
 import React, {useState} from 'react'
 import {Collapse} from 'react-bootstrap'
 
-const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame,removeFrame, pinFrame, addAlert, getMetaData}) => {
+const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame,removeFrame, pinFrame, addAlert, getMetaData, getMetaChartData}) => {
     const [formData, setFormData] = useState({})
     const [isExpanded, setIsExpanded] = useState(true)
 
@@ -63,31 +63,27 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, a
                         <form>
                             <fieldset className="form-group">
                                 <label htmlFor="host">Connect URL</label>
-                                <input type="text" className="form-control" id="host" name="host" onChange={handleChange}/>
+                                <input type="text" className="form-control" name="host" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
                                 <label htmlFor="port">Connect Port</label>
-                                <input type="number" className="form-control" id="port" name="port" onChange={handleChange}/>
+                                <input type="number" className="form-control" name="port" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
                                 <label htmlFor="database">Database Name</label>
-                                <input type="text" className="form-control" id="database"
-                                    name="database" onChange={handleChange}/>
+                                <input type="text" className="form-control" name="database" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
                                 <label htmlFor="graph">Graph Path</label>
-                                <input type="text" className="form-control" id="graph"
-                                    name="graph" onChange={handleChange}/>
+                                <input type="text" className="form-control" name="graph" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
                                 <label htmlFor="user">User Name</label>
-                                <input type="text" className="form-control" id="user"
-                                    name="user" onChange={handleChange}/>
+                                <input type="text" className="form-control" name="user" onChange={handleChange}/>
                             </fieldset>
                             <fieldset className="form-group">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" className="form-control" id="password"
-                                    name="password" autoComplete="on" onChange={handleChange}/>
+                                <input type="password" className="form-control" name="password" autoComplete="on" onChange={handleChange}/>
                             </fieldset>
 
                         </form>
@@ -96,10 +92,14 @@ const ServerConnectFrame = ({refKey, isPinned, reqString, connectToAgensGraph, a
                                     addAlert('NoticeServerConnected')
                                     trimFrame('ServerConnect')
                                     getMetaData().then((response) => {
-                                        if (response.type === 'database/getMetaData/rejected'){
+                                        if (response.type === 'database/getMetaData/fulfilled'){
+                                            getMetaChartData()
+                                        } 
+                                        else if (response.type === 'database/getMetaData/rejected'){
                                             addAlert('ErrorMetaFail')
                                         }
                                     })
+                                    
                                     addFrame(':server status', 'ServerStatus')
                                 } else if (response.type === 'database/connectToAgensGraph/rejected') {
                                     addAlert('ErrorServerConnectFail', response.error.message)

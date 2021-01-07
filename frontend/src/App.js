@@ -18,7 +18,9 @@ import React from "react";
 import MainPage from "./pages/Main/MainPage";
 
 const App = () => {
-    return <MainPage />;
-};
+    return (
+            <MainPage />
+    );
+}
 
 export default App;

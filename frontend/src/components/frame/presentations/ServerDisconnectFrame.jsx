@@ -18,12 +18,16 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Collapse } from 'react-bootstrap';
 
-const ServerDisconnectFrame = ({ refKey, isPinned, reqString, disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand }) => {
+const ServerDisconnectFrame = ({ refKey, isPinned, reqString, disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand, resetMetaData }) => {
     const [isExpanded, setIsExpanded] = useState(true)
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(() => disconnectToAgensGraph())
+        dispatch(() => disconnectToAgensGraph().then((response)=>{
+            if (response.type === 'database/disconnectToAgensGraph/fulfilled'){
+                resetMetaData()
+            }
+        }))
         /*dispatch(() => addFrame(':server connect'));*/
         /*dispatch(() => addAlert('NoticeServerDisconnected'));*/
     }, [dispatch, disconnectToAgensGraph, addFrame, addAlert])
@@ -61,7 +65,7 @@ const ServerDisconnectFrame = ({ refKey, isPinned, reqString, disconnectToAgensG
                             <p>You are successfully disconnected from Agensgraph.</p>
                         </div>
                         <div className="col-9">
-                            <p>You may run <a href="/#" className="badge badge-light" onClick={(e) => {e.preventDefault(); setCommand(":server connect")}}><span
+                            <p>You may run <a href="/#" className="badge badge-light" onClick={(e) => {setCommand(":server connect")}}><span
                                 className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to establish new connection</p>
                         </div>
                     </div>
