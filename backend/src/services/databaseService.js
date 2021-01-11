@@ -15,7 +15,7 @@
  */
 
 const AgensGraphRepository = require('../models/agensgraph/agensGraphRepository');
-class ConnectorService {
+class DatabaseService {
     constructor() {}
 
     async getMetaData() {
@@ -36,14 +36,20 @@ class ConnectorService {
 
     async getGraphLabels() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let query = [];
-        query.push("SELECT l.labid as la_oid, l.labname as la_name, l.labkind as la_kind");
-        query.push('FROM PG_CATALOG.AG_LABEL l');
-        query.push('INNER JOIN PG_CATALOG.AG_GRAPH g ON g.oid = l.graphid');
-        query.push('WHERE g.graphname = $1');
-        query.push('and l.labname not in (\'ag_vertex\', \'ag_edge\')');
+        let queryResult = {};
+        try {
+            let query = [];
+            query.push("SELECT l.labid as la_oid, l.labname as la_name, l.labkind as la_kind");
+            query.push("FROM PG_CATALOG.AG_LABEL l");
+            query.push("INNER JOIN PG_CATALOG.AG_GRAPH g ON g.oid = l.graphid");
+            query.push("WHERE g.graphname = $1");
+            query.push("and l.labname not in ('ag_vertex', 'ag_edge')");
 
-        let queryResult = await agensDatabaseHelper.execute(query.join('\n'), [this.getConnectionInfo().graph]);
+            queryResult = await agensDatabaseHelper.execute(query.join('\n'), [this.getConnectionInfo().graph]);
+        } catch (error) {
+            throw error;
+        }
+
         return queryResult.rows;
     }
 
@@ -62,7 +68,7 @@ class ConnectorService {
 
         let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
 
-        return queryResult
+        return queryResult.rows;
     }
 
     async getNodes() {
@@ -195,4 +201,4 @@ class ConnectorService {
     }
 }
 
-module.exports = ConnectorService;
+module.exports = DatabaseService;

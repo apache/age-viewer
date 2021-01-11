@@ -47,9 +47,9 @@ app.use(logger('common', { stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-app.use('/api/v1/cypher', sessionRouter, cypherRouter);
-app.use('/api/v1/db', sessionRouter, databaseRouter);
+app.use('/api/v1/*', sessionRouter);
+app.use('/api/v1/cypher', cypherRouter);
+app.use('/api/v1/db', databaseRouter);
 app.use(errorHandler);
 
 process.on('uncaughtException', function (exception) {
