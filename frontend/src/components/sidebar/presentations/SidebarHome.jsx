@@ -148,15 +148,7 @@ const ConnectedText =({userName, roleName}) => (
 
 const DBMSText =({dbname, graph}) => (
     <div>
-        <h6>
-            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
-                <SubLabelRight label="Version :" classes="col-sm-6"></SubLabelRight>
-                <SubLabelLeft label="-" classes="col-sm-6"></SubLabelLeft>
-            </div>
-            <div style={{display: 'flex', flexWrap: 'wrap'}}>      
-                <SubLabelRight label="Edition :" classes="col-sm-6"></SubLabelRight>
-                <SubLabelLeft label="-" classes="col-sm-6"></SubLabelLeft>
-            </div>
+        <h6>            
             <div style={{display: 'flex', flexWrap: 'wrap'}}>      
                 <SubLabelRight label="Databases :" classes="col-sm-6"></SubLabelRight>
                 <SubLabelLeft label={dbname} classes="col-sm-6"></SubLabelLeft>

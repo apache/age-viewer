@@ -254,6 +254,7 @@ const generateElements = (nodeLegend, edgeLegend, nodes, edges, alias, val, isNe
     if (val['start'] && val['end']) {
         if (!edgeLegend.hasOwnProperty(labelName)) { edgeLegend[labelName] = Object.assign({ size: getEdgeSize(labelName), caption: getCaption('edge', val) }, getEdgeColor(labelName)) }
         if (!edgelabelCaptions.hasOwnProperty(labelName)) { edgelabelCaptions[labelName] = 'label' }
+        if (!val.properties.hasOwnProperty(edgeLegend.caption)) { edgeLegend[labelName].caption = getCaption('edge', val) }
         edges.push(
             {
                 group: 'edges'
@@ -276,6 +277,7 @@ const generateElements = (nodeLegend, edgeLegend, nodes, edges, alias, val, isNe
     } else {
         if (!nodeLegend.hasOwnProperty(labelName)) { nodeLegend[labelName] = Object.assign({ size: getNodeSize(labelName), caption: getCaption('node', val) }, getNodeColor(labelName)) }
         if (!nodelabelCaptions.hasOwnProperty(labelName)) { nodelabelCaptions[labelName] = 'gid' }
+        if (!val.properties.hasOwnProperty(nodeLegend.caption)) { nodeLegend[labelName].caption = getCaption('node', val) }
         nodes.push(
             {
                 group: 'nodes'
