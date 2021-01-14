@@ -37,7 +37,7 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
 
     useEffect(() => {
         //dispatch(() => executeCypherQuery([refKey, reqString]));
-        // setZoomRate(chartAreaRef.current.getCy().zoom())
+        setZoomRate(chartAreaRef.current.getCy().zoom())
     }, [refKey, reqString, dispatch, chartAreaRef])
 
 
@@ -47,10 +47,10 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
         const ref = chartAreaRef.current
         window.setTimeout(resize, 500)
         function resize() {
-            // ref.getCy().resize()
-            // ref.getCy().zoom({ level: zoomRate, position: { x: 0, y: 0 } })
-            // ref.getCy().zoomingEnabled(!cyZoomingEnabled)
-            // ref.getCy().userZoomingEnabled(!cyZoomingEnabled)
+            ref.getCy().resize()
+            ref.getCy().zoom({ level: zoomRate, position: { x: 0, y: 0 } })
+            ref.getCy().zoomingEnabled(!cyZoomingEnabled)
+            ref.getCy().userZoomingEnabled(!cyZoomingEnabled)
         }
     }
 
