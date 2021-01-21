@@ -84,11 +84,11 @@ const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCyp
                     <CodeMirror onClick={onClick} setReqString={setReqString} forwardedRef={codeMirrorRef} />
                     </div>
                     <div className="input-group-append ml-auto" id="editor-buttons">
-                        <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-star-o fa-lg"
+                        <button className="frame-head-button btn btn-link" type="button"><span className="far fa-star fa-lg"
                                 aria-hidden="true"></span></button>
-                        <button className="frame-head-button btn btn-link" type="button" onClick={() => resetCodeMirror()}><span className="fa fa-eraser fa-lg"
+                        <button className="frame-head-button btn btn-link" type="button" onClick={() => resetCodeMirror()}><span className="fas fa-eraser fa-lg"
                                 aria-hidden="true"></span></button>
-                        <button className="frame-head-button btn btn-link" type="button" onClick={() => onClick()}><span className="fa fa-play-circle-o fa-lg"
+                        <button className="frame-head-button btn btn-link" type="button" onClick={() => onClick()}><span className="far fa-play-circle fa-lg"
                                 aria-hidden="true"></span></button>
                     </div>
                 </div>

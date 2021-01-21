@@ -39,7 +39,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
                 <Alert.Heading>Database Disconnected</Alert.Heading>
                 <p>
                 Database is Disconnected. You may use <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server connect")}><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connect</a> to
+                        className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>:server connect</a> to
                 estableish connection. There's a graph waiting for you.
                 </p>
             </Alert>
@@ -51,7 +51,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
                 <Alert.Heading>Database Connected</Alert.Heading>
                 <p>
                 Successfully database is connected. You may use <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server status")}><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true" ></span>:server status</a> to
+                        className="far fa-play-circle fa-lg pr-2" aria-hidden="true" ></span>:server status</a> to
                 confirm connected database information.
                 </p>
             </Alert>
@@ -74,7 +74,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
                 <Alert.Heading>No Database Connected</Alert.Heading>
                 <p>
                 You haven't set database connection. You may use <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server connect")}><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true" ></span>:server connect</a> to
+                        className="far fa-play-circle fa-lg pr-2" aria-hidden="true" ></span>:server connect</a> to
                         estableish connection. There's a graph waiting for you.
                 </p>
                 {errorMessage}
@@ -118,7 +118,7 @@ const SingleAlert = ({alertName, errorMessage, setCommand}) => {
                 <p>
                     You are currently connected to a database. If you want to access to another database, you may execute
                     <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ":server disconnect")}><span
-                        className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true" ></span>:server disconnect</a> to disconnect from current database first.
+                        className="far fa-play-circle fa-lg pr-2" aria-hidden="true" ></span>:server disconnect</a> to disconnect from current database first.
                 </p>
             </Alert>
         );

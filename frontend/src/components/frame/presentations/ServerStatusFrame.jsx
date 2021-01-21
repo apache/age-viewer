@@ -79,7 +79,7 @@ const ServerStatusFrame = ({refKey, isPinned, reqString, serverInfo, removeFrame
                 </div>
                 <div className="col-9">
                     <p>You may run <a href="/#" className="badge badge-light"><span
-                                className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connect</a> to access to Agensgraph.
+                                className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>:server connect</a> to access to Agensgraph.
                                 </p>
                 </div>
             </div>

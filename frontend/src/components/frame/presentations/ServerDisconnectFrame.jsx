@@ -66,7 +66,7 @@ const ServerDisconnectFrame = ({ refKey, isPinned, reqString, disconnectToAgensG
                         </div>
                         <div className="col-9">
                             <p>You may run <a href="/#" className="badge badge-light" onClick={(e) => {setCommand(":server connect")}}><span
-                                className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to establish new connection</p>
+                                className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>:server connection</a> to establish new connection</p>
                         </div>
                     </div>
                 </div>

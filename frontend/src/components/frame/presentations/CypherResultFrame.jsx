@@ -68,11 +68,11 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
                             <Nav variant="pills" className="flex-column graph-card-nav">
 
                                 <Nav.Item>
-                                    <Nav.Link eventKey="table"><span className="fa fa-table" aria-hidden="true"></span><br />Table</Nav.Link>
+                                    <Nav.Link eventKey="table"><span className="fas fa-table" aria-hidden="true"></span><br />Table</Nav.Link>
                                 </Nav.Item>
 
                                 <Nav.Item>
-                                    <Nav.Link eventKey="code"><span className="fa fa-terminal" aria-hidden="true"></span><br />Meta</Nav.Link>
+                                    <Nav.Link eventKey="code"><span className="fas fa-terminal" aria-hidden="true"></span><br />Meta</Nav.Link>
                                 </Nav.Item>
 
                             </Nav>

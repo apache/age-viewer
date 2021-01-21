@@ -60,7 +60,7 @@ const SidebarSetting = ({theme, maxNumOfFrames, maxNumOfHistories, maxDataOfGrap
                 </div>
                 <div className="form-group pt-4">
                     <fieldset className="form-group">
-                    <button type="button" class="btn btn-info btn-sm btn-block" onClick={() => [
+                    <button type="button" className="btn btn-info btn-sm btn-block" onClick={() => [
                         resetSetting()
                     ]}  >Reset Configuration</button>
                     </fieldset>

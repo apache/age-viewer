@@ -49,8 +49,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -76,8 +76,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -111,8 +111,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -159,8 +159,8 @@ export const slides = [
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -328,8 +328,8 @@ FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -379,8 +379,8 @@ CREATE PROPERTY INDEX ON territory(territoryid);`}
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
@@ -429,8 +429,8 @@ CREATE (n)-[r:SOLD]->(m);`}
             </p>
             <hr />
             <p>
-                <small>:help</small> <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>cypher</a>
-                <a href="/#" className="badge badge-light"><span className="fa fa-play-circle-o fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
+                <small>:help</small> <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>cypher</a>
+                <a href="/#" className="badge badge-light"><span className="far fa-play-circle fa-lg pr-2" aria-hidden="true"></span>MATCH</a>
             </p>
         </div>
         <div className="col-sm-9">
