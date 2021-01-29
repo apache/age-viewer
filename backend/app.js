@@ -15,6 +15,7 @@
  */
 
 const express = require('express');
+const cors = require('cors');
 const session = require('express-session');
 const uuid = require('node-uuid');
 const path = require('path');
@@ -26,6 +27,7 @@ const databaseRouter = require('./src/routes/databaseRouter');
 const sessionRouter = require('./src/routes/sessionRouter');
 const app = express();
 
+app.use(cors())
 app.use(express.static(path.join(__dirname, '../../frontend/build')));
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
@@ -47,6 +49,10 @@ app.use(logger('common', { stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.post('/agensviewer', sessionRouter, function(req, res) {
+    console.log(req.sessionID);
+    res.redirect('/');
+});
 app.use('/api/v1/*', sessionRouter);
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
