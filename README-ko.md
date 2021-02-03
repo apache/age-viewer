@@ -1,12 +1,9 @@
 [ENGLISH](./README.md)
 
-[<img src="./doc/images/logo.png" width="180" height="180">](https://bitnine.net/)
-
-
 # AgensViewer &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 AgensViewer는 Agens 제품군의 그래프 시각화 도구입니다.
 
-- Getting Started
+- [Getting Started](#1-getting-started)
 
 
 
@@ -27,7 +24,7 @@ AgensViewer는 Javascript 기반의 프로젝트이며, 종속성으로 Node.js�
 
 #### 초기 개발 환경 구동
 
-AgensViewer는 Database와 통신하기 위하여 Web Browser에서 처리하지 못하는 기능을 수행하기 위하여, Back-end와 Front-end로 구성됩니다.
+AgensViewer는 데이터베이스와의 직접적 통신과 같은 WebBrowser에서 처리하지 못하는 기능을 수행하기 위하여, Back-end와 Front-end로 구성됩니다.
 
 Back-end는 Express.js 기반으로 Database의 Connection을 관리하고, Front-end에서 발생하는 이벤트를 처리하도록 개발되어 있으며, Front-end는 React.js 기반으로 사용자에게 렌더링 하는 것에 초점이 이루어져 있습니다.
 
