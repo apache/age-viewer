@@ -1,3 +1,5 @@
+[한국어](./README-ko.md)
+
 # Command
 1. **npm run setup**
    1. Install backend & frontend dependencies
