@@ -35,4 +35,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = { setLabels }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CypherResultCytoscape);
+export default connect(mapStateToProps, mapDispatchToProps, null ,{ forwardRef: true })(CypherResultCytoscape);

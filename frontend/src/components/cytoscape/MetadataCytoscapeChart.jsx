@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import cytoscape from 'cytoscape';
 import COSEBilkent from 'cytoscape-cose-bilkent';
 import cola from 'cytoscape-cola'
@@ -7,9 +7,9 @@ import klay from 'cytoscape-klay'
 import euler from 'cytoscape-euler'
 import avsdf from 'cytoscape-avsdf'
 import spread from 'cytoscape-spread'
-import { defaultLayout } from './CytoscapeLayouts'
-import { stylesheet } from './CytoscapeStyleSheet'
-import { conf } from './CytoscapeConfig'
+import {defaultLayout} from './CytoscapeLayouts'
+import {stylesheet} from './CytoscapeStyleSheet'
+import {conf} from './CytoscapeConfig'
 
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
@@ -22,17 +22,17 @@ cytoscape.use(spread);
 class CytoscapeComponent extends Component {
   constructor(props) {
     super(props);
+    this.cyelement = null;
     this.cy = ''
     this.menu = ''
   }
 
   componentDidMount() {
-    conf.container = this.refs.cyelement;
-    conf.pan = { x: this.refs.cyelement.offsetWidth / 3, y: 50 } 
+    conf.container = this.cyelement;
+    conf.pan = { x: this.cyelement.offsetWidth / 3, y: 50 }
     conf.style = stylesheet
     conf.layout = defaultLayout
-    let initCy = cytoscape(conf);
-    this.cy = initCy
+    this.cy = cytoscape(conf)
   }
 
   handleUserAction(props, areNewElements) {
@@ -92,7 +92,7 @@ class CytoscapeComponent extends Component {
   }
 
   render() {
-    return <div className="chart-area metachart-area" ref="cyelement" />
+    return <div className="chart-area metachart-area" ref={el => this.cyelement = el} />
   }
 }
 
