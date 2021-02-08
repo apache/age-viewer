@@ -58,14 +58,14 @@ app.use('/agensviewer', sessionRouter, agcloudRouter);
 app.use('/api/v1/*', sessionRouter);
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
-app.use(errorHandler);
+
+// Error Handler
+app.use(function(err, req, res, next) {
+    res.status(err.status).json({ message: err.message });
+});
 
 process.on('uncaughtException', function (exception) {
     console.log(exception);
 });
-
-function errorHandler(err, req, res, next) {
-    res.status(err.status).json({ message: err.message }).end();
-}
 
 module.exports = app;

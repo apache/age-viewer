@@ -18,21 +18,15 @@ const winston = require('winston');
 const logger = winston.createLogger();
 
 class AgcloudController {
-
     async connectDatabase(req, res, next) {
         let databaseService = sessionService.get(req.sessionID);
         if (databaseService.isConnected() || !req.body) {
             res.redirect('/');
         } else {
-            try {
-                await databaseService.connectDatabase(req.body);
-                res.redirect('/');
-            } catch (err) {
-                let error = new Error(err.message);
-                error.status = 500;
-                next(error);
-            }
+            await databaseService.connectDatabase(req.body);
+            res.redirect('/');
         }
     }
 }
+
 module.exports = AgcloudController;

@@ -20,7 +20,9 @@ const CypherController = require("../controllers/cypherController");
 const router = express.Router();
 const cypherController = new CypherController();
 
+const {wrap} = require('../common/Routes');
+
 // Execute Cypher Query
-router.post("/", cypherController.executeCypher);
+router.post("/", wrap(cypherController.executeCypher));
 
 module.exports = router;

@@ -20,7 +20,9 @@ const AgcloudController = require("../controllers/agcloudController");
 const router = express.Router();
 const agcloudController = new AgcloudController();
 
+const {wrap} = require('../common/Routes');
+
 // Execute Cypher Query
-router.post("/", agcloudController.connectDatabase)
+router.post("/", wrap(agcloudController.connectDatabase));
 
 module.exports = router;

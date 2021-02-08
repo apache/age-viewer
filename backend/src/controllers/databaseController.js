@@ -15,24 +15,16 @@
  */
 const sessionService = require('../services/sessionService');
 const winston = require('winston');
-const logger = winston.createLogger();
 
 class DatabseController {
 
     async connectDatabase(req, res, next) {
         let databaseService = sessionService.get(req.sessionID);
-        if (databaseService.isConnected()) {
-            res.status(200).json(databaseService.getConnectionInfo()).end();
-        } else {
-            try {
-                await databaseService.connectDatabase(req.body);
-                res.status(200).json(databaseService.getConnectionInfo()).end();
-            } catch (err) {
-                let error = new Error(err.message);
-                error.status = 500;
-                next(error);
-            }
+        if(!databaseService.isConnected()){
+            await databaseService.connectDatabase(req.body);
         }
+        const connectionInfo = databaseService.getConnectionInfo();
+        res.status(200).json(connectionInfo).end();
     }
 
     async disconnectDatabase(req, res, next) {
@@ -41,9 +33,9 @@ class DatabseController {
             let isDisconnect = await databaseService.disconnectDatabase();
 
             if (isDisconnect) {
-                res.status(200).json({ msg: 'Disconnect Successful' }).end();
+                res.status(200).json({msg: 'Disconnect Successful'}).end();
             } else {
-                res.status(500).json({ msg: 'Already Disconnected' }).end();
+                res.status(500).json({msg: 'Already Disconnected'}).end();
             }
         } else {
             let error = new Error('Not connected');
@@ -55,14 +47,8 @@ class DatabseController {
     async getStatus(req, res, next) {
         let databaseService = sessionService.get(req.sessionID);
         if (databaseService.isConnected()) {
-            try {
-                await databaseService.getConnectionStatus();
-                res.status(200).json(databaseService.getConnectionInfo()).end();
-            } catch (err) {
-                let error = new Error(err.message);
-                error.status = 500;
-                next(error);
-            }
+            await databaseService.getConnectionStatus();
+            res.status(200).json(databaseService.getConnectionInfo()).end();
         } else {
             let error = new Error('Not connected');
             error.status = 500;

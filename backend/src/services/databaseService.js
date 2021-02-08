@@ -15,11 +15,14 @@
  */
 
 const AgensGraphRepository = require('../models/agensgraph/agensGraphRepository');
+
 class DatabaseService {
-    constructor() {}
+    constructor() {
+        this._agensDatabaseHelper = null;
+    }
 
     async getMetaData() {
-        let metadata = new Object();
+        let metadata = {};
         try {
             let connectionInfo = this.getConnectionInfo();
             metadata.nodes = await this.getNodes();
@@ -130,13 +133,11 @@ class DatabaseService {
             agensDatabaseHelper = this._agensDatabaseHelper;
         }
 
-        try {
-            await agensDatabaseHelper.isHealth();
-            return true;
-        } catch(err) {
+        const isHealth = await agensDatabaseHelper.isHealth();
+        if (isHealth === false) {
             this._agensDatabaseHelper = null;
-            throw err;
         }
+        return isHealth;
     }
 
     async disconnectDatabase() {
@@ -158,7 +159,7 @@ class DatabaseService {
 
     async getConnectionStatus() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        if(agensDatabaseHelper == null) {
+        if (agensDatabaseHelper == null) {
             return false;
         }
 
@@ -171,6 +172,8 @@ class DatabaseService {
     }
 
     getConnectionInfo() {
+        if(this.isConnected() === false)
+            throw new Error("Not connected");
         return this._agensDatabaseHelper.getConnectionInfo();
     }
 
@@ -182,7 +185,7 @@ class DatabaseService {
         return this._agensDatabaseHelper;
     }
 
-    convertEdge({ label, id, start, end, props }) {
+    convertEdge({label, id, start, end, props}) {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,
@@ -192,7 +195,7 @@ class DatabaseService {
         };
     }
 
-    convertVertex({ label, id, props }) {
+    convertVertex({label, id, props}) {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,

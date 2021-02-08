@@ -18,11 +18,12 @@ const DatabaseController = require('../controllers/databaseController')
 const router = express.Router();
 const databaseController = new DatabaseController();
 
+const {wrap} = require('../common/Routes');
 // Get connection status
-router.get("/", databaseController.getStatus)
-router.post("/connect", databaseController.connectDatabase)
-router.get("/disconnect", databaseController.disconnectDatabase)
-router.get("/meta", databaseController.getMetadata)
-router.get("/metaChart", databaseController.getMetaChart)
+router.get("/", wrap(databaseController.getStatus));
+router.post("/connect", wrap(databaseController.connectDatabase));
+router.get("/disconnect", wrap(databaseController.disconnectDatabase));
+router.get("/meta", wrap(databaseController.getMetadata));
+router.get("/metaChart", wrap(databaseController.getMetaChart));
 
 module.exports = router;

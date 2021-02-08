@@ -17,7 +17,7 @@
 const ag = require('agensgraph');
 
 class AgensGraphRepository {
-    constructor({ host, port, database, graph, user, password } = {}) {
+    constructor({host, port, database, graph, user, password} = {}) {
         this._host = host;
         this._port = port;
         this._database = database;
@@ -28,9 +28,8 @@ class AgensGraphRepository {
 
     // Check connection status
     async isHealth() {
-        let result = false;
-        if (this.getPoolConnectionInfo() == null) {
-            return result;
+        if (this.getPoolConnectionInfo() === null) {
+            return false;
         }
 
         let client = null;
@@ -38,12 +37,10 @@ class AgensGraphRepository {
             client = await this.getConnection();
             await client.query(`set graph_path = ${this._graph}`);
             client.release();
-
-            result = true;
         } catch (err) {
-            console.error('isHealth() Error Occurred!!!: ', err.message);
-            throw err;
+            return false;
         }
+        return true;
     }
 
     // Execute cypher query
@@ -125,7 +122,7 @@ class AgensGraphRepository {
      */
     getConnectionInfo() {
         if (!this._host || !this._port || !this._database) {
-            return null;
+            throw new Error("Not connected");
         }
         return {
             host: this._host,
