@@ -120,17 +120,17 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
 
     const setIconForIsExpanded = (isExpanded) => {
         if (isExpanded) {
-            return <span className="fas fa-angle-up fa-lg" aria-hidden="true"></span>
+            return <span className="fas fa-angle-up fa-lg" aria-hidden="true"/>
         } else {
-            return <span className="fas fa-angle-down fa-lg" aria-hidden="true"></span>
+            return <span className="fas fa-angle-down fa-lg" aria-hidden="true"/>
         }
     }
 
     const setIconForIsFullscreen = () => {
         if (isFullScreen) {
-            return <span className="fas fa-compress-alt fa-lg" aria-hidden="true" onClick={() => expandFrame()}></span>
+            return <span className="fas fa-compress-alt fa-lg" aria-hidden="true"/>
         } else {
-            return <span className="fas fa-expand-alt fa-lg" aria-hidden="true" onClick={() => expandFrame()}></span>
+            return <span className="fas fa-expand-alt fa-lg" aria-hidden="true"/>
         }
     }
 
@@ -139,22 +139,22 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
             <div className="card-header">
                 <div className="d-flex card-title text-muted">
                     <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <DropdownButton bsPrefix="frame-head-button btn btn-link" title={<i className="fas fa-download fa-lg"></i>}>
+                    <DropdownButton bsPrefix="frame-head-button btn btn-link" title={<i className="fas fa-download fa-lg"/>}>
                         <Dropdown.Item onClick={() => downloadPng()}>Save as PNG</Dropdown.Item>
                         <Dropdown.Item onClick={() => downloadJson()}>Save as JSON</Dropdown.Item>
                         <Dropdown.Item onClick={() => downloadCsv()}>Save as CSV</Dropdown.Item>
                     </DropdownButton>
-                    <button className={"frame-head-button btn btn-link px-3" + (isFullScreen ? " selected " : "")}>
+                    <button className={"frame-head-button btn btn-link px-3" + (isFullScreen ? " selected " : "")} onClick={() => expandFrame()}>
                         {setIconForIsFullscreen(isExpanded)}</button>
-                    <button className="frame-head-button btn btn-link px-3">
-                        <span className="fas fa-sync fa-lg" aria-hidden="true" onClick={() => refreshFrame()}></span></button>
-                    <button className={"frame-head-button btn btn-link px-3" + (isPinned ? " selected " : "")} onClick={() => pinFrame(refKey)}><span className="fas fa-paperclip fa-lg"
-                        aria-hidden="true"></span></button>
+                    <button className="frame-head-button btn btn-link px-3" onClick={() => refreshFrame()}>
+                        <span className="fas fa-sync fa-lg" aria-hidden="true" /></button>
+                    <button className={"frame-head-button btn btn-link px-3" + (isPinned ? " selected " : "")} onClick={() => pinFrame(refKey)}>
+                        <span className="fas fa-paperclip fa-lg" aria-hidden="true"/></button>
                     <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
                         aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
                         {setIconForIsExpanded(isExpanded)}</button>
-                    <button className="frame-head-button btn btn-link pl-3">
-                        <span className="fas fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
+                    <button className="frame-head-button btn btn-link pl-3" onClick={() => removeFrame(refKey)}>
+                        <span className="fas fa-times fa-lg" aria-hidden="true"/></button>
                 </div>
             </div>
             <Collapse in={isExpanded}>
@@ -165,26 +165,26 @@ const CypherResultFrame = ({ refKey, isPinned, reqString, removeFrame, pinFrame 
                             <Nav variant="pills" className="flex-column graph-card-nav">
 
                                 <Nav.Item>
-                                    <Nav.Link eventKey="graph"><span className="fas fa-paperclip" aria-hidden="true"></span><br />Graph</Nav.Link>
+                                    <Nav.Link eventKey="graph"><span className="fas fa-paperclip" aria-hidden="true"/><br />Graph</Nav.Link>
                                 </Nav.Item>
 
                                 <Nav.Item>
-                                    <Nav.Link eventKey="table"><span className="fas fa-table" aria-hidden="true"></span><br />Table</Nav.Link>
+                                    <Nav.Link eventKey="table"><span className="fas fa-table" aria-hidden="true"/><br />Table</Nav.Link>
                                 </Nav.Item>
 
                                 <Nav.Item>
-                                    <Nav.Link eventKey="text"><span className="fas fa-font" aria-hidden="true"></span><br />Text</Nav.Link>
+                                    <Nav.Link eventKey="text"><span className="fas fa-font" aria-hidden="true"/><br />Text</Nav.Link>
                                 </Nav.Item>
 
                                 <Nav.Item>
-                                    <Nav.Link eventKey="code"><span className="fas fa-terminal" aria-hidden="true"></span><br />Meta</Nav.Link>
+                                    <Nav.Link eventKey="code"><span className="fas fa-terminal" aria-hidden="true"/><br />Meta</Nav.Link>
                                 </Nav.Item>
 
                             </Nav>
                             <Tab.Content className="graph-card-content container-fluid graph-tabpanel">
 
                                 <Tab.Pane eventKey="graph" style={{ height: '100%' }}>
-                                    <CypherResultCytoscapeContainer key={cytoscapeContainerKey} forwardedRef={chartAreaRef} refKey={refKey} isFullScreen={isFullScreen} />
+                                    <CypherResultCytoscapeContainer key={cytoscapeContainerKey} ref={chartAreaRef} refKey={refKey} isFullScreen={isFullScreen} />
                                 </Tab.Pane>
 
                                 <Tab.Pane eventKey="table" style={{height: '450px'}}>
