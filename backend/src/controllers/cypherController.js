@@ -18,23 +18,16 @@ const CypherService = require("../services/cypherService");
 const sessionService = require("../services/sessionService");
 
 class CypherController {
-    async executeCypher(req, res, next) {
+    async executeCypher(req, res) {
         let connectorService = sessionService.get(req.sessionID);
         if (connectorService.isConnected()) {
-            try {
-                let cypherService = new CypherService(
-                    connectorService.agensDatabaseHelper
-                );
-                let data = await cypherService.executeCypher(req.body.cmd);
-                res.status(200).json(data).end();
-            } catch (err) {
-                err.status = 500;
-                next(err);
-            }
+            let cypherService = new CypherService(
+                connectorService.agensDatabaseHelper
+            );
+            let data = await cypherService.executeCypher(req.body.cmd);
+            res.status(200).json(data).end();
         } else {
-            let error = new Error("Not connected");
-            error.status = 500;
-            next(error);
+            throw new Error("Not connected");
         }
     }
 }

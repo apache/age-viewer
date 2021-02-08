@@ -61,7 +61,7 @@ app.use('/api/v1/db', databaseRouter);
 
 // Error Handler
 app.use(function(err, req, res, next) {
-    res.status(err.status).json({ message: err.message });
+    res.status(err.status || 500).json({ message: err.message });
 });
 
 process.on('uncaughtException', function (exception) {

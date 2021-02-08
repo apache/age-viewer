@@ -20,7 +20,7 @@ class DatabseController {
 
     async connectDatabase(req, res, next) {
         let databaseService = sessionService.get(req.sessionID);
-        if(!databaseService.isConnected()){
+        if (!databaseService.isConnected()) {
             await databaseService.connectDatabase(req.body);
         }
         const connectionInfo = databaseService.getConnectionInfo();
@@ -38,9 +38,7 @@ class DatabseController {
                 res.status(500).json({msg: 'Already Disconnected'}).end();
             }
         } else {
-            let error = new Error('Not connected');
-            error.status = 500;
-            next(error);
+            throw new Error('Not connected');
         }
     }
 
@@ -50,9 +48,7 @@ class DatabseController {
             await databaseService.getConnectionStatus();
             res.status(200).json(databaseService.getConnectionInfo()).end();
         } else {
-            let error = new Error('Not connected');
-            error.status = 500;
-            next(error);
+            throw new Error('Not connected');
         }
     }
 
@@ -67,9 +63,7 @@ class DatabseController {
                 res.status(500).json(metadata).end();
             }
         } else {
-            let error = new Error('Not connected');
-            error.status = 500;
-            next(error);
+            throw new Error('Not connected');
         }
     }
 
@@ -94,10 +88,9 @@ class DatabseController {
                 res.status(500).json(metadata).end();
             }
         } else {
-            let error = new Error('Not connected');
-            error.status = 500;
-            next(error);
+            throw new Error('Not connected');
         }
     }
 }
+
 module.exports = DatabseController;
