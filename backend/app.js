@@ -32,9 +32,9 @@ app.use(cors({
     origin: true,
     credentials: true
 }))
-app.use(express.static(path.join(__dirname, '../../frontend/build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
 app.use(
