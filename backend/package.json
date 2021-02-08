@@ -3,12 +3,12 @@
     "version": "0.4.0",
     "private": true,
     "scripts": {
-        "test": "mocha",
-        "test:connector": "mocha --exit --timeout 10000 ./test/connector.api.test.js",
-        "test:metachart": "mocha --exit --timeout 10000 ./test/meta.api.test.js",
-        "test:cypher": "mocha --exit --timeout 10000 ./test/cypher.api.test.js",
-        "test:session": "mocha --exit --timeout 10000 ./test/session.api.test.js",
-        "test:query": "mocha --exit --timeout 10000 ./test/cypher.service.test.js",
+        "test": "mocha -r @babel/register --exit --timeout 100000",
+        "test:connector": "mocha -r @babel/register --exit --timeout 10000 ./test/connector.api.test.js",
+        "test:metachart": "mocha -r @babel/register --exit --timeout 10000 ./test/meta.api.test.js",
+        "test:cypher": "mocha -r @babel/register --exit --timeout 10000 ./test/cypher.api.test.js",
+        "test:session": "mocha -r @babel/register --exit --timeout 10000 ./test/session.api.test.js",
+        "test:query": "mocha -r @babel/register --exit --timeout 10000 ./test/cypher.service.test.js",
         "start": "babel-node ./bin/www"
     },
     "dependencies": {
@@ -31,12 +31,11 @@
         "@babel/cli": "^7.12.13",
         "@babel/core": "^7.12.13",
         "@babel/node": "^7.12.13",
+        "@babel/plugin-transform-runtime": "^7.12.15",
         "@babel/preset-env": "^7.12.13",
+        "@babel/register": "^7.12.13",
         "mocha": "^8.2.1",
         "supertest": "^6.0.1",
         "supertest-session": "^4.1.0"
-    },
-    "babel": {
-        "presets": ["@babel/env"]
     }
 }
