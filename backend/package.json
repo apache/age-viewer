@@ -9,7 +9,7 @@
         "test:cypher": "mocha --exit --timeout 10000 ./test/cypher.api.test.js",
         "test:session": "mocha --exit --timeout 10000 ./test/session.api.test.js",
         "test:query": "mocha --exit --timeout 10000 ./test/cypher.service.test.js",
-        "start": "node ./bin/www"
+        "start": "babel-node ./bin/www"
     },
     "dependencies": {
         "agensgraph": "git+https://github.com/bitnine-oss/agensgraph-nodejs.git",
@@ -28,8 +28,15 @@
         "winston-daily-rotate-file": "^4.5.0"
     },
     "devDependencies": {
+        "@babel/cli": "^7.12.13",
+        "@babel/core": "^7.12.13",
+        "@babel/node": "^7.12.13",
+        "@babel/preset-env": "^7.12.13",
         "mocha": "^8.2.1",
         "supertest": "^6.0.1",
         "supertest-session": "^4.1.0"
+    },
+    "babel": {
+        "presets": ["@babel/env"]
     }
 }
