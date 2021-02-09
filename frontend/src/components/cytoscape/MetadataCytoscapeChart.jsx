@@ -80,7 +80,12 @@ class CytoscapeComponent extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.elements.nodes.length === 0) {
-      this.cy.add(nextProps.elements)
+      try{
+        // todo fix MetaData query throws something wrong
+        this.cy.add(nextProps.elements)
+      }catch (e) {
+        console.error(e);
+      }
       this.cy.layout(defaultLayout).run()
 
       this.handleUserAction(nextProps, false)
