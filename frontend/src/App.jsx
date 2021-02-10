@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import MainPage from './pages/Main/MainPage';
 
-import { Provider } from "react-redux";
-import store from "./app/store";
-
-import App from "./App";
-import "./index.css";
-
-ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById("root")
+const App = () => (
+  <MainPage />
 );
+
+export default App;

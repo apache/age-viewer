@@ -15,8 +15,8 @@
  */
 
 import React, { Component } from 'react';
-import { Badge } from 'react-bootstrap'
-import uuid from 'react-uuid'
+import { Badge } from 'react-bootstrap';
+import uuid from 'react-uuid';
 
 class CypherResultCytoscapeLegend extends Component {
   constructor(props) {
@@ -25,8 +25,8 @@ class CypherResultCytoscapeLegend extends Component {
       nodeBadges: new Map(),
       edgeBadges: new Map(),
       nodeLegendExpanded: false,
-      edgeLegendExpanded: false
-    }
+      edgeLegendExpanded: false,
+    };
   }
 
   componentDidMount() {
@@ -37,45 +37,107 @@ class CypherResultCytoscapeLegend extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let newNodeBadges = this.state.nodeBadges
-    let newEdgeBadges = this.state.edgeBadges
+    let newNodeBadges = this.state.nodeBadges;
+    let newEdgeBadges = this.state.edgeBadges;
     if (nextProps.isReloading) {
-      newNodeBadges =  new Map()
-      newEdgeBadges =  new Map()
+      newNodeBadges = new Map();
+      newEdgeBadges = new Map();
     }
 
     for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {
       if (this.props.legendData !== undefined && this.props.legendData.nodeLegend !== undefined) {
-        let isChanged = false
-        for (let [prevLabel, prevLegend] of Object.entries(this.props.legendData.nodeLegend)) {
-          if (label === prevLabel && legend.color !== prevLegend.color) { isChanged = true }
-          else if (label === prevLabel && legend.size !== prevLegend.size) { isChanged = true }
-          else if (label === prevLabel && legend.caption !== prevLegend.caption) { isChanged = true }
+        let isChanged = false;
+        for (const [prevLabel, prevLegend] of Object.entries(this.props.legendData.nodeLegend)) {
+          if (label === prevLabel && legend.color !== prevLegend.color) {
+            isChanged = true;
+          } else if (label === prevLabel && legend.size !== prevLegend.size) {
+            isChanged = true;
+          } else if (label === prevLabel && legend.caption !== prevLegend.caption) {
+            isChanged = true;
+          }
         }
 
-        if (isChanged) { nextProps.onLabelClick({ type: 'labels', data: { type: 'node', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } }) }
+        if (isChanged) {
+          nextProps.onLabelClick({
+            type: 'labels',
+            data: {
+              type: 'node',
+              backgroundColor: legend.color,
+              fontColor: legend.fontColor,
+              size: legend.size,
+              label,
+            },
+          });
+        }
       }
 
-      newNodeBadges.set(label, <Badge className="nodeLabel px-3 py-2 mx-1 my-2" pill key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'node', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } })} style={{ backgroundColor: legend.color, color: legend.fontColor }}>{label}</Badge>)
+      newNodeBadges.set(label, <Badge
+        className="nodeLabel px-3 py-2 mx-1 my-2"
+        pill
+        key={uuid()}
+        onClick={() => nextProps.onLabelClick({
+          type: 'labels',
+          data: {
+            type: 'node',
+            backgroundColor: legend.color,
+            fontColor: legend.fontColor,
+            size: legend.size,
+            label,
+          },
+        })}
+        style={{ backgroundColor: legend.color, color: legend.fontColor }}
+      >
+        {label}
+                               </Badge>);
     }
-
 
     for (const [label, legend] of Object.entries(nextProps.legendData.edgeLegend)) {
       if (this.props.legendData !== undefined && this.props.legendData.edgeLegend !== undefined) {
-          let isChanged = false
-          for (let [prevLabel, prevLegend] of Object.entries(this.props.legendData.edgeLegend)) {
-            if (label === prevLabel && legend.color !== prevLegend.color) { isChanged = true }
-            else if (label === prevLabel && legend.size !== prevLegend.size) { isChanged = true }
-            else if (label === prevLabel && legend.caption !== prevLegend.caption) { isChanged = true }
+        let isChanged = false;
+        for (const [prevLabel, prevLegend] of Object.entries(this.props.legendData.edgeLegend)) {
+          if (label === prevLabel && legend.color !== prevLegend.color) {
+            isChanged = true;
+          } else if (label === prevLabel && legend.size !== prevLegend.size) {
+            isChanged = true;
+          } else if (label === prevLabel && legend.caption !== prevLegend.caption) {
+            isChanged = true;
           }
+        }
 
-          if (isChanged) { nextProps.onLabelClick({ type: 'labels', data: { type: 'edge', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } }) }
+        if (isChanged) {
+          nextProps.onLabelClick({
+            type: 'labels',
+            data: {
+              type: 'edge',
+              backgroundColor: legend.color,
+              fontColor: legend.fontColor,
+              size: legend.size,
+              label,
+            },
+          });
+        }
       }
-      newEdgeBadges.set(label, <Badge className="edgeLabel px-3 py-2 mx-1 my-2" key={uuid()} onClick={() => nextProps.onLabelClick({ type: 'labels', data: { type: 'edge', backgroundColor: legend.color, fontColor: legend.fontColor, size: legend.size, label: label } })} style={{ backgroundColor: legend.color, color: legend.fontColor }}>{label}</Badge>)
+      newEdgeBadges.set(label, <Badge
+        className="edgeLabel px-3 py-2 mx-1 my-2"
+        key={uuid()}
+        onClick={() => nextProps.onLabelClick({
+          type: 'labels',
+          data: {
+            type: 'edge',
+            backgroundColor: legend.color,
+            fontColor: legend.fontColor,
+            size: legend.size,
+            label,
+          },
+        })}
+        style={{ backgroundColor: legend.color, color: legend.fontColor }}
+      >
+        {label}
+                               </Badge>);
     }
 
-    this.setState({nodeBadges : newNodeBadges})
-    this.setState({edgeBadges : newEdgeBadges})
+    this.setState({ nodeBadges: newNodeBadges });
+    this.setState({ edgeBadges: newEdgeBadges });
   }
 
   componentWillUnmount() {
@@ -84,39 +146,48 @@ class CypherResultCytoscapeLegend extends Component {
   componentDidUpdate() {
   }
 
-
   render() {
-    let nodeLedgend = []
-    let edgeLedgend = []
+    const nodeLedgend = [];
+    const edgeLedgend = [];
 
-    this.state.nodeBadges.forEach((value, key, mapObj) => {
-      return nodeLedgend.push(value)
-    })
+    this.state.nodeBadges.forEach((value, key, mapObj) => nodeLedgend.push(value));
 
-    this.state.edgeBadges.forEach((value, key, mapObj) => {
-      return edgeLedgend.push(value)
-    })
+    this.state.edgeBadges.forEach((value, key, mapObj) => edgeLedgend.push(value));
 
-    return <div className="legend-area" style={{ width: '100%' }}>
-      <div className="d-flex nodeLegend">
-        <div className={"mr-auto legends legend " + (this.state.nodeLegendExpanded ? "expandedLegend" : "" )}>
-        {nodeLedgend}
+    return (
+      <div className="legend-area" style={{ width: '100%' }}>
+        <div className="d-flex nodeLegend">
+          <div className={`mr-auto legends legend ${this.state.nodeLegendExpanded ? 'expandedLegend' : ''}`}>
+            {nodeLedgend}
+          </div>
+          <button
+            className="frame-head-button btn btn-link px-3"
+            onClick={() => this.setState({ nodeLegendExpanded: !this.state.nodeLegendExpanded })}
+          >
+            <span
+              className={`fas ${this.state.nodeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
+              aria-hidden="true"
+            />
+          </button>
         </div>
-        <button className="frame-head-button btn btn-link px-3" onClick={() => this.setState({nodeLegendExpanded : !this.state.nodeLegendExpanded})}>
-          <span className={"fas " + ((this.state.nodeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
-        </button>
-      </div>
-      <div className="d-flex edgeLegend">
-        <div className={"mr-auto legends legend " + (this.state.edgeLegendExpanded ? "expandedLegend" : "" )}>
-        {edgeLedgend}
+        <div className="d-flex edgeLegend">
+          <div className={`mr-auto legends legend ${this.state.edgeLegendExpanded ? 'expandedLegend' : ''}`}>
+            {edgeLedgend}
+          </div>
+          <button
+            className="frame-head-button btn btn-link px-3"
+            onClick={() => this.setState({ edgeLegendExpanded: !this.state.edgeLegendExpanded })}
+          >
+            <span
+              className={`fas ${this.state.edgeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
+              aria-hidden="true"
+            />
+          </button>
         </div>
-        <button className="frame-head-button btn btn-link px-3" onClick={() => this.setState({edgeLegendExpanded : !this.state.edgeLegendExpanded})}>
-          <span className={"fas " + ((this.state.edgeLegendExpanded ? "fa-angle-up" : "fa-angle-down" ))} aria-hidden="true" ></span>
-        </button>
-      </div>
 
-    </div>
+      </div>
+    );
   }
 }
-export default CypherResultCytoscapeLegend
 
+export default CypherResultCytoscapeLegend;

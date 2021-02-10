@@ -15,60 +15,136 @@
  */
 
 import React from 'react';
-import {useDispatch} from 'react-redux'
-import { saveToCookie, loadFromCookie } from '../../../features/cookie/CookieUtil'
-import Contents from '../../../components/frame/containers/ContentsFrameContainer'
-import ServerStatus from '../../../components/frame/containers/ServerStatusContainer'
-import ServerConnect from '../../../components/frame/containers/ServerConnectContainer'
-import ServerDisconnect from '../../../components/frame/containers/ServerDisconnectContainer'
-import CypherGraphResult from '../../../components/frame/containers/CypherGraphResultContainers'
-import CypherResult from '../../../components/frame/containers/CypherResultContainers'
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import Contents from '../../frame/containers/ContentsFrameContainer';
+import ServerStatus from '../../frame/containers/ServerStatusContainer';
+import ServerConnect from '../../frame/containers/ServerConnectContainer';
+import ServerDisconnect from '../../frame/containers/ServerDisconnectContainer';
+import CypherGraphResult from '../../frame/containers/CypherGraphResultContainers';
+import CypherResult from '../../frame/containers/CypherResultContainers';
 
+const Frames = ({
+  database,
+  frameList,
+  addFrame,
+  queryResult,
+  maxNumOfFrames,
+}) => {
+  const dispatch = useDispatch();
 
-const Frames = ({ database, frameList, addFrame, queryResult, maxNumOfFrames }) => {
-    const dispatch = useDispatch();
+  if (database.status === 'connected' && frameList.length === 0) {
+    dispatch(() => addFrame(':server status', 'ServerStatus'));
+  }
 
-    if(database.status === 'connected' && frameList.length === 0) {
-        dispatch(() => addFrame(':server status', 'ServerStatus'))
+  if (database.status === 'disconnected') {
+    const serverConnectFrames = frameList.filter((frame) => (frame.frameName.toUpperCase() === 'SERVERCONNECT'));
+    if (serverConnectFrames.length === 0) {
+      dispatch(() => addFrame(':server connect', 'ServerConnect'));
+    }
+  }
+
+  const frames = frameList.map((frame, index) => {
+    if (index > maxNumOfFrames) {
+      return '';
     }
 
-    if (database.status === 'disconnected') {
-        const serverConnectFrames = frameList.filter((frame) => (frame.frameName.toUpperCase() === 'SERVERCONNECT'))
-        if ( serverConnectFrames.length === 0) {
-            dispatch(() => addFrame(':server connect', 'ServerConnect'))
-        }
+    if (frame.frameName === 'Contents') {
+      return (
+        <Contents
+          key={frame.frameProps.key}
+          refKey={frame.frameProps.key}
+          reqString={frame.frameProps.reqString}
+          playTarget={frame.frameProps.playTarget}
+          isPinned={frame.isPinned}
+        />
+      );
     }
+    if (frame.frameName === 'ServerStatus') {
+      return (
+        <ServerStatus
+          key={frame.frameProps.key}
+          refKey={frame.frameProps.key}
+          reqString={frame.frameProps.reqString}
+          isPinned={frame.isPinned}
+        />
+      );
+    }
+    if (frame.frameName === 'ServerConnect') {
+      return (
+        <ServerConnect
+          key={frame.frameProps.key}
+          refKey={frame.frameProps.key}
+          reqString={frame.frameProps.reqString}
+          isPinned={frame.isPinned}
+        />
+      );
+    }
+    if (frame.frameName === 'ServerDisconnect') {
+      return (
+        <ServerDisconnect
+          key={frame.frameProps.key}
+          refKey={frame.frameProps.key}
+          reqString={frame.frameProps.reqString}
+          isPinned={frame.isPinned}
+        />
+      );
+    }
+    if (frame.frameName === 'CypherResultFrame') {
+      if (Object.prototype.hasOwnProperty.call(queryResult, frame.frameProps.key)
+          && queryResult[frame.frameProps.key].command.toUpperCase().match('(ERROR|GRAPH|CREATE|COPY).*')) {
+        return (
+          <CypherResult
+            key={frame.frameProps.key}
+            refKey={frame.frameProps.key}
+            reqString={frame.frameProps.reqString}
+            isPinned={frame.isPinned}
+          />
+        );
+      }
+      return (
+        <CypherGraphResult
+          key={frame.frameProps.key}
+          refKey={frame.frameProps.key}
+          reqString={frame.frameProps.reqString}
+          isPinned={frame.isPinned}
+        />
+      );
+    }
+    return '';
+  });
 
-    const frames = frameList.map((frame, index) => {
-        if (index > maxNumOfFrames) {
-            return
-        }
+  return (
+    <div className="container-fluid frame-area pt-3">
+      {frames}
+    </div>
+  );
+};
 
-        if (frame.frameName === 'Contents') {
-            return <Contents key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} playTarget={frame.frameProps.playTarget} isPinned={frame.isPinned}/>;
-        } else if (frame.frameName === 'ServerStatus') {
-            return <ServerStatus key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
-        } else if (frame.frameName === 'ServerConnect') {
-            return <ServerConnect key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
-        } else if (frame.frameName === 'ServerDisconnect') {
-            return <ServerDisconnect key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
-        } else if (frame.frameName === 'CypherResultFrame') {
-            if (queryResult.hasOwnProperty(frame.frameProps.key) && queryResult[frame.frameProps.key]['command'].toUpperCase().match('(ERROR|GRAPH|CREATE|COPY).*')) {
-                return <CypherResult key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
-            } else {
-                return <CypherGraphResult key={frame.frameProps.key} refKey={frame.frameProps.key} reqString={frame.frameProps.reqString} isPinned={frame.isPinned}/>;
-            }
+Frames.defaultProps = {
+  queryResult: {},
+};
 
-        }
-        return '';
-    });
+Frames.propTypes = {
+  database: PropTypes.shape({
+    status: PropTypes.string.isRequired,
+  }).isRequired,
+  frameList: PropTypes.arrayOf(
+    PropTypes.shape({
+      frameName: PropTypes.string.isRequired,
+      frameProps: PropTypes.shape({
+        reqString: PropTypes.string.isRequired,
+        key: PropTypes.string.isRequired,
+        playTarget: PropTypes.string,
+      }).isRequired,
+      isPinned: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
+  addFrame: PropTypes.func.isRequired,
+  // todo: need to refactoring on management Cypher Results
+  // eslint-disable-next-line react/forbid-prop-types
+  queryResult: PropTypes.any,
+  maxNumOfFrames: PropTypes.number.isRequired,
+};
 
-    return (
-        <div className="container-fluid frame-area pt-3">
-            {frames}
-        </div>
-
-    );
-}
-
-export default Frames
+export default Frames;

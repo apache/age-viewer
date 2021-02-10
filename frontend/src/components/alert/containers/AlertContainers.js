@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-import {connect} from 'react-redux'
-import Alert from '../presentations/Alert'
-import {setCommand} from '../../../features/editor/EditorSlice'
+import { connect } from 'react-redux';
+import Alert from '../presentations/Alert';
+import { setCommand } from '../../../features/editor/EditorSlice';
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-    }
-}
+const mapStateToProps = () => ({
+});
 
-const mapDispatchToProps = { setCommand }
-
+const mapDispatchToProps = { setCommand };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Alert);

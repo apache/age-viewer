@@ -15,29 +15,43 @@
  */
 
 import React from 'react';
-import {useDispatch} from 'react-redux'
-import EditorContainer from '../containers/Editor'
-import FramesContainer from '../containers/Frames'
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import EditorContainer from '../containers/Editor';
+import FramesContainer from '../containers/Frames';
 
-const Contents = ({ database, isActive, getConnectionStatus, getMetaData, getMetaChartData }) => {
-    const dispatch = useDispatch();
+const Contents = ({
+  database, isActive, getConnectionStatus, getMetaData, getMetaChartData,
+}) => {
+  const dispatch = useDispatch();
 
-    if (database.status === 'init') {
+  if (database.status === 'init') {
+    dispatch(() => {
+      getConnectionStatus().then((response) => {
+        if (response.type === 'database/getConnectionStatus/fulfilled') {
+          getMetaData();
+          getMetaChartData();
+        }
+      });
+    });
+  }
 
-        dispatch(() => {getConnectionStatus().then((response) => {
-            if (response.type === 'database/getConnectionStatus/fulfilled'){
-                getMetaData()
-                getMetaChartData()
-            }
-        })})
-    }
+  return (
+    <div id="content" className={isActive ? 'active' : ''}>
+      <EditorContainer />
+      <FramesContainer />
+    </div>
+  );
+};
 
-    return (
-        <div id="content" className={isActive ? "active" : ""}>
-                <EditorContainer />
-                <FramesContainer />
-        </div>
-    );
-}
+Contents.propTypes = {
+  database: PropTypes.shape({
+    status: PropTypes.string.isRequired,
+  }).isRequired,
+  isActive: PropTypes.bool.isRequired,
+  getConnectionStatus: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
+  getMetaChartData: PropTypes.func.isRequired,
+};
 
-export default Contents
+export default Contents;

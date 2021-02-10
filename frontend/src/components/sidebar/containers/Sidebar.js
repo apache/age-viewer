@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import {connect} from 'react-redux'
-import Sidebar from '../presentations/Sidebar'
+import { connect } from 'react-redux';
+import Sidebar from '../presentations/Sidebar';
 
-const mapStateToProps = (state) => {
-    return {
-        activeMenuName: state.navigator.activeMenu,
-        isActive: state.navigator.isActive
-    }
-}
+const mapStateToProps = (state) => ({
+  activeMenuName: state.navigator.activeMenu,
+  isActive: state.navigator.isActive,
+});
 
 /*
 const  mapDispatchToProps = (dispatch) => {
@@ -35,7 +33,7 @@ const  mapDispatchToProps = (dispatch) => {
 }
 */
 
-const mapDispatchToProps = { }
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 

@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import {connect} from 'react-redux'
-import {removeFrame, pinFrame} from '../../../features/frame/FrameSlice'
-import CypherGraphResultFrame from '../presentations/CypherGraphResultFrame'
+import { connect } from 'react-redux';
+import { pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
+import CypherGraphResultFrame from '../presentations/CypherGraphResultFrame';
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
+const mapStateToProps = () => ({
+});
 
-const mapDispatchToProps = { removeFrame, pinFrame }
+const mapDispatchToProps = { removeFrame, pinFrame };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CypherGraphResultFrame);

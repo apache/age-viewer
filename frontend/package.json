@@ -25,6 +25,7 @@
     "cytoscape-spread": "^3.0.0",
     "file-saver": "^2.0.5",
     "json2csv": "^5.0.6",
+    "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-cookies": "^0.1.1",
@@ -60,6 +61,9 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^7.19.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-react": "^7.22.0",
     "webpack-dev-server": "^3.11.0"
   }
 }
