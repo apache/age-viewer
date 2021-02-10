@@ -4,7 +4,7 @@ import { ColoredLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
 const SidebarAbout = ({ releaseDate, version, license }) => (
   <div className="sidebar-setting">
     <div className="sidebar sidebar-header">
-      <h4>About OpenBrowser</h4>
+      <h4>About AGViewer</h4>
     </div>
     <div className="sidebar sidebar-body">
       <div className="form-group">
@@ -21,12 +21,12 @@ const SidebarAbout = ({ releaseDate, version, license }) => (
         />
       </div>
       <div className="form-group pt-4">
-        <label><b>Current OpenBrowser Version</b></label>
+        <label><b>Current AGViewer Version</b></label>
         <ColoredLine />
         <div>
           <h6>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              <SubLabelRight label="OpenBrowser :" classes="col-sm-6" />
+              <SubLabelRight label="AGViewer :" classes="col-sm-6" />
               <SubLabelLeft label={version} classes="col-sm-6" />
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
