@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import React, { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import uuid from 'react-uuid';
 import { ColoredLine, SubLabelRight, SubLabelLeft } from './SidebarComponents';
@@ -65,17 +66,31 @@ const NodeList = ({ nodes, setCommand }) => {
 
   return null;
 };
+NodeList.propTypes = {
+  nodes: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
 
 const NodeItems = ({ label, cnt, setCommand }) => (
-  <>
-    <span className="nodeLabel px-3 py-2 mx-1 my-1 badge badge-pill badge-dark" onClick={() => setCommand(genLabelQuery('node', label))}>
-      {label}
-      (
-      {cnt}
-      )
-    </span>
-  </>
+  <button
+    type="button"
+    className="nodeLabel mx-1 my-1 btn rounded-pill btn-dark btn-sm"
+    onClick={() => setCommand(genLabelQuery('node', label))}
+  >
+    {label}
+    (
+    {cnt}
+    )
+  </button>
 );
+NodeItems.propTypes = {
+  label: PropTypes.string.isRequired,
+  cnt: PropTypes.number.isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
 
 const EdgeList = ({ edges, setCommand }) => {
   let list;
@@ -97,17 +112,31 @@ const EdgeList = ({ edges, setCommand }) => {
 
   return null;
 };
+EdgeList.propTypes = {
+  edges: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
 
 const EdgeItems = ({ label, cnt, setCommand }) => (
-  <>
-    <span className="edgeLabel px-3 py-2 mx-1 my-1 badge badge-light" onClick={() => setCommand(genLabelQuery('edge', label))}>
-      {label}
-      (
-      {cnt}
-      )
-    </span>
-  </>
+  <button
+    type="button"
+    className="edgeLabel mx-1 my-1 btn btn-light btn-sm"
+    onClick={() => setCommand(genLabelQuery('edge', label))}
+  >
+    {label}
+    (
+    {cnt}
+    )
+  </button>
 );
+EdgeItems.propTypes = {
+  label: PropTypes.string.isRequired,
+  cnt: PropTypes.number.isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
 
 const PropertyList = ({ propertyKeys, setCommand }) => {
   let list;
@@ -129,12 +158,28 @@ const PropertyList = ({ propertyKeys, setCommand }) => {
 
   return null;
 };
+PropertyList.propTypes = {
+  propertyKeys: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    key_type: PropTypes.string,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
 
 const PropertyItems = ({ propertyName, keyType, setCommand }) => (
-  <>
-    <span className={keyType === 'v' ? 'nodeLabel px-3 py-2 mx-1 my-1 badge badge-pill badge-dark' : 'edgeLabel px-3 py-2 mx-1 my-1 badge badge-light'} onClick={() => setCommand(genPropQuery(keyType, propertyName))}>{propertyName}</span>
-  </>
+  <button
+    type="button"
+    className={`${keyType === 'v' ? 'nodeLabel btn-dark' : 'edgeLabel btn-light'} mx-1 btn rounded-pill btn-sm`}
+    onClick={() => setCommand(genPropQuery(keyType, propertyName))}
+  >
+    {propertyName}
+  </button>
 );
+PropertyItems.propTypes = {
+  propertyName: PropTypes.string.isRequired,
+  keyType: PropTypes.string.isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
 
 const ConnectedText = ({ userName, roleName }) => (
   <div>
@@ -150,6 +195,11 @@ const ConnectedText = ({ userName, roleName }) => (
     </h6>
   </div>
 );
+
+ConnectedText.propTypes = {
+  userName: PropTypes.string.isRequired,
+  roleName: PropTypes.string.isRequired,
+};
 
 const DBMSText = ({ dbname, graph }) => (
   <div>
@@ -174,6 +224,11 @@ const DBMSText = ({ dbname, graph }) => (
   </div>
 );
 
+DBMSText.propTypes = {
+  dbname: PropTypes.string.isRequired,
+  graph: PropTypes.string.isRequired,
+};
+
 const SidebarHome = ({
   edges, nodes, propertyKeys, setCommand, dbname, graph, role,
 }) => (
@@ -183,27 +238,27 @@ const SidebarHome = ({
     </div>
     <div className="sidebar sidebar-body">
       <div className="form-group">
-        <label htmlFor="exampleFormControlSelect1"><b>Vertex Label</b></label>
+        <b>Vertex Label</b>
         <ColoredLine />
         <NodeList nodes={nodes} setCommand={setCommand} />
       </div>
       <div className="form-group">
-        <label htmlFor="exampleFormControlSelect1"><b>Edge Label</b></label>
+        <b>Edge Label</b>
         <ColoredLine />
         <EdgeList edges={edges} setCommand={setCommand} />
       </div>
       <div className="form-group">
-        <label htmlFor="exampleFormControlSelect1"><b>Properties</b></label>
+        <b>Properties</b>
         <ColoredLine />
         <PropertyList propertyKeys={propertyKeys} setCommand={setCommand} />
       </div>
       <div className="form-group">
-        <label htmlFor="exampleFormControlSelect1"><b>Connected as</b></label>
+        <b>Connected as</b>
         <ColoredLine />
         <ConnectedText userName={role.user_name} roleName={role.role_name} />
       </div>
       <div className="form-group">
-        <label htmlFor="exampleFormControlSelect1"><b>DBMS</b></label>
+        <b>DBMS</b>
         <ColoredLine />
         <DBMSText dbname={dbname} graph={graph} />
       </div>
@@ -211,5 +266,27 @@ const SidebarHome = ({
     </div>
   </div>
 );
+
+SidebarHome.propTypes = {
+  edges: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  nodes: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  propertyKeys: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    key_type: PropTypes.string,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+  dbname: PropTypes.string.isRequired,
+  graph: PropTypes.string.isRequired,
+  role: PropTypes.shape({
+    user_name: PropTypes.string,
+    role_name: PropTypes.string,
+  }).isRequired,
+};
 
 export default SidebarHome;

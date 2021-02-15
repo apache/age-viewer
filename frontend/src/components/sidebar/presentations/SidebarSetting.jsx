@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ColoredLine, SubLabelLeft } from './SidebarComponents';
 import { saveToCookie } from '../../../features/cookie/CookieUtil';
 
@@ -37,7 +38,7 @@ const SidebarSetting = ({
     </div>
     <div className="sidebar sidebar-body">
       <div className="form-group">
-        <label htmlFor="exampleFormControlSelect1"><b>Themes</b></label>
+        <b>Themes</b>
         <ColoredLine />
         <select
           className="form-control theme-switcher"
@@ -49,7 +50,7 @@ const SidebarSetting = ({
         </select>
       </div>
       <div className="form-group pt-4">
-        <label htmlFor="exampleFormControlSelect1"><b>Frames</b></label>
+        <b>Frames</b>
         <ColoredLine />
         <fieldset className="form-group">
           <SubLabelLeft label="Maximum Number of Frames:" classes="py-1" />
@@ -77,7 +78,7 @@ const SidebarSetting = ({
         </fieldset>
       </div>
       <div className="form-group pt-4">
-        <label htmlFor="exampleFormControlSelect1"><b>Data Display</b></label>
+        <b>Data Display</b>
         <ColoredLine />
         <fieldset className="form-group">
           <SubLabelLeft label="Maximum Data of Graph Visualization" classes="py-1" />
@@ -120,5 +121,19 @@ const SidebarSetting = ({
     </div>
   </div>
 );
+
+SidebarSetting.propTypes = {
+  theme: PropTypes.string.isRequired,
+  maxNumOfFrames: PropTypes.number.isRequired,
+  maxNumOfHistories: PropTypes.number.isRequired,
+  maxDataOfGraph: PropTypes.number.isRequired,
+  maxDataOfTable: PropTypes.number.isRequired,
+  changeTheme: PropTypes.func.isRequired,
+  changeMaxNumOfFrames: PropTypes.func.isRequired,
+  changeMaxNumOfHistories: PropTypes.func.isRequired,
+  changeMaxDataOfGraph: PropTypes.func.isRequired,
+  changeMaxDataOfTable: PropTypes.func.isRequired,
+  resetSetting: PropTypes.func.isRequired,
+};
 
 export default SidebarSetting;

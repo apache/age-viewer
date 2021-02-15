@@ -15,6 +15,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import Navigator from '../../navigator/containers/Navigator';
 import Sidebar from '../../sidebar/containers/Sidebar';
@@ -22,7 +23,12 @@ import Contents from '../../contents/containers/Contents';
 import { loadFromCookie, saveToCookie } from '../../../features/cookie/CookieUtil';
 
 const DefaultTemplate = ({
-  theme, maxNumOfFrames, maxNumOfHistories, maxDataOfGraph, maxDataOfTable, changeSettings,
+  theme,
+  maxNumOfFrames,
+  maxNumOfHistories,
+  maxDataOfGraph,
+  maxDataOfTable,
+  changeSettings,
 }) => {
   const dispatch = useDispatch();
   const [stateValues] = useState({
@@ -83,6 +89,15 @@ const DefaultTemplate = ({
 
     </div>
   );
+};
+
+DefaultTemplate.propTypes = {
+  theme: PropTypes.string.isRequired,
+  maxNumOfFrames: PropTypes.number.isRequired,
+  maxNumOfHistories: PropTypes.number.isRequired,
+  maxDataOfGraph: PropTypes.number.isRequired,
+  maxDataOfTable: PropTypes.number.isRequired,
+  changeSettings: PropTypes.func.isRequired,
 };
 
 export default DefaultTemplate;

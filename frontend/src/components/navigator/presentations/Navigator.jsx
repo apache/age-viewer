@@ -15,11 +15,17 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import NavigatorItem from './NavigatorItem';
 
 const Navigator = ({ menuList, activeMenuName, toggleMenu }) => {
-  const menus = menuList.map((menuItem, index) => (
-    <NavigatorItem itemInfo={menuItem} activeMenuName={activeMenuName} onClick={toggleMenu} key={index} />
+  const menus = menuList.map((menuItem) => (
+    <NavigatorItem
+      itemInfo={menuItem}
+      activeMenuName={activeMenuName}
+      onClick={toggleMenu}
+      key={menuItem.menuName}
+    />
   ));
   return (
     <nav id="navbar" className="navbar navbar-expand-md fixed-left">
@@ -30,6 +36,14 @@ const Navigator = ({ menuList, activeMenuName, toggleMenu }) => {
       </div>
     </nav>
   );
+};
+
+Navigator.propTypes = {
+  menuList: PropTypes.arrayOf(PropTypes.shape({
+    menuName: PropTypes.string, fwCode: PropTypes.string,
+  })).isRequired,
+  activeMenuName: PropTypes.string.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 export default Navigator;

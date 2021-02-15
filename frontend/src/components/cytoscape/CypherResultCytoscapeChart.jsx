@@ -15,6 +15,7 @@
  */
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import cytoscape from 'cytoscape';
 import cxtmenu from 'cytoscape-cxtmenu';
 import COSEBilkent from 'cytoscape-cose-bilkent';
@@ -27,7 +28,7 @@ import spread from 'cytoscape-spread';
 import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
 import { defaultLayout, initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { selectedLabel, stylesheet } from './CytoscapeStyleSheet';
-import { conf } from './CytoscapeConfig';
+import conf from './CytoscapeConfig';
 
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
@@ -331,5 +332,9 @@ class CytoscapeComponent extends Component {
     return <div id="cyto" className="chart-area" ref={(el) => this.cyelement = el} />;
   }
 }
+
+CytoscapeComponent.propTypes = {
+
+};
 
 export default CytoscapeComponent;

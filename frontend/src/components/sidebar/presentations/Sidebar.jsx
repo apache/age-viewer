@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import SidebarHome from '../containers/SidebarHome';
 import SidebarSetting from '../containers/SidebarSetting';
 import SidebarAbout from '../containers/SidebarAbout';
@@ -34,5 +35,10 @@ const Sidebar = ({ activeMenuName, isActive }) => (
     </div>
   </div>
 );
+
+Sidebar.propTypes = {
+  activeMenuName: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+};
 
 export default Sidebar;

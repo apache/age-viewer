@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 
 const CypherResultTable = ({ data }) => {
@@ -37,20 +38,34 @@ const CypherResultTable = ({ data }) => {
       <thead>
         <tr>
           {
-              data.columns.map((h, index) => <th key={index}>{h.toString()}</th>)
+              data.columns.map((h) => <th key={h.toString()}>{h.toString()}</th>)
             }
         </tr>
       </thead>
       <tbody>
         {
-            data.rows.map((d, rIndex) => {
-              const rows = data.columns.map((alias, cIndex) => <td key={cIndex}>{JSON.stringify(d[alias])}</td>);
-              return <tr key={rIndex}>{rows}</tr>;
+            data.rows.map((d) => {
+              const rows = data.columns.map(
+                (alias) => <td key={alias}>{JSON.stringify(d[alias])}</td>,
+              );
+              return <tr key={rows}>{rows}</tr>;
             })
           }
       </tbody>
     </Table>
   );
+};
+
+CypherResultTable.propTypes = {
+  data: PropTypes.shape({
+    message: PropTypes.string,
+    command: PropTypes.string,
+    rowCount: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    columns: PropTypes.any,
+    // eslint-disable-next-line react/forbid-prop-types
+    rows: PropTypes.any,
+  }).isRequired,
 };
 
 export default CypherResultTable;

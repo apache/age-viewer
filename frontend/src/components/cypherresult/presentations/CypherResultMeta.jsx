@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 
 const CypherResultMeta = ({ database, query, data }) => (
@@ -43,5 +44,15 @@ const CypherResultMeta = ({ database, query, data }) => (
     </tbody>
   </Table>
 );
+
+CypherResultMeta.propTypes = {
+  database: PropTypes.shape({
+    host: PropTypes.string.isRequired,
+    port: PropTypes.number.isRequired,
+  }).isRequired,
+  query: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  data: PropTypes.any.isRequired,
+};
 
 export default CypherResultMeta;

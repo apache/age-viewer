@@ -15,6 +15,7 @@
  */
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Tab, Nav, Collapse } from 'react-bootstrap';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
@@ -29,7 +30,7 @@ const CypherResultFrame = ({
     setIsFullScreen(!isFullScreen);
   };
 
-  const setIconForIsExpanded = (isExpanded) => {
+  const setIconForIsExpanded = () => {
     if (isExpanded) {
       return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
     }
@@ -54,25 +55,38 @@ const CypherResultFrame = ({
               {reqString}
             </strong>
           </div>
-          <button className={`frame-head-button btn btn-link px-3${isFullScreen ? ' selected ' : ''}`} onClick={() => expandFrame()}>
+          <button
+            type="button"
+            className={`frame-head-button btn btn-link px-3${isFullScreen ? ' selected ' : ''}`}
+            onClick={() => expandFrame()}
+          >
             {setIconForIsFullscreen(isExpanded)}
           </button>
-          <button className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`} onClick={() => pinFrame(refKey)}>
+          <button
+            type="button"
+            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
+            onClick={() => pinFrame(refKey)}
+          >
             <span
               className="fas fa-paperclip fa-lg"
               aria-hidden="true"
             />
           </button>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
             data-toggle="collapse"
             aria-expanded={isExpanded}
             onClick={() => setIsExpanded(!isExpanded)}
             aria-controls={refKey}
           >
-            {setIconForIsExpanded(isExpanded)}
+            {setIconForIsExpanded()}
           </button>
-          <button className="frame-head-button btn btn-link pl-3" onClick={() => removeFrame(refKey)}>
+          <button
+            type="button"
+            className="frame-head-button btn btn-link pl-3"
+            onClick={() => removeFrame(refKey)}
+          >
             <span className="fas fa-times fa-lg" aria-hidden="true" />
           </button>
         </div>
@@ -119,6 +133,14 @@ const CypherResultFrame = ({
     </div>
 
   );
+};
+
+CypherResultFrame.propTypes = {
+  refKey: PropTypes.string.isRequired,
+  isPinned: PropTypes.bool.isRequired,
+  reqString: PropTypes.string.isRequired,
+  removeFrame: PropTypes.func.isRequired,
+  pinFrame: PropTypes.func.isRequired,
 };
 
 export default CypherResultFrame;

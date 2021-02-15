@@ -15,11 +15,21 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Collapse } from 'react-bootstrap';
 
 const ServerDisconnectFrame = ({
-  refKey, isPinned, reqString, disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand, resetMetaData,
+  refKey,
+  isPinned,
+  reqString,
+  disconnectToAgensGraph,
+  addFrame,
+  removeFrame,
+  pinFrame,
+  addAlert,
+  setCommand,
+  resetMetaData,
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const dispatch = useDispatch();
@@ -34,7 +44,7 @@ const ServerDisconnectFrame = ({
     /* dispatch(() => addAlert('NoticeServerDisconnected')); */
   }, [dispatch, disconnectToAgensGraph, addFrame, addAlert]);
 
-  const setIconForIsExpanded = (isExpanded) => {
+  const setIconForIsExpanded = () => {
     if (isExpanded) {
       return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
     }
@@ -52,13 +62,18 @@ const ServerDisconnectFrame = ({
               {reqString}
             </strong>
           </div>
-          <button className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`} onClick={() => pinFrame(refKey)}>
+          <button
+            type="button"
+            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
+            onClick={() => pinFrame(refKey)}
+          >
             <span
               className="fas fa-paperclip fa-lg"
               aria-hidden="true"
             />
           </button>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
             data-toggle="collapse"
             aria-expanded={isExpanded}
@@ -67,7 +82,11 @@ const ServerDisconnectFrame = ({
           >
             {setIconForIsExpanded(isExpanded)}
           </button>
-          <button className="frame-head-button btn btn-link pl-3" onClick={() => removeFrame(refKey)}>
+          <button
+            type="button"
+            className="frame-head-button btn btn-link pl-3"
+            onClick={() => removeFrame(refKey)}
+          >
             <span className="fas fa-times fa-lg" aria-hidden="true" />
           </button>
         </div>
@@ -99,6 +118,19 @@ const ServerDisconnectFrame = ({
       <div className="card-footer" />
     </div>
   );
+};
+
+ServerDisconnectFrame.propTypes = {
+  refKey: PropTypes.string.isRequired,
+  isPinned: PropTypes.bool.isRequired,
+  reqString: PropTypes.string.isRequired,
+  disconnectToAgensGraph: PropTypes.func.isRequired,
+  addFrame: PropTypes.func.isRequired,
+  removeFrame: PropTypes.func.isRequired,
+  pinFrame: PropTypes.func.isRequired,
+  addAlert: PropTypes.func.isRequired,
+  setCommand: PropTypes.func.isRequired,
+  resetMetaData: PropTypes.func.isRequired,
 };
 
 export default ServerDisconnectFrame;

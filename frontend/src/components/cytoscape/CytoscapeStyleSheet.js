@@ -3,13 +3,50 @@ export const selectedLabel = {
   edge: {},
 };
 
+const getLabel = (ele, captionProp) => {
+  if (captionProp === 'gid') {
+    if (ele.isNode()) {
+      selectedLabel.node[ele.data('label')] = 'gid';
+    } else {
+      selectedLabel.edge[ele.data('label')] = 'gid';
+    }
+    return `[ ${ele.data('id')} ]`;
+  } if (captionProp === 'label') {
+    if (ele.isNode()) {
+      selectedLabel.node[ele.data('label')] = 'label';
+    } else {
+      selectedLabel.edge[ele.data('label')] = 'label';
+    }
+    return `[ :${ele.data('label')} ]`;
+  }
+  const props = ele.data('properties');
+  if (props[captionProp] === undefined) {
+    if (ele.isNode()) {
+      selectedLabel.node[ele.data('label')] = 'gid';
+    } else {
+      selectedLabel.edge[ele.data('label')] = 'gid';
+    }
+    return `[ ${ele.data('id')} ]`;
+  }
+
+  if (ele.isNode()) {
+    selectedLabel.node[ele.data('label')] = captionProp;
+  } else {
+    selectedLabel.edge[ele.data('label')] = captionProp;
+  }
+  return props[captionProp];
+};
+
 export const stylesheet = [
   {
     selector: 'node',
     style: {
       width(ele) { return ele == null ? 55 : ele.data('size'); },
       height(ele) { return ele == null ? 55 : ele.data('size'); },
-      label(ele) { const captionProp = ele.data('caption'); return ele == null ? '' : getLabel(ele, captionProp); },
+      label(ele) {
+        const captionProp = ele.data('caption');
+        return getLabel(ele, captionProp);
+      },
       'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
       'border-width': '3px',
       'border-color': function (ele) { return ele == null ? '#FFF' : ele.data('borderColor'); },
@@ -40,7 +77,7 @@ export const stylesheet = [
     selector: 'edge',
     style: {
       width(ele) { return ele == null ? 1 : ele.data('size'); },
-      label(ele) { const captionProp = ele.data('caption'); return ele == null ? '' : getLabel(ele, captionProp); },
+      label(ele) { const captionProp = ele.data('caption'); return getLabel(ele, captionProp); },
       'text-background-color': '#FFF',
       'text-background-opacity': 1,
       'text-background-padding': '3px',
@@ -74,21 +111,3 @@ export const stylesheet = [
     },
   },
 ];
-
-const getLabel = (ele, captionProp) => {
-  if (captionProp === 'gid') {
-    ele.isNode() ? selectedLabel.node[ele.data('label')] = 'gid' : selectedLabel.edge[ele.data('label')] = 'gid';
-    return `[ ${ele.data('id')} ]`;
-  } if (captionProp === 'label') {
-    ele.isNode() ? selectedLabel.node[ele.data('label')] = 'label' : selectedLabel.edge[ele.data('label')] = 'label';
-    return `[ :${ele.data('label')} ]`;
-  }
-  const props = ele.data('properties');
-  if (props[captionProp] === undefined) {
-    ele.isNode() ? selectedLabel.node[ele.data('label')] = 'gid' : selectedLabel.edge[ele.data('label')] = 'gid';
-    return `[ ${ele.data('id')} ]`;
-  }
-
-  ele.isNode() ? selectedLabel.node[ele.data('label')] = captionProp : selectedLabel.edge[ele.data('label')] = captionProp;
-  return props[captionProp];
-};

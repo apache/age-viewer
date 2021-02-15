@@ -15,10 +15,21 @@
  */
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Collapse } from 'react-bootstrap';
 
 const ServerConnectFrame = ({
-  refKey, isPinned, reqString, connectToAgensGraph, addFrame, trimFrame, removeFrame, pinFrame, addAlert, getMetaData, getMetaChartData,
+  refKey,
+  isPinned,
+  reqString,
+  connectToAgensGraph,
+  addFrame,
+  trimFrame,
+  removeFrame,
+  pinFrame,
+  addAlert,
+  getMetaData,
+  getMetaChartData,
 }) => {
   const [formData, setFormData] = useState({});
   const [isExpanded, setIsExpanded] = useState(true);
@@ -30,7 +41,7 @@ const ServerConnectFrame = ({
     });
   };
 
-  const setIconForIsExpanded = (isExpanded) => {
+  const setIconForIsExpanded = () => {
     if (isExpanded) {
       return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
     }
@@ -48,13 +59,18 @@ const ServerConnectFrame = ({
               {reqString}
             </strong>
           </div>
-          <button className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`} onClick={() => pinFrame(refKey)}>
+          <button
+            type="button"
+            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
+            onClick={() => pinFrame(refKey)}
+          >
             <span
               className="fas fa-paperclip fa-lg"
               aria-hidden="true"
             />
           </button>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
             data-toggle="collapse"
             aria-expanded={isExpanded}
@@ -63,7 +79,11 @@ const ServerConnectFrame = ({
           >
             {setIconForIsExpanded(isExpanded)}
           </button>
-          <button className="frame-head-button btn btn-link pl-3" onClick={() => removeFrame(refKey)}>
+          <button
+            type="button"
+            className="frame-head-button btn btn-link pl-3"
+            onClick={() => removeFrame(refKey)}
+          >
             <span className="fas fa-times fa-lg" aria-hidden="true" />
           </button>
         </div>
@@ -79,41 +99,53 @@ const ServerConnectFrame = ({
             <div className="col-9">
               <form>
                 <fieldset className="form-group">
-                  <label htmlFor="host">Connect URL</label>
-                  <input type="text" className="form-control" name="host" onChange={handleChange} />
+                  <label htmlFor="host">
+                    Connect URL
+                    <input type="text" className="form-control" name="host" onChange={handleChange} />
+                  </label>
                 </fieldset>
                 <fieldset className="form-group">
-                  <label htmlFor="port">Connect Port</label>
-                  <input type="number" className="form-control" name="port" onChange={handleChange} />
+                  <label htmlFor="port">
+                    Connect Port
+                    <input type="number" className="form-control" name="port" onChange={handleChange} />
+                  </label>
                 </fieldset>
                 <fieldset className="form-group">
-                  <label htmlFor="database">Database Name</label>
-                  <input type="text" className="form-control" name="database" onChange={handleChange} />
+                  <label htmlFor="database">
+                    Database Name
+                    <input type="text" className="form-control" name="database" onChange={handleChange} />
+                  </label>
                 </fieldset>
                 <fieldset className="form-group">
-                  <label htmlFor="graph">Graph Path</label>
-                  <input type="text" className="form-control" name="graph" onChange={handleChange} />
+                  <label htmlFor="graph">
+                    Graph Path
+                    <input type="text" className="form-control" name="graph" onChange={handleChange} />
+                  </label>
                 </fieldset>
                 <fieldset className="form-group">
-                  <label htmlFor="user">User Name</label>
-                  <input type="text" className="form-control" name="user" onChange={handleChange} />
+                  <label htmlFor="user">
+                    User Name
+                    <input type="text" className="form-control" name="user" onChange={handleChange} />
+                  </label>
                 </fieldset>
                 <fieldset className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <input type="password" className="form-control" name="password" autoComplete="on" onChange={handleChange} />
+                  <label htmlFor="password">
+                    Password
+                    <input type="password" className="form-control" id="password" name="password" autoComplete="on" onChange={handleChange} />
+                  </label>
                 </fieldset>
-
               </form>
               <button
+                type="button"
                 className="btn btn-info"
                 onClick={() => connectToAgensGraph(formData).then((response) => {
                   if (response.type === 'database/connectToAgensGraph/fulfilled') {
                     addAlert('NoticeServerConnected');
                     trimFrame('ServerConnect');
-                    getMetaData().then((response) => {
-                      if (response.type === 'database/getMetaData/fulfilled') {
+                    getMetaData().then((metadataResponse) => {
+                      if (metadataResponse.type === 'database/getMetaData/fulfilled') {
                         getMetaChartData();
-                      } else if (response.type === 'database/getMetaData/rejected') {
+                      } else if (metadataResponse.type === 'database/getMetaData/rejected') {
                         addAlert('ErrorMetaFail');
                       }
                     });
@@ -133,6 +165,20 @@ const ServerConnectFrame = ({
       <div className="card-footer" />
     </div>
   );
+};
+
+ServerConnectFrame.propTypes = {
+  refKey: PropTypes.string.isRequired,
+  isPinned: PropTypes.bool.isRequired,
+  reqString: PropTypes.string.isRequired,
+  connectToAgensGraph: PropTypes.func.isRequired,
+  addFrame: PropTypes.func.isRequired,
+  trimFrame: PropTypes.func.isRequired,
+  removeFrame: PropTypes.func.isRequired,
+  pinFrame: PropTypes.func.isRequired,
+  addAlert: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
+  getMetaChartData: PropTypes.func.isRequired,
 };
 
 export default ServerConnectFrame;

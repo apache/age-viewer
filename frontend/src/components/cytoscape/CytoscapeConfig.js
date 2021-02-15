@@ -1,4 +1,4 @@
-export const conf = {
+export default {
   // Viewport Options
   zoom: 1,
   // Interaction Options

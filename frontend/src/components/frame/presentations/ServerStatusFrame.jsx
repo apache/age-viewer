@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Collapse } from 'react-bootstrap';
 import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart';
-import MetadataCytoscapeFooter from '../../cytoscape/MetadataCytoscapeFooter';
 
 const ServerStatusFrame = ({
   refKey, isPinned, reqString, serverInfo, removeFrame, pinFrame, data,
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [elements, setElements] = useState({ edges: [], nodes: [] });
-  const [footerData, setFooterData] = useState({});
   const {
     host, port, user, database, graph, status,
   } = serverInfo;
@@ -36,7 +35,7 @@ const ServerStatusFrame = ({
     }
   });
 
-  const setIconForIsExpanded = (isExpanded) => {
+  const setIconForIsExpanded = () => {
     if (isExpanded) {
       return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
     }
@@ -75,16 +74,19 @@ const ServerStatusFrame = ({
           </div>
 
           <hr style={{
-            color: 'rgba(0,0,0,.125)', backgroundColor: '#fff', margin: '0px 10px 0px 10px', height: '0.3px',
+            color: 'rgba(0,0,0,.125)',
+            backgroundColor: '#fff',
+            margin: '0px 10px 0px 10px',
+            height: '0.3px',
           }}
           />
           <div className="chart-frame-area">
             <MetadataCytoscapeChart ref={chartRef} elements={elements} />
-            <MetadataCytoscapeFooter footerData={footerData} />
           </div>
         </div>
       );
-    } if (status === 'disconnected') {
+    }
+    if (status === 'disconnected') {
       return (
         <div className="card-body collapse" id="connectStatusCardBody">
           <div className="row">
@@ -110,6 +112,7 @@ const ServerStatusFrame = ({
         </div>
       );
     }
+    return null;
   };
   return (
     <div className="card mt-3">
@@ -122,13 +125,18 @@ const ServerStatusFrame = ({
               {reqString}
             </strong>
           </div>
-          <button className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`} onClick={() => pinFrame(refKey)}>
+          <button
+            type="button"
+            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
+            onClick={() => pinFrame(refKey)}
+          >
             <span
               className="fas fa-paperclip fa-lg"
               aria-hidden="true"
             />
           </button>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
             data-toggle="collapse"
             aria-expanded={isExpanded}
@@ -137,7 +145,11 @@ const ServerStatusFrame = ({
           >
             {setIconForIsExpanded(isExpanded)}
           </button>
-          <button className="frame-head-button btn btn-link pl-3" onClick={() => removeFrame(refKey)}>
+          <button
+            type="button"
+            className="frame-head-button btn btn-link pl-3"
+            onClick={() => removeFrame(refKey)}
+          >
             <span className="fas fa-times fa-lg" aria-hidden="true" />
           </button>
         </div>
@@ -147,6 +159,24 @@ const ServerStatusFrame = ({
       </Collapse>
     </div>
   );
+};
+
+ServerStatusFrame.propTypes = {
+  refKey: PropTypes.string.isRequired,
+  isPinned: PropTypes.bool.isRequired,
+  reqString: PropTypes.string.isRequired,
+  serverInfo: PropTypes.shape({
+    host: PropTypes.string,
+    port: PropTypes.string,
+    user: PropTypes.string,
+    database: PropTypes.string,
+    graph: PropTypes.string,
+    status: PropTypes.string,
+  }).isRequired,
+  removeFrame: PropTypes.func.isRequired,
+  pinFrame: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  data: PropTypes.any.isRequired,
 };
 
 export default ServerStatusFrame;

@@ -15,6 +15,7 @@
  */
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
 import uuid from 'react-uuid';
 import {
@@ -42,8 +43,8 @@ const CypherResultCytoscapeFooter = ({
 
   const extractData = (d) => {
     const extractedData = [];
-    for (let [alias, val] of Object.entries(d)) {
-      val = typeof val === 'object' ? JSON.stringify(val) : val;
+    for (let i = 0; i < Object.entries(d).length; i += 1) {
+      const [alias, val] = Object.entries(d)[i];
       extractedData.push(
         <span key={uuid()} className="label">
           <strong className="pl-3">
@@ -53,7 +54,7 @@ const CypherResultCytoscapeFooter = ({
             {' '}
           </strong>
           {' '}
-          {val}
+          {typeof val === 'object' ? JSON.stringify(val) : val}
         </span>,
       );
     }
@@ -62,14 +63,14 @@ const CypherResultCytoscapeFooter = ({
 
   const displayFooterData = () => {
     if (footerData.type === 'elements') {
-      const isEdge = footerData.data.source ? {} : { pill: true };
+      const isEdge = footerData.data.source;
 
       return (
         <div className="d-flex pl-3">
           <div className={`mr-auto graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
             <Badge
               className="px-3 py-1"
-              {...isEdge}
+              pill={isEdge === false}
               style={{
                 backgroundColor: footerData.data.backgroundColor,
                 color: footerData.data.fontColor,
@@ -85,6 +86,7 @@ const CypherResultCytoscapeFooter = ({
             {extractData(footerData.data.properties)}
           </div>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
             onClick={() => setFooterExpanded(!footerExpanded)}
           >
@@ -105,7 +107,7 @@ const CypherResultCytoscapeFooter = ({
             {' '}
             edges
           </div>
-          <label htmlFor="selectLayout" className="col-form-label px-1">Layout : </label>
+          Layout :&nbsp;
           <select
             id="selectLayout"
             className="col-1 custom-select custom-select-sm layout-select"
@@ -129,16 +131,7 @@ const CypherResultCytoscapeFooter = ({
       );
     }
     if (footerData.type === 'labels') {
-      const isEdge = footerData.data.type === 'edge' ? {} : { pill: true };
-
-      const generateButton = () => {
-        if (footerData.data.type === 'node') {
-          return nodeLabelSizes.map((labelSize, i) => nodeSizeButton(labelSize.size, i));
-        }
-        if (footerData.data.type === 'edge') {
-          return edgeLabelSizes.map((labelSize, i) => edgeSizeButton(labelSize.size, i));
-        }
-      };
+      const isEdge = footerData.data.type === 'edge';
 
       const nodeSizeButton = (nodeSize, i) => {
         const size = (i * 3) + 12;
@@ -150,7 +143,9 @@ const CypherResultCytoscapeFooter = ({
             type="button"
             className={`btn sizeSelector node ${footerData.data.size >= nodeSize ? ' selectedSize ' : ''}`}
             style={{ width: `${size}px`, height: `${size}px` }}
-          />
+          >
+            &nbsp;
+          </button>
         );
       };
 
@@ -164,13 +159,24 @@ const CypherResultCytoscapeFooter = ({
             type="button"
             className={`btn sizeSelector edge ${footerData.data.size >= edgeSize ? ' selectedSize ' : ''}`}
             style={{ width: `${size + 18}px`, height: `${size}px` }}
-          />
+          >
+            &nbsp;
+          </button>
         );
       };
 
+      const generateButton = () => {
+        if (footerData.data.type === 'node') {
+          return nodeLabelSizes.map((labelSize, i) => nodeSizeButton(labelSize.size, i));
+        }
+        if (footerData.data.type === 'edge') {
+          return edgeLabelSizes.map((labelSize, i) => edgeSizeButton(labelSize.size, i));
+        }
+        return null;
+      };
       const generateColors = () => {
         if (footerData.data.type === 'node') {
-          return nodeLabelColors.map((color, i) => (
+          return nodeLabelColors.map((color) => (
             <button
               onClick={() => [
                 updateLabelColor(footerData.data.type, footerData.data.label, color),
@@ -179,11 +185,13 @@ const CypherResultCytoscapeFooter = ({
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
               style={{ backgroundColor: color.color }}
-            />
+            >
+              &nbsp;
+            </button>
           ));
         }
         if (footerData.data.type === 'edge') {
-          return edgeLabelColors.map((color, i) => (
+          return edgeLabelColors.map((color) => (
             <button
               onClick={() => [
                 updateLabelColor(footerData.data.type, footerData.data.label, color),
@@ -192,9 +200,12 @@ const CypherResultCytoscapeFooter = ({
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
               style={{ backgroundColor: color.color }}
-            />
+            >
+              &nbsp;
+            </button>
           ));
         }
+        return null;
       };
 
       return (
@@ -202,7 +213,7 @@ const CypherResultCytoscapeFooter = ({
           <div className={`mr-auto graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
             <Badge
               className="px-3 py-1"
-              {...isEdge}
+              pill={isEdge === false}
               style={{
                 backgroundColor: footerData.data.backgroundColor,
                 color: footerData.data.fontColor,
@@ -240,6 +251,7 @@ const CypherResultCytoscapeFooter = ({
             </span>
           </div>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
             onClick={() => setFooterExpanded(!footerExpanded)}
           >
@@ -251,7 +263,7 @@ const CypherResultCytoscapeFooter = ({
     return (
       <div className="d-flex pl-3">
         <div className="mr-auto label pl-3" />
-        <label htmlFor="selectLayout" className="col-form-label px-1">Layout : </label>
+        <div className="px-1">Layout : </div>
         <select
           id="selectLayout"
           className="col-1 custom-select custom-select-sm layout-select"
@@ -280,6 +292,41 @@ const CypherResultCytoscapeFooter = ({
       {displayFooterData()}
     </div>
   );
+};
+
+CypherResultCytoscapeFooter.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  footerData: PropTypes.any.isRequired,
+  edgeLabelColors: PropTypes.arrayOf(PropTypes.shape({
+    color: PropTypes.string,
+    borderColor: PropTypes.string,
+    fontColor: PropTypes.string,
+    edgeLabels: PropTypes.string,
+    index: PropTypes.number,
+  })).isRequired,
+  nodeLabelColors: PropTypes.arrayOf(PropTypes.shape({
+    color: PropTypes.string,
+    borderColor: PropTypes.string,
+    fontColor: PropTypes.string,
+    nodeLabels: PropTypes.string,
+    index: PropTypes.number,
+  })).isRequired,
+  nodeLabelSizes: PropTypes.arrayOf(PropTypes.shape({
+    size: PropTypes.number,
+    labels: PropTypes.arrayOf(PropTypes.string),
+    index: PropTypes.number,
+  })).isRequired,
+  edgeLabelSizes: PropTypes.arrayOf(PropTypes.shape({
+    size: PropTypes.number,
+    labels: PropTypes.arrayOf(PropTypes.string),
+    index: PropTypes.number,
+  })).isRequired,
+  colorChange: PropTypes.func.isRequired,
+  sizeChange: PropTypes.func.isRequired,
+  captionChange: PropTypes.func.isRequired,
+  layoutChange: PropTypes.func.isRequired,
+  selectedCaption: PropTypes.string.isRequired,
+  captions: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default CypherResultCytoscapeFooter;

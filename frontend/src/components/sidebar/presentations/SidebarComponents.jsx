@@ -1,7 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const StyleJustifyCenter = { display: 'flex', justifyContent: 'center' };
-const StyleTextright = {
+const StyleTextRight = {
   marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold',
 };
 const StyleTextLeft = { fontSize: '13px', fontWeight: 'bold' };
@@ -17,18 +17,28 @@ export const ColoredLine = () => (
   />
 );
 
-export const SubLabelWarp = () => (
-  <div style={StyleJustifyCenter} />
+const SubLabelRight = ({ label, classes }) => (
+  <div className={classes} style={StyleTextRight}>{label}</div>
 );
+SubLabelRight.propTypes = {
+  classes: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
 
-export const SubLabelRight = ({ label, classes }) => (
-  <div className={classes} style={StyleTextright}>{label}</div>
-);
-
-export const SubLabelLeft = ({ label, classes }) => (
+const SubLabelLeft = ({ label, classes }) => (
   <div className={classes} style={StyleTextLeft}>{label}</div>
 );
+SubLabelLeft.propTypes = {
+  classes: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
 
-export const SubLabelLeftWithLink = ({ label, classes }) => (
+const SubLabelLeftWithLink = ({ label, classes }) => (
   <div className={classes} style={StyleTextLeft}><pre>{label}</pre></div>
 );
+SubLabelLeftWithLink.propTypes = {
+  classes: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
+export { SubLabelRight, SubLabelLeft, SubLabelLeftWithLink };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ColoredLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
 
 const SidebarAbout = ({ releaseDate, version, license }) => (
@@ -8,7 +9,7 @@ const SidebarAbout = ({ releaseDate, version, license }) => (
     </div>
     <div className="sidebar sidebar-body">
       <div className="form-group">
-        <label htmlFor="exampleFormControlSelect1"><b>Made by Bitnine</b></label>
+        <b>Made by Bitnine</b>
         <ColoredLine />
         <SubLabelLeft
           label={(
@@ -21,7 +22,7 @@ const SidebarAbout = ({ releaseDate, version, license }) => (
         />
       </div>
       <div className="form-group pt-4">
-        <label><b>Current AGViewer Version</b></label>
+        <b>Current AGViewer Version</b>
         <ColoredLine />
         <div>
           <h6>
@@ -48,7 +49,7 @@ const SidebarAbout = ({ releaseDate, version, license }) => (
             label={(
               <span>
                 Leave your feedback at
-                <a target="_blank" rel="noopener noreferrer" href="http://jira.bitnine.net:9080/projects/OBFB/summary"> Here!</a>
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/bitnine-oss/AGViewer/issues"> Here!</a>
                 {' '}
                 <br />
                 Your feedback help us provide you better experience!
@@ -62,5 +63,11 @@ const SidebarAbout = ({ releaseDate, version, license }) => (
     </div>
   </div>
 );
+
+SidebarAbout.propTypes = {
+  releaseDate: PropTypes.string.isRequired,
+  version: PropTypes.string.isRequired,
+  license: PropTypes.string.isRequired,
+};
 
 export default SidebarAbout;

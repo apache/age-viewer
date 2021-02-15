@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
   const [menuName, fwCode] = itemInfo;
@@ -37,6 +38,14 @@ const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
       </a>
     </li>
   );
+};
+
+NavigatorItem.propTypes = {
+  itemInfo: PropTypes.shape({
+    menuName: PropTypes.string, fwCode: PropTypes.string,
+  }).isRequired,
+  activeMenuName: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default NavigatorItem;
