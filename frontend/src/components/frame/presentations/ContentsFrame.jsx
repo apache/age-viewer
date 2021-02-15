@@ -17,6 +17,7 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Carousel, Collapse } from 'react-bootstrap';
+import { slides as northwindSlides } from '../../../documents/tutorial/northwind';
 
 const ContentFrame = ({
   refKey, isPinned, reqString, playTarget, removeFrame, pinFrame, addAlert,
@@ -24,12 +25,12 @@ const ContentFrame = ({
   const [isExpanded, setIsExpanded] = useState(true);
   const [slides, setSlides] = useState([]);
 
-  import(`../../../documents/tutorial/${playTarget.toLowerCase()}`).then((content) => {
-    setSlides(content.slides);
-  }).catch(() => {
+  if (playTarget.toLowerCase() === 'northwind') {
+    setSlides(northwindSlides);
+  } else {
     addAlert('ErrorPlayLoadFail', playTarget);
     removeFrame(refKey);
-  });
+  }
 
   const setIconForIsExpanded = () => {
     if (isExpanded) {

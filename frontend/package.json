@@ -44,9 +44,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
@@ -63,8 +60,13 @@
   "devDependencies": {
     "eslint": "^7.19.0",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "webpack-dev-server": "^3.11.0",
-    "babel-eslint": "^11.0.0-beta.2"
+    "babel-eslint": "^10.1.0"
   }
 }
