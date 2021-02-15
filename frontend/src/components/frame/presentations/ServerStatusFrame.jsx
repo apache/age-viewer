@@ -36,14 +36,6 @@ const ServerStatusFrame = ({
     }
   });
 
-  const getFooterData = (props) => {
-    if (props.type === 'labels') {
-      props.data.captions = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(props.data.type, props.data.label)));
-    }
-
-    setFooterData(props);
-  };
-
   const setIconForIsExpanded = (isExpanded) => {
     if (isExpanded) {
       return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
@@ -87,7 +79,7 @@ const ServerStatusFrame = ({
           }}
           />
           <div className="chart-frame-area">
-            <MetadataCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} elements={elements} />
+            <MetadataCytoscapeChart ref={chartRef} elements={elements} />
             <MetadataCytoscapeFooter footerData={footerData} />
           </div>
         </div>

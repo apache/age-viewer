@@ -60,7 +60,7 @@ const SidebarSetting = ({
             name="maxFrames"
             min="0"
             value={maxNumOfFrames}
-            onChange={(e) => [saveToCookie('maxNumOfFrames', e.target.value), changeMaxNumOfFrames(e)]}
+            onChange={(e) => [saveToCookie('maxNumOfFrames', e.target.value), changeMaxNumOfFrames(parseInt(e.target.value, 10))]}
           />
         </fieldset>
         <fieldset className="form-group">
@@ -86,9 +86,9 @@ const SidebarSetting = ({
             className="form-control"
             id="maxGraphData"
             name="maxGraphData"
-            value={maxDataOfGraph}
+            value={maxDataOfGraph.toString()}
             min="0"
-            onChange={(e) => [saveToCookie('maxDataOfGraph', e.target.value), changeMaxDataOfGraph(e)]}
+            onChange={(e) => [saveToCookie('maxDataOfGraph', e.target.value), changeMaxDataOfGraph(parseInt(e.target.value, 10))]}
           />
         </fieldset>
         <fieldset className="form-group">

@@ -297,13 +297,26 @@ class CytoscapeComponent extends Component {
   }
 
   captionChange(elementType, label, caption) {
-    if (caption === 'gid') {
-      this.cy.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => (ele == null ? '' : `[ ${ele.data('id')} ]`));
-    } else if (caption === 'label') {
-      this.cy.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => (ele == null ? '' : `[ :${ele.data('label')} ]`));
-    } else {
-      this.cy.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => (ele == null ? '' : (ele.data('properties')[caption] == null ? '' : ele.data('properties')[caption])));
-    }
+    this.cy.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => {
+      let displayValue = '< NULL >';
+      if (caption === 'gid') {
+        const idValue = ele.data('id');
+        if (idValue !== null && idValue !== undefined) {
+          displayValue = `[ ${idValue} ]`;
+        }
+      } else if (caption === 'label') {
+        const labelValue = ele.data('label');
+        if (labelValue !== null && labelValue !== undefined) {
+          displayValue = `[ :${labelValue} ]`;
+        }
+      } else if (ele !== null && ele !== undefined) {
+        const anonValue = ele.data('properties')[caption];
+        if (anonValue !== null && anonValue !== undefined) {
+          displayValue = anonValue;
+        }
+      }
+      return displayValue;
+    });
   }
 
   layoutChange(layoutName) {

@@ -15,6 +15,7 @@
  */
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
 import uuid from 'react-uuid';
 
@@ -26,28 +27,27 @@ class CypherResultCytoscapeLegend extends Component {
       edgeBadges: new Map(),
       nodeLegendExpanded: false,
       edgeLegendExpanded: false,
+      legendData: props.legendData,
     };
   }
 
   componentDidMount() {
   }
 
-  shouldComponentUpdate() {
-    return true;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let newNodeBadges = this.state.nodeBadges;
-    let newEdgeBadges = this.state.edgeBadges;
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let newNodeBadges = prevState.nodeBadges;
+    let newEdgeBadges = prevState.edgeBadges;
     if (nextProps.isReloading) {
       newNodeBadges = new Map();
       newEdgeBadges = new Map();
     }
 
-    for (const [label, legend] of Object.entries(nextProps.legendData.nodeLegend)) {
-      if (this.props.legendData !== undefined && this.props.legendData.nodeLegend !== undefined) {
+    for (let i1 = 0; i1 < Object.entries(nextProps.legendData.nodeLegend).length; i1 += 1) {
+      const [label, legend] = Object.entries(nextProps.legendData.nodeLegend)[i1];
+      if (prevState.legendData !== undefined && prevState.legendData.nodeLegend !== undefined) {
         let isChanged = false;
-        for (const [prevLabel, prevLegend] of Object.entries(this.props.legendData.nodeLegend)) {
+        for (let i = 0; i < Object.entries(prevState.legendData.nodeLegend).length; i += 1) {
+          const [prevLabel, prevLegend] = Object.entries(prevState.legendData.nodeLegend)[i];
           if (label === prevLabel && legend.color !== prevLegend.color) {
             isChanged = true;
           } else if (label === prevLabel && legend.size !== prevLegend.size) {
@@ -71,30 +71,33 @@ class CypherResultCytoscapeLegend extends Component {
         }
       }
 
-      newNodeBadges.set(label, <Badge
-        className="nodeLabel px-3 py-2 mx-1 my-2"
-        pill
-        key={uuid()}
-        onClick={() => nextProps.onLabelClick({
-          type: 'labels',
-          data: {
-            type: 'node',
-            backgroundColor: legend.color,
-            fontColor: legend.fontColor,
-            size: legend.size,
-            label,
-          },
-        })}
-        style={{ backgroundColor: legend.color, color: legend.fontColor }}
-      >
-        {label}
-                               </Badge>);
+      newNodeBadges.set(label,
+        <Badge
+          className="nodeLabel px-3 py-2 mx-1 my-2"
+          pill
+          key={uuid()}
+          onClick={() => nextProps.onLabelClick({
+            type: 'labels',
+            data: {
+              type: 'node',
+              backgroundColor: legend.color,
+              fontColor: legend.fontColor,
+              size: legend.size,
+              label,
+            },
+          })}
+          style={{ backgroundColor: legend.color, color: legend.fontColor }}
+        >
+          {label}
+        </Badge>);
     }
 
-    for (const [label, legend] of Object.entries(nextProps.legendData.edgeLegend)) {
-      if (this.props.legendData !== undefined && this.props.legendData.edgeLegend !== undefined) {
+    for (let i = 0; i < Object.entries(nextProps.legendData.edgeLegend).length; i += 1) {
+      const [label, legend] = Object.entries(nextProps.legendData.edgeLegend)[i];
+      if (prevState.legendData !== undefined && prevState.legendData.edgeLegend !== undefined) {
         let isChanged = false;
-        for (const [prevLabel, prevLegend] of Object.entries(this.props.legendData.edgeLegend)) {
+        for (let i1 = 0; i1 < Object.entries(prevState.legendData.edgeLegend).length; i1 += 1) {
+          const [prevLabel, prevLegend] = Object.entries(prevState.legendData.edgeLegend)[i1];
           if (label === prevLabel && legend.color !== prevLegend.color) {
             isChanged = true;
           } else if (label === prevLabel && legend.size !== prevLegend.size) {
@@ -117,30 +120,35 @@ class CypherResultCytoscapeLegend extends Component {
           });
         }
       }
-      newEdgeBadges.set(label, <Badge
-        className="edgeLabel px-3 py-2 mx-1 my-2"
-        key={uuid()}
-        onClick={() => nextProps.onLabelClick({
-          type: 'labels',
-          data: {
-            type: 'edge',
-            backgroundColor: legend.color,
-            fontColor: legend.fontColor,
-            size: legend.size,
-            label,
-          },
-        })}
-        style={{ backgroundColor: legend.color, color: legend.fontColor }}
-      >
-        {label}
-                               </Badge>);
+      newEdgeBadges.set(label,
+        <Badge
+          className="edgeLabel px-3 py-2 mx-1 my-2"
+          key={uuid()}
+          onClick={() => nextProps.onLabelClick({
+            type: 'labels',
+            data: {
+              type: 'edge',
+              backgroundColor: legend.color,
+              fontColor: legend.fontColor,
+              size: legend.size,
+              label,
+            },
+          })}
+          style={{ backgroundColor: legend.color, color: legend.fontColor }}
+        >
+          {label}
+        </Badge>);
     }
 
-    this.setState({ nodeBadges: newNodeBadges });
-    this.setState({ edgeBadges: newEdgeBadges });
+    return {
+      nodeBadges: newNodeBadges,
+      edgeBadges: newEdgeBadges,
+      legendData: nextProps.legendData,
+    };
   }
 
-  componentWillUnmount() {
+  shouldComponentUpdate() {
+    return true;
   }
 
   componentDidUpdate() {
@@ -150,36 +158,41 @@ class CypherResultCytoscapeLegend extends Component {
     const nodeLedgend = [];
     const edgeLedgend = [];
 
-    this.state.nodeBadges.forEach((value, key, mapObj) => nodeLedgend.push(value));
+    const {
+      nodeBadges, edgeBadges, nodeLegendExpanded, edgeLegendExpanded,
+    } = this.state;
 
-    this.state.edgeBadges.forEach((value, key, mapObj) => edgeLedgend.push(value));
+    nodeBadges.forEach((value) => nodeLedgend.push(value));
+    edgeBadges.forEach((value) => edgeLedgend.push(value));
 
     return (
       <div className="legend-area" style={{ width: '100%' }}>
         <div className="d-flex nodeLegend">
-          <div className={`mr-auto legends legend ${this.state.nodeLegendExpanded ? 'expandedLegend' : ''}`}>
+          <div className={`mr-auto legends legend ${nodeLegendExpanded ? 'expandedLegend' : ''}`}>
             {nodeLedgend}
           </div>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
-            onClick={() => this.setState({ nodeLegendExpanded: !this.state.nodeLegendExpanded })}
+            onClick={() => this.setState({ nodeLegendExpanded: !nodeLegendExpanded })}
           >
             <span
-              className={`fas ${this.state.nodeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
+              className={`fas ${nodeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
               aria-hidden="true"
             />
           </button>
         </div>
         <div className="d-flex edgeLegend">
-          <div className={`mr-auto legends legend ${this.state.edgeLegendExpanded ? 'expandedLegend' : ''}`}>
+          <div className={`mr-auto legends legend ${edgeLegendExpanded ? 'expandedLegend' : ''}`}>
             {edgeLedgend}
           </div>
           <button
+            type="button"
             className="frame-head-button btn btn-link px-3"
-            onClick={() => this.setState({ edgeLegendExpanded: !this.state.edgeLegendExpanded })}
+            onClick={() => this.setState({ edgeLegendExpanded: !edgeLegendExpanded })}
           >
             <span
-              className={`fas ${this.state.edgeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
+              className={`fas ${edgeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
               aria-hidden="true"
             />
           </button>
@@ -189,5 +202,16 @@ class CypherResultCytoscapeLegend extends Component {
     );
   }
 }
+
+CypherResultCytoscapeLegend.propTypes = {
+  legendData: PropTypes.shape({
+    // eslint-disable-next-line react/forbid-prop-types
+    nodeLegend: PropTypes.any,
+    // eslint-disable-next-line react/forbid-prop-types
+    edgeLegend: PropTypes.any,
+  }).isRequired,
+  isReloading: PropTypes.bool.isRequired,
+  onLabelClick: PropTypes.func.isRequired,
+};
 
 export default CypherResultCytoscapeLegend;

@@ -18,7 +18,10 @@ import React, { useState } from 'react';
 import { Badge } from 'react-bootstrap';
 import uuid from 'react-uuid';
 import {
-  updateLabelColor, updateNodeLabelSize, updateEdgeLabelSize, updateLabelCaption,
+  updateEdgeLabelSize,
+  updateLabelCaption,
+  updateLabelColor,
+  updateNodeLabelSize,
 } from '../../features/cypher/CypherUtil';
 
 const CypherResultCytoscapeFooter = ({
@@ -31,6 +34,8 @@ const CypherResultCytoscapeFooter = ({
   sizeChange,
   captionChange,
   layoutChange,
+  selectedCaption,
+  captions,
 }) => {
   const [footerExpanded, setFooterExpanded] = useState(false);
   const [layout, setLayout] = useState('coseBilkent');
@@ -39,16 +44,18 @@ const CypherResultCytoscapeFooter = ({
     const extractedData = [];
     for (let [alias, val] of Object.entries(d)) {
       val = typeof val === 'object' ? JSON.stringify(val) : val;
-      extractedData.push(<span key={uuid()} className="label">
-        <strong className="pl-3">
-          {alias}
+      extractedData.push(
+        <span key={uuid()} className="label">
+          <strong className="pl-3">
+            {alias}
+            {' '}
+            :
+            {' '}
+          </strong>
           {' '}
-          :
-          {' '}
-        </strong>
-        {' '}
-        {val}
-                         </span>);
+          {val}
+        </span>,
+      );
     }
     return extractedData;
   };
@@ -137,7 +144,8 @@ const CypherResultCytoscapeFooter = ({
         const size = (i * 3) + 12;
         return (
           <button
-            onClick={() => [updateNodeLabelSize(footerData.data.label, nodeSize), sizeChange(footerData.data.type, footerData.data.label, nodeSize)]}
+            onClick={() => [updateNodeLabelSize(footerData.data.label, nodeSize),
+              sizeChange(footerData.data.type, footerData.data.label, nodeSize)]}
             key={uuid()}
             type="button"
             className={`btn sizeSelector node ${footerData.data.size >= nodeSize ? ' selectedSize ' : ''}`}
@@ -150,7 +158,8 @@ const CypherResultCytoscapeFooter = ({
         const size = (i * 3) + 12;
         return (
           <button
-            onClick={() => [updateEdgeLabelSize(footerData.data.label, edgeSize), sizeChange(footerData.data.type, footerData.data.label, edgeSize)]}
+            onClick={() => [updateEdgeLabelSize(footerData.data.label, edgeSize),
+              sizeChange(footerData.data.type, footerData.data.label, edgeSize)]}
             key={uuid()}
             type="button"
             className={`btn sizeSelector edge ${footerData.data.size >= edgeSize ? ' selectedSize ' : ''}`}
@@ -163,7 +172,9 @@ const CypherResultCytoscapeFooter = ({
         if (footerData.data.type === 'node') {
           return nodeLabelColors.map((color, i) => (
             <button
-              onClick={() => [updateLabelColor(footerData.data.type, footerData.data.label, color), colorChange(footerData.data.type, footerData.data.label, color)]}
+              onClick={() => [
+                updateLabelColor(footerData.data.type, footerData.data.label, color),
+                colorChange(footerData.data.type, footerData.data.label, color)]}
               key={uuid()}
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
@@ -174,7 +185,9 @@ const CypherResultCytoscapeFooter = ({
         if (footerData.data.type === 'edge') {
           return edgeLabelColors.map((color, i) => (
             <button
-              onClick={() => [updateLabelColor(footerData.data.type, footerData.data.label, color), colorChange(footerData.data.type, footerData.data.label, color)]}
+              onClick={() => [
+                updateLabelColor(footerData.data.type, footerData.data.label, color),
+                colorChange(footerData.data.type, footerData.data.label, color)]}
               key={uuid()}
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
@@ -207,12 +220,14 @@ const CypherResultCytoscapeFooter = ({
             </span>
             <span className="label">
               <span className="pl-3">Caption : </span>
-              {footerData.data.captions.map((caption) => (
+              {captions.map((caption) => (
                 <button
-                  onClick={() => [updateLabelCaption(footerData.data.type, footerData.data.label, caption), captionChange(footerData.data.type, footerData.data.label, caption)]}
+                  onClick={() => [
+                    updateLabelCaption(footerData.data.type, footerData.data.label, caption),
+                    captionChange(footerData.data.type, footerData.data.label, caption)]}
                   key={uuid()}
                   type="button"
-                  className={`btn captionSelector ${footerData.data.selectedCaption === caption ? ' btn-secondary ' : ' btn-outline-dark '}`}
+                  className={`btn captionSelector ${selectedCaption === caption ? ' btn-secondary ' : ' btn-outline-dark '}`}
                 >
                   <strong>
                     &lt;

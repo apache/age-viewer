@@ -298,7 +298,13 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
       }
       if (!Object.prototype.hasOwnProperty.call(edgeLabelCaptions, labelName)) {
         edgeLabelCaptions[labelName] = 'label';
+
+        // if has property named [ name ], than set [ name ]
+        if (Object.prototype.hasOwnProperty.call(val.properties, 'name')) {
+          nodeLabelCaptions[labelName] = 'name';
+        }
       }
+
       if (!Object.prototype.hasOwnProperty.call(val.properties, edgeLegend.caption)) {
         edgeLegend[labelName].caption = getCaption('edge', val);
       }
@@ -331,7 +337,13 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
       }
       if (!Object.prototype.hasOwnProperty.call(nodeLabelCaptions, labelName)) {
         nodeLabelCaptions[labelName] = 'gid';
+
+        // if has property named [ name ], than set [ name ]
+        if (Object.prototype.hasOwnProperty.call(val.properties, 'name')) {
+          nodeLabelCaptions[labelName] = 'name';
+        }
       }
+
       if (!Object.prototype.hasOwnProperty.call(val.properties, nodeLegend.caption)) {
         nodeLegend[labelName].caption = getCaption('node', val);
       }

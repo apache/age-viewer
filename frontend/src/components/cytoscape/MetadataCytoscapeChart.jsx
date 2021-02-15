@@ -25,6 +25,8 @@ class CytoscapeComponent extends Component {
     this.cyelement = null;
     this.cy = '';
     this.menu = '';
+    this.onElementsMouseover = () => {
+    };
   }
 
   componentDidMount() {

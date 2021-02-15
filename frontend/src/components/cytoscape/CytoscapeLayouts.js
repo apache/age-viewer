@@ -1,3 +1,4 @@
+/* eslint-disable max-len,no-unused-vars */
 /*
  * Copyright 2020 Bitnine Co., Ltd.
  *
