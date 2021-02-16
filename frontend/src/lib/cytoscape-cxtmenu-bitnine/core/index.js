@@ -1,5 +1,6 @@
-module.exports = function(){
-  let cy = this;
+/* eslint-disable */
+module.exports = function () {
+  const cy = this;
 
   // your extension impl...
 

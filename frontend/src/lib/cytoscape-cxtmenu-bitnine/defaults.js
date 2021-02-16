@@ -1,5 +1,6 @@
-let defaults = {
-  menuRadius: function(ele){ return 100 }, // the radius of the circular menu in pixels
+/* eslint-disable */
+const defaults = {
+  menuRadius(ele) { return 100; }, // the radius of the circular menu in pixels
   selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
   commands: [ // an array of commands to list in the menu or a function that returns the array
     /*
@@ -26,7 +27,7 @@ let defaults = {
   itemColor: 'white', // the colour of text in the command's content
   itemTextShadowColor: 'transparent', // the text shadow colour of the command's content
   zIndex: 9999, // the z-index of the ui div
-  atMouse: false // draw menu at mouse position
+  atMouse: false, // draw menu at mouse position
 };
 
 module.exports = defaults;
