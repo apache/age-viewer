@@ -26,4 +26,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CodeMirrorWrapper);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  null,
+  { forwardRef: true },
+)(CodeMirrorWrapper);

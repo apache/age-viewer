@@ -98,7 +98,7 @@ const Editor = ({
               <CodeMirror
                 onClick={onClick}
                 setReqString={setReqString}
-                forwardedRef={codeMirrorRef}
+                ref={codeMirrorRef}
               />
             </div>
             <div className="input-group-append ml-auto" id="editor-buttons">
