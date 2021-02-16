@@ -460,6 +460,9 @@ const cxtmenu = function (params) {
 
         activeCommandI = undefined;
 
+        // refresh offset, because of scroll or resizing..
+        offset = getOffset(container);
+
         let dx = pageX - offset.left - ctrx;
         const dy = pageY - offset.top - ctry;
 
@@ -494,6 +497,8 @@ const cxtmenu = function (params) {
         let theta1 = Math.PI / 2;
         let theta2 = theta1 + dtheta;
 
+        const isMouseCircleIn = Math.pow(r, 2) > (Math.pow(ctrx - (pageX - offset.left), 2) + Math.pow(ctry - (pageY - offset.top), 2));
+
         for (let i = 0; i < commands.length; i++) {
           const command = commands[i];
 
@@ -504,7 +509,7 @@ const cxtmenu = function (params) {
             inThisCommand = false;
           }
 
-          if (inThisCommand) {
+          if (isMouseCircleIn && inThisCommand) {
             activeCommandI = i;
             break;
           }
