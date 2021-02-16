@@ -15,7 +15,7 @@
  */
 
 import React, {
-  forwardRef, useEffect, useImperativeHandle, useRef, useState,
+  forwardRef, useEffect, useImperativeHandle, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -33,9 +33,11 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   const [isReloading, setIsReloading] = useState(false);
   const [maxDataOfGraph] = useState(props.maxDataOfGraph);
   const dispatch = useDispatch();
-  const chartRef = useRef();
   const [selectedCaption, setSelectedCaption] = useState(null);
   const [captions, setCaptions] = useState([]);
+
+  const [cytoscapeObject, setCytoscapeObject] = useState(null);
+  const [cytoscapeLayout, setCytoscapeLayout] = useState('coseBilkent');
 
   useEffect(() => {
     if (props.data.legend !== undefined && Object.keys(props.data.legend.nodeLegend).length > 0) {
@@ -56,9 +58,18 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     props.data,
   ]);
 
+  const getCaptionsFromCytoscapeObject = (elementType, label) => {
+    const elementsObject = cytoscapeObject.elements(`${elementType}[label = "${label}"]`).jsons();
+    let extendedSet = new Set([]);
+    elementsObject.forEach((ele) => {
+      extendedSet = new Set([...extendedSet, ...Object.keys(ele.data.properties)]);
+    });
+    return extendedSet;
+  };
+
   const getFooterData = (event) => {
     if (event.type === 'labels') {
-      setCaptions(['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(event.data.type, event.data.label))));
+      setCaptions(['gid', 'label'].concat(Array.from(getCaptionsFromCytoscapeObject(event.data.type, event.data.label))));
 
       if (event.data.type === 'node') {
         setSelectedCaption(legendData.nodeLegend[event.data.label].caption);
@@ -73,6 +84,22 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   const addLegendData = (addedLegendData) => {
     setIsReloading(false);
     setLegendData(addedLegendData);
+  };
+
+  const changeColorOnCytoscapeElements = (elementType, label, color) => {
+    const colorObject = Array.isArray(color) ? {
+      color: color[0],
+      borderColor: color[1],
+      fontColor: color[2],
+    } : color;
+
+    if (elementType === 'node') {
+      cytoscapeObject.nodes(`[label = "${label}"]`).data('backgroundColor', colorObject.color)
+        .data('borderColor', colorObject.borderColor).data('fontColor', colorObject.fontColor);
+    } else if (elementType === 'edge') {
+      cytoscapeObject.edges(`[label = "${label}"]`).data('backgroundColor', colorObject.color)
+        .data('fontColor', colorObject.fontColor).data('fontColor', '#2A2C34');
+    }
   };
 
   const colorChange = (elementType, label, color) => {
@@ -92,7 +119,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
       }
 
       setLegendData(Object.assign(legendData, { nodeLegend: nodeLegendObj }));
-      chartRef.current.colorChange(elementType, label, color);
+      changeColorOnCytoscapeElements(elementType, label, color);
     } else if (elementType === 'edge') {
       const edgeLegendObj = legendData.edgeLegend;
       if (Object.prototype.hasOwnProperty.call(edgeLegendObj, label)) {
@@ -101,7 +128,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         edgeLegendObj[label].fontColor = color.fontColor;
       }
       setLegendData(Object.assign(legendData, { edgeLegend: edgeLegendObj }));
-      chartRef.current.colorChange(elementType, label, color);
+      changeColorOnCytoscapeElements(elementType, label, color);
     }
 
     dispatch(() => props.setLabels(elementType, label, {
@@ -111,12 +138,22 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     }));
   };
 
+  const changeSizeOnCytoscapeElements = (elementType, label, size) => {
+    const changedData = cytoscapeObject.elements(`${elementType}[label = "${label}"]`).data('size', size);
+
+    if (size > 6) {
+      changedData.style('text-background-opacity', 0);
+    } else {
+      changedData.style('text-background-opacity', 1);
+    }
+  };
+
   const sizeChange = (elementType, label, size) => {
     const footerObj = footerData.data;
     footerObj.size = size;
     setFooterData({ ...footerData, data: footerObj });
     setIsReloading(false);
-    chartRef.current.sizeChange(elementType, label, size);
+    changeSizeOnCytoscapeElements(elementType, label, size);
 
     if (elementType === 'node') {
       const nodeLegendObj = legendData.nodeLegend;
@@ -134,12 +171,32 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     dispatch(() => props.setLabels(elementType, label, { size }));
   };
 
+  const changeCaptionOnCytoscapeElements = (elementType, label, caption) => {
+    cytoscapeObject.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => {
+      let displayValue = '< NULL >';
+      if (caption === 'gid') {
+        const idValue = ele.data('id');
+        if (idValue !== null && idValue !== undefined) {
+          displayValue = `[ ${idValue} ]`;
+        }
+      } else if (caption === 'label') {
+        const labelValue = ele.data('label');
+        if (labelValue !== null && labelValue !== undefined) {
+          displayValue = `[ :${labelValue} ]`;
+        }
+      } else if (ele !== null && ele !== undefined) {
+        const anonValue = ele.data('properties')[caption];
+        if (anonValue !== null && anonValue !== undefined) {
+          displayValue = anonValue;
+        }
+      }
+      return displayValue;
+    });
+  };
+
   const captionChange = (elementType, label, caption) => {
-    chartRef.current.captionChange(elementType, label, caption);
-    const footerObj = footerData.data;
-    footerObj.captions = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(elementType, label)));
+    changeCaptionOnCytoscapeElements(elementType, label, caption);
     setSelectedCaption(caption);
-    setFooterData({ ...footerData, data: footerObj });
 
     if (elementType === 'node') {
       const nodeLegendObj = legendData.nodeLegend;
@@ -157,18 +214,10 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     dispatch(() => props.setLabels(elementType, label, { caption }));
   };
 
-  const layoutChange = (layoutName) => {
-    chartRef.current.layoutChange(layoutName);
-  };
-
   useImperativeHandle(ref, () => ({
 
     getCy() {
-      return chartRef.current.getCy();
-    },
-
-    resetChart() {
-      return chartRef.current.resetChart();
+      return cytoscapeObject;
     },
   }));
 
@@ -181,9 +230,11 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
       />
       <CypherResultCytoscapeChart
         onElementsMouseover={getFooterData}
-        ref={chartRef}
         legendData={legendData}
         elements={elements}
+        setCytoscapeObject={setCytoscapeObject}
+        cytoscapeObject={cytoscapeObject}
+        cytoscapeLayout={cytoscapeLayout}
         addLegendData={addLegendData}
         maxDataOfGraph={maxDataOfGraph}
       />
@@ -192,7 +243,8 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         colorChange={colorChange}
         sizeChange={sizeChange}
         captionChange={captionChange}
-        layoutChange={layoutChange}
+        setCytoscapeLayout={setCytoscapeLayout}
+        cytoscapeLayout={cytoscapeLayout}
         selectedCaption={selectedCaption}
         footerData={footerData}
         nodeLabelSizes={nodeLabelSizes}

@@ -190,7 +190,7 @@ a[data-toggle="collapse"] {
 }
 
 .card.fullscreen .chart-area {
-    height: calc(100% - 94px - 35px)
+    flex: 1;
 }
 .card-header {
     border-bottom: 1px solid rgba(0,0,0,.125);    
@@ -251,12 +251,13 @@ a.nav-link.active {
 .chart-frame-area {
     width:100%;
     height:100%;
-
+    display: flex;
+    flex-direction: column;
 }
 .chart-area {
     height: 417px;
     width: 100%;
-    display: 'block';
+    display: block;
     overflow:hidden;
 }
 

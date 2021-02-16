@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState, createRef } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { createRef, useState } from 'react';
 import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
 import { Parser } from 'json2csv';
 import {
-  Tab, Nav, Collapse, Dropdown, DropdownButton,
+  Collapse, Dropdown, DropdownButton, Nav, Tab,
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer';
@@ -34,16 +33,8 @@ const CypherResultFrame = ({
   const chartAreaRef = createRef();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [zoomRate, setZoomRate] = useState(0);
   const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false);
   const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // dispatch(() => executeCypherQuery([refKey, reqString]));
-    setZoomRate(chartAreaRef.current.getCy().zoom());
-  }, [refKey, reqString, dispatch, chartAreaRef]);
 
   const expandFrame = () => {
     setIsFullScreen(!isFullScreen);
@@ -51,10 +42,9 @@ const CypherResultFrame = ({
     const ref = chartAreaRef.current;
 
     function resize() {
+      const zoom = ref.getCy().zoom();
       ref.getCy().resize();
-      ref.getCy().zoom({ level: zoomRate, position: { x: 0, y: 0 } });
-      ref.getCy().zoomingEnabled(!cyZoomingEnabled);
-      ref.getCy().userZoomingEnabled(!cyZoomingEnabled);
+      ref.getCy().zoom({ level: zoom, position: { x: 0, y: 0 } });
     }
 
     window.setTimeout(resize, 500);

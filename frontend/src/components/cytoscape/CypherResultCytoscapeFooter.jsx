@@ -34,12 +34,12 @@ const CypherResultCytoscapeFooter = ({
   colorChange,
   sizeChange,
   captionChange,
-  layoutChange,
   selectedCaption,
   captions,
+  setCytoscapeLayout,
+  cytoscapeLayout,
 }) => {
   const [footerExpanded, setFooterExpanded] = useState(false);
-  const [layout, setLayout] = useState('coseBilkent');
 
   const extractData = (d) => {
     const extractedData = [];
@@ -111,8 +111,8 @@ const CypherResultCytoscapeFooter = ({
           <select
             id="selectLayout"
             className="col-1 custom-select custom-select-sm layout-select"
-            defaultValue={layout}
-            onChange={(e) => [setLayout(e.target.value), layoutChange(e.target.value)]}
+            defaultValue={cytoscapeLayout}
+            onChange={(e) => [setCytoscapeLayout(e.target.value)]}
           >
             <option value="random">Random</option>
             <option value="grid">Grid</option>
@@ -267,8 +267,8 @@ const CypherResultCytoscapeFooter = ({
         <select
           id="selectLayout"
           className="col-1 custom-select custom-select-sm layout-select"
-          defaultValue={layout}
-          onChange={(e) => [setLayout(e.target.value), layoutChange(e.target.value)]}
+          defaultValue={cytoscapeLayout}
+          onChange={(e) => [setCytoscapeLayout(e.target.value)]}
         >
           <option value="random">Random</option>
           <option value="grid">Grid</option>
@@ -324,7 +324,8 @@ CypherResultCytoscapeFooter.propTypes = {
   colorChange: PropTypes.func.isRequired,
   sizeChange: PropTypes.func.isRequired,
   captionChange: PropTypes.func.isRequired,
-  layoutChange: PropTypes.func.isRequired,
+  setCytoscapeLayout: PropTypes.func.isRequired,
+  cytoscapeLayout: PropTypes.string.isRequired,
   selectedCaption: PropTypes.string.isRequired,
   captions: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
