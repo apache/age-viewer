@@ -1,12 +1,12 @@
 [ENGLISH](./README.md)
 
-# AgensViewer &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-AgensViewer는 Agens 제품군의 그래프 시각화 도구입니다.
+# AGViewer &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+AGViewer는 Agens 제품군의 그래프 시각화 도구입니다.
 
 - [Getting Started](#1-getting-started)
 
 ## 1. Getting Started
-AgensViewer는 Node.js 기반의 프로젝트 입니다.  
+AGViewer는 Node.js 기반의 프로젝트 입니다.  
 로컬 개발 환경을 사용하여 빠르게 시작하고, 실행할 수 있습니다.
 
 우선적으로 기동을 위해서는 Node.js와 Yarn ( 혹은,  NPM 같은 다른 패키지 매니저 )이 필요합니다.
@@ -20,7 +20,7 @@ AgensViewer는 Node.js 기반의 프로젝트 입니다.
 
 #### 초기 개발 환경 구동
 
-AgensViewer는 데이터베이스와의 직접적 통신과 같은 WebBrowser에서 처리하지 못하는 기능을 수행하기 위하여, Back-end와 Front-end로 구성됩니다.
+AGViewer는 데이터베이스와의 직접적 통신과 같은 WebBrowser에서 처리하지 못하는 기능을 수행하기 위하여, Back-end와 Front-end로 구성됩니다.
 
 Back-end는 Express.js 기반으로 Database의 Connection을 관리하고, Front-end에서 발생하는 이벤트를 처리하도록 개발되어 있으며,  
 Front-end는 React.js 기반으로 사용자에게 렌더링 하는 것에 초점이 이루어져 있습니다.

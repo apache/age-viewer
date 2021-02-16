@@ -15,13 +15,17 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
-const ShortCut = ({ code }) => {
-    return (
-        <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-            {code}
-        </pre>
-    );
-}
+import { Provider } from 'react-redux';
+import store from './app/store';
 
-export default ShortCut
+import App from './App';
+import './index.css';
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root'),
+);

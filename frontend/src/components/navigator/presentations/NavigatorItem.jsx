@@ -14,17 +14,38 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
-    const [ menuName, fwCode ] = itemInfo;
-    return (
-        <li className="nav-item">
-            <a id={"side-"+ menuName + "-tab"} className={"nav-link" + (activeMenuName === menuName ? " active show " : "") } data-classname="fixed-left" data-toggle="pill"
-                href="/#" role="tab" aria-controls={"side-" + menuName} aria-selected="true" onClick={() => onClick(menuName)}><i
-                    className={"fas fa-" + fwCode}></i></a>
-        </li>
-    );
-}
+  const [menuName, fwCode] = itemInfo;
+  return (
+    <li className="nav-item">
+      <a
+        id={`side-${menuName}-tab`}
+        className={`nav-link${activeMenuName === menuName ? ' active show ' : ''}`}
+        data-classname="fixed-left"
+        data-toggle="pill"
+        href="/#"
+        role="tab"
+        aria-controls={`side-${menuName}`}
+        aria-selected="true"
+        onClick={() => onClick(menuName)}
+      >
+        <i
+          className={`fas fa-${fwCode}`}
+        />
+      </a>
+    </li>
+  );
+};
 
-export default NavigatorItem
+NavigatorItem.propTypes = {
+  itemInfo: PropTypes.shape({
+    menuName: PropTypes.string, fwCode: PropTypes.string,
+  }).isRequired,
+  activeMenuName: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
+export default NavigatorItem;

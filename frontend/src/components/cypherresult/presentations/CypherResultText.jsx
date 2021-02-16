@@ -15,28 +15,31 @@
  */
 
 import React from 'react';
-import AsciiTable  from 'ascii-table'
+import PropTypes from 'prop-types';
+import AsciiTable from 'ascii-table';
 
-const CypherResultText = ({data}) => {
-
-  const extractRows = () => {
-    return data['rows'].map((d, rIndex) => {
-      const rows = data['columns'].map((alias, cIndex) => {
-        return JSON.stringify(d[alias])
-      })
-      return rows
-    })
-  }
+const CypherResultText = ({ data }) => {
+  const extractRows = () => data.rows.map(
+    (d) => data.columns.map(
+      (alias) => JSON.stringify(d[alias]),
+    ),
+  );
 
   const table = AsciiTable.factory({
-    heading: data['columns']
-  , rows: extractRows()
-  })
+    heading: data.columns,
+    rows: extractRows(),
+  });
 
   return (
-  <div style={{height:'100%'}}><pre style={{height:'inherit', marginBottom:'initial'}}>{table.toString()}</pre></div>
-  )
-}
+    <div style={{ height: '100%' }}><pre style={{ height: 'inherit', marginBottom: 'initial' }}>{table.toString()}</pre></div>
+  );
+};
 
+CypherResultText.propTypes = {
+  data: PropTypes.shape({
+    rows: PropTypes.arrayOf(PropTypes.any),
+    columns: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+};
 
-export default CypherResultText
+export default CypherResultText;

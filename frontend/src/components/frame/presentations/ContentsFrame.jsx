@@ -14,68 +14,108 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react'
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { Carousel, Collapse } from 'react-bootstrap';
+import { slides as northwindSlides } from '../../../documents/tutorial/northwind';
 
+const ContentFrame = ({
+  refKey, isPinned, reqString, playTarget, removeFrame, pinFrame, addAlert,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [slides, setSlides] = useState([]);
 
-
-const ContentFrame = ({ refKey, isPinned, reqString, playTarget, removeFrame, pinFrame, addAlert }) => {
-    const [isExpanded, setIsExpanded] = useState(true)
-    const [slides, setSlides] = useState([])
-
-    import('../../../documents/tutorial/' + playTarget.toLowerCase()).then(content => {
-        setSlides(content.slides)
-    }).catch((error) => {
-        addAlert('ErrorPlayLoadFail', playTarget)
-        removeFrame(refKey)
-    })
-
-    const setIconForIsExpanded = (isExpanded) => {
-        if (isExpanded) {
-            return <span className="fas fa-angle-up fa-lg" aria-hidden="true"></span>
-        } else {
-            return <span className="fas fa-angle-down fa-lg" aria-hidden="true"></span>
-        }
+  useEffect(() => {
+    if (playTarget.toLowerCase() === 'northwind') {
+      setSlides(northwindSlides);
+    } else {
+      addAlert('ErrorPlayLoadFail', playTarget);
+      removeFrame(refKey);
     }
+  }, []);
 
-    return (
-        <div className="card mt-3">
-            <div className="card-header">
-                <div className="d-flex card-title text-muted">
-                    <div className="mr-auto"><strong> $ {reqString} </strong></div>
-                    <button className={"frame-head-button btn btn-link px-3" + (isPinned ? " selected " : "")} onClick={() => pinFrame(refKey)}><span className="fas fa-paperclip fa-lg"
-                        aria-hidden="true"></span></button>
-                    <button className="frame-head-button btn btn-link px-3" data-toggle="collapse"
-                        aria-expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} aria-controls={refKey}>
-                        {setIconForIsExpanded(isExpanded)}</button>
-                    <button className="frame-head-button btn btn-link pl-3">
-                        <span className="fas fa-times fa-lg" aria-hidden="true" onClick={() => removeFrame(refKey)}></span></button>
+  const setIconForIsExpanded = () => {
+    if (isExpanded) {
+      return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
+    }
+    return <span className="fas fa-angle-down fa-lg" aria-hidden="true" />;
+  };
 
+  return (
+    <div className="card mt-3">
+      <div className="card-header">
+        <div className="d-flex card-title text-muted">
+          <div className="mr-auto">
+            <strong>
+              {' '}
+              $
+              {reqString}
+            </strong>
+          </div>
+          <button
+            type="button"
+            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
+            onClick={() => pinFrame(refKey)}
+          >
+            <span
+              className="fas fa-paperclip fa-lg"
+              aria-hidden="true"
+            />
+          </button>
+          <button
+            type="button"
+            className="frame-head-button btn btn-link px-3"
+            data-toggle="collapse"
+            aria-expanded={isExpanded}
+            onClick={() => setIsExpanded(!isExpanded)}
+            aria-controls={refKey}
+          >
+            {setIconForIsExpanded()}
+          </button>
+          <button
+            type="button"
+            className="frame-head-button btn btn-link pl-3"
+            onClick={() => removeFrame(refKey)}
+          >
+            <span className="fas fa-times fa-lg" aria-hidden="true" />
+          </button>
+
+        </div>
+      </div>
+      <Collapse in={isExpanded}>
+
+        <div className="card-body" id={refKey} style={{ padding: 'initial' }}>
+          <Carousel
+            interval={null}
+            fade
+            wrap={false}
+            prevIcon={<span aria-hidden="true"><i className="fas fa-angle-left fa-lg" /></span>}
+            nextIcon={<span aria-hidden="true"><i className="fas fa-angle-right fa-lg" /></span>}
+          >
+            {slides.map((slide) => (
+              <Carousel.Item>
+                <div style={{ paddingTop: '10px' }}>
+                  {slide}
                 </div>
-            </div>
-            <Collapse in={isExpanded}>
-
-                <div className="card-body" id={refKey} style={{padding: 'initial'}}>
-                        <Carousel interval={null} fade={true} wrap={false}
-                        prevIcon={<span aria-hidden="true"><i className="fas fa-angle-left fa-lg"></i></span>}
-                        nextIcon={<span aria-hidden="true"><i className="fas fa-angle-right fa-lg"></i></span>}>
-                            {slides.map((slide)=>(
-                            <Carousel.Item>
-                                <div style={{paddingTop:'10px'}}>
-                                    {slide}
-                                </div>
-                            </Carousel.Item>
-                            ))}
-                        </Carousel>
-                </div>
-
-            </Collapse>
-            <div className="card-footer">
-
-            </div>
+              </Carousel.Item>
+            ))}
+          </Carousel>
         </div>
 
-    );
-}
+      </Collapse>
+      <div className="card-footer" />
+    </div>
+  );
+};
 
-export default ContentFrame
+ContentFrame.propTypes = {
+  refKey: PropTypes.string.isRequired,
+  isPinned: PropTypes.bool.isRequired,
+  reqString: PropTypes.string.isRequired,
+  playTarget: PropTypes.string.isRequired,
+  removeFrame: PropTypes.func.isRequired,
+  pinFrame: PropTypes.func.isRequired,
+  addAlert: PropTypes.func.isRequired,
+};
+
+export default ContentFrame;

@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 const app = require('../app');
-const debug = require('debug')('openbrowser-v3:server');
+const debug = require('debug')('ag-viewer:server');
 const http = require('http');
 
 /**

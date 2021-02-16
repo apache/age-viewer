@@ -1,15 +1,14 @@
-
-export const conf = {
+export default {
   // Viewport Options
   zoom: 1,
   // Interaction Options
   minZoom: 0.5,
   maxZoom: 2,
-  zoomingEnabled: false, //true
-  userZoomingEnabled: false, //true
+  zoomingEnabled: false, // true
+  userZoomingEnabled: false, // true
   panningEnabled: true,
   userPanningEnabled: true,
-  boxSelectionEnabled: false, //true
+  boxSelectionEnabled: false, // true
   selectionType: 'single',
   touchTapThreshold: 8,
   desktopTapThreshold: 4,
@@ -24,5 +23,5 @@ export const conf = {
   motionBlur: false,
   motionBlurOpacity: 0.2,
   wheelSensitivity: 1,
-  pixelRatio: 'auto'
+  pixelRatio: 'auto',
 };
