@@ -9,7 +9,7 @@ import euler from 'cytoscape-euler';
 import avsdf from 'cytoscape-avsdf';
 import spread from 'cytoscape-spread';
 import CytoscapeComponent from 'react-cytoscapejs';
-import { defaultLayout } from './CytoscapeLayouts';
+import { seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
 
 cytoscape.use(COSEBilkent);
@@ -20,17 +20,11 @@ cytoscape.use(euler);
 cytoscape.use(avsdf);
 cytoscape.use(spread);
 
-const CytoscapeFitPadding = 200;
-
 const MetadataCytoscapeChart = ({ elements }) => {
   const [cytoscapeObject, setCytoscapeObject] = useState(null);
 
   const cyCallback = useCallback((newCytoscapeObject) => {
     if (cytoscapeObject) return;
-    newCytoscapeObject.ready(() => {
-      newCytoscapeObject.fit(null, CytoscapeFitPadding);
-      newCytoscapeObject.center();
-    });
     newCytoscapeObject.on('resize', () => {
       newCytoscapeObject.center();
     });
@@ -40,8 +34,13 @@ const MetadataCytoscapeChart = ({ elements }) => {
 
   useEffect(() => {
     if (cytoscapeObject) {
-      cytoscapeObject.fit(null, CytoscapeFitPadding);
-      cytoscapeObject.center();
+      cytoscapeObject.minZoom(1e-1);
+      cytoscapeObject.maxZoom(1.5);
+      const selectedLayout = seletableLayouts.coseBilkent;
+      selectedLayout.animate = true;
+      selectedLayout.fit = true;
+      cytoscapeObject.layout(selectedLayout).run();
+      cytoscapeObject.maxZoom(5);
     }
   }, [elements]);
 
@@ -49,7 +48,6 @@ const MetadataCytoscapeChart = ({ elements }) => {
     <CytoscapeComponent
       elements={CytoscapeComponent.normalizeElements(elements)}
       stylesheet={stylesheet}
-      layout={defaultLayout}
       cy={cyCallback}
       className="chart-area metachart-area"
     />
