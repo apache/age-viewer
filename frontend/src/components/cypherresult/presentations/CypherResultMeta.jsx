@@ -48,7 +48,7 @@ const CypherResultMeta = ({ database, query, data }) => (
 CypherResultMeta.propTypes = {
   database: PropTypes.shape({
     host: PropTypes.string.isRequired,
-    port: PropTypes.number.isRequired,
+    port: PropTypes.string.isRequired,
   }).isRequired,
   query: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types

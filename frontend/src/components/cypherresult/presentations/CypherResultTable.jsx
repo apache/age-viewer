@@ -19,6 +19,9 @@ import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 
 const CypherResultTable = ({ data }) => {
+  let trIndex = 0;
+  let tdIndex = 0;
+
   if (data.command && data.command.toUpperCase().match('(GRAPH|COPY).*')) {
     return (
       <div style={{ margin: '25px' }}>
@@ -38,7 +41,7 @@ const CypherResultTable = ({ data }) => {
       <thead>
         <tr>
           {
-              data.columns.map((h) => <th key={h.toString()}>{h.toString()}</th>)
+              data.columns.map((h) => (<th key={h.toString()}>{h.toString()}</th>))
             }
         </tr>
       </thead>
@@ -46,9 +49,14 @@ const CypherResultTable = ({ data }) => {
         {
             data.rows.map((d) => {
               const rows = data.columns.map(
-                (alias) => <td key={alias}>{JSON.stringify(d[alias])}</td>,
+                (alias) => {
+                  const stringifyData = JSON.stringify(d[alias]);
+                  tdIndex += 1;
+                  return <td key={tdIndex}>{stringifyData}</td>;
+                },
               );
-              return <tr key={rows}>{rows}</tr>;
+              trIndex += 1;
+              return <tr key={trIndex}>{rows}</tr>;
             })
           }
       </tbody>
