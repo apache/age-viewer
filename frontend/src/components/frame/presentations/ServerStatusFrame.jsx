@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-bootstrap';
 import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart';
@@ -27,7 +27,6 @@ const ServerStatusFrame = ({
   const {
     host, port, user, database, graph, status,
   } = serverInfo;
-  const chartRef = useRef();
 
   useEffect(() => {
     if (elements.edges.length === 0 && elements.nodes.length === 0) {
@@ -53,11 +52,11 @@ const ServerStatusFrame = ({
             </div>
             <div className="col-9">
               <p>
-                You are connected as user
+                You are connected as user&nbsp;
                 <strong>{user}</strong>
               </p>
               <p>
-                to
+                to&nbsp;
                 <strong>
                   {host}
                   :
@@ -67,7 +66,7 @@ const ServerStatusFrame = ({
                 </strong>
               </p>
               <p>
-                Graph path has been set to
+                Graph path has been set to&nbsp;
                 <strong>{graph}</strong>
               </p>
             </div>
@@ -81,7 +80,7 @@ const ServerStatusFrame = ({
           }}
           />
           <div className="chart-frame-area">
-            <MetadataCytoscapeChart ref={chartRef} elements={elements} />
+            <MetadataCytoscapeChart elements={elements} />
           </div>
         </div>
       );
