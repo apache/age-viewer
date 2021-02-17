@@ -259,8 +259,8 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
 CypherResultCytoscape.propTypes = {
   maxDataOfGraph: PropTypes.number.isRequired,
   data: PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    type: PropTypes.string,
     legend: PropTypes.shape({
       // eslint-disable-next-line react/forbid-prop-types
       nodeLegend: PropTypes.any,

@@ -18,7 +18,9 @@ import React from 'react';
 import MainPage from './pages/Main/MainPage';
 
 const App = () => (
-  <MainPage />
+  <React.StrictMode>
+    <MainPage />
+  </React.StrictMode>
 );
 
 export default App;

@@ -294,6 +294,10 @@ const CypherResultCytoscapeFooter = ({
   );
 };
 
+CypherResultCytoscapeFooter.defaultProps = {
+  selectedCaption: null,
+};
+
 CypherResultCytoscapeFooter.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   footerData: PropTypes.any.isRequired,
@@ -301,24 +305,28 @@ CypherResultCytoscapeFooter.propTypes = {
     color: PropTypes.string,
     borderColor: PropTypes.string,
     fontColor: PropTypes.string,
-    edgeLabels: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    edgeLabels: PropTypes.any,
     index: PropTypes.number,
   })).isRequired,
   nodeLabelColors: PropTypes.arrayOf(PropTypes.shape({
     color: PropTypes.string,
     borderColor: PropTypes.string,
     fontColor: PropTypes.string,
-    nodeLabels: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    nodeLabels: PropTypes.any,
     index: PropTypes.number,
   })).isRequired,
   nodeLabelSizes: PropTypes.arrayOf(PropTypes.shape({
     size: PropTypes.number,
-    labels: PropTypes.arrayOf(PropTypes.string),
+    // eslint-disable-next-line react/forbid-prop-types
+    labels: PropTypes.any,
     index: PropTypes.number,
   })).isRequired,
   edgeLabelSizes: PropTypes.arrayOf(PropTypes.shape({
     size: PropTypes.number,
-    labels: PropTypes.arrayOf(PropTypes.string),
+    // eslint-disable-next-line react/forbid-prop-types
+    labels: PropTypes.any,
     index: PropTypes.number,
   })).isRequired,
   colorChange: PropTypes.func.isRequired,
@@ -326,7 +334,7 @@ CypherResultCytoscapeFooter.propTypes = {
   captionChange: PropTypes.func.isRequired,
   setCytoscapeLayout: PropTypes.func.isRequired,
   cytoscapeLayout: PropTypes.string.isRequired,
-  selectedCaption: PropTypes.string.isRequired,
+  selectedCaption: PropTypes.string,
   captions: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 

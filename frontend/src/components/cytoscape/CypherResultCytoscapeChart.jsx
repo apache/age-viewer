@@ -229,6 +229,10 @@ const CypherResultCytoscapeCharts = ({
   );
 };
 
+CypherResultCytoscapeCharts.defaultProps = {
+  cytoscapeObject: null,
+};
+
 CypherResultCytoscapeCharts.propTypes = {
   elements: PropTypes.shape({
     nodes: PropTypes.arrayOf(PropTypes.shape({
@@ -241,7 +245,7 @@ CypherResultCytoscapeCharts.propTypes = {
     })),
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  cytoscapeObject: PropTypes.any.isRequired,
+  cytoscapeObject: PropTypes.any,
   setCytoscapeObject: PropTypes.func.isRequired,
   cytoscapeLayout: PropTypes.string.isRequired,
   maxDataOfGraph: PropTypes.number.isRequired,
