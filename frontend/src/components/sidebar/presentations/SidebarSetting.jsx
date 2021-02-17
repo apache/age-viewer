@@ -73,7 +73,7 @@ const SidebarSetting = ({
             name="maxHistories"
             value={maxNumOfHistories}
             min="0"
-            onChange={(e) => [saveToCookie('maxNumOfHistories', e.target.value), changeMaxNumOfHistories(e)]}
+            onChange={(e) => [saveToCookie('maxNumOfHistories', e.target.value), changeMaxNumOfHistories(parseInt(e.target.value, 10))]}
           />
         </fieldset>
       </div>
@@ -101,7 +101,7 @@ const SidebarSetting = ({
             name="maxTableData"
             value={maxDataOfTable}
             min="0"
-            onChange={(e) => [saveToCookie('maxDataOfTable', e.target.value), changeMaxDataOfTable(e)]}
+            onChange={(e) => [saveToCookie('maxDataOfTable', e.target.value), changeMaxDataOfTable(parseInt(e.target.value, 10))]}
           />
         </fieldset>
       </div>

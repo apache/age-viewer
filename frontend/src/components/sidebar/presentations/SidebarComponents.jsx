@@ -30,7 +30,10 @@ const SubLabelLeft = ({ label, classes }) => (
 );
 SubLabelLeft.propTypes = {
   classes: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
 };
 
 const SubLabelLeftWithLink = ({ label, classes }) => (

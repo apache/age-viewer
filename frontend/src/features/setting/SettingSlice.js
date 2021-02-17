@@ -69,7 +69,7 @@ const SidebarSettingSlice = createSlice({
       reducer: (state, action) => {
         state.maxNumOfHistories = action.payload.maxNumOfHistories;
       },
-      prepare: (event) => ({ payload: { maxNumOfHistories: event.target.value } }),
+      prepare: (event) => ({ payload: { maxNumOfHistories: event } }),
     },
     changeMaxDataOfGraph: {
       reducer: (state, action) => {
@@ -81,7 +81,7 @@ const SidebarSettingSlice = createSlice({
       reducer: (state, action) => {
         state.maxDataOfTable = action.payload.maxDataOfTable;
       },
-      prepare: (event) => ({ payload: { maxDataOfTable: event.target.value } }),
+      prepare: (event) => ({ payload: { maxDataOfTable: event } }),
     },
     changeSettings: {
       reducer: (state, action) => {

@@ -50,10 +50,16 @@ const DefaultTemplate = ({
     };
 
     Object.keys(stateValues).forEach((key) => {
-      if (loadFromCookie(key) === undefined) {
+      let fromCookieValue = loadFromCookie(key);
+
+      if (fromCookieValue !== undefined && key !== 'theme') {
+        fromCookieValue = parseInt(fromCookieValue, 10);
+      }
+
+      if (fromCookieValue === undefined) {
         saveToCookie(key, stateValues[key]);
-      } else if (loadFromCookie(key) !== undefined && loadFromCookie(key) !== stateValues[key]) {
-        cookieState[key] = loadFromCookie(key);
+      } else if (fromCookieValue !== stateValues[key]) {
+        cookieState[key] = fromCookieValue;
         isChanged = true;
       }
     });

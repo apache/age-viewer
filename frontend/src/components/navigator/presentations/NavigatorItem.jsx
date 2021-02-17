@@ -41,9 +41,7 @@ const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
 };
 
 NavigatorItem.propTypes = {
-  itemInfo: PropTypes.shape({
-    menuName: PropTypes.string, fwCode: PropTypes.string,
-  }).isRequired,
+  itemInfo: PropTypes.arrayOf(PropTypes.string).isRequired,
   activeMenuName: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
