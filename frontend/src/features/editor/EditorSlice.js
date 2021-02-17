@@ -20,15 +20,15 @@ import { createSlice } from '@reduxjs/toolkit';
 const EditorSlice = createSlice({
   name: 'editor',
   initialState: {
-    reqString: '',
+    command: '',
     commandHistory: [],
   },
   reducers: {
     setCommand: {
       reducer: (state, action) => {
-        state.reqString = action.payload.reqString;
+        state.command = action.payload.command;
       },
-      prepare: (reqString) => ({ payload: { reqString } }),
+      prepare: (command) => ({ payload: { command } }),
     },
     addCommandHistory: {
       reducer: (state, action) => {

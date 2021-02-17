@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import EditorContainer from '../containers/Editor';
@@ -25,16 +25,18 @@ const Contents = ({
 }) => {
   const dispatch = useDispatch();
 
-  if (database.status === 'init') {
-    dispatch(() => {
-      getConnectionStatus().then((response) => {
-        if (response.type === 'database/getConnectionStatus/fulfilled') {
-          getMetaData();
-          getMetaChartData();
-        }
+  useEffect(() => {
+    if (database.status === 'init') {
+      dispatch(() => {
+        getConnectionStatus().then((response) => {
+          if (response.type === 'database/getConnectionStatus/fulfilled') {
+            getMetaData();
+            getMetaChartData();
+          }
+        });
       });
-    });
-  }
+    }
+  }, [database.status]);
 
   return (
     <div id="content" className={isActive ? 'active' : ''}>

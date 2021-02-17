@@ -19,16 +19,18 @@ import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { getConnectionStatus } from '../../../features/database/DatabaseSlice';
 import { executeCypherQuery } from '../../../features/cypher/CypherSlice';
-import { addCommandHistory } from '../../../features/editor/EditorSlice';
+import { addCommandHistory, setCommand } from '../../../features/editor/EditorSlice';
 
 import Editor from '../presentations/Editor';
 
 const mapStateToProps = (state) => ({
   alertList: state.alerts,
   database: state.database,
+  command: state.editor.command,
 });
 
 const mapDispatchToProps = {
+  setCommand,
   addFrame,
   trimFrame,
   addAlert,

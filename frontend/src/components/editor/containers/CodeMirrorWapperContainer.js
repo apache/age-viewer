@@ -18,7 +18,6 @@ import { connect } from 'react-redux';
 import CodeMirrorWrapper from '../presentations/CodeMirrorWrapper';
 
 const mapStateToProps = (state) => ({
-  reqString: state.editor.reqString,
   commandHistory: state.editor.commandHistory.slice(
     Math.max(state.editor.commandHistory.length - state.setting.maxNumOfHistories, 1),
   ),
@@ -29,6 +28,4 @@ const mapDispatchToProps = { };
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  null,
-  { forwardRef: true },
 )(CodeMirrorWrapper);

@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-import React, {
-  forwardRef, useImperativeHandle, useRef, useState,
-} from 'react';
+import React, { useRef, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import 'codemirror/keymap/sublime';
 import 'codemirror/theme/ambiance-mobile.css';
 import PropTypes from 'prop-types';
 
-const CodeMirrorWrapper = forwardRef((props, ref) => {
-  const [commandHistoryIndex, setCommandHistoryIndex] = useState(props.commandHistory.length);
+const CodeMirrorWrapper = ({
+  value, onChange, commandHistory, onClick,
+}) => {
+  const [commandHistoryIndex, setCommandHistoryIndex] = useState(commandHistory.length);
   const codeMirrorRef = useRef();
-
-  useImperativeHandle(ref, () => ({
-    resetReqString() {
-      codeMirrorRef.current.editor.setValue('');
-    },
-  }));
 
   return (
     <CodeMirror
       id="editor"
       ref={codeMirrorRef}
-      value={props.reqString}
+      value={value}
       options={{
         keyMap: 'sublime',
         mode: 'cypher',
@@ -45,36 +39,36 @@ const CodeMirrorWrapper = forwardRef((props, ref) => {
         lineNumberFormatter: () => '$',
         extraKeys: {
           'Shift-Enter': (editor) => {
-            props.onClick();
+            onClick();
             editor.setValue('');
             setCommandHistoryIndex(-1);
           },
           'Ctrl-Enter': (editor) => {
-            props.onClick();
+            onClick();
             editor.setValue('');
             setCommandHistoryIndex(-1);
           },
           'Ctrl-Up': (editor) => {
-            if (props.commandHistory.length === 0) {
+            if (commandHistory.length === 0) {
               return;
             }
             if (commandHistoryIndex === -1) {
-              const currentIdx = props.commandHistory.length - 1;
-              editor.setValue(props.commandHistory[currentIdx]);
+              const currentIdx = commandHistory.length - 1;
+              editor.setValue(commandHistory[currentIdx]);
               setCommandHistoryIndex(currentIdx);
               return;
             }
             if (commandHistoryIndex === 0) {
-              editor.setValue(props.commandHistory[0]);
+              editor.setValue(commandHistory[0]);
               setCommandHistoryIndex(0);
               return;
             }
 
-            editor.setValue(props.commandHistory[commandHistoryIndex - 1]);
+            editor.setValue(commandHistory[commandHistoryIndex - 1]);
             setCommandHistoryIndex(commandHistoryIndex - 1);
           },
           'Ctrl-Down': (editor) => {
-            if (props.commandHistory.length === 0) {
+            if (commandHistory.length === 0) {
               return;
             }
             if (commandHistoryIndex === -1) {
@@ -82,19 +76,19 @@ const CodeMirrorWrapper = forwardRef((props, ref) => {
               return;
             }
 
-            if (commandHistoryIndex === (props.commandHistory.length - 1)) {
+            if (commandHistoryIndex === (commandHistory.length - 1)) {
               editor.setValue('');
               setCommandHistoryIndex(-1);
               return;
             }
 
-            editor.setValue(props.commandHistory[commandHistoryIndex + 1]);
+            editor.setValue(commandHistory[commandHistoryIndex + 1]);
             setCommandHistoryIndex(commandHistoryIndex + 1);
           },
         },
       }}
       onChange={(editor) => {
-        props.setReqString(editor.getValue());
+        onChange(editor.getValue());
         const lineCount = editor.lineCount();
         if (lineCount <= 1) {
           editor.setOption('lineNumberFormatter', () => '$');
@@ -110,12 +104,12 @@ const CodeMirrorWrapper = forwardRef((props, ref) => {
       }}
     />
   );
-});
+};
 
 CodeMirrorWrapper.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
   commandHistory: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setReqString: PropTypes.func.isRequired,
-  reqString: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

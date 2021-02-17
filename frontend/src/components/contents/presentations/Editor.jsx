@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
@@ -22,6 +22,8 @@ import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 
 const Editor = ({
+  setCommand,
+  command,
   addFrame,
   trimFrame,
   addAlert,
@@ -31,41 +33,40 @@ const Editor = ({
   addCommandHistory,
 }) => {
   const dispatch = useDispatch();
-  const [reqString, setReqString] = useState();
-  const codeMirrorRef = useRef();
-  const resetCodeMirror = () => {
-    codeMirrorRef.current.resetReqString();
-    // codeMirrorRef.current.resetReqString()
+  const [alerts, setAlerts] = useState([]);
+
+  const clearCommand = () => {
+    setCommand('');
   };
 
   const onClick = () => {
     const refKey = uuid();
-    if (reqString.toUpperCase().startsWith(':PLAY')) {
-      dispatch(() => addFrame(reqString, 'Contents', refKey));
-    } else if (reqString.toUpperCase() === ':SERVER STATUS') {
+    if (command.toUpperCase().startsWith(':PLAY')) {
+      dispatch(() => addFrame(command, 'Contents', refKey));
+    } else if (command.toUpperCase() === ':SERVER STATUS') {
       dispatch(() => trimFrame('ServerStatus'));
-      dispatch(() => addFrame(reqString, 'ServerStatus', refKey));
-    } else if (database.status === 'disconnected' && reqString.toUpperCase() === ':SERVER DISCONNECT') {
+      dispatch(() => addFrame(command, 'ServerStatus', refKey));
+    } else if (database.status === 'disconnected' && command.toUpperCase() === ':SERVER DISCONNECT') {
       dispatch(() => trimFrame('ServerDisconnect'));
       dispatch(() => trimFrame('ServerConnect'));
       dispatch(() => addAlert('ErrorNoDatabaseConnected'));
-      dispatch(() => addFrame(reqString, 'ServerDisconnect', refKey));
-    } else if (database.status === 'disconnected' && reqString.toUpperCase() === ':SERVER CONNECT') {
+      dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
+    } else if (database.status === 'disconnected' && command.toUpperCase() === ':SERVER CONNECT') {
       dispatch(() => trimFrame('ServerConnect'));
-    } else if (database.status === 'disconnected' && reqString.toUpperCase().match('(MATCH|CREATE).*')) {
+    } else if (database.status === 'disconnected' && command.toUpperCase().match('(MATCH|CREATE).*')) {
       dispatch(() => trimFrame('ServerConnect'));
       dispatch(() => addAlert('ErrorNoDatabaseConnected'));
-      dispatch(() => addFrame(reqString, 'ServerConnect', refKey));
-    } else if (database.status === 'connected' && reqString.toUpperCase() === ':SERVER DISCONNECT') {
+      dispatch(() => addFrame(command, 'ServerConnect', refKey));
+    } else if (database.status === 'connected' && command.toUpperCase() === ':SERVER DISCONNECT') {
       dispatch(() => trimFrame('ServerDisconnect'));
       dispatch(() => addAlert('NoticeServerDisconnected'));
-      dispatch(() => addFrame(reqString, 'ServerDisconnect', refKey));
-    } else if (database.status === 'connected' && reqString.toUpperCase() === ':SERVER CONNECT') {
+      dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
+    } else if (database.status === 'connected' && command.toUpperCase() === ':SERVER CONNECT') {
       dispatch(() => trimFrame('ServerStatus'));
       dispatch(() => addAlert('NoticeAlreadyConnected'));
-      dispatch(() => addFrame(reqString, 'ServerStatus', refKey));
-    } else if (database.status === 'connected' && reqString.toUpperCase().match('(MATCH|CREATE|COPY).*')) {
-      const reqStringValue = reqString;
+      dispatch(() => addFrame(command, 'ServerStatus', refKey));
+    } else if (database.status === 'connected' && command.toUpperCase().match('(MATCH|CREATE|COPY).*')) {
+      const reqStringValue = command;
       dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
         if (response.type === 'cypher/executeCypherQuery/fulfilled') {
           addFrame(reqStringValue, 'CypherResultFrame', refKey);
@@ -77,17 +78,22 @@ const Editor = ({
     } else {
       alert("Sorry, I Can't understand your command");
     }
-    dispatch(() => addCommandHistory(reqString));
+    dispatch(() => addCommandHistory(command));
+    clearCommand();
   };
 
-  const alerts = alertList.map((alert) => (
-    <AlertContainers
-      key={alert.alertProps.key}
-      alertKey={alert.alertProps.key}
-      alertName={alert.alertName}
-      errorMessage={alert.alertProps.errorMessage}
-    />
-  ));
+  useEffect(() => {
+    setAlerts(
+      alertList.map((alert) => (
+        <AlertContainers
+          key={alert.alertProps.key}
+          alertKey={alert.alertProps.key}
+          alertName={alert.alertName}
+          errorMessage={alert.alertProps.errorMessage}
+        />
+      )),
+    );
+  }, [alertList]);
 
   return (
     <div className="container-fluid">
@@ -97,8 +103,8 @@ const Editor = ({
             <div className="form-control col-11" style={{ padding: '0px' }}>
               <CodeMirror
                 onClick={onClick}
-                setReqString={setReqString}
-                ref={codeMirrorRef}
+                value={command}
+                onChange={setCommand}
               />
             </div>
             <div className="input-group-append ml-auto" id="editor-buttons">
@@ -108,7 +114,7 @@ const Editor = ({
                   aria-hidden="true"
                 />
               </button>
-              <button className="frame-head-button btn btn-link" type="button" onClick={() => resetCodeMirror()}>
+              <button className="frame-head-button btn btn-link" type="button" onClick={() => clearCommand()}>
                 <span
                   className="fas fa-eraser fa-lg"
                   aria-hidden="true"
@@ -130,6 +136,8 @@ const Editor = ({
 };
 
 Editor.propTypes = {
+  setCommand: PropTypes.func.isRequired,
+  command: PropTypes.string.isRequired,
   addFrame: PropTypes.func.isRequired,
   trimFrame: PropTypes.func.isRequired,
   addAlert: PropTypes.func.isRequired,
