@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Contents from '../../frame/containers/ContentsFrameContainer';
@@ -32,69 +32,41 @@ const Frames = ({
   maxNumOfFrames,
 }) => {
   const dispatch = useDispatch();
+  const [frames, setFrames] = useState(null);
 
-  if (database.status === 'connected' && frameList.length === 0) {
-    dispatch(() => addFrame(':server status', 'ServerStatus'));
-  }
-
-  if (database.status === 'disconnected') {
-    const serverConnectFrames = frameList.filter((frame) => (frame.frameName.toUpperCase() === 'SERVERCONNECT'));
-    if (serverConnectFrames.length === 0) {
-      dispatch(() => addFrame(':server connect', 'ServerConnect'));
-    }
-  }
-
-  const frames = frameList.map((frame, index) => {
-    if (index > maxNumOfFrames) {
-      return '';
+  useEffect(() => {
+    if (database.status === 'connected' && frameList.length === 0) {
+      dispatch(() => addFrame(':server status', 'ServerStatus'));
     }
 
-    if (frame.frameName === 'Contents') {
-      return (
-        <Contents
-          key={frame.frameProps.key}
-          refKey={frame.frameProps.key}
-          reqString={frame.frameProps.reqString}
-          playTarget={frame.frameProps.playTarget}
-          isPinned={frame.isPinned}
-        />
-      );
+    if (database.status === 'disconnected') {
+      const serverConnectFrames = frameList.filter((frame) => (frame.frameName.toUpperCase() === 'SERVERCONNECT'));
+      if (serverConnectFrames.length === 0) {
+        dispatch(() => addFrame(':server connect', 'ServerConnect'));
+      }
     }
-    if (frame.frameName === 'ServerStatus') {
-      return (
-        <ServerStatus
-          key={frame.frameProps.key}
-          refKey={frame.frameProps.key}
-          reqString={frame.frameProps.reqString}
-          isPinned={frame.isPinned}
-        />
-      );
-    }
-    if (frame.frameName === 'ServerConnect') {
-      return (
-        <ServerConnect
-          key={frame.frameProps.key}
-          refKey={frame.frameProps.key}
-          reqString={frame.frameProps.reqString}
-          isPinned={frame.isPinned}
-        />
-      );
-    }
-    if (frame.frameName === 'ServerDisconnect') {
-      return (
-        <ServerDisconnect
-          key={frame.frameProps.key}
-          refKey={frame.frameProps.key}
-          reqString={frame.frameProps.reqString}
-          isPinned={frame.isPinned}
-        />
-      );
-    }
-    if (frame.frameName === 'CypherResultFrame') {
-      if (Object.prototype.hasOwnProperty.call(queryResult, frame.frameProps.key)
-          && queryResult[frame.frameProps.key].command.toUpperCase().match('(ERROR|GRAPH|CREATE|COPY).*')) {
+  }, [database.status]);
+
+  useEffect(() => {
+    setFrames(frameList.map((frame, index) => {
+      if (index > maxNumOfFrames) {
+        return '';
+      }
+
+      if (frame.frameName === 'Contents') {
         return (
-          <CypherResult
+          <Contents
+            key={frame.frameProps.key}
+            refKey={frame.frameProps.key}
+            reqString={frame.frameProps.reqString}
+            playTarget={frame.frameProps.playTarget}
+            isPinned={frame.isPinned}
+          />
+        );
+      }
+      if (frame.frameName === 'ServerStatus') {
+        return (
+          <ServerStatus
             key={frame.frameProps.key}
             refKey={frame.frameProps.key}
             reqString={frame.frameProps.reqString}
@@ -102,17 +74,51 @@ const Frames = ({
           />
         );
       }
-      return (
-        <CypherGraphResult
-          key={frame.frameProps.key}
-          refKey={frame.frameProps.key}
-          reqString={frame.frameProps.reqString}
-          isPinned={frame.isPinned}
-        />
-      );
-    }
-    return '';
-  });
+      if (frame.frameName === 'ServerConnect') {
+        return (
+          <ServerConnect
+            key={frame.frameProps.key}
+            refKey={frame.frameProps.key}
+            reqString={frame.frameProps.reqString}
+            isPinned={frame.isPinned}
+          />
+        );
+      }
+      if (frame.frameName === 'ServerDisconnect') {
+        return (
+          <ServerDisconnect
+            key={frame.frameProps.key}
+            refKey={frame.frameProps.key}
+            reqString={frame.frameProps.reqString}
+            isPinned={frame.isPinned}
+          />
+        );
+      }
+      if (frame.frameName === 'CypherResultFrame') {
+        if (Object.prototype.hasOwnProperty.call(queryResult, frame.frameProps.key)
+          && queryResult[frame.frameProps.key].command.toUpperCase()
+            .match('(ERROR|GRAPH|CREATE|COPY).*')) {
+          return (
+            <CypherResult
+              key={frame.frameProps.key}
+              refKey={frame.frameProps.key}
+              reqString={frame.frameProps.reqString}
+              isPinned={frame.isPinned}
+            />
+          );
+        }
+        return (
+          <CypherGraphResult
+            key={frame.frameProps.key}
+            refKey={frame.frameProps.key}
+            reqString={frame.frameProps.reqString}
+            isPinned={frame.isPinned}
+          />
+        );
+      }
+      return '';
+    }));
+  }, [frameList]);
 
   return (
     <div className="container-fluid frame-area pt-3">
