@@ -201,8 +201,11 @@ const CypherResultCytoscapeCharts = ({
       const selectedLayout = seletableLayouts[cytoscapeLayout];
       selectedLayout.animate = true;
       selectedLayout.fit = true;
-      cytoscapeObject.layout(selectedLayout).run();
 
+      cytoscapeObject.minZoom(1e-1);
+      cytoscapeObject.maxZoom(1.5);
+      cytoscapeObject.layout(selectedLayout).run();
+      cytoscapeObject.maxZoom(5);
       if (!initialized) {
         addEventOnElements(cytoscapeObject.elements());
         setInitialized(true);
