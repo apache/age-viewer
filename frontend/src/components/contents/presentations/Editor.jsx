@@ -18,6 +18,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlayCircle, faStar } from '@fortawesome/free-regular-svg-icons';
+import { faEraser } from '@fortawesome/free-solid-svg-icons';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 
@@ -109,21 +112,21 @@ const Editor = ({
             </div>
             <div className="input-group-append ml-auto" id="editor-buttons">
               <button className="frame-head-button btn btn-link" type="button">
-                <span
-                  className="far fa-star fa-lg"
-                  aria-hidden="true"
+                <FontAwesomeIcon
+                  icon={faStar}
+                  size="lg"
                 />
               </button>
               <button className="frame-head-button btn btn-link" type="button" onClick={() => clearCommand()}>
-                <span
-                  className="fas fa-eraser fa-lg"
-                  aria-hidden="true"
+                <FontAwesomeIcon
+                  icon={faEraser}
+                  size="lg"
                 />
               </button>
               <button className="frame-head-button btn btn-link" type="button" onClick={() => onClick()}>
-                <span
-                  className="far fa-play-circle fa-lg"
-                  aria-hidden="true"
+                <FontAwesomeIcon
+                  icon={faPlayCircle}
+                  size="lg"
                 />
               </button>
             </div>

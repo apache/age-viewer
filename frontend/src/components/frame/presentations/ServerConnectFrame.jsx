@@ -17,6 +17,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faAngleDown, faAngleUp, faPaperclip, faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 
 const ServerConnectFrame = ({
   refKey,
@@ -41,12 +45,12 @@ const ServerConnectFrame = ({
     });
   };
 
-  const setIconForIsExpanded = () => {
-    if (isExpanded) {
-      return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
-    }
-    return <span className="fas fa-angle-down fa-lg" aria-hidden="true" />;
-  };
+  const setIconForIsExpanded = () => (
+    <FontAwesomeIcon
+      icon={isExpanded ? faAngleUp : faAngleDown}
+      size="lg"
+    />
+  );
 
   return (
     <div className="card mt-3">
@@ -64,9 +68,9 @@ const ServerConnectFrame = ({
             className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
             onClick={() => pinFrame(refKey)}
           >
-            <span
-              className="fas fa-paperclip fa-lg"
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon={faPaperclip}
+              size="lg"
             />
           </button>
           <button
@@ -84,7 +88,10 @@ const ServerConnectFrame = ({
             className="frame-head-button btn btn-link pl-3"
             onClick={() => removeFrame(refKey)}
           >
-            <span className="fas fa-times fa-lg" aria-hidden="true" />
+            <FontAwesomeIcon
+              icon={faTimes}
+              size="lg"
+            />
           </button>
         </div>
       </div>

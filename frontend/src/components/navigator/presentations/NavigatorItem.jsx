@@ -16,6 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
   const [menuName, fwCode] = itemInfo;
@@ -32,16 +33,14 @@ const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
         aria-selected="true"
         onClick={() => onClick(menuName)}
       >
-        <i
-          className={`fas fa-${fwCode}`}
-        />
+        <FontAwesomeIcon icon={fwCode} />
       </a>
     </li>
   );
 };
 
 NavigatorItem.propTypes = {
-  itemInfo: PropTypes.arrayOf(PropTypes.string).isRequired,
+  itemInfo: PropTypes.arrayOf(PropTypes.any).isRequired,
   activeMenuName: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };

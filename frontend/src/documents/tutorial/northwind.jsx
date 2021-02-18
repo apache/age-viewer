@@ -16,6 +16,8 @@
  */
 
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
 
 export const title = 'Northwind Graph';
 export const category = 'graphExamples';
@@ -56,11 +58,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -91,11 +99,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -134,11 +148,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -193,11 +213,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -370,11 +396,17 @@ FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -429,11 +461,17 @@ CREATE PROPERTY INDEX ON territory(territoryid);`}
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -487,11 +525,17 @@ CREATE (n)-[r:SOLD]->(m);`}
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
