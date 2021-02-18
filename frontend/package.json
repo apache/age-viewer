@@ -4,9 +4,6 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.6.3",
     "@uiw/react-codemirror": "^3.0.5",
     "ascii-table": "0.0.9",
     "axios": "^0.21.1",
@@ -58,6 +55,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.6.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.19.0",
     "eslint-config-airbnb": "^18.2.1",
