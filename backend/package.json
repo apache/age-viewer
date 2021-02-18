@@ -29,7 +29,6 @@
         "winston-daily-rotate-file": "^4.5.0"
     },
     "devDependencies": {
-        "nodemon": "^2.0.7",
         "@babel/cli": "^7.12.13",
         "@babel/core": "^7.12.13",
         "@babel/node": "^7.12.13",
@@ -37,6 +36,7 @@
         "@babel/preset-env": "^7.12.13",
         "@babel/register": "^7.12.13",
         "mocha": "^8.2.1",
+        "nodemon": "^2.0.7",
         "supertest": "^6.0.1",
         "supertest-session": "^4.1.0"
     }

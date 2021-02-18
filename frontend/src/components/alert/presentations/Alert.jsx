@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
 
 const SingleAlert = ({ alertName, errorMessage, setCommand }) => {
   const dispatch = useDispatch();
@@ -45,13 +47,14 @@ const SingleAlert = ({ alertName, errorMessage, setCommand }) => {
         <p>
           Database is Disconnected. You may use
           {' '}
-          <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
-            <span
-              className="far fa-play-circle fa-lg pr-2"
-              aria-hidden="true"
+          <button type="button" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
+
+            <FontAwesomeIcon
+              icon={faPlayCircle}
+              size="lg"
             />
             :server connect
-          </a>
+          </button>
           {' '}
           to
           establish connection. There&apos;s a graph waiting for you.
@@ -67,9 +70,9 @@ const SingleAlert = ({ alertName, errorMessage, setCommand }) => {
           Successfully database is connected. You may use
           {' '}
           <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server status')}>
-            <span
-              className="far fa-play-circle fa-lg pr-2"
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon={faPlayCircle}
+              size="lg"
             />
             :server status
           </a>
@@ -99,9 +102,9 @@ const SingleAlert = ({ alertName, errorMessage, setCommand }) => {
           You haven&apos;t set database connection. You may use
           {' '}
           <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
-            <span
-              className="far fa-play-circle fa-lg pr-2"
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon={faPlayCircle}
+              size="lg"
             />
             :server connect
           </a>
@@ -157,9 +160,9 @@ const SingleAlert = ({ alertName, errorMessage, setCommand }) => {
             className="badge badge-light"
             onClick={(e) => setAlertConnect(e, ':server disconnect')}
           >
-            <span
-              className="far fa-play-circle fa-lg pr-2"
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon={faPlayCircle}
+              size="lg"
             />
             :server disconnect
           </a>

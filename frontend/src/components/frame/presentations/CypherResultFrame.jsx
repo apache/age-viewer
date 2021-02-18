@@ -16,7 +16,17 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tab, Nav, Collapse } from 'react-bootstrap';
+import { Collapse, Nav, Tab } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faAngleDown,
+  faAngleUp,
+  faCompressAlt,
+  faExpandAlt,
+  faPaperclip,
+  faTable,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
 
@@ -30,19 +40,19 @@ const CypherResultFrame = ({
     setIsFullScreen(!isFullScreen);
   };
 
-  const setIconForIsExpanded = () => {
-    if (isExpanded) {
-      return <span className="fas fa-angle-up fa-lg" aria-hidden="true" />;
-    }
-    return <span className="fas fa-angle-down fa-lg" aria-hidden="true" />;
-  };
+  const setIconForIsExpanded = () => (
+    <FontAwesomeIcon
+      icon={isExpanded ? faAngleUp : faAngleDown}
+      size="lg"
+    />
+  );
 
-  const setIconForIsFullscreen = () => {
-    if (isFullScreen) {
-      return <span className="fas fa-compress-alt fa-lg" aria-hidden="true" />;
-    }
-    return <span className="fas fa-expand-alt fa-lg" aria-hidden="true" />;
-  };
+  const setIconForIsFullscreen = () => (
+    <FontAwesomeIcon
+      icon={isFullScreen ? faCompressAlt : faExpandAlt}
+      size="lg"
+    />
+  );
 
   return (
     <div className={`card ${isFullScreen ? ' fullscreen ' : 'mt-3'}`}>
@@ -67,9 +77,9 @@ const CypherResultFrame = ({
             className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
             onClick={() => pinFrame(refKey)}
           >
-            <span
-              className="fas fa-paperclip fa-lg"
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon={faPaperclip}
+              size="lg"
             />
           </button>
           <button
@@ -87,7 +97,10 @@ const CypherResultFrame = ({
             className="frame-head-button btn btn-link pl-3"
             onClick={() => removeFrame(refKey)}
           >
-            <span className="fas fa-times fa-lg" aria-hidden="true" />
+            <FontAwesomeIcon
+              icon={faTimes}
+              size="lg"
+            />
           </button>
         </div>
       </div>
@@ -100,7 +113,10 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="table">
-                    <span className="fas fa-table" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faTable}
+                      size="lg"
+                    />
                     <br />
                     Table
                   </Nav.Link>
@@ -108,7 +124,10 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="code">
-                    <span className="fas fa-terminal" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faTable}
+                      size="lg"
+                    />
                     <br />
                     Meta
                   </Nav.Link>

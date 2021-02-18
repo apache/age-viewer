@@ -39,7 +39,7 @@ const Navigator = ({ menuList, activeMenuName, toggleMenu }) => {
 };
 
 Navigator.propTypes = {
-  menuList: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  menuList: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)).isRequired,
   activeMenuName: PropTypes.string.isRequired,
   toggleMenu: PropTypes.func.isRequired,
 };

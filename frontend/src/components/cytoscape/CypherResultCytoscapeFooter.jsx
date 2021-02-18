@@ -18,6 +18,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
 import uuid from 'react-uuid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import {
   updateEdgeLabelSize,
   updateLabelCaption,
@@ -90,7 +92,9 @@ const CypherResultCytoscapeFooter = ({
             className="frame-head-button btn btn-link px-3"
             onClick={() => setFooterExpanded(!footerExpanded)}
           >
-            <span className={`fas ${footerExpanded ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true" />
+            <FontAwesomeIcon
+              icon={footerExpanded ? faAngleUp : faAngleDown}
+            />
           </button>
         </div>
       );
@@ -255,7 +259,9 @@ const CypherResultCytoscapeFooter = ({
             className="frame-head-button btn btn-link px-3"
             onClick={() => setFooterExpanded(!footerExpanded)}
           >
-            <span className={`fas ${footerExpanded ? 'fa-angle-up' : 'fa-angle-down'}`} aria-hidden="true" />
+            <FontAwesomeIcon
+              icon={footerExpanded ? faAngleUp : faAngleDown}
+            />
           </button>
         </div>
       );

@@ -22,7 +22,22 @@ import {
   Collapse, Dropdown, DropdownButton, Nav, Tab,
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faAngleDown,
+  faAngleUp,
+  faCompressAlt,
+  faDownload,
+  faExpandAlt,
+  faFont,
+  faPaperclip,
+  faSync,
+  faTable,
+  faTerminal,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
+import CypherResultCytoscapeContainer
+  from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer';
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
@@ -121,7 +136,12 @@ const CypherResultFrame = ({
           </div>
           <DropdownButton
             bsPrefix="frame-head-button btn btn-link"
-            title={<i className="fas fa-download fa-lg" />}
+            title={(
+              <FontAwesomeIcon
+                icon={faDownload}
+                size="lg"
+              />
+            )}
           >
             <Dropdown.Item onClick={() => downloadPng()}>Save as PNG</Dropdown.Item>
             <Dropdown.Item onClick={() => downloadJson()}>Save as JSON</Dropdown.Item>
@@ -132,23 +152,30 @@ const CypherResultFrame = ({
             className={`frame-head-button btn btn-link px-3${isFullScreen ? ' selected ' : ''}`}
             onClick={() => expandFrame()}
           >
-            { isFullScreen
-              ? <span className="fas fa-compress-alt fa-lg" aria-hidden="true" />
-              : <span className="fas fa-expand-alt fa-lg" aria-hidden="true" />}
+            <FontAwesomeIcon
+              icon={isFullScreen ? faCompressAlt : faExpandAlt}
+              size="lg"
+            />
           </button>
           <button
             type="button"
             className="frame-head-button btn btn-link px-3"
             onClick={() => refreshFrame()}
           >
-            <span className="fas fa-sync fa-lg" aria-hidden="true" />
+            <FontAwesomeIcon
+              icon={faSync}
+              size="lg"
+            />
           </button>
           <button
             type="button"
             className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
             onClick={() => pinFrame(refKey)}
           >
-            <span className="fas fa-paperclip fa-lg" aria-hidden="true" />
+            <FontAwesomeIcon
+              icon={faPaperclip}
+              size="lg"
+            />
           </button>
           <button
             type="button"
@@ -158,18 +185,20 @@ const CypherResultFrame = ({
             onClick={() => setIsExpanded(!isExpanded)}
             aria-controls={refKey}
           >
-            {
-              isExpanded
-                ? <span className="fas fa-angle-up fa-lg" aria-hidden="true" />
-                : <span className="fas fa-angle-down fa-lg" aria-hidden="true" />
-            }
+            <FontAwesomeIcon
+              icon={isExpanded ? faAngleUp : faAngleDown}
+              size="lg"
+            />
           </button>
           <button
             type="button"
             className="frame-head-button btn btn-link pl-3"
             onClick={() => removeFrame(refKey)}
           >
-            <span className="fas fa-times fa-lg" aria-hidden="true" />
+            <FontAwesomeIcon
+              icon={faTimes}
+              size="lg"
+            />
           </button>
         </div>
       </div>
@@ -182,7 +211,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="graph">
-                    <span className="fas fa-paperclip" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faPaperclip}
+                    />
                     <br />
                     Graph
                   </Nav.Link>
@@ -190,7 +221,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="table">
-                    <span className="fas fa-table" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faTable}
+                    />
                     <br />
                     Table
                   </Nav.Link>
@@ -198,7 +231,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="text">
-                    <span className="fas fa-font" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faFont}
+                    />
                     <br />
                     Text
                   </Nav.Link>
@@ -206,7 +241,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="code">
-                    <span className="fas fa-terminal" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faTerminal}
+                    />
                     <br />
                     Meta
                   </Nav.Link>
