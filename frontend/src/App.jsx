@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import 'antd/dist/antd.css';
 import MainPage from './pages/Main/MainPage';
 
 const App = () => (

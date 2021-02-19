@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
 import { Parser } from 'json2csv';
@@ -31,6 +31,7 @@ import {
   faExpandAlt,
   faFont,
   faPaperclip,
+  faSearch,
   faSync,
   faTable,
   faTerminal,
@@ -41,15 +42,47 @@ import CypherResultCytoscapeContainer
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer';
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
+import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
 
 const CypherResultFrame = ({
-  refKey, isPinned, reqString, removeFrame, pinFrame,
+  refKey,
+  isPinned,
+  reqString,
+  removeFrame,
+  pinFrame,
 }) => {
   const chartAreaRef = createRef();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false);
   const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
+
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+
+  const [filterProperties, setFilterProperties] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState(null);
+
+  useEffect(() => {
+    if (chartAreaRef.current && filterModalVisible) {
+      const labels = chartAreaRef.current.getLabels()
+        .map(
+          (label) => {
+            const propertiesIter = Array.from(chartAreaRef.current.getCaptionsFromCytoscapeObject('node', label));
+            return propertiesIter.map((value) => ({
+              label,
+              property: value,
+            }));
+          },
+        ).flat();
+      setFilterProperties(labels);
+    }
+  }, [filterModalVisible]);
+
+  useEffect(() => {
+    if (globalFilter) {
+      chartAreaRef.current.applyFilterOnCytoscapeElements(globalFilter);
+    }
+  }, [globalFilter]);
 
   const expandFrame = () => {
     setIsFullScreen(!isFullScreen);
@@ -134,6 +167,16 @@ const CypherResultFrame = ({
               {reqString}
             </strong>
           </div>
+          <button
+            type="button"
+            className="frame-head-button btn btn-link px-3"
+            onClick={() => setFilterModalVisible(true)}
+          >
+            <FontAwesomeIcon
+              icon={faSearch}
+              size="lg"
+            />
+          </button>
           <DropdownButton
             bsPrefix="frame-head-button btn btn-link"
             title={(
@@ -278,6 +321,14 @@ const CypherResultFrame = ({
           </div>
         </div>
       </Collapse>
+      <GraphFilterModal
+        onSubmit={(filters) => {
+          setGlobalFilter(filters);
+        }}
+        visible={filterModalVisible}
+        setVisible={setFilterModalVisible}
+        properties={filterProperties}
+      />
     </div>
 
   );

@@ -194,6 +194,30 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     });
   };
 
+  const applyFilterOnCytoscapeElements = (filters) => {
+    const gFilteredClassName = 'g-filtered';
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '1.0').removeClass('g-filtered');
+    filters.map((filter) => {
+      const elementType = 'node';
+      const { label, property } = filter.property;
+
+      cytoscapeObject.elements(`${elementType}[label = "${label}"]`)
+        .filter((ele) => {
+          const propertyValue = ele.data('properties')[property];
+          if (filter.keyword === null || filter.keyword === '') {
+            return false;
+          }
+          if (propertyValue === undefined || propertyValue === null) {
+            return true;
+          }
+          return !propertyValue.toString().includes(filter.keyword);
+        }).addClass('g-filtered');
+
+      return false;
+    });
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.5');
+  };
+
   const captionChange = (elementType, label, caption) => {
     changeCaptionOnCytoscapeElements(elementType, label, caption);
     setSelectedCaption(caption);
@@ -215,10 +239,14 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   };
 
   useImperativeHandle(ref, () => ({
-
     getCy() {
       return cytoscapeObject;
     },
+    getLabels() {
+      return Object.keys(props.data.legend.nodeLegend);
+    },
+    getCaptionsFromCytoscapeObject,
+    applyFilterOnCytoscapeElements,
   }));
 
   return (
