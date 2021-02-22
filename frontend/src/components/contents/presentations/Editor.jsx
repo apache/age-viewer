@@ -56,6 +56,7 @@ const Editor = ({
       dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
     } else if (database.status === 'disconnected' && command.toUpperCase() === ':SERVER CONNECT') {
       dispatch(() => trimFrame('ServerConnect'));
+      dispatch(() => addFrame(':server connect', 'ServerConnect'));
     } else if (database.status === 'disconnected' && command.toUpperCase().match('(MATCH|CREATE).*')) {
       dispatch(() => trimFrame('ServerConnect'));
       dispatch(() => addAlert('ErrorNoDatabaseConnected'));
