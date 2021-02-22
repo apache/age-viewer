@@ -70,7 +70,10 @@ const GraphFilterModal = ({
               key={strPropertyItem}
               value={strPropertyItem}
             >
-              {`${propertyItem.label}.${propertyItem.property}`}
+              &#91;
+              {propertyItem.label}
+              &#93;&nbsp;
+              {propertyItem.property}
             </Select.Option>
           );
         }),

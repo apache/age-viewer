@@ -103,10 +103,10 @@ const CypherResultCytoscapeFooter = ({
       return (
         <div className="d-flex pl-3">
           <div className="mr-auto label pl-3">
-            Displaying
+            Displaying&nbsp;
             <strong>{footerData.data.nodeCount}</strong>
-            {' '}
-            nodes,
+            &nbsp;
+            nodes,&nbsp;
             <strong>{footerData.data.edgeCount}</strong>
             {' '}
             edges
