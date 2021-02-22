@@ -33,7 +33,13 @@ const MetadataCytoscapeChart = ({ elements }) => {
   [cytoscapeObject]);
 
   useEffect(() => {
-    if (cytoscapeObject) {
+    if (cytoscapeObject && elements) {
+      try {
+        cytoscapeObject.add(CytoscapeComponent.normalizeElements(elements));
+      } catch (e) {
+        // todo: Metadata handling on server is wrong.
+      }
+
       cytoscapeObject.minZoom(1e-1);
       cytoscapeObject.maxZoom(1.5);
       const selectedLayout = seletableLayouts.coseBilkent;
@@ -46,7 +52,7 @@ const MetadataCytoscapeChart = ({ elements }) => {
 
   return (
     <CytoscapeComponent
-      elements={CytoscapeComponent.normalizeElements(elements)}
+      elements={[]}
       stylesheet={stylesheet}
       cy={cyCallback}
       className="chart-area metachart-area"
