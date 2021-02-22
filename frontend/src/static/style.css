@@ -13,7 +13,7 @@
     --dark-theme: #bd93f9;
     --dark-navbar: #ffffff;
     --dark-sidebar: #747474;
-    
+
     /* Default mode */
     --text-color: var(--light-text);
     --bg-color: var(--light-bg);
@@ -92,7 +92,7 @@ body {
     top: 0;
     left: 70px;
     height: 100vh;
-    z-index: 999;
+    z-index: 10;
     background-color: var(--sidebar-color);
     color: #fff;
     transition: all 0.3s;
@@ -150,7 +150,7 @@ a[data-toggle="collapse"] {
 
 #content.active {
     width: calc(100% - 390px);
-    
+
 }
 
 
@@ -186,21 +186,21 @@ a[data-toggle="collapse"] {
     top: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1040;
+    z-index: 12;
 }
 
 .card.fullscreen .chart-area {
     flex: 1;
 }
 .card-header {
-    border-bottom: 1px solid rgba(0,0,0,.125);    
+    border-bottom: 1px solid rgba(0,0,0,.125);
 }
 
 .card-title {
     margin: 0.5rem 0;
 }
 
-[aria-expanded="true"] .fa:before {   
+[aria-expanded="true"] .fa:before {
     content: "\f077";
 }
 
@@ -217,7 +217,7 @@ a[data-toggle="collapse"] {
 .graph-card-nav {
     text-align: center;
     width: 70px;
-    border-right: 1px solid rgba(0,0,0,.125);    
+    border-right: 1px solid rgba(0,0,0,.125);
 }
 
 .graph-card-nav-item.active {
@@ -267,7 +267,7 @@ a.nav-link.active {
 
 .chart-footer-area {
     vertical-align: middle;
-    line-height: 37px;       
+    line-height: 37px;
     min-height: 37px;
     width: 100%;
     background-color: rgba(0,0,0,.03);
@@ -332,14 +332,14 @@ a.nav-link.active {
 }
 
 .colorSelector {
-    width: 15px; 
-    height: 15px; 
-    padding: 6px 0px; 
-    border-radius: 15px; 
-    font-size: 8px; 
-    text-align: center; 
+    width: 15px;
+    height: 15px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    font-size: 8px;
+    text-align: center;
     margin-left: 5px;
-    opacity: 0.2; 
+    opacity: 0.2;
 }
 
 .captionSelector {
@@ -349,46 +349,46 @@ a.nav-link.active {
     border-radius: .2rem;
     margin-left: 5px;
     border-color: darkgrey;
-    opacity: 0.5; 
+    opacity: 0.5;
 }
 
 .sizeSelector.node {
     background-color: darkgrey;
-    padding: 6px 0px; 
-    border-radius: 15px; 
-    font-size: 8px; 
-    text-align: center; 
+    padding: 6px 0px;
+    border-radius: 15px;
+    font-size: 8px;
+    text-align: center;
     margin-left: 5px;
-    opacity: 0.2; 
+    opacity: 0.2;
 }
 
 .sizeSelector.edge {
     background-color: darkgrey;
-    padding: 6px 0px; 
-    font-size: 8px; 
-    text-align: center; 
+    padding: 6px 0px;
+    font-size: 8px;
+    text-align: center;
     margin-left: 5px;
-    opacity: 0.2; 
+    opacity: 0.2;
 }
 
 .sizeSelector:hover {
-    opacity: 1; 
+    opacity: 1;
 }
 
 .sizeSelector.selectedSize {
-    opacity: 1; 
+    opacity: 1;
 }
 
 .colorSelector:hover {
-    opacity: 1; 
+    opacity: 1;
 }
 
 .colorSelector.selectedColor {
-    opacity: 1; 
+    opacity: 1;
 }
 
 .captionSelector.selectedCaption {
-    opacity: 1; 
+    opacity: 1;
 }
 
 
