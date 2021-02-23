@@ -16,18 +16,16 @@
 
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Collapse } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faAngleDown, faAngleUp, faPaperclip, faTimes,
-} from '@fortawesome/free-solid-svg-icons';
 import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
+import { Col, Row } from 'antd';
 import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart';
+import Frame from '../Frame';
+import FrameStyles from '../Frame.module.scss';
 
 const ServerStatusFrame = ({
   refKey, isPinned, reqString, serverInfo, removeFrame, pinFrame, data,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
   const [elements, setElements] = useState({ edges: [], nodes: [] });
   const {
     host, port, user, database, graph, status,
@@ -39,23 +37,16 @@ const ServerStatusFrame = ({
     }
   });
 
-  const setIconForIsExpanded = () => (
-    <FontAwesomeIcon
-      icon={isExpanded ? faAngleUp : faAngleDown}
-      size="lg"
-    />
-  );
-
   const setContent = () => {
     if (status === 'connected') {
       return (
-        <div className="card-body card-body-graph collapse" id="connectStatusCardBody">
-          <div className="row" style={{ padding: '15px 30px' }}>
-            <div className="col-3">
+        <div className={FrameStyles.FlexContentWrapper}>
+          <Row>
+            <Col span={6}>
               <h3>Connection Status</h3>
               <p>This is your current connection information.</p>
-            </div>
-            <div className="col-9">
+            </Col>
+            <Col span={18}>
               <p>
                 You are connected as user&nbsp;
                 <strong>{user}</strong>
@@ -74,8 +65,8 @@ const ServerStatusFrame = ({
                 Graph path has been set to&nbsp;
                 <strong>{graph}</strong>
               </p>
-            </div>
-          </div>
+            </Col>
+          </Row>
 
           <hr style={{
             color: 'rgba(0,0,0,.125)',
@@ -84,21 +75,20 @@ const ServerStatusFrame = ({
             height: '0.3px',
           }}
           />
-          <div className="chart-frame-area">
-            <MetadataCytoscapeChart elements={elements} />
-          </div>
+
+          <MetadataCytoscapeChart elements={elements} />
         </div>
       );
     }
     if (status === 'disconnected') {
       return (
-        <div className="card-body collapse" id="connectStatusCardBody">
-          <div className="row">
-            <div className="col-3">
+        <>
+          <Row>
+            <Col span={6}>
               <h3>Connection Status</h3>
               <p>You are currently not connected to AgensGraph</p>
-            </div>
-            <div className="col-9">
+            </Col>
+            <Col span={18}>
               <p>
                 You may run
                 <a href="/#" className="badge badge-light">
@@ -111,60 +101,22 @@ const ServerStatusFrame = ({
                 {' '}
                 to access to Agensgraph.
               </p>
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </>
       );
     }
     return null;
   };
   return (
-    <div className="card mt-3">
-      <div className="card-header">
-        <div className="d-flex card-title text-muted">
-          <div className="mr-auto">
-            <strong>
-              {' '}
-              $
-              {reqString}
-            </strong>
-          </div>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
-            onClick={() => pinFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faPaperclip}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            data-toggle="collapse"
-            aria-expanded={isExpanded}
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-controls={refKey}
-          >
-            {setIconForIsExpanded(isExpanded)}
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link pl-3"
-            onClick={() => removeFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faTimes}
-              size="lg"
-            />
-          </button>
-        </div>
-      </div>
-      <Collapse in={isExpanded}>
-        {setContent()}
-      </Collapse>
-    </div>
+    <Frame
+      reqString={reqString}
+      isPinned={isPinned}
+      pinFrame={pinFrame}
+      content={setContent()}
+      refKey={refKey}
+      removeFrame={removeFrame}
+    />
   );
 };
 

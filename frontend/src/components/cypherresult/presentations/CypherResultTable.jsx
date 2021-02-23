@@ -14,13 +14,46 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Table from 'react-bootstrap/Table';
+import { Table } from 'antd';
+import { uuid } from 'cytoscape/src/util';
 
 const CypherResultTable = ({ data }) => {
-  let trIndex = 0;
-  let tdIndex = 0;
+  const [localColumns, setLocalColumns] = useState([]);
+  const [localRows, setLocalRows] = useState([]);
+
+  useEffect(() => {
+    const randKeyName = `key_${uuid()}`;
+    let hasKey = false;
+    const columnsForFTable = [];
+    data.columns.forEach((key) => {
+      let isKey = false;
+      if (key === 'key') {
+        isKey = true;
+        hasKey = true;
+      }
+      columnsForFTable.push({
+        title: key,
+        dataIndex: isKey ? randKeyName : key,
+        key: isKey ? randKeyName : key,
+        render: (text) => <>{JSON.stringify(text)}</>,
+      });
+    });
+    setLocalColumns(columnsForFTable);
+
+    setLocalRows(data.rows.map((item) => {
+      const newItem = {
+        ...item,
+      };
+      if (hasKey) {
+        newItem[randKeyName] = newItem.key;
+        delete newItem.key;
+      }
+      newItem.key = uuid();
+      return newItem;
+    }));
+  }, []);
 
   if (data.command && data.command.toUpperCase().match('(GRAPH|COPY).*')) {
     return (
@@ -37,30 +70,7 @@ const CypherResultTable = ({ data }) => {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>{data.message}</span></div>;
   }
   return (
-    <Table className="table table-hover">
-      <thead>
-        <tr>
-          {
-              data.columns.map((h) => (<th key={h.toString()}>{h.toString()}</th>))
-            }
-        </tr>
-      </thead>
-      <tbody>
-        {
-            data.rows.map((d) => {
-              const rows = data.columns.map(
-                (alias) => {
-                  const stringifyData = JSON.stringify(d[alias]);
-                  tdIndex += 1;
-                  return <td key={tdIndex}>{stringifyData}</td>;
-                },
-              );
-              trIndex += 1;
-              return <tr key={trIndex}>{rows}</tr>;
-            })
-          }
-      </tbody>
-    </Table>
+    <Table columns={localColumns} dataSource={localRows} />
   );
 };
 

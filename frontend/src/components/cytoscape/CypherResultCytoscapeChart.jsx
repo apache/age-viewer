@@ -36,6 +36,7 @@ import cxtmenu from '../../lib/cytoscape-cxtmenu-bitnine';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
 import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
+import styles from '../frame/Frame.module.scss';
 
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
@@ -239,7 +240,7 @@ const CypherResultCytoscapeCharts = ({
       elements={CytoscapeComponent.normalizeElements(elements)}
       stylesheet={stylesheet}
       cy={cyCallback}
-      className="chart-area"
+      className={styles.NormalChart}
     />
   );
 };

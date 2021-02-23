@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { Collapse } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faAngleDown, faAngleUp, faPaperclip, faTimes,
-} from '@fortawesome/free-solid-svg-icons';
 import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
+import { Col, Row } from 'antd';
+import Frame from '../Frame';
 
 const ServerDisconnectFrame = ({
   refKey,
@@ -36,7 +34,6 @@ const ServerDisconnectFrame = ({
   setCommand,
   resetMetaData,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,82 +46,36 @@ const ServerDisconnectFrame = ({
     /* dispatch(() => addAlert('NoticeServerDisconnected')); */
   }, [dispatch, disconnectToAgensGraph, addFrame, addAlert]);
 
-  const setIconForIsExpanded = () => (
-    <FontAwesomeIcon
-      icon={isExpanded ? faAngleUp : faAngleDown}
-      size="lg"
-    />
-  );
-
   return (
-    <div className="card mt-3">
-      <div className="card-header">
-        <div className="d-flex card-title text-muted">
-          <div className="mr-auto">
-            <strong>
+    <Frame
+      content={(
+        <Row>
+          <Col span={6}>
+            <h3>Disconnected Succesfully</h3>
+            <p>You are successfully disconnected from Agensgraph.</p>
+          </Col>
+          <Col span={18}>
+            <p>
+              You may run
+              <a href="/#" className="badge badge-light" onClick={() => { setCommand(':server connect'); }}>
+                <FontAwesomeIcon
+                  icon={faPlayCircle}
+                  size="lg"
+                />
+                :server connection
+              </a>
               {' '}
-              $
-              {reqString}
-            </strong>
-          </div>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
-            onClick={() => pinFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faPaperclip}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            data-toggle="collapse"
-            aria-expanded={isExpanded}
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-controls={refKey}
-          >
-            {setIconForIsExpanded(isExpanded)}
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link pl-3"
-            onClick={() => removeFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faTimes}
-              size="lg"
-            />
-          </button>
-        </div>
-      </div>
-      <Collapse in={isExpanded}>
-        <div className="card-body collapse" id={refKey}>
-          <div className="row">
-            <div className="col-3">
-              <h3>Disconnected Succesfully</h3>
-              <p>You are successfully disconnected from Agensgraph.</p>
-            </div>
-            <div className="col-9">
-              <p>
-                You may run
-                <a href="/#" className="badge badge-light" onClick={() => { setCommand(':server connect'); }}>
-                  <FontAwesomeIcon
-                    icon={faPlayCircle}
-                    size="lg"
-                  />
-                  :server connection
-                </a>
-                {' '}
-                to establish new connection
-              </p>
-            </div>
-          </div>
-        </div>
-      </Collapse>
-      <div className="card-footer" />
-    </div>
+              to establish new connection
+            </p>
+          </Col>
+        </Row>
+)}
+      reqString={reqString}
+      isPinned={isPinned}
+      pinFrame={pinFrame}
+      removeFrame={removeFrame}
+      refKey={refKey}
+    />
   );
 };
 

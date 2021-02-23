@@ -18,24 +18,11 @@ import React, { createRef, useEffect, useState } from 'react';
 import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
 import { Parser } from 'json2csv';
-import {
-  Collapse, Dropdown, DropdownButton, Nav, Tab,
-} from 'react-bootstrap';
+import { Nav, Tab } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleDown,
-  faAngleUp,
-  faCompressAlt,
-  faDownload,
-  faExpandAlt,
-  faFont,
-  faPaperclip,
-  faSearch,
-  faSync,
-  faTable,
-  faTerminal,
-  faTimes,
+  faFont, faPaperclip, faTable, faTerminal,
 } from '@fortawesome/free-solid-svg-icons';
 import CypherResultCytoscapeContainer
   from '../../cypherresult/containers/CypherResultCytoscapeContainer';
@@ -43,6 +30,7 @@ import CypherResultTableContainer from '../../cypherresult/containers/CypherResu
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer';
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
 import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
+import Frame from '../Frame';
 
 const CypherResultFrame = ({
   refKey,
@@ -52,9 +40,6 @@ const CypherResultFrame = ({
   pinFrame,
 }) => {
   const chartAreaRef = createRef();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false);
   const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -83,20 +68,6 @@ const CypherResultFrame = ({
       chartAreaRef.current.applyFilterOnCytoscapeElements(globalFilter);
     }
   }, [globalFilter]);
-
-  const expandFrame = () => {
-    setIsFullScreen(!isFullScreen);
-    setCyZoomingEnabled(!cyZoomingEnabled);
-    const ref = chartAreaRef.current;
-
-    function resize() {
-      const zoom = ref.getCy().zoom();
-      ref.getCy().resize();
-      ref.getCy().zoom({ level: zoom, position: { x: 0, y: 0 } });
-    }
-
-    window.setTimeout(resize, 500);
-  };
 
   const refreshFrame = () => {
     setCytoscapeContainerKey(uuid());
@@ -157,96 +128,21 @@ const CypherResultFrame = ({
   };
 
   return (
-    <div className={`card ${isFullScreen ? ' fullscreen ' : 'mt-3'}`}>
-      <div className="card-header">
-        <div className="d-flex card-title text-muted">
-          <div className="mr-auto">
-            <strong>
-              {' '}
-              $
-              {reqString}
-            </strong>
-          </div>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            onClick={() => setFilterModalVisible(true)}
-          >
-            <FontAwesomeIcon
-              icon={faSearch}
-              size="lg"
-            />
-          </button>
-          <DropdownButton
-            bsPrefix="frame-head-button btn btn-link"
-            title={(
-              <FontAwesomeIcon
-                icon={faDownload}
-                size="lg"
-              />
-            )}
-          >
-            <Dropdown.Item onClick={() => downloadPng()}>Save as PNG</Dropdown.Item>
-            <Dropdown.Item onClick={() => downloadJson()}>Save as JSON</Dropdown.Item>
-            <Dropdown.Item onClick={() => downloadCsv()}>Save as CSV</Dropdown.Item>
-          </DropdownButton>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isFullScreen ? ' selected ' : ''}`}
-            onClick={() => expandFrame()}
-          >
-            <FontAwesomeIcon
-              icon={isFullScreen ? faCompressAlt : faExpandAlt}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            onClick={() => refreshFrame()}
-          >
-            <FontAwesomeIcon
-              icon={faSync}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
-            onClick={() => pinFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faPaperclip}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            data-toggle="collapse"
-            aria-expanded={isExpanded}
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-controls={refKey}
-          >
-            <FontAwesomeIcon
-              icon={isExpanded ? faAngleUp : faAngleDown}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link pl-3"
-            onClick={() => removeFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faTimes}
-              size="lg"
-            />
-          </button>
-        </div>
-      </div>
-      <Collapse in={isExpanded}>
-        <div className="card-body card-body-graph" id={refKey}>
+    <>
+      <Frame
+        bodyNoPadding
+        onSearch={() => setFilterModalVisible(true)}
+        onRefresh={refreshFrame}
+        onDownload={(type) => {
+          if (type === 'csv') {
+            downloadCsv();
+          } else if (type === 'json') {
+            downloadJson();
+          } else if (type === 'png') {
+            downloadPng();
+          }
+        }}
+        content={(
           <div className="d-flex h-100">
             <Tab.Container defaultActiveKey="graph">
 
@@ -300,7 +196,6 @@ const CypherResultFrame = ({
                     key={cytoscapeContainerKey}
                     ref={chartAreaRef}
                     refKey={refKey}
-                    isFullScreen={isFullScreen}
                   />
                 </Tab.Pane>
 
@@ -319,8 +214,13 @@ const CypherResultFrame = ({
               </Tab.Content>
             </Tab.Container>
           </div>
-        </div>
-      </Collapse>
+        )}
+        reqString={reqString}
+        isPinned={isPinned}
+        pinFrame={pinFrame}
+        removeFrame={removeFrame}
+        refKey={refKey}
+      />
       <GraphFilterModal
         onSubmit={(filters) => {
           setGlobalFilter(filters);
@@ -329,7 +229,7 @@ const CypherResultFrame = ({
         setVisible={setFilterModalVisible}
         properties={filterProperties}
       />
-    </div>
+    </>
 
   );
 };

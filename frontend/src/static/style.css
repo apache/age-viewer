@@ -128,33 +128,6 @@ a[data-toggle="collapse"] {
 }
 
 /* ---------------------------------------------------
-    CONTENT STYLE
------------------------------------------------------ */
-
-#content {
-    width: calc(100% - 70px);
-    padding: 1rem;
-    min-height: 100vh;
-    transition: all 0.3s;
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
-/*
-#sidebar.active~#content{
-    width: calc(100% - 390px);
-}
-*/
-
-#content.active {
-    width: calc(100% - 390px);
-
-}
-
-
-/* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
 
@@ -408,7 +381,7 @@ a.nav-link.active {
     Play Contents
 ----------------------------------------------------- */
 .carousel.slide {
-    height: 500px;
+    height: 100%;
     width: 100%;
 }
 
@@ -504,18 +477,6 @@ textarea.editorTextarea
  padding-top: 10px;
  border-color:#ccc;
  line-height:16px;
-}
-
-.CodeMirror {
-    font-family: 'Poppins', sans-serif !important;
-}
-
-.CodeMirror-line {
-    padding: 5px !important;
-}
-
-.CodeMirror-linenumber {
-    padding: 5px 3px 0 5px !important;
 }
 
 .layout-select {

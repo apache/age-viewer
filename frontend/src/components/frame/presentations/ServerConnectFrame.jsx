@@ -16,11 +16,8 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Collapse } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faAngleDown, faAngleUp, faPaperclip, faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { Col, Row } from 'antd';
+import Frame from '../Frame';
 
 const ServerConnectFrame = ({
   refKey,
@@ -36,7 +33,6 @@ const ServerConnectFrame = ({
   getMetaChartData,
 }) => {
   const [formData, setFormData] = useState({});
-  const [isExpanded, setIsExpanded] = useState(true);
 
   const handleChange = (e) => {
     setFormData({
@@ -45,132 +41,85 @@ const ServerConnectFrame = ({
     });
   };
 
-  const setIconForIsExpanded = () => (
-    <FontAwesomeIcon
-      icon={isExpanded ? faAngleUp : faAngleDown}
-      size="lg"
-    />
-  );
-
   return (
-    <div className="card mt-3">
-      <div className="card-header">
-        <div className="d-flex card-title text-muted">
-          <div className="mr-auto">
-            <strong>
-              {' '}
-              $
-              {reqString}
-            </strong>
-          </div>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
-            onClick={() => pinFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faPaperclip}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            data-toggle="collapse"
-            aria-expanded={isExpanded}
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-controls={refKey}
-          >
-            {setIconForIsExpanded(isExpanded)}
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link pl-3"
-            onClick={() => removeFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faTimes}
-              size="lg"
-            />
-          </button>
-        </div>
-      </div>
+    <Frame
+      content={(
+        <Row>
+          <Col span={6}>
+            <h3>Connect to AgensGraph</h3>
+            <p>Database access might require and authenticated connection.</p>
+          </Col>
+          <Col span={18}>
+            <form>
+              <fieldset className="form-group">
+                <label htmlFor="host">
+                  Connect URL
+                  <input type="text" className="form-control" name="host" onChange={handleChange} />
+                </label>
+              </fieldset>
+              <fieldset className="form-group">
+                <label htmlFor="port">
+                  Connect Port
+                  <input type="number" className="form-control" name="port" onChange={handleChange} />
+                </label>
+              </fieldset>
+              <fieldset className="form-group">
+                <label htmlFor="database">
+                  Database Name
+                  <input type="text" className="form-control" name="database" onChange={handleChange} />
+                </label>
+              </fieldset>
+              <fieldset className="form-group">
+                <label htmlFor="graph">
+                  Graph Path
+                  <input type="text" className="form-control" name="graph" onChange={handleChange} />
+                </label>
+              </fieldset>
+              <fieldset className="form-group">
+                <label htmlFor="user">
+                  User Name
+                  <input type="text" className="form-control" name="user" onChange={handleChange} />
+                </label>
+              </fieldset>
+              <fieldset className="form-group">
+                <label htmlFor="password">
+                  Password
+                  <input type="password" className="form-control" id="password" name="password" autoComplete="on" onChange={handleChange} />
+                </label>
+              </fieldset>
+            </form>
+            <button
+              type="button"
+              className="btn btn-info"
+              onClick={() => connectToAgensGraph(formData).then((response) => {
+                if (response.type === 'database/connectToAgensGraph/fulfilled') {
+                  addAlert('NoticeServerConnected');
+                  trimFrame('ServerConnect');
+                  getMetaData().then((metadataResponse) => {
+                    if (metadataResponse.type === 'database/getMetaData/fulfilled') {
+                      getMetaChartData();
+                    } else if (metadataResponse.type === 'database/getMetaData/rejected') {
+                      addAlert('ErrorMetaFail');
+                    }
+                  });
 
-      <Collapse in={isExpanded}>
-        <div className="card-body collapse" id={refKey}>
-          <div className="row">
-            <div className="col-3">
-              <h3>Connect to AgensGraph</h3>
-              <p>Database access might require and authenticated connection.</p>
-            </div>
-            <div className="col-9">
-              <form>
-                <fieldset className="form-group">
-                  <label htmlFor="host">
-                    Connect URL
-                    <input type="text" className="form-control" name="host" onChange={handleChange} />
-                  </label>
-                </fieldset>
-                <fieldset className="form-group">
-                  <label htmlFor="port">
-                    Connect Port
-                    <input type="number" className="form-control" name="port" onChange={handleChange} />
-                  </label>
-                </fieldset>
-                <fieldset className="form-group">
-                  <label htmlFor="database">
-                    Database Name
-                    <input type="text" className="form-control" name="database" onChange={handleChange} />
-                  </label>
-                </fieldset>
-                <fieldset className="form-group">
-                  <label htmlFor="graph">
-                    Graph Path
-                    <input type="text" className="form-control" name="graph" onChange={handleChange} />
-                  </label>
-                </fieldset>
-                <fieldset className="form-group">
-                  <label htmlFor="user">
-                    User Name
-                    <input type="text" className="form-control" name="user" onChange={handleChange} />
-                  </label>
-                </fieldset>
-                <fieldset className="form-group">
-                  <label htmlFor="password">
-                    Password
-                    <input type="password" className="form-control" id="password" name="password" autoComplete="on" onChange={handleChange} />
-                  </label>
-                </fieldset>
-              </form>
-              <button
-                type="button"
-                className="btn btn-info"
-                onClick={() => connectToAgensGraph(formData).then((response) => {
-                  if (response.type === 'database/connectToAgensGraph/fulfilled') {
-                    addAlert('NoticeServerConnected');
-                    trimFrame('ServerConnect');
-                    getMetaData().then((metadataResponse) => {
-                      if (metadataResponse.type === 'database/getMetaData/fulfilled') {
-                        getMetaChartData();
-                      } else if (metadataResponse.type === 'database/getMetaData/rejected') {
-                        addAlert('ErrorMetaFail');
-                      }
-                    });
-
-                    addFrame(':server status', 'ServerStatus');
-                  } else if (response.type === 'database/connectToAgensGraph/rejected') {
-                    addAlert('ErrorServerConnectFail', response.error.message);
-                  }
-                })}
-              >
-                CONNECT
-              </button>
-            </div>
-          </div>
-        </div>
-      </Collapse>
-      <div className="card-footer" />
-    </div>
+                  addFrame(':server status', 'ServerStatus');
+                } else if (response.type === 'database/connectToAgensGraph/rejected') {
+                  addAlert('ErrorServerConnectFail', response.error.message);
+                }
+              })}
+            >
+              CONNECT
+            </button>
+          </Col>
+        </Row>
+)}
+      reqString={reqString}
+      isPinned={isPinned}
+      pinFrame={pinFrame}
+      removeFrame={removeFrame}
+      refKey={refKey}
+    />
   );
 };
 

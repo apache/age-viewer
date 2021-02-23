@@ -16,18 +16,21 @@
 
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Carousel, Collapse } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faAngleDown, faAngleLeft, faAngleRight, faAngleUp, faPaperclip, faTimes,
-} from '@fortawesome/free-solid-svg-icons';
 import { slides as northwindSlides } from '../../../documents/tutorial/northwind';
+import Frame from '../Frame';
+import FrameStyles from '../Frame.module.scss';
 
 const ContentFrame = ({
-  refKey, isPinned, reqString, playTarget, removeFrame, pinFrame, addAlert,
+  refKey,
+  isPinned,
+  reqString,
+  playTarget,
+  removeFrame,
+  pinFrame,
+  addAlert,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
   const [slides, setSlides] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     if (playTarget.toLowerCase() === 'northwind') {
@@ -38,90 +41,64 @@ const ContentFrame = ({
     }
   }, []);
 
-  const setIconForIsExpanded = () => (
-    <FontAwesomeIcon
-      icon={isExpanded ? faAngleUp : faAngleDown}
-      size="lg"
-    />
-  );
+  const genCarousel = () => {
+    const slideSize = slides.length;
+    const carousel = [];
+    for (let i = 0; i < slideSize; i += 1) {
+      carousel.push(
+        <div
+          aria-hidden="true"
+          onClick={() => setCurrentSlide(i)}
+          style={{
+            width: '30px',
+            height: '3px',
+            cursor: 'pointer',
+            background: currentSlide === i ? 'rgba(0,0,0,.13)' : '#6c757d',
+            margin: '5px',
+            border: 0,
+            opacity: '0.5',
+          }}
+        />,
+      );
+    }
+    return carousel;
+  };
 
   return (
-    <div className="card mt-3">
-      <div className="card-header">
-        <div className="d-flex card-title text-muted">
-          <div className="mr-auto">
-            <strong>
-              {' '}
-              $
-              {reqString}
-            </strong>
+    <Frame
+      reqString={reqString}
+      isPinned={isPinned}
+      bodyNoPadding
+      pinFrame={pinFrame}
+      removeFrame={removeFrame}
+      refKey={refKey}
+      content={(
+        <div
+          className={`${FrameStyles.FlexContentWrapper} ${FrameStyles.DefaultLimitWrapper}`}
+          id={refKey}
+          style={{ padding: 'initial' }}
+        >
+
+          <div style={{
+            flex: 1,
+            padding: '15px 30px',
+            overflowY: 'auto',
+          }}
+          >
+            {slides[currentSlide]}
           </div>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
-            onClick={() => pinFrame(refKey)}
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '1rem',
+          }}
           >
-            <FontAwesomeIcon
-              icon={faPaperclip}
-              size="lg"
-            />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            data-toggle="collapse"
-            aria-expanded={isExpanded}
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-controls={refKey}
-          >
-            {setIconForIsExpanded()}
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link pl-3"
-            onClick={() => removeFrame(refKey)}
-          >
-            <FontAwesomeIcon
-              icon={faTimes}
-              size="lg"
-            />
-          </button>
-
+            {genCarousel()}
+          </div>
         </div>
-      </div>
-      <Collapse in={isExpanded}>
-
-        <div className="card-body" id={refKey} style={{ padding: 'initial' }}>
-          <Carousel
-            interval={null}
-            fade
-            wrap={false}
-            prevIcon={(
-              <FontAwesomeIcon
-                icon={faAngleLeft}
-                size="lg"
-              />
-              )}
-            nextIcon={(
-              <FontAwesomeIcon
-                icon={faAngleRight}
-                size="lg"
-              />
-            )}
-          >
-            {slides.map((slide) => (
-              <Carousel.Item>
-                <div style={{ paddingTop: '10px' }}>
-                  {slide}
-                </div>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </div>
-
-      </Collapse>
-      <div className="card-footer" />
-    </div>
+      )}
+    />
   );
 };
 

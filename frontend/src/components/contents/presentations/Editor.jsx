@@ -104,7 +104,7 @@ const Editor = ({
       <div className="card">
         <div className="container-fluid editor-area card-header">
           <div className="input-group">
-            <div className="form-control col-11" style={{ padding: '0px' }}>
+            <div className="form-control col-11" style={{ height: 'auto', padding: '0px' }}>
               <CodeMirror
                 onClick={onClick}
                 value={command}

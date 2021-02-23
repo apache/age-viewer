@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
+import { Alert } from 'antd';
 
-const SingleAlert = ({ alertName, errorMessage, setCommand }) => {
+const SingleAlert = ({
+  alertKey,
+  alertName,
+  errorMessage,
+  setCommand,
+  removeAlert,
+}) => {
   const dispatch = useDispatch();
-
-  const [show, setShow] = useState(true);
 
   const setAlertConnect = (e, command) => {
     e.preventDefault();
@@ -33,151 +37,213 @@ const SingleAlert = ({ alertName, errorMessage, setCommand }) => {
     });
   };
 
+  const clearAlert = () => {
+    dispatch(() => {
+      removeAlert(alertKey);
+    });
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShow(false);
+      clearAlert();
     }, 10000);
     return () => clearTimeout(timer);
   }, []);
 
   if (alertName === 'NoticeServerDisconnected') {
     return (
-      <Alert show={show} variant="warning" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Database Disconnected</Alert.Heading>
-        <p>
-          Database is Disconnected. You may use
-          {' '}
-          <button type="button" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
+      <Alert
+        variant="warning"
+        afterClose={() => clearAlert()}
+        showIcon
+        closable
+        message="Database Disconnected"
+        description={(
+          <p>
+            Database is Disconnected. You may use
+            {' '}
+            <button type="button" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
 
-            <FontAwesomeIcon
-              icon={faPlayCircle}
-              size="lg"
-            />
-            :server connect
-          </button>
-          {' '}
-          to
-          establish connection. There&apos;s a graph waiting for you.
-        </p>
-      </Alert>
+              <FontAwesomeIcon
+                icon={faPlayCircle}
+                size="lg"
+              />
+              :server connect
+            </button>
+            {' '}
+            to
+            establish connection. There&apos;s a graph waiting for you.
+          </p>
+        )}
+      />
     );
   }
   if (alertName === 'NoticeServerConnected') {
     return (
-      <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Database Connected</Alert.Heading>
-        <p>
-          Successfully database is connected. You may use
-          {' '}
-          <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server status')}>
-            <FontAwesomeIcon
-              icon={faPlayCircle}
-              size="lg"
-            />
-            :server status
-          </a>
-          {' '}
-          to
-          confirm connected database information.
-        </p>
-      </Alert>
+      <Alert
+        type="success"
+        afterClose={() => clearAlert()}
+        showIcon
+        closable
+        message="Database Connected"
+        description={(
+          <p>
+            Successfully database is connected. You may use
+            {' '}
+            <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server status')}>
+              <FontAwesomeIcon
+                icon={faPlayCircle}
+                size="lg"
+              />
+              :server status
+            </a>
+            {' '}
+            to
+            confirm connected database information.
+          </p>
+        )}
+      />
     );
   }
   if (alertName === 'ErrorServerConnectFail') {
     return (
-      <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Database Connection Failed</Alert.Heading>
-        <p>
-          Failed to connect to the database. Are you sure the database is running on the server?
-        </p>
-        {errorMessage}
-      </Alert>
+      <Alert
+        type="error"
+        afterClose={() => clearAlert()}
+        showIcon
+        closable
+        message="Database Connection Failed"
+        description={(
+          <>
+            <p>
+              Failed to connect to the database. Are you sure the database is running on the server?
+            </p>
+            {errorMessage}
+          </>
+        )}
+      />
     );
   }
   if (alertName === 'ErrorNoDatabaseConnected') {
     return (
-      <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>No Database Connected</Alert.Heading>
-        <p>
-          You haven&apos;t set database connection. You may use
-          {' '}
-          <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
-            <FontAwesomeIcon
-              icon={faPlayCircle}
-              size="lg"
-            />
-            :server connect
-          </a>
-          {' '}
-          to
-          establish connection. There&apos;s a graph waiting for you.
-        </p>
-        {errorMessage}
-      </Alert>
+      <Alert
+        type="error"
+        showIcon
+        closable
+        afterClose={() => clearAlert()}
+        message="No Database Connected"
+        description={
+        (
+          <>
+            <p>
+              You haven&apos;t set database connection. You may use
+              {' '}
+              <a href="/#" className="badge badge-light" onClick={(e) => setAlertConnect(e, ':server connect')}>
+                <FontAwesomeIcon
+                  icon={faPlayCircle}
+                  size="lg"
+                />
+                :server connect
+              </a>
+              {' '}
+              to
+              establish connection. There&apos;s a graph waiting for you.
+            </p>
+            {errorMessage}
+          </>
+        )
+      }
+      />
     );
   }
   if (alertName === 'ErrorMetaFail') {
     return (
-      <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Metadata Load Error</Alert.Heading>
-        <p>
-          Unexpectedly error occurred while getting metadata.
-        </p>
-      </Alert>
+      <Alert
+        type="error"
+        afterClose={() => clearAlert()}
+        message="Metadata Load Error"
+        showIcon
+        closable
+        description={(
+          <p>
+            Unexpectedly error occurred while getting metadata.
+          </p>
+        )}
+      />
     );
   }
   if (alertName === 'ErrorCypherQuery') {
     return (
-      <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Query Error</Alert.Heading>
-        <p>
-          Your query wansn&apos;t executed properly. Refer the below error message.
-        </p>
-      </Alert>
+      <Alert
+        type="error"
+        afterClose={() => clearAlert()}
+        showIcon
+        closable
+        message="Query Error"
+        description={(
+          <p>
+            Your query was not executed properly. Refer the below error message.
+          </p>
+        )}
+      />
     );
   }
   if (alertName === 'ErrorPlayLoadFail') {
     return (
-      <Alert show={show} variant="danger" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Failed to Load Play Target</Alert.Heading>
-        <p>
-          &apos;
-          {errorMessage}
-          &apos; does not exists.
-        </p>
-      </Alert>
+      <Alert
+        type="error"
+        afterClose={() => clearAlert()}
+        showIcon
+        closable
+        message="Failed to Load Play Target"
+        description={(
+          <p>
+            &apos;
+            {errorMessage}
+            &apos; does not exists.
+          </p>
+        )}
+      />
     );
   }
   if (alertName === 'NoticeAlreadyConnected') {
     return (
-      <Alert show={show} variant="primary" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Already Connected to Database</Alert.Heading>
-        <p>
-          You are currently connected to a database.
-          If you want to access to another database, you may execute
-          <a
-            href="/#"
-            className="badge badge-light"
-            onClick={(e) => setAlertConnect(e, ':server disconnect')}
-          >
-            <FontAwesomeIcon
-              icon={faPlayCircle}
-              size="lg"
-            />
-            :server disconnect
-          </a>
-          {' '}
-          to disconnect from current database first.
-        </p>
-      </Alert>
+      <Alert
+        type="info"
+        afterClose={() => clearAlert()}
+        showIcon
+        closable
+        message="Already Connected to Database"
+        description={(
+          <p>
+            You are currently connected to a database.
+            If you want to access to another database, you may execute
+            <a
+              href="/#"
+              className="badge badge-light"
+              onClick={(e) => setAlertConnect(e, ':server disconnect')}
+            >
+              <FontAwesomeIcon
+                icon={faPlayCircle}
+                size="lg"
+              />
+              :server disconnect
+            </a>
+            {' '}
+            to disconnect from current database first.
+          </p>
+        )}
+      />
     );
   }
   return (<></>);
 };
 SingleAlert.propTypes = {
+  alertKey: PropTypes.string.isRequired,
   alertName: PropTypes.string.isRequired,
   errorMessage: PropTypes.string.isRequired,
   setCommand: PropTypes.func.isRequired,
+  removeAlert: PropTypes.func.isRequired,
 };
 
 export default SingleAlert;

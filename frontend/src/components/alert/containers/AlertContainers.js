@@ -17,10 +17,11 @@
 import { connect } from 'react-redux';
 import Alert from '../presentations/Alert';
 import { setCommand } from '../../../features/editor/EditorSlice';
+import { removeAlert } from '../../../features/alert/AlertSlice';
 
 const mapStateToProps = () => ({
 });
 
-const mapDispatchToProps = { setCommand };
+const mapDispatchToProps = { setCommand, removeAlert };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Alert);

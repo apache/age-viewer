@@ -16,33 +16,33 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Table from 'react-bootstrap/Table';
+import { Col, Row } from 'antd';
 
 const CypherResultMeta = ({ database, query, data }) => (
-  <Table className="table table-hover" style={{ marginBottom: 'initial' }}>
-    <tbody>
-      <tr>
-        <th className="w-25">Server Version</th>
-        <td className="w-75">TBD</td>
-      </tr>
-      <tr>
-        <th className="w-25">Database URI</th>
-        <td className="w-75">
-          {database.host}
-          :
-          {database.port}
-        </td>
-      </tr>
-      <tr>
-        <th className="w-25">Executed Query</th>
-        <td className="w-75">{query}</td>
-      </tr>
-      <tr>
-        <th className="w-25">Data</th>
-        <td className="w-75"><pre>{JSON.stringify(data, null, 2)}</pre></td>
-      </tr>
-    </tbody>
-  </Table>
+  <>
+    <Row>
+      <Col span={6}>
+        <b>Server Version</b>
+      </Col>
+      <Col span={18}>TBD</Col>
+    </Row>
+    <Row>
+      <Col span={6}><b>Database URI</b></Col>
+      <Col span={18}>
+        {database.host}
+        :
+        {database.port}
+      </Col>
+    </Row>
+    <Row>
+      <Col span={6}><b>Executed Query</b></Col>
+      <Col span={18}>{query}</Col>
+    </Row>
+    <Row>
+      <Col span={6}><b>Data</b></Col>
+      <Col span={18}><pre>{JSON.stringify(data, null, 2)}</pre></Col>
+    </Row>
+  </>
 );
 
 CypherResultMeta.propTypes = {
