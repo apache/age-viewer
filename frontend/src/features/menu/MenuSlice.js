@@ -16,11 +16,12 @@
  */
 
 import { createSlice } from '@reduxjs/toolkit';
+import { faCog, faHome, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const MenuSlice = createSlice({
   name: 'navigator',
   initialState: {
-    menuList: [['home', 'home'], ['setting', 'cog'], ['about', 'info-circle']],
+    menuList: [['home', faHome], ['setting', faCog], ['about', faInfoCircle]],
     activeMenu: 'init',
     isActive: false,
   },

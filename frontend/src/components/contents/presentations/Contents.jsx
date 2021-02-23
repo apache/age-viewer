@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import EditorContainer from '../containers/Editor';
 import FramesContainer from '../containers/Frames';
+import styles from './Contents.module.scss';
 
 const Contents = ({
   database, isActive, getConnectionStatus, getMetaData, getMetaChartData,
@@ -39,9 +40,11 @@ const Contents = ({
   }, [database.status]);
 
   return (
-    <div id="content" className={isActive ? 'active' : ''}>
-      <EditorContainer />
-      <FramesContainer />
+    <div className={`${styles.Content} ${isActive ? styles.Expanded : ''}`}>
+      <div style={{ padding: '1rem' }}>
+        <EditorContainer />
+        <FramesContainer />
+      </div>
     </div>
   );
 };

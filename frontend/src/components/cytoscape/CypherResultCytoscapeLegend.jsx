@@ -18,6 +18,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
 import uuid from 'react-uuid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
 class CypherResultCytoscapeLegend extends Component {
   constructor(props) {
@@ -176,9 +178,8 @@ class CypherResultCytoscapeLegend extends Component {
             className="frame-head-button btn btn-link px-3"
             onClick={() => this.setState({ nodeLegendExpanded: !nodeLegendExpanded })}
           >
-            <span
-              className={`fas ${nodeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon={nodeLegendExpanded ? faAngleUp : faAngleDown}
             />
           </button>
         </div>
@@ -191,9 +192,8 @@ class CypherResultCytoscapeLegend extends Component {
             className="frame-head-button btn btn-link px-3"
             onClick={() => this.setState({ edgeLegendExpanded: !edgeLegendExpanded })}
           >
-            <span
-              className={`fas ${edgeLegendExpanded ? 'fa-angle-up' : 'fa-angle-down'}`}
-              aria-hidden="true"
+            <FontAwesomeIcon
+              icon={edgeLegendExpanded ? faAngleUp : faAngleDown}
             />
           </button>
         </div>

@@ -16,6 +16,9 @@
  */
 
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
+import CodeMirror from '@uiw/react-codemirror';
 
 export const title = 'Northwind Graph';
 export const category = 'graphExamples';
@@ -56,11 +59,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -91,11 +100,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -134,11 +149,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -193,11 +214,17 @@ export const slides = [
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -208,8 +235,12 @@ export const slides = [
         <aside className="warn">
           CSV 파일 형태의 데이터셋을 적재할 각각의 Table을 생성합니다.
         </aside>
-        <pre className="pre-scrollable code runnable">
-          {`CREATE TABLE categories (CategoryID int, CategoryName varchar(15), Description text, Picture bytea);
+        <CodeMirror
+          options={{
+            mode: 'cypher',
+            readOnly: true,
+          }}
+          value={`CREATE TABLE categories (CategoryID int, CategoryName varchar(15), Description text, Picture bytea);
 CREATE TABLE customers (CustomerID char(5), CompanyName varchar(40), ContactName varchar(30), ContactTitle varchar(30), Address varchar(60), City varchar(15), Region varchar(15), PostalCode varchar(10), Country varchar(15), Phone varchar(24), Fax varchar(24));
 CREATE TABLE employees (EmployeeID int, LastName varchar(20), FirstName varchar(10), Title varchar(30), TitleOfCourtesy varchar(25), BirthDate date, HireDate date, Address varchar(60), City varchar(15), Region varchar(15), PostalCode varchar(10), Country varchar(15), HomePhone varchar(24), Extension varchar(4), Photo bytea, Notes text, ReportTo int, PhotoPath varchar(255));
 CREATE TABLE employee_territories (EmployeeID int, TerritoryID varchar(20));
@@ -220,15 +251,19 @@ CREATE TABLE regions (RegionID int, RegionDescription char(50));
 CREATE TABLE shippers (ShipperID int, CompanyName varchar(40), Phone varchar(24));
 CREATE TABLE suppliers (SupplierID int, CompanyName varchar(40), ContactName varchar(30), ContactTitle varchar(30), Address varchar(60), City varchar(15), Region varchar(15), PostalCode varchar(10), Country varchar(15), Phone varchar(24), Fax varchar(24), HomePage text);
 CREATE TABLE territories (TerritoryID varchar(20), TerritoryDescription char(50), RegionID int);`}
-        </pre>
+        />
       </figure>
       <h4>Data Copy to Table</h4>
       <figure>
         <aside className="warn">
           생성 된 테이블에 CSV 데이터셋을 적재합니다.
         </aside>
-        <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-          {`COPY categories (
+        <CodeMirror
+          options={{
+            mode: 'cypher',
+            readOnly: true,
+          }}
+          value={`COPY categories (
     CategoryID,
     CategoryName,
     Description,
@@ -355,7 +390,7 @@ COPY territories (
     RegionID
 )
 FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset/master/territories.csv' csv header delimiter ',';`}
-        </pre>
+        />
       </figure>
     </div>
   </div>,
@@ -370,11 +405,17 @@ FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -382,8 +423,12 @@ FROM PROGRAM 'curl https://raw.githubusercontent.com/KarlJeong/northwind_dataset
     <div className="col-sm-9">
       <h4>Create Vertices</h4>
       <figure>
-        <pre className="pre-scrollable code runnable">
-          {`LOAD FROM categories AS source CREATE (n:category=to_jsonb(source));
+        <CodeMirror
+          options={{
+            mode: 'cypher',
+            readOnly: true,
+          }}
+          value={`LOAD FROM categories AS source CREATE (n:category=to_jsonb(source));
 LOAD FROM customers AS source CREATE (n:customer=to_jsonb(source));
 LOAD FROM employees AS source CREATE (n:employee=to_jsonb(source));
 CREATE VLABEL IF NOT EXISTS "order";
@@ -393,15 +438,19 @@ LOAD FROM regions AS source CREATE (n:region=to_jsonb(source));
 LOAD FROM shippers AS source CREATE (n:shipper=to_jsonb(source));
 LOAD FROM suppliers AS source CREATE (n:supplier=to_jsonb(source));
 LOAD FROM territories AS source CREATE (n:territory=to_jsonb(source));`}
-        </pre>
+        />
         <aside className="warn">
           각 Table의 데이터를 로드하여 Vertex를 생성하였습니다. 이 때, Table 각 Column이 Vertex의 Property로 입력 됩니다.
         </aside>
       </figure>
       <h4>Create Indices</h4>
       <figure>
-        <pre className="pre-scrollable code runnable">
-          {`CREATE PROPERTY INDEX ON category(categoryid);
+        <CodeMirror
+          options={{
+            mode: 'cypher',
+            readOnly: true,
+          }}
+          value={`CREATE PROPERTY INDEX ON category(categoryid);
 CREATE PROPERTY INDEX ON customer(customerid);
 CREATE PROPERTY INDEX ON employee(employeeid);
 CREATE PROPERTY INDEX ON "order"(orderid);
@@ -410,7 +459,7 @@ CREATE PROPERTY INDEX ON region(regionid);
 CREATE PROPERTY INDEX ON shipper(shipperid);
 CREATE PROPERTY INDEX ON supplier(supplierid);
 CREATE PROPERTY INDEX ON territory(territoryid);`}
-        </pre>
+        />
         <aside className="warn">
           생성한 Vertex별로 특정 속성에 Index를 생성합니다.
         </aside>
@@ -429,11 +478,17 @@ CREATE PROPERTY INDEX ON territory(territoryid);`}
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -441,8 +496,12 @@ CREATE PROPERTY INDEX ON territory(territoryid);`}
     <div className="col-sm-9">
       <h4>Create Edges</h4>
       <figure>
-        <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-          {`LOAD FROM orders_details AS source
+        <CodeMirror
+          options={{
+            mode: 'cypher',
+            readOnly: true,
+          }}
+          value={`LOAD FROM orders_details AS source
 MATCH (n:"order"),(m:product)
 WHERE n.orderid=to_jsonb((source).orderid)
 AND m.productid=to_jsonb((source).productid)
@@ -467,7 +526,7 @@ CREATE (n)-[r:PURCHASED]->(m);
 MATCH (n:employee),(m:"order")
 WHERE m.employeeid=n.employeeid
 CREATE (n)-[r:SOLD]->(m);`}
-        </pre>
+        />
         <aside className="warn">
           위 과정을 모두 정상적으로 수행하셨다면 아래와 같은 그래프 모델이 생성됩니다. (AGViewer에서 쿼리 수행 시 그래프 레이아웃 및 쿼리 조건에 따라 보여지는 모습이 달라질 수 있습니다)
 
@@ -487,11 +546,17 @@ CREATE (n)-[r:SOLD]->(m);`}
         <small>:help</small>
         {' '}
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           cypher
         </a>
         <a href="/#" className="badge badge-light">
-          <span className="far fa-play-circle fa-lg pr-2" aria-hidden="true" />
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="lg"
+          />
           MATCH
         </a>
       </p>
@@ -499,25 +564,33 @@ CREATE (n)-[r:SOLD]->(m);`}
     <div className="col-sm-9">
       <h4>전체 데이터 중 100개를 조회해보기</h4>
       <figure>
-        <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-          {`MATCH (c:customer)-[pc:purchased]->(o:"order")-[r:orders]->(p:product)
+        <CodeMirror
+          options={{
+            mode: 'cypher',
+            readOnly: true,
+          }}
+          value={`MATCH (c:customer)-[pc:purchased]->(o:"order")-[r:orders]->(p:product)
 RETURN *
 LIMIT 100;`}
-        </pre>
+        />
         <aside className="warn">
           고객, 주문, 상품을 합쳐 최대 100개의 객체를 조회해보겠습니다.
         </aside>
       </figure>
       <h4>특정 고객의 데이터만 조회해보기</h4>
       <figure>
-        <pre className="pre-scrollable code runnable" style={{ maxHeight: '350px' }}>
-          {`MATCH (c:customer)-[pc:PURCHASED]->(o:"order")-[r:ORDERS]->(p:product)-[po:PART_OF]->(ct:category)
+        <CodeMirror
+          options={{
+            mode: 'cypher',
+            readOnly: true,
+          }}
+          value={`MATCH (c:customer)-[pc:PURCHASED]->(o:"order")-[r:ORDERS]->(p:product)-[po:PART_OF]->(ct:category)
 WHERE c.customerid = 'ANTON'
 RETURN *
 LIMIT 100;`}
-        </pre>
+        />
         <aside className="warn">
-          여러 고객 중 &amp;apos;ANTON&amp;apos;이라는 이름을 가진 고객의 구매 데이터를 조회해보겠습니다.
+          여러 고객 중 &apos;ANTON&apos;이라는 이름을 가진 고객의 구매 데이터를 조회해보겠습니다.
         </aside>
       </figure>
     </div>

@@ -194,6 +194,67 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     });
   };
 
+  const applyFilterOnCytoscapeElements = (filters) => {
+    const gFilteredClassName = 'g-filtered';
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '1.0').removeClass(gFilteredClassName);
+
+    let notFilteredNodeLength = 0;
+    const notFilteredNodes = [];
+    const filterLength = filters.length;
+    let nullFilterCount = 0;
+    for (let i = 0; i < filterLength; i += 1) {
+      const { keyword } = filters[i];
+      if (keyword === null || keyword === '') {
+        nullFilterCount += 1;
+      }
+    }
+    if (nullFilterCount === 1 && filterLength === 1) {
+      // if null filter size is 1 and filter length is 1 -> not filtering.
+      return;
+    }
+    cytoscapeObject.nodes().filter((ele) => {
+      let notIncluded = true;
+      const currentLabel = ele.data('label');
+      for (let i = 0; i < filterLength; i += 1) {
+        const { keyword } = filters[i];
+        const { label, property } = filters[i].property;
+
+        if (currentLabel === label) {
+          const propertyValue = ele.data('properties')[property];
+          if (keyword === null || keyword === '') {
+            notIncluded = false;
+          } else if (propertyValue === undefined || propertyValue === null) {
+            notIncluded = true;
+          } else if (propertyValue.toString().includes(keyword)) {
+            notIncluded = false;
+          }
+        }
+        if (!notIncluded) {
+          break;
+        }
+      }
+      if (!notIncluded) {
+        notFilteredNodeLength += 1;
+        notFilteredNodes.push(ele);
+      }
+      return notIncluded;
+    }).addClass(gFilteredClassName);
+
+    // Step2. Edge Highlight from not filtered nodes.
+    for (let nodeIndex = 0; nodeIndex < notFilteredNodeLength; nodeIndex += 1) {
+      const currentNode = notFilteredNodes[nodeIndex];
+      const edges = currentNode.connectedEdges();
+      const edgesSize = edges.length;
+      for (let edgeIndex = 0; edgeIndex < edgesSize; edgeIndex += 1) {
+        const currentEdge = edges[edgeIndex];
+        const connectedWithHighlightNode = currentEdge.connectedNodes().not(`.${gFilteredClassName}`).filter((ele) => ele !== currentNode);
+        if (connectedWithHighlightNode.length === 0) currentEdge.addClass(gFilteredClassName);
+      }
+    }
+
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.5');
+  };
+
   const captionChange = (elementType, label, caption) => {
     changeCaptionOnCytoscapeElements(elementType, label, caption);
     setSelectedCaption(caption);
@@ -215,10 +276,14 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   };
 
   useImperativeHandle(ref, () => ({
-
     getCy() {
       return cytoscapeObject;
     },
+    getLabels() {
+      return Object.keys(props.data.legend.nodeLegend);
+    },
+    getCaptionsFromCytoscapeObject,
+    applyFilterOnCytoscapeElements,
   }));
 
   return (

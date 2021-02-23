@@ -14,41 +14,60 @@
  * limitations under the License.
  */
 
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
 import { Parser } from 'json2csv';
-import {
-  Collapse, Dropdown, DropdownButton, Nav, Tab,
-} from 'react-bootstrap';
+import { Nav, Tab } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faFont, faPaperclip, faTable, faTerminal,
+} from '@fortawesome/free-solid-svg-icons';
+import CypherResultCytoscapeContainer
+  from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer';
 import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
+import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
+import Frame from '../Frame';
 
 const CypherResultFrame = ({
-  refKey, isPinned, reqString, removeFrame, pinFrame,
+  refKey,
+  isPinned,
+  reqString,
+  removeFrame,
+  pinFrame,
 }) => {
   const chartAreaRef = createRef();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [cyZoomingEnabled, setCyZoomingEnabled] = useState(false);
   const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
 
-  const expandFrame = () => {
-    setIsFullScreen(!isFullScreen);
-    setCyZoomingEnabled(!cyZoomingEnabled);
-    const ref = chartAreaRef.current;
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
 
-    function resize() {
-      const zoom = ref.getCy().zoom();
-      ref.getCy().resize();
-      ref.getCy().zoom({ level: zoom, position: { x: 0, y: 0 } });
+  const [filterProperties, setFilterProperties] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState(null);
+
+  useEffect(() => {
+    if (chartAreaRef.current && filterModalVisible) {
+      const labels = chartAreaRef.current.getLabels()
+        .map(
+          (label) => {
+            const propertiesIter = Array.from(chartAreaRef.current.getCaptionsFromCytoscapeObject('node', label));
+            return propertiesIter.map((value) => ({
+              label,
+              property: value,
+            }));
+          },
+        ).flat();
+      setFilterProperties(labels);
     }
+  }, [filterModalVisible]);
 
-    window.setTimeout(resize, 500);
-  };
+  useEffect(() => {
+    if (globalFilter) {
+      chartAreaRef.current.applyFilterOnCytoscapeElements(globalFilter);
+    }
+  }, [globalFilter]);
 
   const refreshFrame = () => {
     setCytoscapeContainerKey(uuid());
@@ -109,72 +128,21 @@ const CypherResultFrame = ({
   };
 
   return (
-    <div className={`card ${isFullScreen ? ' fullscreen ' : 'mt-3'}`}>
-      <div className="card-header">
-        <div className="d-flex card-title text-muted">
-          <div className="mr-auto">
-            <strong>
-              {' '}
-              $
-              {reqString}
-            </strong>
-          </div>
-          <DropdownButton
-            bsPrefix="frame-head-button btn btn-link"
-            title={<i className="fas fa-download fa-lg" />}
-          >
-            <Dropdown.Item onClick={() => downloadPng()}>Save as PNG</Dropdown.Item>
-            <Dropdown.Item onClick={() => downloadJson()}>Save as JSON</Dropdown.Item>
-            <Dropdown.Item onClick={() => downloadCsv()}>Save as CSV</Dropdown.Item>
-          </DropdownButton>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isFullScreen ? ' selected ' : ''}`}
-            onClick={() => expandFrame()}
-          >
-            { isFullScreen
-              ? <span className="fas fa-compress-alt fa-lg" aria-hidden="true" />
-              : <span className="fas fa-expand-alt fa-lg" aria-hidden="true" />}
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            onClick={() => refreshFrame()}
-          >
-            <span className="fas fa-sync fa-lg" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            className={`frame-head-button btn btn-link px-3${isPinned ? ' selected ' : ''}`}
-            onClick={() => pinFrame(refKey)}
-          >
-            <span className="fas fa-paperclip fa-lg" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link px-3"
-            data-toggle="collapse"
-            aria-expanded={isExpanded}
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-controls={refKey}
-          >
-            {
-              isExpanded
-                ? <span className="fas fa-angle-up fa-lg" aria-hidden="true" />
-                : <span className="fas fa-angle-down fa-lg" aria-hidden="true" />
-            }
-          </button>
-          <button
-            type="button"
-            className="frame-head-button btn btn-link pl-3"
-            onClick={() => removeFrame(refKey)}
-          >
-            <span className="fas fa-times fa-lg" aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-      <Collapse in={isExpanded}>
-        <div className="card-body card-body-graph" id={refKey}>
+    <>
+      <Frame
+        bodyNoPadding
+        onSearch={() => setFilterModalVisible(true)}
+        onRefresh={refreshFrame}
+        onDownload={(type) => {
+          if (type === 'csv') {
+            downloadCsv();
+          } else if (type === 'json') {
+            downloadJson();
+          } else if (type === 'png') {
+            downloadPng();
+          }
+        }}
+        content={(
           <div className="d-flex h-100">
             <Tab.Container defaultActiveKey="graph">
 
@@ -182,7 +150,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="graph">
-                    <span className="fas fa-paperclip" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faPaperclip}
+                    />
                     <br />
                     Graph
                   </Nav.Link>
@@ -190,7 +160,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="table">
-                    <span className="fas fa-table" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faTable}
+                    />
                     <br />
                     Table
                   </Nav.Link>
@@ -198,7 +170,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="text">
-                    <span className="fas fa-font" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faFont}
+                    />
                     <br />
                     Text
                   </Nav.Link>
@@ -206,7 +180,9 @@ const CypherResultFrame = ({
 
                 <Nav.Item>
                   <Nav.Link eventKey="code">
-                    <span className="fas fa-terminal" aria-hidden="true" />
+                    <FontAwesomeIcon
+                      icon={faTerminal}
+                    />
                     <br />
                     Meta
                   </Nav.Link>
@@ -220,7 +196,6 @@ const CypherResultFrame = ({
                     key={cytoscapeContainerKey}
                     ref={chartAreaRef}
                     refKey={refKey}
-                    isFullScreen={isFullScreen}
                   />
                 </Tab.Pane>
 
@@ -239,9 +214,22 @@ const CypherResultFrame = ({
               </Tab.Content>
             </Tab.Container>
           </div>
-        </div>
-      </Collapse>
-    </div>
+        )}
+        reqString={reqString}
+        isPinned={isPinned}
+        pinFrame={pinFrame}
+        removeFrame={removeFrame}
+        refKey={refKey}
+      />
+      <GraphFilterModal
+        onSubmit={(filters) => {
+          setGlobalFilter(filters);
+        }}
+        visible={filterModalVisible}
+        setVisible={setFilterModalVisible}
+        properties={filterProperties}
+      />
+    </>
 
   );
 };

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React, { useCallback, useEffect, useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import cytoscape from 'cytoscape';
 import COSEBilkent from 'cytoscape-cose-bilkent';
@@ -25,10 +25,18 @@ import euler from 'cytoscape-euler';
 import avsdf from 'cytoscape-avsdf';
 import spread from 'cytoscape-spread';
 import CytoscapeComponent from 'react-cytoscapejs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faEyeSlash,
+  faLockOpen,
+  faProjectDiagram,
+  faWindowClose,
+} from '@fortawesome/free-solid-svg-icons';
 import cxtmenu from '../../lib/cytoscape-cxtmenu-bitnine';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
 import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
+import styles from '../frame/Frame.module.scss';
 
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
@@ -141,13 +149,17 @@ const CypherResultCytoscapeCharts = ({
         selector: 'node',
         commands: [
           {
-            content: '<span class=""><i class="fas fa-lock-open fa-lg"></i></span>',
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faLockOpen} size="lg" />),
+            ),
             select(ele) {
               ele.animate({ position: initLocation[ele.id()] });
             },
           },
           {
-            content: '<span class=""><i class="fas fa-project-diagram fa-lg"></i></span>',
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faProjectDiagram} size="lg" />),
+            ),
             select(ele) {
               fetch('/api/v1/cypher',
                 {
@@ -166,14 +178,18 @@ const CypherResultCytoscapeCharts = ({
           },
 
           {
-            content: '<span class=""><i class="fas fa-eye-slash fa-lg"></i></span>',
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faEyeSlash} size="lg" />),
+            ),
             select(ele) {
               ele.remove();
             },
           },
 
           {
-            content: '<span class=""><i class="far fa-window-close fa-lg"></i></span>',
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faWindowClose} size="lg" />),
+            ),
             select() {
             },
           },
@@ -224,7 +240,7 @@ const CypherResultCytoscapeCharts = ({
       elements={CytoscapeComponent.normalizeElements(elements)}
       stylesheet={stylesheet}
       cy={cyCallback}
-      className="chart-area"
+      className={styles.NormalChart}
     />
   );
 };

@@ -12,6 +12,8 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import { seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
 
+import styles from '../frame/Frame.module.scss';
+
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
 cytoscape.use(dagre);
@@ -26,14 +28,24 @@ const MetadataCytoscapeChart = ({ elements }) => {
   const cyCallback = useCallback((newCytoscapeObject) => {
     if (cytoscapeObject) return;
     newCytoscapeObject.on('resize', () => {
-      newCytoscapeObject.center();
+      try {
+        newCytoscapeObject.center();
+      } catch (e) {
+        // todo check why is it occurs error
+      }
     });
     setCytoscapeObject(newCytoscapeObject);
   },
   [cytoscapeObject]);
 
   useEffect(() => {
-    if (cytoscapeObject) {
+    if (cytoscapeObject && elements) {
+      try {
+        cytoscapeObject.add(CytoscapeComponent.normalizeElements(elements));
+      } catch (e) {
+        // todo: Metadata handling on server is wrong.
+      }
+
       cytoscapeObject.minZoom(1e-1);
       cytoscapeObject.maxZoom(1.5);
       const selectedLayout = seletableLayouts.coseBilkent;
@@ -46,10 +58,10 @@ const MetadataCytoscapeChart = ({ elements }) => {
 
   return (
     <CytoscapeComponent
-      elements={CytoscapeComponent.normalizeElements(elements)}
+      elements={[]}
       stylesheet={stylesheet}
       cy={cyCallback}
-      className="chart-area metachart-area"
+      className={styles.MetaChart}
     />
   );
 };
