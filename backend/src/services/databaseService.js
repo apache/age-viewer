@@ -69,14 +69,13 @@ class DatabaseService {
 
     async getNodes() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-
-        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'meta_nodes'));
+        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_nodes'), agensDatabaseHelper._graph));
         return queryResult.rows;
     }
 
     async getEdges() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'meta_edges'));
+        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_edges'), agensDatabaseHelper._graph));
         return queryResult.rows;
     }
 

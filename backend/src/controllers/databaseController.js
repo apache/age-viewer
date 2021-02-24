@@ -55,13 +55,8 @@ class DatabseController {
     async getMetadata(req, res, next) {
         let databaseService = sessionService.get(req.sessionID);
         if (databaseService.isConnected()) {
-            let metadata = null;
-            try {
-                metadata = await databaseService.getMetaData();
-                res.status(200).json(metadata).end();
-            } catch (error) {
-                res.status(500).json(metadata).end();
-            }
+            let metadata = await databaseService.getMetaData();
+            res.status(200).json(metadata).end();
         } else {
             throw new Error('Not connected');
         }

@@ -12,7 +12,7 @@ function getQuery(flavor = Flavors.AGENS, name) {
         sqlPath = defaultSqlPath;
     }
     if (!fs.existsSync(sqlPath)) {
-        throw new Error("SQL is not exist");
+        throw new Error(`SQL is not exist, name = ${name}`);
     }
     return fs.readFileSync(sqlPath, 'utf8');
 }

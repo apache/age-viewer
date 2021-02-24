@@ -82,6 +82,7 @@ const DatabaseSlice = createSlice({
       password: action.payload.password,
       database: action.payload.database,
       graph: action.payload.graph,
+      flavor: action.payload.flavor,
       status: 'connected',
     }),
     [connectToAgensGraph.rejected]: () => ({
@@ -91,6 +92,7 @@ const DatabaseSlice = createSlice({
       password: '',
       database: '',
       graph: '',
+      flavor: '',
       status: 'disconnected',
     }),
     [disconnectToAgensGraph.fulfilled]: () => ({
@@ -100,6 +102,7 @@ const DatabaseSlice = createSlice({
       password: '',
       database: '',
       graph: '',
+      flavor: '',
       status: 'disconnected',
     }),
     [getConnectionStatus.fulfilled]: (state, action) => ({
@@ -109,6 +112,7 @@ const DatabaseSlice = createSlice({
       password: action.payload.password,
       database: action.payload.database,
       graph: action.payload.graph,
+      flavor: action.payload.flavor,
       status: 'connected',
     }),
     [getConnectionStatus.rejected]: () => ({
@@ -118,6 +122,7 @@ const DatabaseSlice = createSlice({
       password: '',
       database: '',
       graph: '',
+      flavor: '',
       status: 'disconnected',
     }),
   },

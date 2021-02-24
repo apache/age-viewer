@@ -55,6 +55,7 @@ class AgensGraphRepository {
                 port,
             }
         )
+        client.connect();
         if (flavor === Flavors.AGE) {
             await setAGETypes(client, types);
         } else if (flavor === Flavors.AGENS) {
@@ -148,6 +149,7 @@ class AgensGraphRepository {
             user: this._user,
             password: this._password,
             graph: this._graph,
+            flavor: this.flavor,
         };
     }
 }
