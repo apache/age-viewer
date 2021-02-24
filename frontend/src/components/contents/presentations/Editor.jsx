@@ -69,7 +69,7 @@ const Editor = ({
       dispatch(() => trimFrame('ServerStatus'));
       dispatch(() => addAlert('NoticeAlreadyConnected'));
       dispatch(() => addFrame(command, 'ServerStatus', refKey));
-    } else if (database.status === 'connected' && command.toUpperCase().match('(MATCH|CREATE|COPY).*')) {
+    } else if (database.status === 'connected') {
       const reqStringValue = command;
       dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
         if (response.type === 'cypher/executeCypherQuery/fulfilled') {
@@ -79,8 +79,6 @@ const Editor = ({
           dispatch(() => addAlert('ErrorCypherQuery'));
         }
       }));
-    } else {
-      alert("Sorry, I Can't understand your command");
     }
     dispatch(() => addCommandHistory(command));
     clearCommand();
