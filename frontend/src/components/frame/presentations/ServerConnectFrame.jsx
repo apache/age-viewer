@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, Row } from 'antd';
+import {
+  Button, Col, Form, Input, InputNumber, Row, Select,
+} from 'antd';
 import Frame from '../Frame';
+
+import styles from './ServerConnectFrame.module.scss';
+
+const FormInitialValue = {
+  database: '',
+  flavor: null,
+  graph: '',
+  host: '',
+  password: '',
+  port: null,
+  user: '',
+};
 
 const ServerConnectFrame = ({
   refKey,
@@ -32,88 +46,74 @@ const ServerConnectFrame = ({
   getMetaData,
   getMetaChartData,
 }) => {
-  const [formData, setFormData] = useState({});
+  const connectToDatabase = (data) => connectToAgensGraph(data).then((response) => {
+    if (response.type === 'database/connectToAgensGraph/fulfilled') {
+      addAlert('NoticeServerConnected');
+      trimFrame('ServerConnect');
+      getMetaData().then((metadataResponse) => {
+        if (metadataResponse.type === 'database/getMetaData/fulfilled') {
+          getMetaChartData();
+        } else if (metadataResponse.type === 'database/getMetaData/rejected') {
+          addAlert('ErrorMetaFail');
+        }
+      });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value.trim(),
-    });
-  };
+      addFrame(':server status', 'ServerStatus');
+    } else if (response.type === 'database/connectToAgensGraph/rejected') {
+      addAlert('ErrorServerConnectFail', response.error.message);
+    }
+  });
 
   return (
     <Frame
       content={(
         <Row>
           <Col span={6}>
-            <h3>Connect to AgensGraph</h3>
+            <h3>Connect to Database</h3>
             <p>Database access might require and authenticated connection.</p>
           </Col>
           <Col span={18}>
-            <form>
-              <fieldset className="form-group">
-                <label htmlFor="host">
-                  Connect URL
-                  <input type="text" className="form-control" name="host" onChange={handleChange} />
-                </label>
-              </fieldset>
-              <fieldset className="form-group">
-                <label htmlFor="port">
-                  Connect Port
-                  <input type="number" className="form-control" name="port" onChange={handleChange} />
-                </label>
-              </fieldset>
-              <fieldset className="form-group">
-                <label htmlFor="database">
-                  Database Name
-                  <input type="text" className="form-control" name="database" onChange={handleChange} />
-                </label>
-              </fieldset>
-              <fieldset className="form-group">
-                <label htmlFor="graph">
-                  Graph Path
-                  <input type="text" className="form-control" name="graph" onChange={handleChange} />
-                </label>
-              </fieldset>
-              <fieldset className="form-group">
-                <label htmlFor="user">
-                  User Name
-                  <input type="text" className="form-control" name="user" onChange={handleChange} />
-                </label>
-              </fieldset>
-              <fieldset className="form-group">
-                <label htmlFor="password">
-                  Password
-                  <input type="password" className="form-control" id="password" name="password" autoComplete="on" onChange={handleChange} />
-                </label>
-              </fieldset>
-            </form>
-            <button
-              type="button"
-              className="btn btn-info"
-              onClick={() => connectToAgensGraph(formData).then((response) => {
-                if (response.type === 'database/connectToAgensGraph/fulfilled') {
-                  addAlert('NoticeServerConnected');
-                  trimFrame('ServerConnect');
-                  getMetaData().then((metadataResponse) => {
-                    if (metadataResponse.type === 'database/getMetaData/fulfilled') {
-                      getMetaChartData();
-                    } else if (metadataResponse.type === 'database/getMetaData/rejected') {
-                      addAlert('ErrorMetaFail');
-                    }
-                  });
-
-                  addFrame(':server status', 'ServerStatus');
-                } else if (response.type === 'database/connectToAgensGraph/rejected') {
-                  addAlert('ErrorServerConnectFail', response.error.message);
-                }
-              })}
-            >
-              CONNECT
-            </button>
+            <div className={styles.FrameWrapper}>
+              <Form
+                initialValues={FormInitialValue}
+                layout="vertical"
+                onFinish={(values) => connectToDatabase(values)}
+              >
+                <Form.Item name="flavor" label="Database Type" rules={[{ required: true }]}>
+                  <Select
+                    placeholder="Select a flavor of Database"
+                    allowClear
+                  >
+                    <Select.Option value="AGE">Apache AGE</Select.Option>
+                    <Select.Option value="AGENS">AgensGraph</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item name="host" label="Connect URL" rules={[{ required: true }]}>
+                  <Input placeholder="192.168.0.1" />
+                </Form.Item>
+                <Form.Item name="port" label="Connect Port" rules={[{ required: true }]}>
+                  <InputNumber placeholder="5432" className={styles.FullWidth} />
+                </Form.Item>
+                <Form.Item name="database" label="Database Name" rules={[{ required: true }]}>
+                  <Input placeholder="postgres" />
+                </Form.Item>
+                <Form.Item name="graph" label="Graph Path" rules={[{ required: true }]}>
+                  <Input placeholder="postgres" />
+                </Form.Item>
+                <Form.Item name="user" label="User Name" rules={[{ required: true }]}>
+                  <Input placeholder="postgres" />
+                </Form.Item>
+                <Form.Item name="password" label="Password" rules={[{ required: true }]}>
+                  <Input.Password placeholder="postgres" />
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">Connect</Button>
+                </Form.Item>
+              </Form>
+            </div>
           </Col>
         </Row>
-)}
+    )}
       reqString={reqString}
       isPinned={isPinned}
       pinFrame={pinFrame}
