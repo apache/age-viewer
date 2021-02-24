@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import Flavors from "../config/Flavors";
+
 class CypherService {
     constructor(agensDatabaseHelper) {
         this._agensDatabaseHelper = agensDatabaseHelper;
@@ -45,8 +47,16 @@ class CypherService {
             targetItem = resultSet.pop();
         }
 
+        let cypherRow = targetItem.rows;
+        if(this._agensDatabaseHelper.flavor === Flavors.AGENS){
+            try {
+                cypherRow = this._convertRowToResult(targetItem)
+            } catch (e) {
+                console.error("FixMe!")
+            }
+        }
         result = {
-            rows: this._convertRowToResult(targetItem),
+            rows: cypherRow,
             columns: this._getColumns(targetItem),
             rowCount: this._getRowCount(targetItem),
             command: this._getCommand(targetItem),
@@ -71,11 +81,11 @@ class CypherService {
             let convetedObject = {};
             for (let k in row) {
                 let typeName = row[k].constructor.name;
-                if (typeName == 'Path') {
+                if (typeName === 'Path') {
                     convetedObject[k] = this.convertPath(row[k]);
-                } else if (typeName == 'Vertex') {
+                } else if (typeName === 'Vertex') {
                     convetedObject[k] = this.convertVertex(row[k]);
-                } else if (typeName == 'Edge') {
+                } else if (typeName === 'Edge') {
                     convetedObject[k] = this.convertEdge(row[k]);
                 } else {
                     convetedObject[k] = row[k];
@@ -85,7 +95,7 @@ class CypherService {
         });
     }
 
-    convertPath({ vertices, edges, start, end, len }) {
+    convertPath({vertices, edges, start, end, len}) {
         let result = [];
         // vertex
         for (let idx in vertices) {
@@ -99,7 +109,7 @@ class CypherService {
         return result;
     }
 
-    convertEdge({ label, id, start, end, props }) {
+    convertEdge({label, id, start, end, props}) {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,
@@ -109,7 +119,7 @@ class CypherService {
         };
     }
 
-    convertVertex({ label, id, props }) {
+    convertVertex({label, id, props}) {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,

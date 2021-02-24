@@ -63,6 +63,8 @@ app.use('/api/v1/db', databaseRouter);
 
 // Error Handler
 app.use(function (err, req, res, next) {
+    // TODO: logger
+    console.error(err);
     res.status(err.status || 500).json({message: err.message});
 });
 

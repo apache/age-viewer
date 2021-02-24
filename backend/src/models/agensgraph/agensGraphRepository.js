@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import Flavors from "../../config/Flavors";
+
 require('agensgraph');
 import pg from 'pg';
 import types from 'pg-types';
@@ -53,10 +55,12 @@ class AgensGraphRepository {
                 port,
             }
         )
-        if (flavor === 'AGE') {
+        if (flavor === Flavors.AGE) {
             await setAGETypes(client, types);
-        } else if (flavor === 'AGENS') {
+        } else if (flavor === Flavors.AGENS) {
             await client.query(`set graph_path = ${graph}`)
+        } else {
+            throw new Error(`Unknown flavor ${flavor}`)
         }
 
         if (closeConnection === true) {
@@ -76,7 +80,6 @@ class AgensGraphRepository {
         try {
             result = await client.query(query, params);
         } catch (err) {
-            console.trace(`Execute Error: ${query}, ${params}`, err);
             throw err;
         } finally {
             client.release();
@@ -108,7 +111,6 @@ class AgensGraphRepository {
             await this._pool.end();
             return true;
         } catch (err) {
-            console.error('releaseConnection() {}', err.message);
             throw err;
         }
     }

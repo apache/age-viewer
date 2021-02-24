@@ -44,7 +44,7 @@ class DatabaseService {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         let queryResult = {};
         try {
-            queryResult = await agensDatabaseHelper.execute(getQuery('AGENS', 'graph_labels'), [this.getConnectionInfo().graph]);
+            queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'graph_labels'), [this.getConnectionInfo().graph]);
         } catch (error) {
             throw error;
         }
@@ -57,9 +57,9 @@ class DatabaseService {
         let query = null;
 
         if (labelKind === 'v') {
-            query = util.format(getQuery('AGENS', 'label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
+            query = util.format(getQuery(agensDatabaseHelper.flavor, 'label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
         } else if (labelKind === 'e') {
-            query = util.format(getQuery('AGENS', 'label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
+            query = util.format(getQuery(agensDatabaseHelper.flavor, 'label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
         }
 
         let queryResult = await agensDatabaseHelper.execute(query);
@@ -70,25 +70,25 @@ class DatabaseService {
     async getNodes() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
 
-        let queryResult = await agensDatabaseHelper.execute(getQuery('AGENS', 'meta_nodes'));
+        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'meta_nodes'));
         return queryResult.rows;
     }
 
     async getEdges() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(getQuery('AGENS', 'meta_edges'));
+        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'meta_edges'));
         return queryResult.rows;
     }
 
     async getPropertyKeys() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(getQuery('AGENS', 'property_keys'));
+        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'property_keys'));
         return queryResult.rows;
     }
 
     async getRole() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(getQuery('AGENS', 'get_role'), [this.getConnectionInfo().user]);
+        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'get_role'), [this.getConnectionInfo().user]);
         return queryResult.rows[0];
     }
 
@@ -102,8 +102,8 @@ class DatabaseService {
         try {
             await agensDatabaseHelper.getConnection(agensDatabaseHelper.getConnectionInfo(), true);
         } catch (e) {
-            console.error(e);
             this._agensDatabaseHelper = null;
+            throw e;
         }
         return true;
     }
