@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import Flavors from "../config/Flavors";
+
 const sessionService = require('../services/sessionService');
 const winston = require('winston');
 const logger = winston.createLogger();
@@ -23,7 +25,11 @@ class AgcloudController {
         if (databaseService.isConnected() || !req.body) {
             res.redirect('/');
         } else {
-            await databaseService.connectDatabase(req.body);
+            const params = {
+                flavor: Flavors.AGENS,
+                ...req.body
+            }
+            await databaseService.connectDatabase(params);
             res.redirect('/');
         }
     }

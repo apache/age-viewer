@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {getQuery} from "./src/tools/SQLFlavorManager";
+
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -21,7 +23,7 @@ const uuid = require('node-uuid');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const { stream } = require('./src/config/winston');
+const {stream} = require('./src/config/winston');
 const cypherRouter = require('./src/routes/cypherRouter');
 const databaseRouter = require('./src/routes/databaseRouter');
 const agcloudRouter = require('./src/routes/agcloudRouter');
@@ -49,9 +51,9 @@ app.use(
         },
     })
 );
-app.use(logger('common', { stream }));
+app.use(logger('common', {stream}));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
 app.use('/agensviewer', sessionRouter, agcloudRouter);
@@ -60,8 +62,10 @@ app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
 
 // Error Handler
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500).json({ message: err.message });
+app.use(function (err, req, res, next) {
+    // TODO: logger
+    console.error(err);
+    res.status(err.status || 500).json({message: err.message});
 });
 
 process.on('uncaughtException', function (exception) {

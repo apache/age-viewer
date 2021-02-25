@@ -18,20 +18,57 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import uuid from 'react-uuid';
-import { ColoredLine, SubLabelRight, SubLabelLeft } from './SidebarComponents';
+import { connect } from 'react-redux';
+import { ColoredLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
 
-const genLabelQuery = (eleType, labelName) => {
-  if (eleType === 'node') {
-    if (labelName === '*') {
-      return 'MATCH (V) RETURN V';
+const genLabelQuery = (eleType, labelName, database) => {
+  function age() {
+    if (eleType === 'node') {
+      if (labelName === '*') {
+        return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V)
+          RETURN V
+$$) as (V agtype);`;
+      }
+      return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V:${labelName})
+          RETURN V
+$$) as (V agtype);`;
     }
-    return `MATCH (V) WHERE LABEL(V) = '${labelName}' RETURN V`;
+    if (eleType === 'edge') {
+      if (labelName === '*') {
+        return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V)-[R]-(V2)
+          RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);`;
+      }
+      return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V)-[R:${labelName}]-(V2)
+          RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);`;
+    }
+    return '';
   }
-  if (eleType === 'edge') {
-    if (labelName === '*') {
-      return 'MATCH (V)-[R]->(V2) RETURN *';
+  function agens() {
+    if (eleType === 'node') {
+      if (labelName === '*') {
+        return 'MATCH (V) RETURN V';
+      }
+      return `MATCH (V) WHERE LABEL(V) = '${labelName}' RETURN V`;
     }
-    return `MATCH (V)-[R]->(V2) WHERE LABEL(R) = '${labelName}' RETURN *`;
+    if (eleType === 'edge') {
+      if (labelName === '*') {
+        return 'MATCH (V)-[R]->(V2) RETURN *';
+      }
+      return `MATCH (V)-[R]->(V2) WHERE LABEL(R) = '${labelName}' RETURN *`;
+    }
+    return '';
+  }
+  if (database.flavor === 'AGE') {
+    return age();
+  }
+  if (database.flavor === 'AGENS') {
+    return agens();
   }
   return '';
 };
@@ -74,19 +111,28 @@ NodeList.propTypes = {
   setCommand: PropTypes.func.isRequired,
 };
 
-const NodeItems = ({ label, cnt, setCommand }) => (
-  <button
-    type="button"
-    className="nodeLabel mx-1 my-1 btn rounded-pill btn-dark btn-sm"
-    onClick={() => setCommand(genLabelQuery('node', label))}
-  >
-    {label}
-    (
-    {cnt}
-    )
-  </button>
+const NodeItems = connect((state) => ({
+  database: state.database,
+}), {})(
+  ({
+    label, cnt, setCommand, database,
+  }) => (
+    <button
+      type="button"
+      className="nodeLabel mx-1 my-1 btn rounded-pill btn-dark btn-sm"
+      onClick={() => setCommand(genLabelQuery('node', label, database))}
+    >
+      {label}
+      (
+      {cnt}
+      )
+    </button>
+  ),
 );
 NodeItems.propTypes = {
+  database: PropTypes.shape({
+    flavor: PropTypes.string,
+  }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
   setCommand: PropTypes.func.isRequired,
@@ -120,19 +166,26 @@ EdgeList.propTypes = {
   setCommand: PropTypes.func.isRequired,
 };
 
-const EdgeItems = ({ label, cnt, setCommand }) => (
+const EdgeItems = connect((state) => ({
+  database: state.database,
+}), {})(({
+  label, cnt, setCommand, database,
+}) => (
   <button
     type="button"
     className="edgeLabel mx-1 my-1 btn btn-light btn-sm"
-    onClick={() => setCommand(genLabelQuery('edge', label))}
+    onClick={() => setCommand(genLabelQuery('edge', label, database))}
   >
     {label}
     (
     {cnt}
     )
   </button>
-);
+));
 EdgeItems.propTypes = {
+  database: PropTypes.shape({
+    flavor: PropTypes.string,
+  }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
   setCommand: PropTypes.func.isRequired,

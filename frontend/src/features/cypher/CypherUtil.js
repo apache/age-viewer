@@ -288,7 +288,18 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
 
   function generateElements(alias, val) {
     const labelName = val.label;
-    if (val.start && val.end) {
+    let source = val.start;
+    let target = val.end;
+
+    if (!source) {
+      source = val.start_id;
+    }
+
+    if (!target) {
+      target = val.end_id;
+    }
+
+    if (source && target) {
       if (!Object.prototype.hasOwnProperty.call(edgeLegend, labelName)) {
         edgeLegend[labelName] = {
           size: getEdgeSize(labelName),
@@ -313,8 +324,8 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
           group: 'edges',
           data: {
             id: val.id,
-            source: val.start,
-            target: val.end,
+            source,
+            target,
             label: val.label,
             backgroundColor: edgeLegend[labelName].color,
             borderColor: edgeLegend[labelName].borderColor,
