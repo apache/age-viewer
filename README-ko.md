@@ -47,5 +47,15 @@ npm install
 cd frontend && yarn build
 # frontend 폴더에 build 폴더로 HTML/CSS/JS가 생성됩니다.
 cd ..
+# PORT 변경
+# Powsershell
+# $env:PORT="5555"
+
+# CMD
+# set PORT=5555
+
+# SHELL
+# PORT=5555 npm run start
+
 cd backend && npm run start
 ```
