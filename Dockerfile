@@ -7,11 +7,12 @@ ADD . /app
 
 RUN ls -al /app
 
-RUN cd /app/frontend && npm install && npm run build && ls | grep -v 'build' | xargs rm
+RUN apk --no-cache add git less openssh bash
+RUN cd /app/frontend && npm install && npm run build && ls | grep -v 'build' | xargs rm -rf
 RUN cd /app/backend && npm install && npm run build
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh /
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3001

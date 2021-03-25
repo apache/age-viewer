@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 cd /app/backend
-npm run start:production
+exec npm run start:production
