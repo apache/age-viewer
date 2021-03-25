@@ -9,8 +9,10 @@
         "test:cypher": "mocha -r @babel/register --exit --timeout 10000 ./test/cypher.api.test.js",
         "test:session": "mocha -r @babel/register --exit --timeout 10000 ./test/session.api.test.js",
         "test:query": "mocha -r @babel/register --exit --timeout 10000 ./test/cypher.service.test.js",
-        "start": "babel-node ./bin/www",
-        "start:dev": "nodemon --watch app.js --watch src/ --exec 'babel-node' ./bin/www"
+        "start": "babel-node src/bin/www",
+        "start:dev": "nodemon --watch src/app.js --watch src/ --exec 'babel-node' src/bin/www",
+        "build": "babel -d ./build ./src -s",
+        "start:production": "node ./build/bin/www.js"
     },
     "dependencies": {
         "agensgraph": "git+https://github.com/bitnine-oss/agensgraph-nodejs.git",

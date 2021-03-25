@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import {getQuery} from "./src/tools/SQLFlavorManager";
-
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -23,11 +21,11 @@ const uuid = require('node-uuid');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const {stream} = require('./src/config/winston');
-const cypherRouter = require('./src/routes/cypherRouter');
-const databaseRouter = require('./src/routes/databaseRouter');
-const agcloudRouter = require('./src/routes/agcloudRouter');
-const sessionRouter = require('./src/routes/sessionRouter');
+const {stream} = require('./config/winston');
+const cypherRouter = require('./routes/cypherRouter');
+const databaseRouter = require('./routes/databaseRouter');
+const agcloudRouter = require('./routes/agcloudRouter');
+const sessionRouter = require('./routes/sessionRouter');
 const app = express();
 
 app.use(cors({
