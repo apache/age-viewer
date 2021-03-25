@@ -1,7 +1,13 @@
-[한국어](./README-ko.md)
+# Goal of AGViewer
+AGViewer is graph visualisation tool, for AgensGraph or Apache AGE.
 
-# Command
-1. **npm run setup**
-   1. Install backend & frontend dependencies
-2. **npm run start**
-   1. Start Application
+# How to use this image
+```
+docker run \
+    --publish=3001:3001 \
+    --name=agviewer \
+    bitnine/agviewer:latest
+```
+
+# License
+AGViewer is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
