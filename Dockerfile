@@ -5,8 +5,6 @@ WORKDIR /app
 
 ADD . /app
 
-RUN ls -al /app
-
 RUN apk --no-cache add git less openssh bash
 RUN cd /app/frontend && npm install && npm run build && ls | grep -v 'build' | xargs rm -rf
 RUN cd /app/backend && npm install && npm run build
