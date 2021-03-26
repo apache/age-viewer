@@ -99,7 +99,8 @@ class DatabaseService {
         }
 
         try {
-            await agensDatabaseHelper.getConnection(agensDatabaseHelper.getConnectionInfo(), true);
+            let client = await agensDatabaseHelper.getConnection(agensDatabaseHelper.getConnectionInfo(), true);
+            client.release();
         } catch (e) {
             this._agensDatabaseHelper = null;
             throw e;
@@ -131,7 +132,8 @@ class DatabaseService {
         }
 
         try {
-            await AgensGraphRepository.getConnection(agensDatabaseHelper.getConnectionInfo())
+            let client = await AgensGraphRepository.getConnection(agensDatabaseHelper.getConnectionInfo());
+            client.release();
         } catch (err) {
             return false;
         }

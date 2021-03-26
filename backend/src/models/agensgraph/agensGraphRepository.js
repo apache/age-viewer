@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import Flavors from "../../config/Flavors";
+import Flavors from '../../config/Flavors';
+import PgConfig from '../../config/Pg'
 
 require('agensgraph');
 import pg from 'pg';
 import types from 'pg-types';
-import {setAGETypes} from "../../tools/AGEParser";
+import {setAGETypes} from '../../tools/AGEParser';
 
 
 class AgensGraphRepository {
@@ -129,9 +130,9 @@ class AgensGraphRepository {
             database: this._database,
             user: this._user,
             password: this._password,
-            max: 10,
-            idleTimeoutMillis: 30000,
-            connectionTimeoutMillis: 2000,
+            max: PgConfig.max,
+            idleTimeoutMillis: PgConfig.idleTimeoutMillis,
+            connectionTimeoutMillis: PgConfig.connectionTimeoutMillis,
         };
     }
 
