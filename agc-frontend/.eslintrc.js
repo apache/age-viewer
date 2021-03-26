@@ -16,8 +16,6 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['babel', 'react', 'import', 'react-hooks'],
-  rules: {
-    // windows linebreaks when not in production environment
-    'linebreak-style': ['error', process.env.NODE_ENV === 'prod' ? 'unix' : 'windows'],
+  rules: {    
   },
 };
