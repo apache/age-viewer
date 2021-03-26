@@ -96,9 +96,9 @@ const CodeMirrorWrapper = ({
           editor.setOption('lineNumberFormatter', (number) => number);
         }
         if (lineCount <= 5) {
-          editor.setSize(null, '76px');
+          editor.setSize(null, '59x');
         } else {
-          editor.setSize(null, '76px');
+          editor.setSize(null, '59px');
         }
         return true;
       }}

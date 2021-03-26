@@ -116,16 +116,20 @@ const Editor = ({
         <div className="container-fluid editor-area card-header">
           <div className="input-group">
             <div style={{
-              height: '100%',
-              width: '78px',
+              height: '60px%',
+              width: '60px',
               color: '#ffffff',
-              textAlign: 'center',
-              padding: '28px',
+              textAlign: 'left',
+              paddingTop: '5px',
             }}
             >
-              <spna>$</spna>
+              <spna>
+                Query
+                <br />
+                Editor
+              </spna>
             </div>
-            <div className="form-control col-11" style={{ height: '77px', padding: '0px' }}>
+            <div className="form-control col-11" style={{ height: '60px', padding: '0px' }}>
               <CodeMirror
                 onClick={onClick}
                 value={command}

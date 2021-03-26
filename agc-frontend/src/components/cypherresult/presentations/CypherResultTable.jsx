@@ -104,12 +104,12 @@ const CypherResultTable = ({ data, ...props }) => {
           <button
             className="btn"
             type="button"
-            style={{ width: '50%', fontSize: '18px' }}
+            style={{ width: '50%', fontSize: '14px' }}
             onClick={() => activeTab(props.refKey, 'graph')}
           >
             <i className="icon-graph" />
             <br />
-            Graph
+            <b>Graph</b>
           </button>
           <div
             style={{
@@ -122,12 +122,12 @@ const CypherResultTable = ({ data, ...props }) => {
           <button
             className="btn"
             type="button"
-            style={{ width: '50%', fontSize: '18px', color: '#142B80' }}
+            style={{ width: '50%', fontSize: '14px', color: '#142B80' }}
             onClick={() => activeTab(props.refKey, 'table')}
           >
             <FontAwesomeIcon icon={faTable} />
             <br />
-            Table
+            <b>Table</b>
           </button>
         </div>
       </div>

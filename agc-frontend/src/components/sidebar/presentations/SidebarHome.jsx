@@ -99,8 +99,9 @@ const NodeList = ({ nodes, setCommand }) => {
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        height: '70px',
+        height: '75px',
         overflowY: 'auto',
+        marginTop: '12px',
       }}
       >
         {list}
@@ -160,8 +161,9 @@ const EdgeList = ({ edges, setCommand }) => {
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        height: '70px',
+        height: '75px',
         overflowY: 'auto',
+        marginTop: '12px',
       }}
       >
         {list}
@@ -219,8 +221,9 @@ const PropertyList = ({ propertyKeys, setCommand }) => {
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        height: '70px',
+        height: '75px',
         overflowY: 'auto',
+        marginTop: '12px',
       }}
       >
         {list}
@@ -325,20 +328,17 @@ const SidebarHome = ({
         <div className="form-group sidebar-item">
           <b>Vertex Label</b>
           <br />
-          <br />
           <NodeList nodes={nodes} setCommand={setCommand} />
         </div>
         <VerticalLine />
         <div className="form-group sidebar-item">
           <b>Edge Label</b>
           <br />
-          <br />
           <EdgeList edges={edges} setCommand={setCommand} />
         </div>
         <VerticalLine />
         <div className="form-group sidebar-item">
           <b>Properties</b>
-          <br />
           <br />
           <PropertyList propertyKeys={propertyKeys} setCommand={setCommand} />
         </div>

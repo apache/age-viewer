@@ -171,6 +171,7 @@ class CypherResultCytoscapeLegend extends Component {
       <div className="legend-area" style={{ width: '80%' }}>
         <div className="d-flex nodeLegend">
           <div className={`mr-auto legends legend ${nodeLegendExpanded ? 'expandedLegend' : ''}`}>
+            <sapn>Node: </sapn>
             {nodeLedgend}
           </div>
           <button
@@ -185,6 +186,7 @@ class CypherResultCytoscapeLegend extends Component {
         </div>
         <div className="d-flex edgeLegend">
           <div className={`mr-auto legends legend ${edgeLegendExpanded ? 'expandedLegend' : ''}`}>
+            <sapn>Edge: </sapn>
             {edgeLedgend}
           </div>
           <button
