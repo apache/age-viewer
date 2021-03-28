@@ -18,8 +18,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
 import { uuid } from 'cytoscape/src/util';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTable } from '@fortawesome/free-solid-svg-icons';
+import CypherResultTab from '../../cytoscape/CypherResultTab';
 
 const CypherResultTable = ({ data, ...props }) => {
   const [localColumns, setLocalColumns] = useState([]);
@@ -72,20 +71,7 @@ const CypherResultTable = ({ data, ...props }) => {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>{data.message}</span></div>;
   }
 
-  const activeTab = (refKey, tabType) => {
-    if (tabType === 'graph') {
-      document.getElementById(`${refKey}-${tabType}`).classList.add('selected-frame-tab');
-      document.getElementById(`${refKey}-${tabType}`).classList.remove('deselected-frame-tab');
-      document.getElementById(`${refKey}-table`).classList.add('deselected-frame-tab');
-      document.getElementById(`${refKey}-table`).classList.remove('selected-frame-tab');
-    } else if (tabType === 'table') {
-      document.getElementById(`${refKey}-${tabType}`).classList.add('selected-frame-tab');
-      document.getElementById(`${refKey}-${tabType}`).classList.remove('deselected-frame-tab');
-      document.getElementById(`${refKey}-graph`).classList.add('deselected-frame-tab');
-      document.getElementById(`${refKey}-graph`).classList.remove('selected-frame-tab');
-    }
-  };
-
+  const { refKey } = props;
   return (
     <div className="legend-area">
       <div className="contianer-frame-tab">
@@ -93,43 +79,7 @@ const CypherResultTable = ({ data, ...props }) => {
           <div className="d-flex nodeLegend">Node:</div>
           <div className="d-flex edgeLegend">Edge:</div>
         </div>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '20%',
-          height: '96px',
-          border: 'solid 1px #C4C4C4',
-        }}
-        >
-          <button
-            className="btn"
-            type="button"
-            style={{ width: '50%', fontSize: '14px' }}
-            onClick={() => activeTab(props.refKey, 'graph')}
-          >
-            <i className="icon-graph" />
-            <br />
-            <b>Graph</b>
-          </button>
-          <div
-            style={{
-              backgroundColor: '#C4C4C4',
-              width: '1px',
-              height: '75px',
-              marginTop: '20px',
-            }}
-          />
-          <button
-            className="btn"
-            type="button"
-            style={{ width: '50%', fontSize: '14px', color: '#142B80' }}
-            onClick={() => activeTab(props.refKey, 'table')}
-          >
-            <FontAwesomeIcon icon={faTable} />
-            <br />
-            <b>Table</b>
-          </button>
-        </div>
+        <CypherResultTab refKey={refKey} currentTab="table" />
       </div>
       <Table columns={localColumns} dataSource={localRows} />
     </div>

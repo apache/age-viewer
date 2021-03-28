@@ -17,8 +17,6 @@
 import React, {
   forwardRef, useEffect, useImperativeHandle, useState,
 } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTable } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import {
@@ -27,6 +25,7 @@ import {
 import CypherResultCytoscapeChart from '../../cytoscape/CypherResultCytoscapeChart';
 import CypherResultCytoscapeLegend from '../../cytoscape/CypherResultCytoscapeLegend';
 import CypherResultCytoscapeFooter from '../../cytoscape/CypherResultCytoscapeFooter';
+import CypherResultTab from '../../cytoscape/CypherResultTab';
 
 const CypherResultCytoscape = forwardRef((props, ref) => {
   const [footerData, setFooterData] = useState({});
@@ -288,20 +287,6 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     applyFilterOnCytoscapeElements,
   }));
 
-  const activeTab = (refKey, tabType) => {
-    if (tabType === 'graph') {
-      document.getElementById(`${refKey}-${tabType}`).classList.add('selected-frame-tab');
-      document.getElementById(`${refKey}-${tabType}`).classList.remove('deselected-frame-tab');
-      document.getElementById(`${refKey}-table`).classList.add('deselected-frame-tab');
-      document.getElementById(`${refKey}-table`).classList.remove('selected-frame-tab');
-    } else if (tabType === 'table') {
-      document.getElementById(`${refKey}-${tabType}`).classList.add('selected-frame-tab');
-      document.getElementById(`${refKey}-${tabType}`).classList.remove('deselected-frame-tab');
-      document.getElementById(`${refKey}-graph`).classList.add('deselected-frame-tab');
-      document.getElementById(`${refKey}-graph`).classList.remove('selected-frame-tab');
-    }
-  };
-
   return (
     <div className="chart-frame-area">
       <div className="contianer-frame-tab">
@@ -310,39 +295,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
           isReloading={isReloading}
           legendData={legendData}
         />
-        <div style={{
-          display: 'flex', flexDirection: 'row', width: '20%', height: '96px', border: 'solid 1px #C4C4C4',
-        }}
-        >
-          <button
-            className="btn"
-            type="button"
-            style={{ width: '50%', fontSize: '14px', color: '#142B80' }}
-            onClick={() => activeTab(props.refKey, 'graph')}
-          >
-            <i className="icon-graph" />
-            <br />
-            <b style={{ fontSize: '14px;' }}>Graph</b>
-          </button>
-          <div
-            style={{
-              backgroundColor: '#C4C4C4',
-              width: '1px',
-              height: '76px',
-              marginTop: '20px',
-            }}
-          />
-          <button
-            className="btn"
-            type="button"
-            style={{ width: '50%', fontSize: '14px' }}
-            onClick={() => activeTab(props.refKey, 'table')}
-          >
-            <FontAwesomeIcon icon={faTable} />
-            <br />
-            <b style={{ fontSize: '14px;' }}>Table</b>
-          </button>
-        </div>
+        <CypherResultTab refKey={props.refKey} currenTab="graph" />
       </div>
       <CypherResultCytoscapeChart
         onElementsMouseover={getFooterData}
