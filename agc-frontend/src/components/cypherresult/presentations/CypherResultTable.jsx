@@ -69,6 +69,8 @@ const CypherResultTable = ({ data, ...props }) => {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>{data.command.toUpperCase()}</span></div>;
   } if (data.command && data.command.toUpperCase() === 'ERROR') {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>{data.message}</span></div>;
+  } if (data.command === null) {
+    return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>Query Not Valid (Query: )</span></div>;
   }
 
   const { refKey } = props;

@@ -102,8 +102,8 @@ const Frames = ({
       }
       if (frame.frameName === 'CypherResultFrame') {
         if (Object.prototype.hasOwnProperty.call(queryResult, frame.frameProps.key)
-          && queryResult[frame.frameProps.key].command.toUpperCase()
-            .match('(ERROR|GRAPH|CREATE|COPY).*')) {
+          && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
+            .match('(ERROR|GRAPH|CREATE|COPY|NULL).*')) {
           return (
             <CypherResult
               key={frame.frameProps.key}
