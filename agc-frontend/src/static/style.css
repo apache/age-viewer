@@ -161,9 +161,9 @@ a[data-toggle="collapse"] {
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 11px 10px 20px 10px;
+    padding: 2px 2px 2px 2px;
     min-width: 0;
-    height: 110px;
+    height: 90px;
     word-wrap: break-word;    
     background-clip: border-box;
     background: #142B80 0% 0% no-repeat padding-box;
@@ -181,7 +181,7 @@ a[data-toggle="collapse"] {
     left: 0;
     right: 0;
     z-index: 9;
-    padding: 20px 20px 0 20px;
+    padding: 20px 15px 0 15px;
 }
 
 .show-eraser {    

@@ -295,7 +295,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
           isReloading={isReloading}
           legendData={legendData}
         />
-        <CypherResultTab refKey={props.refKey} currenTab="graph" />
+        <CypherResultTab refKey={props.refKey} currentTab="graph" />
       </div>
       <CypherResultCytoscapeChart
         onElementsMouseover={getFooterData}

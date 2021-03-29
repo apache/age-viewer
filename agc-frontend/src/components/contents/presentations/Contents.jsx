@@ -40,7 +40,7 @@ const Contents = ({
 
   return (
     <div className={`${styles.Content} ${isActive ? styles.Expanded : ''}`}>
-      <div style={{ padding: '1rem' }}>
+      <div style={{ padding: '0rem 1rem 1rem 1rem' }}>
         <FramesContainer />
       </div>
     </div>

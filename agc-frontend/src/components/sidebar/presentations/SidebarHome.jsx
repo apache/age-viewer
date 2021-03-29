@@ -99,7 +99,7 @@ const NodeList = ({ nodes, setCommand }) => {
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        height: '75px',
+        height: '80px',
         overflowY: 'auto',
         marginTop: '12px',
       }}
@@ -161,7 +161,7 @@ const EdgeList = ({ edges, setCommand }) => {
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        height: '75px',
+        height: '80px',
         overflowY: 'auto',
         marginTop: '12px',
       }}
@@ -221,7 +221,7 @@ const PropertyList = ({ propertyKeys, setCommand }) => {
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        height: '75px',
+        height: '80px',
         overflowY: 'auto',
         marginTop: '12px',
       }}
