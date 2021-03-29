@@ -370,8 +370,7 @@ const SidebarHome = ({
             className="frame-head-button btn btn-link"
             type="button"
             onClick={() => confirm({
-              title: 'Do you wnat to Close Session ?',
-              content: 'if you Closing the session , current window is close',
+              title: 'Are you sure you want to close this window?',
               onOk() {
                 requestDisconnect();
               },
