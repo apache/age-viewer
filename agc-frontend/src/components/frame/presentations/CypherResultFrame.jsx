@@ -16,11 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Nav, Tab } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTable } from '@fortawesome/free-solid-svg-icons';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
-import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
 import Frame from '../Frame';
 
 const CypherResultFrame = ({
@@ -35,43 +31,7 @@ const CypherResultFrame = ({
     bodyNoPadding
     content={(
       <div className="d-flex h-100">
-        <Tab.Container defaultActiveKey="table">
-
-          <Nav variant="pills" className="flex-column graph-card-nav">
-            <Nav.Item>
-              <Nav.Link eventKey="table">
-                <FontAwesomeIcon
-                  icon={faTable}
-                  size="lg"
-                />
-                <br />
-                Table
-              </Nav.Link>
-            </Nav.Item>
-
-            <Nav.Item>
-              <Nav.Link eventKey="code">
-                <FontAwesomeIcon
-                  icon={faTable}
-                  size="lg"
-                />
-                <br />
-                Meta
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
-          <Tab.Content className="graph-card-content container-fluid graph-tabpanel">
-
-            <Tab.Pane eventKey="table">
-              <CypherResultTableContainer refKey={refKey} />
-            </Tab.Pane>
-
-            <Tab.Pane eventKey="code">
-              <CypherResultMetaContainer refKey={refKey} />
-            </Tab.Pane>
-
-          </Tab.Content>
-        </Tab.Container>
+        <CypherResultTableContainer refKey={refKey} />
       </div>
       )}
   />

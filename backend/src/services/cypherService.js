@@ -23,7 +23,7 @@ class CypherService {
 
     async executeCypher(query) {
         if (!query) {
-            throw new Error(`Query Not Valid (Query: ${query})`);
+            throw new Error('Query not entered!');
         } else {
             try {
                 let resultSet = await this._agensDatabaseHelper.execute(query);

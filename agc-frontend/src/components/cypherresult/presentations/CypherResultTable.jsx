@@ -60,8 +60,8 @@ const CypherResultTable = ({ data, ...props }) => {
     return (
       <div style={{ margin: '25px' }}>
         <span style={{ whiteSpace: 'pre-line' }}>
-          Affected
-          {data.rowCount === null ? 0 : data.rowCount}
+          {data.rowCount === null ? '' : 'Affected'}
+          {data.rowCount === null ? 'Successfully ran the query!' : data.rowCount}
         </span>
       </div>
     );
@@ -70,7 +70,7 @@ const CypherResultTable = ({ data, ...props }) => {
   } if (data.command && data.command.toUpperCase() === 'ERROR') {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>{data.message}</span></div>;
   } if (data.command === null) {
-    return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>Query Not Valid (Query: )</span></div>;
+    return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>Query not entered!</span></div>;
   }
 
   const { refKey } = props;
@@ -97,6 +97,7 @@ CypherResultTable.propTypes = {
     columns: PropTypes.any,
     // eslint-disable-next-line react/forbid-prop-types
     rows: PropTypes.any,
+    statusText: PropTypes.string,
   }).isRequired,
   refKey: PropTypes.string.isRequired,
 };

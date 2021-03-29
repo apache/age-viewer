@@ -67,7 +67,8 @@ export const executeCypherQuery = createAsyncThunk(
         throw error;
       } else {
         const errorJson = await error.json();
-        throw errorJson.message;
+        const messaage = errorJson.message.charAt(0).toUpperCase() + errorJson.message.slice(1);
+        throw messaage;
       }
     }
   },
