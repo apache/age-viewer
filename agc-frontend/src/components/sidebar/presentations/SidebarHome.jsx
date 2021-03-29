@@ -312,6 +312,7 @@ const SidebarHome = ({
   command,
   trimFrame,
   addFrame,
+  getMetaData,
 }) => {
   const dispatch = useDispatch();
   const { confirm } = Modal;
@@ -320,6 +321,10 @@ const SidebarHome = ({
     const refKey = uuid();
     dispatch(() => trimFrame('ServerDisconnect'));
     dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
+  };
+
+  const refreshSidebarHome = () => {
+    getMetaData();
   };
 
   return (
@@ -344,7 +349,23 @@ const SidebarHome = ({
         </div>
         <VerticalLine />
         <div className="form-group sidebar-item-disconnect">
+          <button
+            className="frame-head-button btn btn-link"
+            type="button"
+            onClick={() => refreshSidebarHome()}
+          >
+            <i className="icon-refresh" />
+          </button>
           <br />
+          <b>Refresh</b>
+          <div style={{
+            border: '1px solid #C4C4C4',
+            opacity: '1',
+            width: '111px',
+            height: '0',
+            margin: '3px auto',
+          }}
+          />
           <button
             className="frame-head-button btn btn-link"
             type="button"
@@ -386,6 +407,7 @@ SidebarHome.propTypes = {
   command: PropTypes.string.isRequired,
   trimFrame: PropTypes.func.isRequired,
   addFrame: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
 };
 
 export default SidebarHome;

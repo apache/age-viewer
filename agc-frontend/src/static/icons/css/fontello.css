@@ -60,3 +60,4 @@
 .icon-graph:before { content: '\e802'; } 
 .icon-play:before { content: '\e803'; }
 .icon-close-session:before { content: '\e804'; font-size: 30px; color: #142B80; }
+.icon-refresh:before { content: '\e805'; font-size: 30px; color: #18CCC5; }

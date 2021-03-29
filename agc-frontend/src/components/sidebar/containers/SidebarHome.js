@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import SidebarHome from '../presentations/SidebarHome';
 import { setCommand } from '../../../features/editor/EditorSlice';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
+import { getMetaData } from '../../../features/database/MetadataSlice';
 
 const mapStateToProps = (state) => ({
   edges: state.metadata.edges,
@@ -29,6 +30,8 @@ const mapStateToProps = (state) => ({
   command: state.editor.command,
 });
 
-const mapDispatchToProps = { setCommand, addFrame, trimFrame };
+const mapDispatchToProps = {
+  setCommand, addFrame, trimFrame, getMetaData,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SidebarHome);
