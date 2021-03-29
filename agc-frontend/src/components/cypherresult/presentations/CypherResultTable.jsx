@@ -60,8 +60,7 @@ const CypherResultTable = ({ data, ...props }) => {
     return (
       <div style={{ margin: '25px' }}>
         <span style={{ whiteSpace: 'pre-line' }}>
-          {data.rowCount === null ? '' : 'Affected'}
-          {data.rowCount === null ? 'Successfully ran the query!' : data.rowCount}
+          <span>Successfully ran the query!</span>
         </span>
       </div>
     );
