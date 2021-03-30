@@ -361,7 +361,7 @@ const SidebarHome = ({
           <div style={{
             border: '1px solid #C4C4C4',
             opacity: '1',
-            width: '111px',
+            width: '80%',
             height: '0',
             margin: '3px auto',
           }}

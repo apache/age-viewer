@@ -28,13 +28,13 @@ const SidebarMeunuToggle = ({
         ? (
           <FontAwesomeIcon
             icon={faAngleUp}
-            size="lg"
+            size="3x"
           />
         )
         : (
           <FontAwesomeIcon
             icon={faAngleDown}
-            size="lg"
+            size="3x"
           />
         )
     }

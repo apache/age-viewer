@@ -47,7 +47,7 @@
     clip: rect(1px, 1px, 1px, 1px);
 }
 
-body {
+body {    
     font-family: 'Poppins', sans-serif;
     padding-top: 90px;
 }
@@ -196,6 +196,10 @@ a[data-toggle="collapse"] {
 
 #editor-buttons {
     margin-left: -60px !important;
+}
+
+.input-style{
+    width: 97% !important;
 }
 
 
