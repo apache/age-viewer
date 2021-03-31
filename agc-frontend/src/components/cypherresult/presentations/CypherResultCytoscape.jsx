@@ -253,7 +253,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
       }
     }
 
-    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.5');
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.2');
   };
 
   const resetFilterOnCytoscapeElements = () => {
