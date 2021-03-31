@@ -331,7 +331,7 @@ const SidebarHome = ({
     <div className="sidebar-home">
       <div className="sidebar sidebar-body">
         <div className="form-group sidebar-item">
-          <b>Vertex Label</b>
+          <b>Node Label</b>
           <br />
           <NodeList nodes={nodes} setCommand={setCommand} />
         </div>
