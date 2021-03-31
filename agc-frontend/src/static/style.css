@@ -522,11 +522,16 @@ a.nav-link.active {
     Cytoscapejs-cxtmenu
 ----------------------------------------------------- */
 .cxtmenu-content {
-    font-size: 10px;
+    font-size: 10px;    
 }
 
 
-
+/* ---------------------------------------------------
+    Cytoscapejs-filter-feature style
+----------------------------------------------------- */
+.g-filtered{
+    opacity: 1.0;
+}
 
 /* ---------------------------------------------------
     Play Contents

@@ -256,6 +256,13 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.5');
   };
 
+  const resetFilterOnCytoscapeElements = () => {
+    const gFilteredClassName = 'g-filtered';
+    if (cytoscapeObject) {
+      cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '1.0').removeClass(gFilteredClassName);
+    }
+  };
+
   const captionChange = (elementType, label, caption) => {
     changeCaptionOnCytoscapeElements(elementType, label, caption);
     setSelectedCaption(caption);
@@ -285,6 +292,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     },
     getCaptionsFromCytoscapeObject,
     applyFilterOnCytoscapeElements,
+    resetFilterOnCytoscapeElements,
   }));
 
   return (

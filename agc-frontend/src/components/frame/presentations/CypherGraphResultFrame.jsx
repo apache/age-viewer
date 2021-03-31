@@ -41,7 +41,6 @@ const CypherResultFrame = ({
 
   const [filterProperties, setFilterProperties] = useState([]);
   const [globalFilter, setGlobalFilter] = useState(null);
-
   useEffect(() => {
     if (chartAreaRef.current && filterModalVisible) {
       const labels = chartAreaRef.current.getLabels()
@@ -61,6 +60,8 @@ const CypherResultFrame = ({
   useEffect(() => {
     if (globalFilter) {
       chartAreaRef.current.applyFilterOnCytoscapeElements(globalFilter);
+    } else {
+      chartAreaRef.current.resetFilterOnCytoscapeElements();
     }
   }, [globalFilter]);
 
@@ -127,6 +128,7 @@ const CypherResultFrame = ({
       <Frame
         bodyNoPadding
         onSearch={() => setFilterModalVisible(true)}
+        onSearchCancel={() => setGlobalFilter(null)}
         onRefresh={refreshFrame}
         onDownload={(type) => {
           if (type === 'csv') {
@@ -166,6 +168,7 @@ const CypherResultFrame = ({
         visible={filterModalVisible}
         setVisible={setFilterModalVisible}
         properties={filterProperties}
+        globalFilter={globalFilter}
       />
     </>
 

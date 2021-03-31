@@ -18,7 +18,7 @@ const Frame = ({
   reqString, content,
   // isPinned, pinFrame,
   refKey, removeFrame,
-  onSearch, onDownload, onRefresh,
+  onSearch, onSearchCancel, onDownload, onRefresh,
   bodyNoPadding,
 }) => {
   const [isFullScreen, setFullScreen] = useState(false);
@@ -48,6 +48,17 @@ const Frame = ({
           </strong>
         </div>
         <div className={styles.ButtonArea}>
+          {onSearchCancel ? (
+            <Button
+              size="large"
+              type="link"
+              className={styles.FrameButton}
+              onClick={() => onSearchCancel()}
+              title="Filter/Search"
+            >
+              <i className="icon-search-cancel" />
+            </Button>
+          ) : null}
           {onSearch ? (
             <Button
               size="large"
@@ -153,6 +164,7 @@ const Frame = ({
 
 Frame.defaultProps = {
   onSearch: null,
+  onSearchCancel: null,
   onDownload: null,
   onRefresh: null,
   bodyNoPadding: false,
@@ -166,6 +178,7 @@ Frame.propTypes = {
   refKey: PropTypes.string.isRequired,
   removeFrame: PropTypes.func.isRequired,
   onSearch: PropTypes.func,
+  onSearchCancel: PropTypes.func,
   onDownload: PropTypes.func,
   onRefresh: PropTypes.func,
   bodyNoPadding: PropTypes.bool,

@@ -61,3 +61,4 @@
 .icon-play:before { content: '\e803'; font-size: 30px; }
 .icon-close-session:before { content: '\e804'; font-size: 30px; color: #142B80; }
 .icon-refresh:before { content: '\e805'; font-size: 30px; color: #18CCC5; }
+.icon-search-cancel:before { content: '\e806'; font-size: 24px; }
