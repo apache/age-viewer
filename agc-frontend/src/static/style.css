@@ -115,7 +115,7 @@ body {
 }
 
 #sidebar {        
-    height: 175px;
+    height: auto;
     z-index: 10;      
     background-color: var(--sidebar-color);    
     transition: all 0.3s;

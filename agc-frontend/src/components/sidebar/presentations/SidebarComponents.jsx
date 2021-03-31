@@ -22,8 +22,9 @@ export const VerticalLine = () => (
     style={{
       backgroundColor: '#C4C4C4',
       width: '1px',
-      height: '123px',
-      marginTop: '20px',
+      height: '120px',
+      marginTop: '37px',
+      marginBottom: '37px',
     }}
   />
 );
