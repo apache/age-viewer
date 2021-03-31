@@ -54,7 +54,7 @@ const Frame = ({
               type="link"
               className={styles.FrameButton}
               onClick={() => onSearchCancel()}
-              title="Filter/Search"
+              title="Cancel Search"
             >
               <i className="icon-search-cancel" />
             </Button>
@@ -65,7 +65,7 @@ const Frame = ({
               type="link"
               className={styles.FrameButton}
               onClick={() => onSearch()}
-              title="Cancel Search"
+              title="Filter/Search"
             >
               <i className="icon-filter" />
             </Button>
