@@ -17,6 +17,7 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+// eslint-disable-next-line no-unused-vars
 const validateSamePathVariableReturn = (cypherQuery) => {
   const cypherPathValidator = new RegExp('^match\\s([a-zA-Z0-9].*)\\s*=\\s*\\(', 'i');
 
@@ -29,6 +30,7 @@ const validateSamePathVariableReturn = (cypherQuery) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const validateVlePathVariableReturn = (cypherQuery) => {
   const cypherVleValidator = new RegExp('^match\\s.*[.*[0-9]*\\s*\\.\\.\\s*[0-9]*]', 'i');
 
@@ -45,8 +47,8 @@ export const executeCypherQuery = createAsyncThunk(
   'cypher/executeCypherQuery',
   async (args) => {
     try {
-      validateSamePathVariableReturn(args[1]);
-      validateVlePathVariableReturn(args[1]);
+      // validateSamePathVariableReturn(args[1]);
+      // validateVlePathVariableReturn(args[1]);
 
       const response = await fetch('/api/v1/cypher',
         {
