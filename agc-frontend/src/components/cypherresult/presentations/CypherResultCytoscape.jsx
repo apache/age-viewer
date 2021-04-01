@@ -234,7 +234,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
           break;
         }
       }
-      if (!notIncluded) {
+      if (notIncluded) {
         notFilteredNodeLength += 1;
         notFilteredNodes.push(ele);
       }
