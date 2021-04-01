@@ -241,6 +241,7 @@ const CypherResultCytoscapeCharts = ({
       stylesheet={stylesheet}
       cy={cyCallback}
       className={styles.NormalChart}
+      wheelSensitivity={0.3}
     />
   );
 };
