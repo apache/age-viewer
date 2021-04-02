@@ -423,6 +423,7 @@ a.nav-link.active {
 
 .nodeLegend, .edgeLegend {
     min-height: 47px;
+    line-height: 46px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
