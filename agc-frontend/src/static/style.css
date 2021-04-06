@@ -50,6 +50,7 @@
 body {    
     font-family: 'Poppins', sans-serif;
     padding-top: 90px;
+    overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -67,15 +68,19 @@ body {
 .wrapper {
     display: flex;
     width: 100%;
-    align-items: stretch;
-    padding-top: 105px;
+    max-height: 100%;
+    align-items: stretch;    
+    overflow-y: scroll ;
+    position: fixed;
 }
 
 .wrapper-extension-padding {
     display: flex;
     width: 100%;
-    align-items: stretch;
-    padding-top: 300px;
+    max-height: 100%;
+    align-items: stretch;    
+    overflow-y: scroll ;
+    position: fixed;
 }
 
 /* ---------------------------------------------------
@@ -161,7 +166,7 @@ a[data-toggle="collapse"] {
     background-color: #ffffff;
     height: auto;
     width: 100%;
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
     right: 0;
