@@ -67,18 +67,22 @@ body {
 
 .wrapper {
     display: flex;
+    flex-direction: column;
     width: 100%;
+    align-items: stretch;
+    position: relative;
     max-height: calc(100% - 105px);
-    align-items: stretch;    
     overflow-y: scroll ;
     position: fixed;
 }
 
 .wrapper-extension-padding {
     display: flex;
+    flex-direction: column;
     width: 100%;
+    align-items: stretch;
+    position: relative;
     max-height: calc(100% - 300px);
-    align-items: stretch;    
     overflow-y: scroll ;
     position: fixed;
 }
@@ -105,15 +109,6 @@ body {
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
-
-.wrapper {
-    flex-direction: column;
-    display: flex;
-    width: 100%;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
-
 #navbar {
     width: 70px;
     background-color: var(--navbar-color);
@@ -170,7 +165,7 @@ a[data-toggle="collapse"] {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 9;
+    z-index: 0;
     padding: 20px 15px 0 15px;
 }
 
