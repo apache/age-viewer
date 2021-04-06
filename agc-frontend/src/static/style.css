@@ -68,7 +68,7 @@ body {
     display: flex;
     width: 100%;
     align-items: stretch;
-    padding-top: 115px;
+    padding-top: 105px;
 }
 
 .wrapper-extension-padding {
@@ -157,22 +157,7 @@ a[data-toggle="collapse"] {
 /* ---------------------------------------------------
     EDITOR STYLE
 ----------------------------------------------------- */
-.editor {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: 2px 2px 2px 2px;
-    min-width: 0;
-    height: 90px;
-    word-wrap: break-word;    
-    background-clip: border-box;
-    background: #142B80 0% 0% no-repeat padding-box;
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: .25rem;
-    border-radius: 5px;
-    opacity: 1;
-}
-.editor-bar {
+.editor-divison {
     background-color: #ffffff;
     height: auto;
     width: 100%;
@@ -182,6 +167,36 @@ a[data-toggle="collapse"] {
     right: 0;
     z-index: 9;
     padding: 20px 15px 0 15px;
+}
+
+.editor {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2px 2px 2px 2px;
+    min-width: 0;
+    height: auto;    
+    word-wrap: break-word;    
+    background-clip: border-box;
+    background: #142B80 0% 0% no-repeat padding-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    border-radius: 5px;
+    opacity: 1;
+}
+
+.editor-code-wrapper{
+    margin-top: 1px;
+    min-height: 60px;
+    padding: 0px;
+    resize: vertical;
+    overflow: auto;
+    border: 1px solid;
+}
+
+.editor-button-wrapper{
+    margin-left: -60px !important;
+    height: 60px;
 }
 
 .show-eraser {    
@@ -194,14 +209,15 @@ a[data-toggle="collapse"] {
     visibility:hidden
 }
 
-#editor-buttons {
-    margin-left: -60px !important;
-}
-
 .input-style{
     width: 97% !important;
 }
 
+/* code mirror style bug fix code */
+.CodeMirror-scroll {
+    margin-top: -25px;
+    padding-top: 25px;
+}
 
 /* ---------------------------------------------------
     FRAME TAB STYLE CONTROLL

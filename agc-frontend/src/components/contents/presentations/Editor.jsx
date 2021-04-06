@@ -116,11 +116,11 @@ const Editor = ({
         <div className="container-fluid editor-area card-header">
           <div className="input-group input-style">
             <div style={{
-              height: '60px%',
+              height: '60px',
               width: '60px',
               color: '#ffffff',
               textAlign: 'left',
-              paddingTop: '5px',
+              lineHeight: '30px',
             }}
             >
               <spna>
@@ -129,14 +129,14 @@ const Editor = ({
                 Editor
               </spna>
             </div>
-            <div className="form-control col-11" style={{ height: '60px', padding: '0px' }}>
+            <div className="form-control col-11 editor-code-wrapper">
               <CodeMirror
                 onClick={onClick}
                 value={command}
                 onChange={setCommand}
               />
             </div>
-            <div className="input-group-append ml-auto" id="editor-buttons">
+            <div className="input-group-append ml-auto editor-button-wrapper" id="editor-buttons">
               {/* <button className="frame-head-button btn btn-link"
                type="button" onClick={() => favoritesCommand()}>
                 <FontAwesomeIcon

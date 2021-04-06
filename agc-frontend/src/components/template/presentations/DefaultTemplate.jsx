@@ -87,11 +87,11 @@ const DefaultTemplate = ({
         checked={theme === 'dark'}
         readOnly
       />
+      <div className="editor-divison">
+        <EditorContainer />
+        <Sidebar />
+      </div>
       <div className="wrapper-extension-padding" id="wrapper">
-        <div className="editor-bar">
-          <EditorContainer />
-          <Sidebar />
-        </div>
         <Contents />
       </div>
 
