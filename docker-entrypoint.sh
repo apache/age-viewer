@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 cd /app/backend
-exec npm run start:production
+exec yarn run start:production
