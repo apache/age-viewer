@@ -1,7 +1,7 @@
 [ENGLISH](./README.md)
 
 # AGViewer &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-AGViewer는 Agens 제품군의 그래프 시각화 도구입니다.
+AGViewer는 Agens 제품군의 그래프 시각화 도구입니다. 
 
 - [Getting Started](#1-getting-started)
 
