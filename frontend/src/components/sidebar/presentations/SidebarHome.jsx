@@ -17,9 +17,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Modal } from 'antd';
 import uuid from 'react-uuid';
-import { connect } from 'react-redux';
-import { ColoredLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
+import { connect, useDispatch } from 'react-redux';
+import { VerticalLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
 
 const genLabelQuery = (eleType, labelName, database) => {
   function age() {
@@ -95,7 +96,14 @@ const NodeList = ({ nodes, setCommand }) => {
       />
     ));
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: '80px',
+        overflowY: 'auto',
+        marginTop: '12px',
+      }}
+      >
         {list}
       </div>
     );
@@ -119,7 +127,7 @@ const NodeItems = connect((state) => ({
   }) => (
     <button
       type="button"
-      className="nodeLabel mx-1 my-1 btn rounded-pill btn-dark btn-sm"
+      className="node-item"
       onClick={() => setCommand(genLabelQuery('node', label, database))}
     >
       {label}
@@ -150,7 +158,14 @@ const EdgeList = ({ edges, setCommand }) => {
       />
     ));
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: '80px',
+        overflowY: 'auto',
+        marginTop: '12px',
+      }}
+      >
         {list}
       </div>
     );
@@ -173,7 +188,7 @@ const EdgeItems = connect((state) => ({
 }) => (
   <button
     type="button"
-    className="edgeLabel mx-1 my-1 btn btn-light btn-sm"
+    className="edge-item"
     onClick={() => setCommand(genLabelQuery('edge', label, database))}
   >
     {label}
@@ -203,7 +218,14 @@ const PropertyList = ({ propertyKeys, setCommand }) => {
       />
     ));
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: '80px',
+        overflowY: 'auto',
+        marginTop: '12px',
+      }}
+      >
         {list}
       </div>
     );
@@ -222,7 +244,7 @@ PropertyList.propTypes = {
 const PropertyItems = ({ propertyName, keyType, setCommand }) => (
   <button
     type="button"
-    className={`${keyType === 'v' ? 'nodeLabel btn-dark' : 'edgeLabel btn-light'} mx-1 btn rounded-pill btn-sm`}
+    className={`${keyType === 'v' ? 'propertie-item' : 'propertie-item'} propertie-item`}
     onClick={() => setCommand(genPropQuery(keyType, propertyName))}
   >
     {propertyName}
@@ -283,42 +305,89 @@ DBMSText.propTypes = {
 };
 
 const SidebarHome = ({
-  edges, nodes, propertyKeys, setCommand, dbname, graph, role,
-}) => (
-  <div className="sidebar-home">
-    <div className="sidebar sidebar-header">
-      <h4>Database Information</h4>
-    </div>
-    <div className="sidebar sidebar-body">
-      <div className="form-group">
-        <b>Vertex Label</b>
-        <ColoredLine />
-        <NodeList nodes={nodes} setCommand={setCommand} />
-      </div>
-      <div className="form-group">
-        <b>Edge Label</b>
-        <ColoredLine />
-        <EdgeList edges={edges} setCommand={setCommand} />
-      </div>
-      <div className="form-group">
-        <b>Properties</b>
-        <ColoredLine />
-        <PropertyList propertyKeys={propertyKeys} setCommand={setCommand} />
-      </div>
-      <div className="form-group">
-        <b>Connected as</b>
-        <ColoredLine />
-        <ConnectedText userName={role.user_name} roleName={role.role_name} />
-      </div>
-      <div className="form-group">
-        <b>DBMS</b>
-        <ColoredLine />
-        <DBMSText dbname={dbname} graph={graph} />
-      </div>
+  edges,
+  nodes,
+  propertyKeys,
+  setCommand,
+  command,
+  trimFrame,
+  addFrame,
+  getMetaData,
+}) => {
+  const dispatch = useDispatch();
+  const { confirm } = Modal;
 
+  const requestDisconnect = () => {
+    const refKey = uuid();
+    dispatch(() => trimFrame('ServerDisconnect'));
+    dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
+  };
+
+  const refreshSidebarHome = () => {
+    getMetaData();
+  };
+
+  return (
+    <div className="sidebar-home">
+      <div className="sidebar sidebar-body">
+        <div className="form-group sidebar-item">
+          <b>Node Label</b>
+          <br />
+          <NodeList nodes={nodes} setCommand={setCommand} />
+        </div>
+        <VerticalLine />
+        <div className="form-group sidebar-item">
+          <b>Edge Label</b>
+          <br />
+          <EdgeList edges={edges} setCommand={setCommand} />
+        </div>
+        <VerticalLine />
+        <div className="form-group sidebar-item">
+          <b>Properties</b>
+          <br />
+          <PropertyList propertyKeys={propertyKeys} setCommand={setCommand} />
+        </div>
+        <VerticalLine />
+        <div className="form-group sidebar-item-disconnect">
+          <button
+            className="frame-head-button btn btn-link"
+            type="button"
+            onClick={() => refreshSidebarHome()}
+          >
+            <i className="icon-refresh" />
+          </button>
+          <br />
+          <b>Refresh</b>
+          <div style={{
+            border: '1px solid #C4C4C4',
+            opacity: '1',
+            width: '80%',
+            height: '0',
+            margin: '3px auto',
+          }}
+          />
+          <button
+            className="frame-head-button btn btn-link"
+            type="button"
+            onClick={() => confirm({
+              title: 'Are you sure you want to close this window?',
+              onOk() {
+                requestDisconnect();
+              },
+              onCancel() {
+                return false;
+              },
+            })}
+          >
+            <i className="icon-close-session" />
+          </button>
+          <br />
+          <b>Close Session</b>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 SidebarHome.propTypes = {
   edges: PropTypes.arrayOf(PropTypes.shape({
@@ -334,12 +403,10 @@ SidebarHome.propTypes = {
     key_type: PropTypes.string,
   })).isRequired,
   setCommand: PropTypes.func.isRequired,
-  dbname: PropTypes.string.isRequired,
-  graph: PropTypes.string.isRequired,
-  role: PropTypes.shape({
-    user_name: PropTypes.string,
-    role_name: PropTypes.string,
-  }).isRequired,
+  command: PropTypes.string.isRequired,
+  trimFrame: PropTypes.func.isRequired,
+  addFrame: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
 };
 
 export default SidebarHome;

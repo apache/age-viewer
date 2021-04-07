@@ -22,6 +22,7 @@ const EditorSlice = createSlice({
   initialState: {
     command: '',
     commandHistory: [],
+    commandFavorites: [],
   },
   reducers: {
     setCommand: {
@@ -36,9 +37,15 @@ const EditorSlice = createSlice({
       },
       prepare: (command) => ({ payload: { command } }),
     },
+    addCommandFavorites: {
+      reducer: (state, action) => {
+        state.commandFavorites.push(action.payload.command);
+      },
+      prepare: (command) => ({ payload: { command } }),
+    },
   },
 });
 
-export const { setCommand, addCommandHistory } = EditorSlice.actions;
+export const { setCommand, addCommandHistory, addCommandFavorites } = EditorSlice.actions;
 
 export default EditorSlice.reducer;

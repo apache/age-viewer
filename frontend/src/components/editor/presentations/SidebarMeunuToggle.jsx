@@ -15,18 +15,34 @@
  */
 
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'antd/dist/antd.css';
-import './static/style.css';
-import './static/navbar-fixed-left.css';
-import './static/google-Poppins.css';
-import './static/icons/css/fontello.css';
-import MainPage from './pages/Main/MainPage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
-const App = () => (
-  <React.StrictMode>
-    <MainPage />
-  </React.StrictMode>
+const SidebarMeunuToggle = ({
+  isActive,
+}) => (
+  <div>
+    {
+      isActive === true
+        ? (
+          <FontAwesomeIcon
+            icon={faAngleUp}
+            size="3x"
+          />
+        )
+        : (
+          <FontAwesomeIcon
+            icon={faAngleDown}
+            size="3x"
+          />
+        )
+    }
+  </div>
 );
 
-export default App;
+SidebarMeunuToggle.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+};
+
+export default SidebarMeunuToggle;

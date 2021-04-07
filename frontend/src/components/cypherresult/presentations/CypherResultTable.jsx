@@ -18,8 +18,9 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
 import { uuid } from 'cytoscape/src/util';
+import CypherResultTab from '../../cytoscape/CypherResultTab';
 
-const CypherResultTable = ({ data }) => {
+const CypherResultTable = ({ data, ...props }) => {
   const [localColumns, setLocalColumns] = useState([]);
   const [localRows, setLocalRows] = useState([]);
 
@@ -55,12 +56,11 @@ const CypherResultTable = ({ data }) => {
     }));
   }, []);
 
-  if (data.command && data.command.toUpperCase().match('(GRAPH|COPY).*')) {
+  if (data.command && data.command.toUpperCase().match('(GRAPH|COPY|UPDATE).*')) {
     return (
       <div style={{ margin: '25px' }}>
         <span style={{ whiteSpace: 'pre-line' }}>
-          Affected
-          {data.rowCount === null ? 0 : data.rowCount}
+          <span>Successfully ran the query!</span>
         </span>
       </div>
     );
@@ -68,9 +68,22 @@ const CypherResultTable = ({ data }) => {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>{data.command.toUpperCase()}</span></div>;
   } if (data.command && data.command.toUpperCase() === 'ERROR') {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>{data.message}</span></div>;
+  } if (data.command === null) {
+    return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>Query not entered!</span></div>;
   }
+
+  const { refKey } = props;
   return (
-    <Table columns={localColumns} dataSource={localRows} />
+    <div className="legend-area">
+      <div className="contianer-frame-tab">
+        <div style={{ width: '80%', color: '#C4C4C4' }}>
+          <div className="d-flex nodeLegend">Node:</div>
+          <div className="d-flex edgeLegend">Edge:</div>
+        </div>
+        <CypherResultTab refKey={refKey} currentTab="table" />
+      </div>
+      <Table columns={localColumns} dataSource={localRows} />
+    </div>
   );
 };
 
@@ -83,7 +96,9 @@ CypherResultTable.propTypes = {
     columns: PropTypes.any,
     // eslint-disable-next-line react/forbid-prop-types
     rows: PropTypes.any,
+    statusText: PropTypes.string,
   }).isRequired,
+  refKey: PropTypes.string.isRequired,
 };
 
 export default CypherResultTable;

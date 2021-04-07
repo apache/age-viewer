@@ -26,9 +26,10 @@ const mapStateToProps = (state, ownProps) => {
     let rowCount = null;
     let message = '';
 
-    if (data && data.command !== 'ERROR') {
+    if (data && data.command !== 'ERROR' && data.command !== null) {
       columns = data.columns;
-      rows = data.rows.slice(0, state.setting.maxDataOfTable);
+      rows = data.rows.slice(0, (state.setting.maxDataOfTable === 0
+        ? data.rows.length : state.setting.maxDataOfTable));
       command = data.command;
       rowCount = data.rowCount;
     } else {

@@ -18,17 +18,12 @@ import React, { createRef, useEffect, useState } from 'react';
 import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
 import { Parser } from 'json2csv';
-import { Nav, Tab } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faFont, faPaperclip, faTable, faTerminal,
-} from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faTable } from '@fortawesome/free-solid-svg-icons';
 import CypherResultCytoscapeContainer
   from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
-import CypherResultTextContainer from '../../cypherresult/containers/CypherResultTextContainer';
-import CypherResultMetaContainer from '../../cypherresult/containers/CypherResultMetaContainer';
 import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
 import Frame from '../Frame';
 
@@ -46,7 +41,6 @@ const CypherResultFrame = ({
 
   const [filterProperties, setFilterProperties] = useState([]);
   const [globalFilter, setGlobalFilter] = useState(null);
-
   useEffect(() => {
     if (chartAreaRef.current && filterModalVisible) {
       const labels = chartAreaRef.current.getLabels()
@@ -66,6 +60,8 @@ const CypherResultFrame = ({
   useEffect(() => {
     if (globalFilter) {
       chartAreaRef.current.applyFilterOnCytoscapeElements(globalFilter);
+    } else {
+      chartAreaRef.current.resetFilterOnCytoscapeElements();
     }
   }, [globalFilter]);
 
@@ -132,6 +128,7 @@ const CypherResultFrame = ({
       <Frame
         bodyNoPadding
         onSearch={() => setFilterModalVisible(true)}
+        onSearchCancel={() => setGlobalFilter(null)}
         onRefresh={refreshFrame}
         onDownload={(type) => {
           if (type === 'csv') {
@@ -144,75 +141,18 @@ const CypherResultFrame = ({
         }}
         content={(
           <div className="d-flex h-100">
-            <Tab.Container defaultActiveKey="graph">
-
-              <Nav variant="pills" className="flex-column graph-card-nav">
-
-                <Nav.Item>
-                  <Nav.Link eventKey="graph">
-                    <FontAwesomeIcon
-                      icon={faPaperclip}
-                    />
-                    <br />
-                    Graph
-                  </Nav.Link>
-                </Nav.Item>
-
-                <Nav.Item>
-                  <Nav.Link eventKey="table">
-                    <FontAwesomeIcon
-                      icon={faTable}
-                    />
-                    <br />
-                    Table
-                  </Nav.Link>
-                </Nav.Item>
-
-                <Nav.Item>
-                  <Nav.Link eventKey="text">
-                    <FontAwesomeIcon
-                      icon={faFont}
-                    />
-                    <br />
-                    Text
-                  </Nav.Link>
-                </Nav.Item>
-
-                <Nav.Item>
-                  <Nav.Link eventKey="code">
-                    <FontAwesomeIcon
-                      icon={faTerminal}
-                    />
-                    <br />
-                    Meta
-                  </Nav.Link>
-                </Nav.Item>
-
-              </Nav>
-              <Tab.Content className="graph-card-content container-fluid graph-tabpanel">
-
-                <Tab.Pane eventKey="graph" style={{ height: '100%' }}>
-                  <CypherResultCytoscapeContainer
-                    key={cytoscapeContainerKey}
-                    ref={chartAreaRef}
-                    refKey={refKey}
-                  />
-                </Tab.Pane>
-
-                <Tab.Pane eventKey="table" style={{ height: '450px' }}>
-                  <CypherResultTableContainer refKey={refKey} />
-                </Tab.Pane>
-
-                <Tab.Pane eventKey="text" style={{ height: '450px' }}>
-                  <CypherResultTextContainer refKey={refKey} />
-                </Tab.Pane>
-
-                <Tab.Pane eventKey="code" style={{ height: '450px' }}>
-                  <CypherResultMetaContainer refKey={refKey} />
-                </Tab.Pane>
-
-              </Tab.Content>
-            </Tab.Container>
+            <div style={{ height: '100%', width: '100%' }} id={`${refKey}-graph`} className="selected-frame-tab">
+              <CypherResultCytoscapeContainer
+                key={cytoscapeContainerKey}
+                ref={chartAreaRef}
+                refKey={refKey}
+              />
+            </div>
+            <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
+              <CypherResultTableContainer
+                refKey={refKey}
+              />
+            </div>
           </div>
         )}
         reqString={reqString}
@@ -228,6 +168,7 @@ const CypherResultFrame = ({
         visible={filterModalVisible}
         setVisible={setFilterModalVisible}
         properties={filterProperties}
+        globalFilter={globalFilter}
       />
     </>
 

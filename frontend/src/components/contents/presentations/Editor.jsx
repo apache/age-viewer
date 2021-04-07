@@ -18,11 +18,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle, faStar } from '@fortawesome/free-regular-svg-icons';
-import { faEraser } from '@fortawesome/free-solid-svg-icons';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
+import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 
 const Editor = ({
   setCommand,
@@ -31,12 +29,19 @@ const Editor = ({
   trimFrame,
   addAlert,
   alertList,
+  isActive,
   database,
   executeCypherQuery,
   addCommandHistory,
+  toggleMenu,
+  // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
   const [alerts, setAlerts] = useState([]);
+
+  // const favoritesCommand = () => {
+  //   dispatch(() => addCommandFavorites(command));
+  // };
 
   const clearCommand = () => {
     setCommand('');
@@ -99,34 +104,65 @@ const Editor = ({
 
   return (
     <div className="container-fluid">
-      <div className="card">
+      <div className="editor">
         <div className="container-fluid editor-area card-header">
-          <div className="input-group">
-            <div className="form-control col-11" style={{ height: 'auto', padding: '0px' }}>
+          <div className="input-group input-style">
+            <div style={{
+              height: '60px',
+              width: '60px',
+              color: '#ffffff',
+              textAlign: 'left',
+              lineHeight: '30px',
+            }}
+            >
+              <spna>
+                Query
+                <br />
+                Editor
+              </spna>
+            </div>
+            <div className="form-control col-11 editor-code-wrapper">
               <CodeMirror
                 onClick={onClick}
                 value={command}
                 onChange={setCommand}
               />
             </div>
-            <div className="input-group-append ml-auto" id="editor-buttons">
-              <button className="frame-head-button btn btn-link" type="button">
+            <div className="input-group-append ml-auto editor-button-wrapper" id="editor-buttons">
+              {/* <button className="frame-head-button btn btn-link"
+               type="button" onClick={() => favoritesCommand()}>
                 <FontAwesomeIcon
                   icon={faStar}
                   size="lg"
                 />
+              </button> */}
+              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onClick={() => clearCommand()}>
+                <i className="icon-eraser" />
               </button>
-              <button className="frame-head-button btn btn-link" type="button" onClick={() => clearCommand()}>
-                <FontAwesomeIcon
-                  icon={faEraser}
-                  size="lg"
-                />
+              <button
+                className="frame-head-button btn btn-link"
+                type="button"
+                onClick={() => onClick()}
+                title="Run Query"
+              >
+                <i className="icon-play" />
               </button>
-              <button className="frame-head-button btn btn-link" type="button" onClick={() => onClick()}>
-                <FontAwesomeIcon
-                  icon={faPlayCircle}
-                  size="lg"
-                />
+              <button
+                className="frame-head-button btn btn-link"
+                type="button"
+                onClick={() => {
+                  toggleMenu('home');
+                  if (!isActive) {
+                    document.getElementById('wrapper').classList.remove('wrapper');
+                    document.getElementById('wrapper').classList.add('wrapper-extension-padding');
+                  } else {
+                    document.getElementById('wrapper').classList.remove('wrapper-extension-padding');
+                    document.getElementById('wrapper').classList.add('wrapper');
+                  }
+                }}
+                title={(isActive) ? 'Hide' : 'Show'}
+              >
+                <SideBarToggle isActive={isActive} />
               </button>
             </div>
           </div>
@@ -151,11 +187,14 @@ Editor.propTypes = {
       errorMessage: PropTypes.string.isRequired,
     }),
   })).isRequired,
+  isActive: PropTypes.bool.isRequired,
   database: PropTypes.shape({
     status: PropTypes.string.isRequired,
   }).isRequired,
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
+  // addCommandFavorites: PropTypes.func.isRequired,
 };
 
 export default Editor;

@@ -380,7 +380,7 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
 
   if (data) {
     data.forEach((row, index) => {
-      if (index >= maxDataOfGraph) {
+      if (index >= maxDataOfGraph && maxDataOfGraph !== 0) {
         return;
       }
       Object.entries(row).forEach((rowEntry) => {

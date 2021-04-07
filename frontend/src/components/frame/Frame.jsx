@@ -6,8 +6,8 @@ import {
   faCompressAlt,
   faDownload,
   faExpandAlt,
-  faPaperclip,
-  faSearch, faSync, faTimes,
+  // faPaperclip,
+  faSync, faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, Dropdown, Menu } from 'antd';
@@ -15,8 +15,10 @@ import PropTypes from 'prop-types';
 import styles from './Frame.module.scss';
 
 const Frame = ({
-  reqString, content, isPinned, pinFrame, refKey, removeFrame,
-  onSearch, onDownload, onRefresh,
+  reqString, content,
+  // isPinned, pinFrame,
+  refKey, removeFrame,
+  onSearch, onSearchCancel, onDownload, onRefresh,
   bodyNoPadding,
 }) => {
   const [isFullScreen, setFullScreen] = useState(false);
@@ -46,20 +48,29 @@ const Frame = ({
           </strong>
         </div>
         <div className={styles.ButtonArea}>
+          {onSearchCancel ? (
+            <Button
+              size="large"
+              type="link"
+              className={styles.FrameButton}
+              onClick={() => onSearchCancel()}
+              title="Cancel Search"
+            >
+              <i className="icon-search-cancel" />
+            </Button>
+          ) : null}
           {onSearch ? (
             <Button
               size="large"
               type="link"
               className={styles.FrameButton}
               onClick={() => onSearch()}
+              title="Filter/Search"
             >
-              <FontAwesomeIcon
-                icon={faSearch}
-                size="lg"
-              />
+              <i className="icon-filter" />
             </Button>
           ) : null}
-          {onDownload ? (
+          {false ? ( // en:Functionality is hidden due to functional problems // ko:기능이 동작하지 않아 감춤
             <Dropdown
               trigger={['click']}
               overlay={downloadMenu}
@@ -83,6 +94,7 @@ const Frame = ({
             type="link"
             className={`${styles.FrameButton} ${isFullScreen ? styles.activate : ''}`}
             onClick={() => setFullScreen(!isFullScreen)}
+            title="Expand"
           >
             <FontAwesomeIcon
               icon={isFullScreen ? faCompressAlt : faExpandAlt}
@@ -96,6 +108,7 @@ const Frame = ({
                 type="link"
                 className={`${styles.FrameButton}`}
                 onClick={() => onRefresh()}
+                title="Refresh"
               >
                 <FontAwesomeIcon
                   icon={faSync}
@@ -105,7 +118,7 @@ const Frame = ({
             ) : null
           }
 
-          <Button
+          {/* <Button
             size="large"
             type="link"
             className={`${styles.FrameButton} ${isPinned ? styles.activate : ''}`}
@@ -115,12 +128,13 @@ const Frame = ({
               icon={faPaperclip}
               size="lg"
             />
-          </Button>
+          </Button> */}
           <Button
             size="large"
             type="link"
             className={`${styles.FrameButton}`}
             onClick={() => setExpand(!isExpand)}
+            title={isExpand ? 'Hide' : 'Show'}
           >
             <FontAwesomeIcon
               icon={isExpand ? faAngleUp : faAngleDown}
@@ -132,6 +146,7 @@ const Frame = ({
             type="link"
             className={`${styles.FrameButton}`}
             onClick={() => removeFrame(refKey)}
+            title="Close Window"
           >
             <FontAwesomeIcon
               icon={faTimes}
@@ -149,6 +164,7 @@ const Frame = ({
 
 Frame.defaultProps = {
   onSearch: null,
+  onSearchCancel: null,
   onDownload: null,
   onRefresh: null,
   bodyNoPadding: false,
@@ -157,11 +173,12 @@ Frame.defaultProps = {
 Frame.propTypes = {
   reqString: PropTypes.string.isRequired,
   content: PropTypes.element.isRequired,
-  isPinned: PropTypes.bool.isRequired,
-  pinFrame: PropTypes.func.isRequired,
+  // isPinned: PropTypes.bool.isRequired,
+  // pinFrame: PropTypes.func.isRequired,
   refKey: PropTypes.string.isRequired,
   removeFrame: PropTypes.func.isRequired,
   onSearch: PropTypes.func,
+  onSearchCancel: PropTypes.func,
   onDownload: PropTypes.func,
   onRefresh: PropTypes.func,
   bodyNoPadding: PropTypes.bool,
