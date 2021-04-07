@@ -19,7 +19,7 @@ RUN set -eux; \
     cd /app/backend; \
     yarn install; \
     yarn run build; \
-    ls -A | egrep -v "^(build|package|node_modules)" | xargs rm -rf; \
+    ls -A | egrep -v "^(build|package|node_modules|sql)" | xargs rm -rf; \
     \
     cd /; \
     rm -rf $(yarn cache dir); \
