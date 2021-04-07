@@ -6,8 +6,8 @@ export const about = {
 
 export const setting = {
   theme: 'default',
-  maxNumOfFrames: 30,
-  maxNumOfHistories: 30,
-  maxDataOfGraph: 100,
-  maxDataOfTable: 300,
+  maxNumOfFrames: 0,
+  maxNumOfHistories: 0,
+  maxDataOfGraph: 0,
+  maxDataOfTable: 0,
 };

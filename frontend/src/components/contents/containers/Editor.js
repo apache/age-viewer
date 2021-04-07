@@ -19,7 +19,8 @@ import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { getConnectionStatus } from '../../../features/database/DatabaseSlice';
 import { executeCypherQuery } from '../../../features/cypher/CypherSlice';
-import { addCommandHistory, setCommand } from '../../../features/editor/EditorSlice';
+import { addCommandHistory, addCommandFavorites, setCommand } from '../../../features/editor/EditorSlice';
+import { toggleMenu } from '../../../features/menu/MenuSlice';
 
 import Editor from '../presentations/Editor';
 
@@ -27,6 +28,7 @@ const mapStateToProps = (state) => ({
   alertList: state.alerts,
   database: state.database,
   command: state.editor.command,
+  isActive: state.navigator.isActive,
 });
 
 const mapDispatchToProps = {
@@ -37,6 +39,8 @@ const mapDispatchToProps = {
   getConnectionStatus,
   executeCypherQuery,
   addCommandHistory,
+  addCommandFavorites,
+  toggleMenu,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

@@ -24,7 +24,7 @@ const FrameSlice = createSlice({
   reducers: {
     addFrame: {
       reducer: (state, action) => {
-        const reqString = action.payload.reqString.trim().toLowerCase();
+        const reqString = action.payload.reqString.trim();
         const firstNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false));
         const { frameName } = action.payload;
 

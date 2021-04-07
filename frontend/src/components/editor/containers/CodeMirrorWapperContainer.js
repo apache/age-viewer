@@ -19,8 +19,10 @@ import CodeMirrorWrapper from '../presentations/CodeMirrorWrapper';
 
 const mapStateToProps = (state) => ({
   commandHistory: state.editor.commandHistory.slice(
-    Math.max(state.editor.commandHistory.length - state.setting.maxNumOfHistories, 1),
+    Math.max((state.editor.commandHistory.length - state.setting.maxNumOfHistories === 0
+      ? state.editor.commandHistory.length : state.setting.maxNumOfHistories), 0),
   ),
+  commandFavorites: state.editor.commandFavorites.slice(0),
 });
 
 const mapDispatchToProps = { };

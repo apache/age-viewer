@@ -17,7 +17,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import EditorContainer from '../containers/Editor';
 import FramesContainer from '../containers/Frames';
 import styles from './Contents.module.scss';
 
@@ -41,8 +40,7 @@ const Contents = ({
 
   return (
     <div className={`${styles.Content} ${isActive ? styles.Expanded : ''}`}>
-      <div style={{ padding: '1rem' }}>
-        <EditorContainer />
+      <div style={{ padding: '0rem 1rem 1rem 1rem' }}>
         <FramesContainer />
       </div>
     </div>

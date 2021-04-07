@@ -18,12 +18,22 @@ const GraphFilterModal = ({
   setVisible,
   onSubmit,
   properties,
+  globalFilter,
 }) => {
   const [propertyElements, setPropertyElements] = useState([]);
   const [filterList, setFilterList] = useState([
     generateNewFilterObject(),
   ]);
   const [filterElements, setFilterElements] = useState(null);
+
+  useEffect(() => {
+    if (visible === true) {
+      setPropertyElements(null);
+    }
+    if (visible === true && globalFilter === null) {
+      setFilterElements(null);
+    }
+  }, [visible]);
 
   const onFilterAdd = (index) => {
     const newFilterList = [...filterList];
@@ -105,7 +115,7 @@ const GraphFilterModal = ({
           <div style={{ width: '1px' }} />
           <Input
             style={{ flex: 1 }}
-            defaultValue={filterList[index].keyword}
+            defaultValue={(globalFilter === null) ? '' : filterList[index].keyword}
             onChange={(event) => {
               filterList[index].keyword = event.target.value;
               setFilterList(filterList);
@@ -141,6 +151,7 @@ GraphFilterModal.propTypes = {
     label: PropTypes.string,
     property: PropTypes.string,
   })).isRequired,
+  globalFilter: PropTypes.bool.isRequired,
 };
 
 export default GraphFilterModal;

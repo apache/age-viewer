@@ -22,6 +22,6 @@ export default {
   textureOnViewport: false,
   motionBlur: false,
   motionBlurOpacity: 0.2,
-  wheelSensitivity: 1,
+  wheelSensitivity: 0.5,
   pixelRatio: 'auto',
 };

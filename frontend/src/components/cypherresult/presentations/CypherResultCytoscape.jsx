@@ -25,6 +25,7 @@ import {
 import CypherResultCytoscapeChart from '../../cytoscape/CypherResultCytoscapeChart';
 import CypherResultCytoscapeLegend from '../../cytoscape/CypherResultCytoscapeLegend';
 import CypherResultCytoscapeFooter from '../../cytoscape/CypherResultCytoscapeFooter';
+import CypherResultTab from '../../cytoscape/CypherResultTab';
 
 const CypherResultCytoscape = forwardRef((props, ref) => {
   const [footerData, setFooterData] = useState({});
@@ -233,7 +234,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
           break;
         }
       }
-      if (!notIncluded) {
+      if (notIncluded) {
         notFilteredNodeLength += 1;
         notFilteredNodes.push(ele);
       }
@@ -252,7 +253,14 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
       }
     }
 
-    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.5');
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.1');
+  };
+
+  const resetFilterOnCytoscapeElements = () => {
+    const gFilteredClassName = 'g-filtered';
+    if (cytoscapeObject) {
+      cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '1.0').removeClass(gFilteredClassName);
+    }
   };
 
   const captionChange = (elementType, label, caption) => {
@@ -284,15 +292,19 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     },
     getCaptionsFromCytoscapeObject,
     applyFilterOnCytoscapeElements,
+    resetFilterOnCytoscapeElements,
   }));
 
   return (
     <div className="chart-frame-area">
-      <CypherResultCytoscapeLegend
-        onLabelClick={getFooterData}
-        isReloading={isReloading}
-        legendData={legendData}
-      />
+      <div className="contianer-frame-tab">
+        <CypherResultCytoscapeLegend
+          onLabelClick={getFooterData}
+          isReloading={isReloading}
+          legendData={legendData}
+        />
+        <CypherResultTab refKey={props.refKey} currentTab="graph" />
+      </div>
       <CypherResultCytoscapeChart
         onElementsMouseover={getFooterData}
         legendData={legendData}
@@ -340,6 +352,7 @@ CypherResultCytoscape.propTypes = {
     }).isRequired,
   }).isRequired,
   setLabels: PropTypes.func.isRequired,
+  refKey: PropTypes.string.isRequired,
 };
 
 export default CypherResultCytoscape;

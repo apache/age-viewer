@@ -17,6 +17,18 @@ export const ColoredLine = () => (
   />
 );
 
+export const VerticalLine = () => (
+  <div
+    style={{
+      backgroundColor: '#C4C4C4',
+      width: '1px',
+      height: '120px',
+      marginTop: '37px',
+      marginBottom: '37px',
+    }}
+  />
+);
+
 const SubLabelRight = ({ label, classes }) => (
   <div className={classes} style={StyleTextRight}>{label}</div>
 );

@@ -37,7 +37,6 @@
     --theme-color: var(--dark-theme);
     --navbar-color: var(--dark-navbar);
     --sidebar-color: var(--dark-sidebar);
-
 }
 
 .theme-switch {
@@ -48,9 +47,10 @@
     clip: rect(1px, 1px, 1px, 1px);
 }
 
-body {
+body {    
     font-family: 'Poppins', sans-serif;
     padding-top: 90px;
+    overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -67,64 +67,228 @@ body {
 
 .wrapper {
     display: flex;
+    flex-direction: column;
     width: 100%;
     align-items: stretch;
+    position: relative;
+    max-height: calc(100% - 105px);
+    overflow-y: scroll ;
+    position: fixed;
+}
+
+.wrapper-extension-padding {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    position: relative;
+    max-height: calc(100% - 300px);
+    overflow-y: scroll ;
+    position: fixed;
+}
+
+/* ---------------------------------------------------
+    SCROLL BAR STYLE
+----------------------------------------------------- */
+::-webkit-scrollbar-track
+{
+    background-color: #C4C4C4;
+}
+
+::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #C4C4C4;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #2756FF
 }
 
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
-
-.wrapper {
-    display: flex;
-    width: 100%;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
-
 #navbar {
     width: 70px;
     background-color: var(--navbar-color);
 }
-#sidebar {
-    width: 320px;
-    position: fixed;
-    top: 0;
-    left: 70px;
-    height: 100vh;
-    z-index: 10;
-    background-color: var(--sidebar-color);
-    color: #fff;
+
+#sidebar {        
+    height: auto;
+    z-index: 10;      
+    background-color: var(--sidebar-color);    
     transition: all 0.3s;
     margin-left: -320px;
 }
 #sidebar.active {
-    margin-left: 0px;
+    margin: 0px 15px 0px 15px;    
+    background-color: #F7F7F7;
+    border: 1px solid #C4C4C4;
+    border-radius: 0px 0px 5px 5px;
+    opacity: 1;
 }
 
-/*
-#sidebar {
-    width: 0;
-    position: fixed;
-    top: 0;
-    left: 70px;
-    height: 100vh;
-    background-color: var(--sidebar-color);
-    color: #fff;
-    transition: all 0.3s;
+#sidebar.inactive {
+    display: none;
 }
-#sidebar.active {
-    width: 320px;
+
+.sidebar {
+    display: flex;
+    flex-direction: row;    
+    color: #495057
 }
-*/
+
+.sidebar-item {
+    width: 30%;
+    margin: 1.5rem 1rem 1.5rem 1rem;    
+}
+
+.sidebar-item-disconnect {
+    width: 10%;
+    margin: 1.5rem 1rem 1.5rem 1rem;
+    text-align: center;       
+}
 
 a[data-toggle="collapse"] {
     position: relative;
 }
 
-.sidebar {
-    padding: 1.2rem;
-    color: #EAEAEA;
+/* ---------------------------------------------------
+    EDITOR STYLE
+----------------------------------------------------- */
+.editor-divison {
+    background-color: #ffffff;
+    height: auto;
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    padding: 20px 15px 0 15px;
+}
+
+.editor {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2px 2px 2px 2px;
+    min-width: 0;
+    height: auto;    
+    word-wrap: break-word;    
+    background-clip: border-box;
+    background: #142B80 0% 0% no-repeat padding-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    border-radius: 5px;
+    opacity: 1;
+}
+
+.editor-code-wrapper{
+    margin-top: 1px;
+    min-height: 60px;
+    padding: 0px;
+    resize: vertical;
+    overflow: auto;
+    border: 1px solid;
+}
+
+.editor-button-wrapper{
+    margin-left: -60px !important;
+    height: 60px;
+}
+
+.show-eraser {    
+    color: #B0B0B0;
+    font-size: 1.5rem;
+}
+
+.hide-eraser {
+    font-size: 1.5rem;
+    visibility:hidden
+}
+
+.input-style{
+    width: 97% !important;
+}
+
+/* code mirror style bug fix code */
+.CodeMirror-scroll {
+    margin-top: -25px;
+    padding-top: 25px;
+}
+
+/* ---------------------------------------------------
+    FRAME TAB STYLE CONTROLL
+----------------------------------------------------- */
+.selected-frame-tab {
+    display: '';
+}
+
+.deselected-frame-tab {
+    display: none;
+}
+
+.contianer-frame-tab{
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+/* ---------------------------------------------------
+    NODE & EDGE & PROPERTIES ITEM STYLE
+----------------------------------------------------- */
+.node-item {
+    height: 35px;
+    background-color: #ffffff;
+    border: 1px solid #142B80;
+    border-radius: 20px;
+    opacity: 1;
+    color: #142B80;
+    margin: 0px 4px 4px 4px;
+}
+.node-item:hover{
+    background-color: #2756FF;
+    border: 1px solid #2756FF;
+    border-radius: 20px;
+    opacity: 1;
+    color: #ffffff;    
+}
+
+.edge-item {
+    height: 35px;
+    background-color: #ffffff;
+    border: 1px solid #142B80;
+    border-radius: 5px;
+    opacity: 1;
+    color: #142B80;
+    margin: 0px 4px 4px 4px;
+}
+.edge-item:hover {
+    background-color: #2756FF;
+    border: 1px solid #2756FF;
+    border-radius: 5px;
+    opacity: 1;
+    color: #ffffff;
+}
+
+.propertie-item {
+    height: 35px;
+    background: #DEDEDE 0% 0% no-repeat padding-box;
+    border: 1px solid #DEDEDE;
+    border-radius: 5px;
+    opacity: 1;
+    color: #142B80;
+    margin: 0px 4px 4px 4px;
+}
+.propertie-item:hover {
+    background-color: #2756FF;
+    background: #2756FF 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    opacity: 1;
+    color: #ffffff;    
 }
 
 /* ---------------------------------------------------
@@ -150,7 +314,10 @@ a[data-toggle="collapse"] {
 }
 
 .btn-link {
-    color: gray !important;
+    color: #ffffff !important;
+}
+.btn-link:hover {
+    color: #2756FF !important;
 }
 
 .card.fullscreen {
@@ -272,6 +439,7 @@ a.nav-link.active {
 
 .nodeLegend, .edgeLegend {
     min-height: 47px;
+    line-height: 46px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
@@ -371,11 +539,16 @@ a.nav-link.active {
     Cytoscapejs-cxtmenu
 ----------------------------------------------------- */
 .cxtmenu-content {
-    font-size: 10px;
+    font-size: 10px;    
 }
 
 
-
+/* ---------------------------------------------------
+    Cytoscapejs-filter-feature style
+----------------------------------------------------- */
+.g-filtered{
+    opacity: 1.0;
+}
 
 /* ---------------------------------------------------
     Play Contents

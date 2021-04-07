@@ -15,15 +15,13 @@
  */
 
 import { connect } from 'react-redux';
-import { pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
-import ContentsFrame from '../presentations/ContentsFrame';
-import { addAlert } from '../../../features/alert/AlertSlice';
+import SidebarMeunuToggle from '../presentations/SidebarMeunuToggle';
 
-const mapStateToProps = () => ({
+const mapStateToProps = (state) => ({
+  isActive: state.navigator.isActive,
 });
 
-const mapDispatchToProps = {
-  removeFrame, pinFrame, addAlert,
-};
+const mapDispatchToProps = { };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContentsFrame);
+export default connect(mapStateToProps,
+  mapDispatchToProps)(SidebarMeunuToggle);
