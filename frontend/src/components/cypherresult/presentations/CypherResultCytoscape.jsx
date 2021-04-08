@@ -14,159 +14,345 @@
  * limitations under the License.
  */
 
-import React, { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react';
-import { useDispatch } from 'react-redux'
-import { nodeLabelColors, edgeLabelColors, nodeLabelSizes, edgeLabelSizes } from '../../../features/cypher/CypherUtil'
-import CypherResultCytoscapeChart from './CypherResultCytoscapeChart'
-import CypherResultCytoscapeLegend from './CypherResultCytoscapeLegend'
-import CypherResultCytoscapeFooter from './CypherResultCytoscapeFooter'
-
+import React, {
+  forwardRef, useEffect, useImperativeHandle, useState,
+} from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import {
+  edgeLabelColors, edgeLabelSizes, nodeLabelColors, nodeLabelSizes,
+} from '../../../features/cypher/CypherUtil';
+import CypherResultCytoscapeChart from '../../cytoscape/CypherResultCytoscapeChart';
+import CypherResultCytoscapeLegend from '../../cytoscape/CypherResultCytoscapeLegend';
+import CypherResultCytoscapeFooter from '../../cytoscape/CypherResultCytoscapeFooter';
+import CypherResultTab from '../../cytoscape/CypherResultTab';
 
 const CypherResultCytoscape = forwardRef((props, ref) => {
-  const [footerData, setFooterData] = useState({})
-  const [legendData, setLegendData] = useState({ edgeLegend: {}, nodeLegend: {} })
-  const [elements, setElements] = useState({ edges: [], nodes: [] })
-  const [isReloading, setIsReloading] = useState(false)
-  const dispatch = useDispatch()
-  const chartRef = useRef()
+  const [footerData, setFooterData] = useState({});
+  const [legendData, setLegendData] = useState({ edgeLegend: {}, nodeLegend: {} });
+  const [elements, setElements] = useState({ edges: [], nodes: [] });
+  const [isReloading, setIsReloading] = useState(false);
+  const [maxDataOfGraph] = useState(props.maxDataOfGraph);
+  const dispatch = useDispatch();
+  const [selectedCaption, setSelectedCaption] = useState(null);
+  const [captions, setCaptions] = useState([]);
+
+  const [cytoscapeObject, setCytoscapeObject] = useState(null);
+  const [cytoscapeLayout, setCytoscapeLayout] = useState('coseBilkent');
 
   useEffect(() => {
-
-    if (props.data['legend'] !== undefined && Object.keys(props.data['legend']['nodeLegend']).length > 0) {
-
-      if (Object.keys(legendData.edgeLegend).length === 0 && Object.keys(legendData.nodeLegend).length === 0) {
-        setIsReloading(false)
-        setLegendData(props.data['legend'])
+    if (props.data.legend !== undefined && Object.keys(props.data.legend.nodeLegend).length > 0) {
+      if (Object.keys(legendData.edgeLegend).length === 0
+          && Object.keys(legendData.nodeLegend).length === 0) {
+        setIsReloading(false);
       }
 
-      if (elements.edges.length === 0 && elements.nodes.length === 0) {
-        setElements(props.data.elements)
-      }
+      setLegendData(props.data.legend);
+      setElements(props.data.elements);
     }
-  }, [setIsReloading, elements.edges.length, elements.nodes.length, legendData.edgeLegend, legendData.nodeLegend, props.data])
+  }, [
+    setIsReloading,
+    elements.edges.length,
+    elements.nodes.length,
+    legendData.edgeLegend,
+    legendData.nodeLegend,
+    props.data,
+  ]);
 
-  const getFooterData = (props) => {
-    if (props.type === 'labels') {
+  const getCaptionsFromCytoscapeObject = (elementType, label) => {
+    const elementsObject = cytoscapeObject.elements(`${elementType}[label = "${label}"]`).jsons();
+    let extendedSet = new Set([]);
+    elementsObject.forEach((ele) => {
+      extendedSet = new Set([...extendedSet, ...Object.keys(ele.data.properties)]);
+    });
+    return extendedSet;
+  };
 
-      props.data['captions'] = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(props.data.type, props.data.label)))
+  const getFooterData = (event) => {
+    if (event.type === 'labels') {
+      setCaptions(['gid', 'label'].concat(Array.from(getCaptionsFromCytoscapeObject(event.data.type, event.data.label))));
 
-      if (props.data.type === 'node') {
-        props.data['selectedCaption'] = legendData.nodeLegend[props.data.label].caption
+      if (event.data.type === 'node') {
+        setSelectedCaption(legendData.nodeLegend[event.data.label].caption);
       } else {
-        props.data['selectedCaption'] = legendData.edgeLegend[props.data.label].caption
+        setSelectedCaption(legendData.edgeLegend[event.data.label].caption);
       }
     }
 
-    setFooterData(props)
-  }
+    setFooterData(event);
+  };
 
   const addLegendData = (addedLegendData) => {
-    setIsReloading(false)
-    setLegendData(addedLegendData)
-  }
+    setIsReloading(false);
+    setLegendData(addedLegendData);
+  };
+
+  const changeColorOnCytoscapeElements = (elementType, label, color) => {
+    const colorObject = Array.isArray(color) ? {
+      color: color[0],
+      borderColor: color[1],
+      fontColor: color[2],
+    } : color;
+
+    if (elementType === 'node') {
+      cytoscapeObject.nodes(`[label = "${label}"]`).data('backgroundColor', colorObject.color)
+        .data('borderColor', colorObject.borderColor).data('fontColor', colorObject.fontColor);
+    } else if (elementType === 'edge') {
+      cytoscapeObject.edges(`[label = "${label}"]`).data('backgroundColor', colorObject.color)
+        .data('fontColor', colorObject.fontColor).data('fontColor', '#2A2C34');
+    }
+  };
 
   const colorChange = (elementType, label, color) => {
-    let footerObj = footerData.data
-    footerObj.backgroundColor = color.color
-    footerObj.fontColor = color.fontColor
-    setIsReloading(false)
-    setFooterData(Object.assign({}, footerData, { data: footerObj }))
+    const footerObj = footerData.data;
+    footerObj.backgroundColor = color.color;
+    footerObj.fontColor = color.fontColor;
+    setIsReloading(false);
+    setFooterData(Object.assign(footerData, { data: footerObj }));
 
     if (elementType === 'node') {
-      let nodeLegendObj = legendData.nodeLegend
+      const nodeLegendObj = legendData.nodeLegend;
 
-
-      if (nodeLegendObj.hasOwnProperty(label)) {
-        nodeLegendObj[label]['color'] = color.color
-        nodeLegendObj[label]['borderColor'] = color.borderColor
-        nodeLegendObj[label]['fontColor'] = color.fontColor
+      if (Object.prototype.hasOwnProperty.call(nodeLegendObj, label)) {
+        nodeLegendObj[label].color = color.color;
+        nodeLegendObj[label].borderColor = color.borderColor;
+        nodeLegendObj[label].fontColor = color.fontColor;
       }
 
-      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
-      chartRef.current.colorChange(elementType, label, color);
-
+      setLegendData(Object.assign(legendData, { nodeLegend: nodeLegendObj }));
+      changeColorOnCytoscapeElements(elementType, label, color);
     } else if (elementType === 'edge') {
-      let edgeLegendObj = legendData.edgeLegend
-      if (edgeLegendObj.hasOwnProperty(label)) {
-        edgeLegendObj[label]['color'] = color.color
-        edgeLegendObj[label]['borderColor'] = color.borderColor
-        edgeLegendObj[label]['fontColor'] = color.fontColor
+      const edgeLegendObj = legendData.edgeLegend;
+      if (Object.prototype.hasOwnProperty.call(edgeLegendObj, label)) {
+        edgeLegendObj[label].color = color.color;
+        edgeLegendObj[label].borderColor = color.borderColor;
+        edgeLegendObj[label].fontColor = color.fontColor;
       }
-      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
-      chartRef.current.colorChange(elementType, label, color);
+      setLegendData(Object.assign(legendData, { edgeLegend: edgeLegendObj }));
+      changeColorOnCytoscapeElements(elementType, label, color);
     }
 
-    dispatch(() => props.setLabels(elementType, label, { borderColor: color.borderColor, color: color.color, fontColor: color.fontColor }))
-  }
+    dispatch(() => props.setLabels(elementType, label, {
+      borderColor: color.borderColor,
+      color: color.color,
+      fontColor: color.fontColor,
+    }));
+  };
+
+  const changeSizeOnCytoscapeElements = (elementType, label, size) => {
+    const changedData = cytoscapeObject.elements(`${elementType}[label = "${label}"]`).data('size', size);
+
+    if (size > 6) {
+      changedData.style('text-background-opacity', 0);
+    } else {
+      changedData.style('text-background-opacity', 1);
+    }
+  };
 
   const sizeChange = (elementType, label, size) => {
-    let footerObj = footerData.data
-    footerObj.size = size
-    setFooterData(Object.assign({}, footerData, { data: footerObj }))
-    setIsReloading(false)
-    chartRef.current.sizeChange(elementType, label, size);
+    const footerObj = footerData.data;
+    footerObj.size = size;
+    setFooterData({ ...footerData, data: footerObj });
+    setIsReloading(false);
+    changeSizeOnCytoscapeElements(elementType, label, size);
 
     if (elementType === 'node') {
-      let nodeLegendObj = legendData.nodeLegend
-      if (nodeLegendObj.hasOwnProperty(label)) {
-        nodeLegendObj[label].size = size
+      const nodeLegendObj = legendData.nodeLegend;
+      if (Object.prototype.hasOwnProperty.call(nodeLegendObj, label)) {
+        nodeLegendObj[label].size = size;
       }
-      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
+      setLegendData({ ...legendData, nodeLegend: nodeLegendObj });
     } else if (elementType === 'edge') {
-      let edgeLegendObj = legendData.edgeLegend
-      if (edgeLegendObj.hasOwnProperty(label)) {
-        edgeLegendObj[label].size = size
+      const edgeLegendObj = legendData.edgeLegend;
+      if (Object.prototype.hasOwnProperty.call(edgeLegendObj, label)) {
+        edgeLegendObj[label].size = size;
       }
-      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
+      setLegendData({ ...legendData, edgeLegend: edgeLegendObj });
     }
-    dispatch(() => props.setLabels(elementType, label, { size: size }))
-  }
+    dispatch(() => props.setLabels(elementType, label, { size }));
+  };
+
+  const changeCaptionOnCytoscapeElements = (elementType, label, caption) => {
+    cytoscapeObject.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => {
+      let displayValue = '< NULL >';
+      if (caption === 'gid') {
+        const idValue = ele.data('id');
+        if (idValue !== null && idValue !== undefined) {
+          displayValue = `[ ${idValue} ]`;
+        }
+      } else if (caption === 'label') {
+        const labelValue = ele.data('label');
+        if (labelValue !== null && labelValue !== undefined) {
+          displayValue = `[ :${labelValue} ]`;
+        }
+      } else if (ele !== null && ele !== undefined) {
+        const anonValue = ele.data('properties')[caption];
+        if (anonValue !== null && anonValue !== undefined) {
+          displayValue = anonValue;
+        }
+      }
+      return displayValue;
+    });
+  };
+
+  const applyFilterOnCytoscapeElements = (filters) => {
+    const gFilteredClassName = 'g-filtered';
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '1.0').removeClass(gFilteredClassName);
+
+    let notFilteredNodeLength = 0;
+    const notFilteredNodes = [];
+    const filterLength = filters.length;
+    let nullFilterCount = 0;
+    for (let i = 0; i < filterLength; i += 1) {
+      const { keyword } = filters[i];
+      if (keyword === null || keyword === '') {
+        nullFilterCount += 1;
+      }
+    }
+    if (nullFilterCount === 1 && filterLength === 1) {
+      // if null filter size is 1 and filter length is 1 -> not filtering.
+      return;
+    }
+    cytoscapeObject.nodes().filter((ele) => {
+      let notIncluded = true;
+      const currentLabel = ele.data('label');
+      for (let i = 0; i < filterLength; i += 1) {
+        const { keyword } = filters[i];
+        const { label, property } = filters[i].property;
+
+        if (currentLabel === label) {
+          const propertyValue = ele.data('properties')[property];
+          if (keyword === null || keyword === '') {
+            notIncluded = false;
+          } else if (propertyValue === undefined || propertyValue === null) {
+            notIncluded = true;
+          } else if (propertyValue.toString().includes(keyword)) {
+            notIncluded = false;
+          }
+        }
+        if (!notIncluded) {
+          break;
+        }
+      }
+      if (notIncluded) {
+        notFilteredNodeLength += 1;
+        notFilteredNodes.push(ele);
+      }
+      return notIncluded;
+    }).addClass(gFilteredClassName);
+
+    // Step2. Edge Highlight from not filtered nodes.
+    for (let nodeIndex = 0; nodeIndex < notFilteredNodeLength; nodeIndex += 1) {
+      const currentNode = notFilteredNodes[nodeIndex];
+      const edges = currentNode.connectedEdges();
+      const edgesSize = edges.length;
+      for (let edgeIndex = 0; edgeIndex < edgesSize; edgeIndex += 1) {
+        const currentEdge = edges[edgeIndex];
+        const connectedWithHighlightNode = currentEdge.connectedNodes().not(`.${gFilteredClassName}`).filter((ele) => ele !== currentNode);
+        if (connectedWithHighlightNode.length === 0) currentEdge.addClass(gFilteredClassName);
+      }
+    }
+
+    cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.1');
+  };
+
+  const resetFilterOnCytoscapeElements = () => {
+    const gFilteredClassName = 'g-filtered';
+    if (cytoscapeObject) {
+      cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '1.0').removeClass(gFilteredClassName);
+    }
+  };
 
   const captionChange = (elementType, label, caption) => {
-    chartRef.current.captionChange(elementType, label, caption);
-    let footerObj = footerData.data
-    footerObj.captions = ['gid', 'label'].concat(Array.from(chartRef.current.getCaptions(elementType, label)))
-    footerObj.selectedCaption = caption
-    setFooterData(Object.assign({}, footerData, { data: footerObj }))
+    changeCaptionOnCytoscapeElements(elementType, label, caption);
+    setSelectedCaption(caption);
 
     if (elementType === 'node') {
-      let nodeLegendObj = legendData.nodeLegend
-      if (nodeLegendObj.hasOwnProperty(label)) {
-        nodeLegendObj[label].caption = caption
+      const nodeLegendObj = legendData.nodeLegend;
+      if (Object.prototype.hasOwnProperty.call(nodeLegendObj, label)) {
+        nodeLegendObj[label].caption = caption;
       }
-      setLegendData(Object.assign({}, legendData, { nodeLegend: nodeLegendObj }))
+      setLegendData({ ...legendData, nodeLegend: nodeLegendObj });
     } else if (elementType === 'edge') {
-      let edgeLegendObj = legendData.edgeLegend
-      if (edgeLegendObj.hasOwnProperty(label)) {
-        edgeLegendObj[label].caption = caption
+      const edgeLegendObj = legendData.edgeLegend;
+      if (Object.prototype.hasOwnProperty.call(edgeLegendObj, label)) {
+        edgeLegendObj[label].caption = caption;
       }
-      setLegendData(Object.assign({}, legendData, { edgeLegend: edgeLegendObj }))
+      setLegendData({ ...legendData, edgeLegend: edgeLegendObj });
     }
-    dispatch(() => props.setLabels(elementType, label, { caption: caption }))
-  }
-
-  const layoutChange = (layoutName) => {
-    chartRef.current.layoutChange(layoutName);
-  }
-
+    dispatch(() => props.setLabels(elementType, label, { caption }));
+  };
 
   useImperativeHandle(ref, () => ({
-
     getCy() {
-      return chartRef.current.getCy();
+      return cytoscapeObject;
     },
-
-    resetChart() {
-      return chartRef.current.resetChart();
-    }
+    getLabels() {
+      return Object.keys(props.data.legend.nodeLegend);
+    },
+    getCaptionsFromCytoscapeObject,
+    applyFilterOnCytoscapeElements,
+    resetFilterOnCytoscapeElements,
   }));
 
-  return <div className="chart-frame-area">
-    <CypherResultCytoscapeLegend onLabelClick={getFooterData} isReloading={isReloading} legendData={legendData} />
-    <CypherResultCytoscapeChart onElementsMouseover={getFooterData} ref={chartRef} legendData={legendData} elements={elements} addLegendData={addLegendData} />
-    <CypherResultCytoscapeFooter colorChange={colorChange} sizeChange={sizeChange} captionChange={captionChange} layoutChange={layoutChange} footerData={footerData} nodeLabelSizes={nodeLabelSizes} edgeLabelSizes={edgeLabelSizes} edgeLabelColors={edgeLabelColors} nodeLabelColors={nodeLabelColors} />
-  </div>
-})
+  return (
+    <div className="chart-frame-area">
+      <div className="contianer-frame-tab">
+        <CypherResultCytoscapeLegend
+          onLabelClick={getFooterData}
+          isReloading={isReloading}
+          legendData={legendData}
+        />
+        <CypherResultTab refKey={props.refKey} currentTab="graph" />
+      </div>
+      <CypherResultCytoscapeChart
+        onElementsMouseover={getFooterData}
+        legendData={legendData}
+        elements={elements}
+        setCytoscapeObject={setCytoscapeObject}
+        cytoscapeObject={cytoscapeObject}
+        cytoscapeLayout={cytoscapeLayout}
+        addLegendData={addLegendData}
+        maxDataOfGraph={maxDataOfGraph}
+      />
+      <CypherResultCytoscapeFooter
+        captions={captions}
+        colorChange={colorChange}
+        sizeChange={sizeChange}
+        captionChange={captionChange}
+        setCytoscapeLayout={setCytoscapeLayout}
+        cytoscapeLayout={cytoscapeLayout}
+        selectedCaption={selectedCaption}
+        footerData={footerData}
+        nodeLabelSizes={nodeLabelSizes}
+        edgeLabelSizes={edgeLabelSizes}
+        edgeLabelColors={edgeLabelColors}
+        nodeLabelColors={nodeLabelColors}
+      />
+    </div>
+  );
+});
 
+CypherResultCytoscape.propTypes = {
+  maxDataOfGraph: PropTypes.number.isRequired,
+  data: PropTypes.shape({
+    label: PropTypes.string,
+    type: PropTypes.string,
+    legend: PropTypes.shape({
+      // eslint-disable-next-line react/forbid-prop-types
+      nodeLegend: PropTypes.any,
+      // eslint-disable-next-line react/forbid-prop-types
+      edgeLegend: PropTypes.any,
+    }).isRequired,
+    elements: PropTypes.shape({
+      // eslint-disable-next-line react/forbid-prop-types
+      edges: PropTypes.any,
+      // eslint-disable-next-line react/forbid-prop-types
+      nodes: PropTypes.any,
+    }).isRequired,
+  }).isRequired,
+  setLabels: PropTypes.func.isRequired,
+  refKey: PropTypes.string.isRequired,
+};
 
-export default CypherResultCytoscape
+export default CypherResultCytoscape;

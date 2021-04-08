@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-import {connect} from 'react-redux'
-import {disconnectToAgensGraph} from '../../../features/database/DatabaseSlice'
-import {addFrame, removeFrame, pinFrame} from '../../../features/frame/FrameSlice'
-import {addAlert} from '../../../features/alert/AlertSlice'
-import {setCommand} from '../../../features/editor/EditorSlice'
-import ServerDisconnectFrame from '../presentations/ServerDisconnectFrame'
+import { connect } from 'react-redux';
+import { disconnectToAgensGraph } from '../../../features/database/DatabaseSlice';
+import { resetMetaData } from '../../../features/database/MetadataSlice';
+import { addFrame, pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
+import { addAlert } from '../../../features/alert/AlertSlice';
+import { setCommand } from '../../../features/editor/EditorSlice';
+import ServerDisconnectFrame from '../presentations/ServerDisconnectFrame';
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
+const mapStateToProps = () => ({
+});
 
-const mapDispatchToProps = { disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand }
+const mapDispatchToProps = {
+  disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand, resetMetaData,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServerDisconnectFrame);

@@ -14,63 +14,74 @@
  * limitations under the License.
  */
 
-const ag = require('agensgraph');
+import Flavors from '../../config/Flavors';
+import PgConfig from '../../config/Pg'
+
+require('agensgraph');
+import pg from 'pg';
+import types from 'pg-types';
+import {setAGETypes} from '../../tools/AGEParser';
+
 
 class AgensGraphRepository {
-    constructor({ host, port, database, graph, user, password } = {}) {
+    constructor({host, port, database, graph, user, password, flavor} = {}) {
+        if (!flavor) {
+            throw new Error('Flavor is required.');
+        }
+
         this._host = host;
         this._port = port;
         this._database = database;
         this._graph = graph;
         this._user = user;
         this._password = password;
+        this.flavor = flavor;
     }
 
-    // Check connection status
-    async isHealth() {
-        let result = false;
-        if (this.getPoolConnectionInfo() == null) {
-            return result;
+    static async getConnection({
+                                   host,
+                                   port,
+                                   database,
+                                   graph,
+                                   user,
+                                   password,
+                                   flavor
+                               } = {},
+                               closeConnection = true) {
+        const client = new pg.Client({
+                user,
+                password,
+                host,
+                database,
+                port,
+            }
+        )
+        client.connect();
+        if (flavor === Flavors.AGE) {
+            await setAGETypes(client, types);
+        } else if (flavor === Flavors.AGENS) {
+            await client.query(`set graph_path = ${graph}`)
+        } else {
+            throw new Error(`Unknown flavor ${flavor}`)
         }
 
-        let client = null;
-        try {
-            client = await this.getConnection();
-            await client.query(`set graph_path = ${this._graph}`);
-            client.release();
-
-            result = true;
-        } catch (err) {
-            console.error('isHealth() Error Occurred!!!: ', err.message);
-            throw err;
+        if (closeConnection === true) {
+            await client.end();
         }
+        return client;
     }
 
-    // Execute cypher query
-    async execute(query) {
-        let client = await this.getConnection();
-        let result = null;
-        try {
-            await client.query(`set graph_path = ${this._graph}`);
-            result = await client.query(query);
-        } catch (err) {
-            console.error('Execute Error: ', err.message);
-            throw err;
-        } finally {
-            client.release();
-        }
-        return result;
+    static newConnectionPool(poolConnectionConfig) {
+        return new pg.Pool(poolConnectionConfig);
     }
 
     // Execute cypher query with params
-    async execute(query, params) {
+    async execute(query, params = []) {
         let client = await this.getConnection();
         let result = null;
         try {
-            await client.query(`set graph_path = ${this._graph}`);
             result = await client.query(query, params);
         } catch (err) {
-            console.error('Execute Error: ', err.message);
             throw err;
         } finally {
             client.release();
@@ -81,11 +92,17 @@ class AgensGraphRepository {
     /**
      * Get connectionInfo
      */
-    getConnection() {
+    async getConnection() {
         if (!this._pool) {
-            this._pool = new ag.Pool(this.getPoolConnectionInfo());
+            this._pool = AgensGraphRepository.newConnectionPool(this.getPoolConnectionInfo());
         }
-        return this._pool.connect();
+        const client = await this._pool.connect();
+        if (this.flavor === 'AGE') {
+            await setAGETypes(client, types);
+        } else {
+            await client.query(`set graph_path = ${this._graph}`);
+        }
+        return client;
     }
 
     /**
@@ -96,7 +113,6 @@ class AgensGraphRepository {
             await this._pool.end();
             return true;
         } catch (err) {
-            console.error('releaseConnection() {}', err.message);
             throw err;
         }
     }
@@ -114,9 +130,9 @@ class AgensGraphRepository {
             database: this._database,
             user: this._user,
             password: this._password,
-            max: 10,
-            idleTimeoutMillis: 30000,
-            connectionTimeoutMillis: 2000,
+            max: PgConfig.max,
+            idleTimeoutMillis: PgConfig.idleTimeoutMillis,
+            connectionTimeoutMillis: PgConfig.connectionTimeoutMillis,
         };
     }
 
@@ -125,7 +141,7 @@ class AgensGraphRepository {
      */
     getConnectionInfo() {
         if (!this._host || !this._port || !this._database) {
-            return null;
+            throw new Error("Not connected");
         }
         return {
             host: this._host,
@@ -134,6 +150,7 @@ class AgensGraphRepository {
             user: this._user,
             password: this._password,
             graph: this._graph,
+            flavor: this.flavor,
         };
     }
 }

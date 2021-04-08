@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-const ConnectorService = require('../services/databaseService');
-const connectorServiceManager = require('../services/sessionService');
+const DatabaseService = require('../services/databaseService');
+const sessionService = require('../services/sessionService');
 
 function sessionRouter(req, res, next) {
-    if (connectorServiceManager.get(req.sessionID) == null) {
-        connectorServiceManager.put(req.sessionID, new ConnectorService());
+    if (sessionService.get(req.sessionID) == null) {
+        sessionService.put(req.sessionID, new DatabaseService());
     }
     next();
 }

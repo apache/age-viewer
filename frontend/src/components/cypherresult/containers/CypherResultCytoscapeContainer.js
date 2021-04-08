@@ -14,23 +14,46 @@
  * limitations under the License.
  */
 
-import { connect } from 'react-redux'
-import CypherResultCytoscape from '../presentations/CypherResultCytoscape'
-import {setLabels} from '../../../features/cypher/CypherSlice'
-import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil'
+import { connect } from 'react-redux';
+import CypherResultCytoscape from '../presentations/CypherResultCytoscape';
+import { setLabels } from '../../../features/cypher/CypherSlice';
+import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil';
 
 const mapStateToProps = (state, ownProps) => {
-    const { refKey } = ownProps
+  const { refKey } = ownProps;
 
-    const generateElements = () => {
-        return generateCytoscapeElement(state.cypher.queryResult[refKey], false)
-
+  const generateElements = () => {
+    try {
+      return generateCytoscapeElement(
+        state.cypher.queryResult[refKey].rows, state.setting.maxDataOfGraph, false,
+      );
+    } catch (e) {
+      // TODO need tracing error
+      console.error(e);
     }
     return {
-        data: generateElements()
-    }
-}
+      legend: {
+        nodeLegend: {},
+        edgeLegend: {},
+      },
+      elements: {
+        nodes: [],
+        edges: [],
+      },
+    };
+  };
+  return {
+    data: generateElements(),
+    maxDataOfGraph: state.setting.maxDataOfGraph,
+    maxDataOfTable: state.setting.maxDataOfTable,
+  };
+};
 
-const mapDispatchToProps = { setLabels }
+const mapDispatchToProps = { setLabels };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CypherResultCytoscape);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  null,
+  { forwardRef: true },
+)(CypherResultCytoscape);

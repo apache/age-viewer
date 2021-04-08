@@ -14,89 +14,187 @@
  * limitations under the License.
  */
 
-import React, {useState}  from 'react';
-import {useDispatch} from 'react-redux'
-import uuid from 'react-uuid'
-import AlertContainers from '../../alert/containers/AlertContainers'
-import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer'
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import uuid from 'react-uuid';
+import PropTypes from 'prop-types';
+import AlertContainers from '../../alert/containers/AlertContainers';
+import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
+import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 
-const Editor = ({ addFrame, trimFrame, addAlert, alertList, database, executeCypherQuery, query }) => {
-    const dispatch = useDispatch();
-    const [reqString, setReqString] = useState()
-    const clearReqString = () => (setReqString(''));
+const Editor = ({
+  setCommand,
+  command,
+  addFrame,
+  trimFrame,
+  addAlert,
+  alertList,
+  isActive,
+  database,
+  executeCypherQuery,
+  addCommandHistory,
+  toggleMenu,
+  // addCommandFavorites,
+}) => {
+  const dispatch = useDispatch();
+  const [alerts, setAlerts] = useState([]);
 
-    const onClick = () => {
-        const refKey = uuid()
-        if (reqString.toUpperCase().startsWith(':PLAY')) {
-            dispatch(() => addFrame(reqString, 'Contents', refKey))
-        } else if (reqString.toUpperCase() === ':SERVER STATUS') {
-            dispatch(() => trimFrame('ServerStatus'))
-            dispatch(() => addFrame(reqString, 'ServerStatus', refKey))
-        } else if (database.status === 'disconnected' && reqString.toUpperCase() === ':SERVER DISCONNECT') {
-            dispatch(() => trimFrame('ServerDisconnect'))
-            dispatch(() => trimFrame('ServerConnect'))
-            dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            dispatch(() => addFrame(reqString, 'ServerDisconnect', refKey))
-        } else if (database.status === 'disconnected' && reqString.toUpperCase() === ':SERVER CONNECT') {
-            dispatch(() => trimFrame('ServerConnect'))
-        } else if (database.status === 'disconnected' && reqString.toUpperCase().match('(MATCH|CREATE).*')) {
-            dispatch(() => trimFrame('ServerConnect'))
-            dispatch(() => addAlert('ErrorNoDatabaseConnected'))
-            dispatch(() => addFrame(reqString, 'ServerConnect', refKey))
-        } else if (database.status === 'connected' && reqString.toUpperCase() === ':SERVER DISCONNECT') {
-            dispatch(() => trimFrame('ServerDisconnect'))
-            dispatch(() => addAlert('NoticeServerDisconnected'))
-            dispatch(() => addFrame(reqString, 'ServerDisconnect', refKey))
-        } else if (database.status === 'connected' && reqString.toUpperCase() === ':SERVER CONNECT') {
-            dispatch(() => trimFrame('ServerStatus'))
-            dispatch(() => addAlert('NoticeAlreadyConnected'))
-            dispatch(() => addFrame(reqString, 'ServerStatus', refKey))
-        } else if (database.status === 'connected' && reqString.toUpperCase().match('(MATCH|CREATE|COPY).*')) {
-            const reqStringValue = reqString
-            dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
-                if (response.type === 'cypher/executeCypherQuery/fulfilled'){
-                    addFrame(reqStringValue, 'CypherResultFrame', refKey)
-                } else if (response.type === 'cypher/executeCypherQuery/rejected'){
-                    addFrame(reqStringValue, 'CypherResultFrame', refKey)
-                    dispatch(() => addAlert('ErrorCypherQuery'))
-                }
-            }))
-        } else {
-            alert("Sorry, I Can't understand your command")
+  // const favoritesCommand = () => {
+  //   dispatch(() => addCommandFavorites(command));
+  // };
+
+  const clearCommand = () => {
+    setCommand('');
+  };
+
+  const onClick = () => {
+    const refKey = uuid();
+    if (command.toUpperCase().startsWith(':PLAY')) {
+      dispatch(() => addFrame(command, 'Contents', refKey));
+    } else if (command.toUpperCase() === ':SERVER STATUS') {
+      dispatch(() => trimFrame('ServerStatus'));
+      dispatch(() => addFrame(command, 'ServerStatus', refKey));
+    } else if (database.status === 'disconnected' && command.toUpperCase() === ':SERVER DISCONNECT') {
+      dispatch(() => trimFrame('ServerDisconnect'));
+      dispatch(() => trimFrame('ServerConnect'));
+      dispatch(() => addAlert('ErrorNoDatabaseConnected'));
+      dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
+    } else if (database.status === 'disconnected' && command.toUpperCase() === ':SERVER CONNECT') {
+      dispatch(() => trimFrame('ServerConnect'));
+      dispatch(() => addFrame(':server connect', 'ServerConnect'));
+    } else if (database.status === 'disconnected' && command.toUpperCase().match('(MATCH|CREATE).*')) {
+      dispatch(() => trimFrame('ServerConnect'));
+      dispatch(() => addAlert('ErrorNoDatabaseConnected'));
+      dispatch(() => addFrame(command, 'ServerConnect', refKey));
+    } else if (database.status === 'connected' && command.toUpperCase() === ':SERVER DISCONNECT') {
+      dispatch(() => trimFrame('ServerDisconnect'));
+      dispatch(() => addAlert('NoticeServerDisconnected'));
+      dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
+    } else if (database.status === 'connected' && command.toUpperCase() === ':SERVER CONNECT') {
+      dispatch(() => trimFrame('ServerStatus'));
+      dispatch(() => addAlert('NoticeAlreadyConnected'));
+      dispatch(() => addFrame(command, 'ServerStatus', refKey));
+    } else if (database.status === 'connected') {
+      const reqStringValue = command;
+      dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
+        if (response.type === 'cypher/executeCypherQuery/fulfilled') {
+          addFrame(reqStringValue, 'CypherResultFrame', refKey);
+        } else if (response.type === 'cypher/executeCypherQuery/rejected') {
+          addFrame(reqStringValue, 'CypherResultFrame', refKey);
+          dispatch(() => addAlert('ErrorCypherQuery'));
         }
-        clearReqString()
-    };
+      }));
+    }
+    dispatch(() => addCommandHistory(command));
+    clearCommand();
+  };
 
-    const alerts = alertList.map((alert) => {
-        return <AlertContainers key={alert.alertProps.key} alertKey={alert.alertProps.key} alertName={alert.alertName} errorMessage={alert.alertProps.errorMessage}/>;
-    });
-
-    return (
-        <div className="container-fluid">
-        <div className="card">
-            <div className="container-fluid editor-area card-header">
-                <div className="input-group">
-                    <div className="form-control col-11" style={{padding:'0px'}}>
-                    <CodeMirror onClick={onClick} setReqString={setReqString}/>
-                    </div>
-                    <div className="input-group-append ml-auto" id="editor-buttons">
-                        <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-star-o fa-lg"
-                                aria-hidden="true"></span></button>
-                        <button className="frame-head-button btn btn-link" type="button"><span className="fa fa-eraser fa-lg"
-                                aria-hidden="true"></span></button>
-                        <button className="frame-head-button btn btn-link" type="button" onClick={() => onClick()}><span className="fa fa-play-circle-o fa-lg"
-                                aria-hidden="true"></span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {alerts}
-
-
-        </div>
+  useEffect(() => {
+    setAlerts(
+      alertList.map((alert) => (
+        <AlertContainers
+          key={alert.alertProps.key}
+          alertKey={alert.alertProps.key}
+          alertName={alert.alertName}
+          errorMessage={alert.alertProps.errorMessage}
+        />
+      )),
     );
-}
+  }, [alertList]);
 
+  return (
+    <div className="container-fluid">
+      <div className="editor">
+        <div className="container-fluid editor-area card-header">
+          <div className="input-group input-style">
+            <div style={{
+              height: '60px',
+              width: '60px',
+              color: '#ffffff',
+              textAlign: 'left',
+              lineHeight: '30px',
+            }}
+            >
+              <spna>
+                Query
+                <br />
+                Editor
+              </spna>
+            </div>
+            <div className="form-control col-11 editor-code-wrapper">
+              <CodeMirror
+                onClick={onClick}
+                value={command}
+                onChange={setCommand}
+              />
+            </div>
+            <div className="input-group-append ml-auto editor-button-wrapper" id="editor-buttons">
+              {/* <button className="frame-head-button btn btn-link"
+               type="button" onClick={() => favoritesCommand()}>
+                <FontAwesomeIcon
+                  icon={faStar}
+                  size="lg"
+                />
+              </button> */}
+              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onClick={() => clearCommand()}>
+                <i className="icon-eraser" />
+              </button>
+              <button
+                className="frame-head-button btn btn-link"
+                type="button"
+                onClick={() => onClick()}
+                title="Run Query"
+              >
+                <i className="icon-play" />
+              </button>
+              <button
+                className="frame-head-button btn btn-link"
+                type="button"
+                onClick={() => {
+                  toggleMenu('home');
+                  if (!isActive) {
+                    document.getElementById('wrapper').classList.remove('wrapper');
+                    document.getElementById('wrapper').classList.add('wrapper-extension-padding');
+                  } else {
+                    document.getElementById('wrapper').classList.remove('wrapper-extension-padding');
+                    document.getElementById('wrapper').classList.add('wrapper');
+                  }
+                }}
+                title={(isActive) ? 'Hide' : 'Show'}
+              >
+                <SideBarToggle isActive={isActive} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {alerts}
+    </div>
+  );
+};
 
+Editor.propTypes = {
+  setCommand: PropTypes.func.isRequired,
+  command: PropTypes.string.isRequired,
+  addFrame: PropTypes.func.isRequired,
+  trimFrame: PropTypes.func.isRequired,
+  addAlert: PropTypes.func.isRequired,
+  alertList: PropTypes.arrayOf(PropTypes.shape({
+    alertName: PropTypes.string.isRequired,
+    alertProps: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      alertType: PropTypes.string.isRequired,
+      errorMessage: PropTypes.string.isRequired,
+    }),
+  })).isRequired,
+  isActive: PropTypes.bool.isRequired,
+  database: PropTypes.shape({
+    status: PropTypes.string.isRequired,
+  }).isRequired,
+  executeCypherQuery: PropTypes.func.isRequired,
+  addCommandHistory: PropTypes.func.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
+  // addCommandFavorites: PropTypes.func.isRequired,
+};
 
-export default Editor
+export default Editor;

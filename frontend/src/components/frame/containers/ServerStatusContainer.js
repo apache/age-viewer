@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-import {connect} from 'react-redux'
-import {removeFrame, pinFrame} from '../../../features/frame/FrameSlice'
-import ServerStatusFrame from '../presentations/ServerStatusFrame'
+import { connect } from 'react-redux';
+import { pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
+import { generateCytoscapeMetadataElement } from '../../../features/cypher/CypherUtil';
+import ServerStatusFrame from '../presentations/ServerStatusFrame';
 
 const mapStateToProps = (state) => {
-    return {
-        serverInfo: state.database
-    }
-}
+  const generateElements = () => generateCytoscapeMetadataElement(state.metadata.rows);
 
-const mapDispatchToProps = { removeFrame, pinFrame }
+  return {
+    serverInfo: state.database,
+    data: generateElements(),
+  };
+};
+
+const mapDispatchToProps = { removeFrame, pinFrame };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServerStatusFrame);

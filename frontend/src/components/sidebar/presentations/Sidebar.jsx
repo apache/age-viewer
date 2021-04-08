@@ -14,23 +14,31 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import SidebarHome from '../containers/SidebarHome'
-import SidebarSetting from './SidebarSetting'
+import React from 'react';
+import PropTypes from 'prop-types';
+import SidebarHome from '../containers/SidebarHome';
+import SidebarSetting from '../containers/SidebarSetting';
+import SidebarAbout from '../containers/SidebarAbout';
 
-const Sidebar = ({ activeMenuName, isActive, changeTheme, database, metadata, getMetaData }) => {
-    return (
-        <div id="sidebar" className={isActive ? " active " : ""} style={{overflowY: 'scroll'}}>
-            <div className="tab-content">
-                <div className={"tab-pane fade" + (activeMenuName === "home" ? " active show " : "") } role="tabpanel" aria-labelledby="side-home-tab">
-                    <SidebarHome />
-                </div>
-                <div className={"tab-pane fade" + (activeMenuName === "setting" ? " active show " : "") } role="tabpanel" aria-labelledby="side-setting-tab">
-                    <SidebarSetting changeTheme={changeTheme} />
-                </div>
-            </div>
-        </div>
-    );
-}
+const Sidebar = ({ activeMenuName, isActive }) => (
+  <div id="sidebar" className={isActive ? ' active ' : 'inactive'}>
+    <div className="tab-content">
+      <div className={`tab-pane fade${activeMenuName === 'home' ? ' active show ' : ''}`} role="tabpanel" aria-labelledby="side-home-tab">
+        <SidebarHome />
+      </div>
+      <div className={`tab-pane fade${activeMenuName === 'setting' ? ' active show ' : ''}`} role="tabpanel" aria-labelledby="side-setting-tab">
+        <SidebarSetting />
+      </div>
+      <div className={`tab-pane fade${activeMenuName === 'about' ? ' active show ' : ''}`} role="tabpanel" aria-labelledby="side-about-tab">
+        <SidebarAbout />
+      </div>
+    </div>
+  </div>
+);
 
-export default Sidebar
+Sidebar.propTypes = {
+  activeMenuName: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+};
+
+export default Sidebar;

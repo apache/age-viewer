@@ -14,29 +14,47 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import {useDispatch} from 'react-redux'
-import EditorContainer from '../containers/Editor'
-import FramesContainer from '../containers/Frames'
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import FramesContainer from '../containers/Frames';
+import styles from './Contents.module.scss';
 
-const Contents = ({ database, isActive, getConnectionStatus, getMetaData }) => {
-    const dispatch = useDispatch();
+const Contents = ({
+  database, isActive, getConnectionStatus, getMetaData, getMetaChartData,
+}) => {
+  const dispatch = useDispatch();
 
+  useEffect(() => {
     if (database.status === 'init') {
-
-        dispatch(() => {getConnectionStatus().then((response) => {
-            if (response.type === 'database/getConnectionStatus/fulfilled'){
-                getMetaData()
-            }
-        })})
+      dispatch(() => {
+        getConnectionStatus().then((response) => {
+          if (response.type === 'database/getConnectionStatus/fulfilled') {
+            getMetaData();
+            getMetaChartData();
+          }
+        });
+      });
     }
+  }, [database.status]);
 
-    return (
-        <div id="content" className={isActive ? "active" : ""}>
-                <EditorContainer />
-                <FramesContainer />
-        </div>
-    );
-}
+  return (
+    <div className={`${styles.Content} ${isActive ? styles.Expanded : ''}`}>
+      <div style={{ padding: '0rem 1rem 1rem 1rem' }}>
+        <FramesContainer />
+      </div>
+    </div>
+  );
+};
 
-export default Contents
+Contents.propTypes = {
+  database: PropTypes.shape({
+    status: PropTypes.string.isRequired,
+  }).isRequired,
+  isActive: PropTypes.bool.isRequired,
+  getConnectionStatus: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
+  getMetaChartData: PropTypes.func.isRequired,
+};
+
+export default Contents;

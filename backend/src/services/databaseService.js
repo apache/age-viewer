@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-const sessionManager = require('./sessionService');
+import {getQuery} from "../tools/SQLFlavorManager";
+import * as util from "util";
+
 const AgensGraphRepository = require('../models/agensgraph/agensGraphRepository');
 
-class ConnectorService {
-    constructor() {}
+class DatabaseService {
+    constructor() {
+        this._agensDatabaseHelper = null;
+    }
 
     async getMetaData() {
-        let metadata = new Object();
+        let metadata = {};
         try {
             let connectionInfo = this.getConnectionInfo();
             metadata.nodes = await this.getNodes();
@@ -36,55 +40,54 @@ class ConnectorService {
         return metadata;
     }
 
+    async getGraphLabels() {
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let queryResult = {};
+        try {
+            queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'graph_labels'), [this.getConnectionInfo().graph]);
+        } catch (error) {
+            throw error;
+        }
+
+        return queryResult.rows;
+    }
+
+    async getGraphLabelCount(labelName, labelKind) {
+        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let query = null;
+
+        if (labelKind === 'v') {
+            query = util.format(getQuery(agensDatabaseHelper.flavor, 'label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
+        } else if (labelKind === 'e') {
+            query = util.format(getQuery(agensDatabaseHelper.flavor, 'label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
+        }
+
+        let queryResult = await agensDatabaseHelper.execute(query);
+
+        return queryResult.rows;
+    }
+
     async getNodes() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let query = [];
-        query.push("MATCH(v) RETURN DISTINCT '*' AS label, count(v) AS cnt");
-        query.push('UNION ALL');
-        query.push('MATCH(v) RETURN DISTINCT label(v) AS label, count(v) AS cnt');
-        query.push('ORDER BY label');
-
-        let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
+        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_nodes'), agensDatabaseHelper._graph));
         return queryResult.rows;
     }
 
     async getEdges() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let query = [];
-        query.push("MATCH(v) - [e] - (v2) RETURN DISTINCT '*' AS label, count(e) AS cnt");
-        query.push('UNION ALL');
-        query.push('MATCH(v) - [e] - (v2) RETURN DISTINCT label(e) AS label, count(e) AS cnt');
-        query.push('ORDER BY label');
-
-        let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
+        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_edges'), agensDatabaseHelper._graph));
         return queryResult.rows;
     }
 
     async getPropertyKeys() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let query = [];
-        query.push('MATCH(v)');
-        query.push("RETURN DISTINCT jsonb_object_keys(v) AS key, 'v' AS key_type");
-        query.push('UNION ALL');
-        query.push('MATCH(v1) - [e] - (v2)');
-        query.push("RETURN DISTINCT jsonb_object_keys(e) AS key, 'e' AS key_type");
-
-        let queryResult = await agensDatabaseHelper.execute(query.join('\n'));
+        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'property_keys'));
         return queryResult.rows;
     }
 
     async getRole() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let query = [];
-        query.push('SELECT usename as user_name,');
-        query.push('CASE WHEN usesuper THEN ');
-        query.push("CAST('admin' AS pg_catalog.text)");
-        query.push('ELSE');
-        query.push("CAST('user' AS pg_catalog.text)");
-        query.push('END role_name');
-        query.push('FROM pg_catalog.pg_user');
-        query.push('WHERE usename = $1');
-        let queryResult = await agensDatabaseHelper.execute(query.join('\n'), [this.getConnectionInfo().user]);
+        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'get_role'), [this.getConnectionInfo().user]);
         return queryResult.rows[0];
     }
 
@@ -96,12 +99,13 @@ class ConnectorService {
         }
 
         try {
-            await agensDatabaseHelper.isHealth();
-            return true;
-        } catch(err) {
+            let client = await agensDatabaseHelper.getConnection(agensDatabaseHelper.getConnectionInfo(), true);
+            client.release();
+        } catch (e) {
             this._agensDatabaseHelper = null;
-            throw err;
+            throw e;
         }
+        return true;
     }
 
     async disconnectDatabase() {
@@ -123,19 +127,22 @@ class ConnectorService {
 
     async getConnectionStatus() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        if(agensDatabaseHelper == null) {
+        if (agensDatabaseHelper == null) {
             return false;
         }
 
         try {
-            await agensDatabaseHelper.isHealth()
-            return true;
+            let client = await AgensGraphRepository.getConnection(agensDatabaseHelper.getConnectionInfo());
+            client.release();
         } catch (err) {
-            throw err;
+            return false;
         }
+        return true;
     }
 
     getConnectionInfo() {
+        if (this.isConnected() === false)
+            throw new Error("Not connected");
         return this._agensDatabaseHelper.getConnectionInfo();
     }
 
@@ -147,7 +154,7 @@ class ConnectorService {
         return this._agensDatabaseHelper;
     }
 
-    convertEdge({ label, id, start, end, props }) {
+    convertEdge({label, id, start, end, props}) {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,
@@ -156,14 +163,6 @@ class ConnectorService {
             properties: props,
         };
     }
-
-    convertVertex({ label, id, props }) {
-        return {
-            label: label,
-            id: `${id.oid}.${id.id}`,
-            properties: props,
-        };
-    }
 }
 
-module.exports = ConnectorService;
+module.exports = DatabaseService;

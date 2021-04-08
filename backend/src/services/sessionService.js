@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-class SessionManager {
+class SessionService {
     constructor() {
         this._sessionMap = new Map();
     }
@@ -30,6 +30,6 @@ class SessionManager {
         return this._sessionMap.get(key);
     }
 }
-const sessionManager = new SessionManager();
+const sessionService = new SessionService();
 
-module.exports = sessionManager;
+module.exports = sessionService;

@@ -14,25 +14,98 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import Navigator from '../../navigator/containers/Navigator'
-import Sidebar from '../../sidebar/containers/Sidebar'
-import Contents from '../../contents/containers/Contents'
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import EditorContainer from '../../contents/containers/Editor';
+import Sidebar from '../../sidebar/containers/Sidebar';
+import Contents from '../../contents/containers/Contents';
+import { loadFromCookie, saveToCookie } from '../../../features/cookie/CookieUtil';
 
-const DefaultTemplate = ({ theme }) => {
+const DefaultTemplate = ({
+  theme,
+  maxNumOfFrames,
+  maxNumOfHistories,
+  maxDataOfGraph,
+  maxDataOfTable,
+  changeSettings,
+}) => {
+  const dispatch = useDispatch();
+  const [stateValues] = useState({
+    theme,
+    maxNumOfFrames,
+    maxNumOfHistories,
+    maxDataOfGraph,
+    maxDataOfTable,
+  });
 
-    return (
-        <div>
-            <input type="radio" className="theme-switch" name="theme-switch" id="default-theme" checked={theme === 'default' ? true : false} readOnly />
-            <input type="radio" className="theme-switch" name="theme-switch" id="dark-theme" checked={theme === 'dark' ? true : false} readOnly />
-            <div className="wrapper">
-                <Navigator />
-                <Sidebar />
-                <Contents />
-            </div>
+  useEffect(() => {
+    let isChanged = false;
+    const cookieState = {
+      theme,
+      maxNumOfFrames,
+      maxNumOfHistories,
+      maxDataOfGraph,
+      maxDataOfTable,
+    };
 
-        </div>
-    )
-}
+    Object.keys(stateValues).forEach((key) => {
+      let fromCookieValue = loadFromCookie(key);
 
-export default DefaultTemplate
+      if (fromCookieValue !== undefined && key !== 'theme') {
+        fromCookieValue = parseInt(fromCookieValue, 10);
+      }
+
+      if (fromCookieValue === undefined) {
+        saveToCookie(key, stateValues[key]);
+      } else if (fromCookieValue !== stateValues[key]) {
+        cookieState[key] = fromCookieValue;
+        isChanged = true;
+      }
+    });
+
+    if (isChanged) {
+      dispatch(() => changeSettings(Object.assign(stateValues, cookieState)));
+    }
+  });
+
+  return (
+    <div className="default-template">
+      <input
+        type="radio"
+        className="theme-switch"
+        name="theme-switch"
+        id="default-theme"
+        checked={theme === 'default'}
+        readOnly
+      />
+      <input
+        type="radio"
+        className="theme-switch"
+        name="theme-switch"
+        id="dark-theme"
+        checked={theme === 'dark'}
+        readOnly
+      />
+      <div className="editor-divison">
+        <EditorContainer />
+        <Sidebar />
+      </div>
+      <div className="wrapper-extension-padding" id="wrapper">
+        <Contents />
+      </div>
+
+    </div>
+  );
+};
+
+DefaultTemplate.propTypes = {
+  theme: PropTypes.string.isRequired,
+  maxNumOfFrames: PropTypes.number.isRequired,
+  maxNumOfHistories: PropTypes.number.isRequired,
+  maxDataOfGraph: PropTypes.number.isRequired,
+  maxDataOfTable: PropTypes.number.isRequired,
+  changeSettings: PropTypes.func.isRequired,
+};
+
+export default DefaultTemplate;

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { createSlice } from '@reduxjs/toolkit'
-import uuid from 'react-uuid'
+import { createSlice } from '@reduxjs/toolkit';
+import uuid from 'react-uuid';
 
 const AlertSlice = createSlice({
   name: 'alerts',
@@ -23,24 +23,29 @@ const AlertSlice = createSlice({
   reducers: {
     addAlert: {
       reducer: (state, action) => {
-        let alertName = action.payload.alertName
-        let alertType = 'Notice'
-        let errorMessage = ''
+        const { alertName } = action.payload;
+        let alertType = 'Notice';
+        let errorMessage = '';
 
         if (['ErrorServerConnectFail', 'ErrorNoDatabaseConnected', 'ErrorPlayLoadFail'].includes(alertName)) {
-          alertType = 'Error'
-          errorMessage = action.payload.message
+          alertType = 'Error';
+          errorMessage = action.payload.message;
         }
 
-        state.push({alertName : alertName, alertProps : {key : uuid(), alertType : alertType, errorMessage : errorMessage}})
+        state.push({ alertName, alertProps: { key: uuid(), alertType, errorMessage } });
       },
-      prepare: (alertName, message) => {
-        return { payload: { alertName, message } }
-      }
-    }
-  }
-})
+      prepare: (alertName, message) => ({ payload: { alertName, message } }),
+    },
+    removeAlert: {
+      reducer: (state, action) => {
+        const { alertKey } = action.payload;
+        return state.filter((alert) => (alert.alertProps.key !== alertKey));
+      },
+      prepare: (alertKey) => ({ payload: { alertKey } }),
+    },
+  },
+});
 
-export const { addAlert } = AlertSlice.actions
+export const { addAlert, removeAlert } = AlertSlice.actions;
 
-export default AlertSlice.reducer
+export default AlertSlice.reducer;

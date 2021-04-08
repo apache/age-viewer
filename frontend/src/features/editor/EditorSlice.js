@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /*
  * Copyright 2020 Bitnine Co., Ltd.
  *
@@ -14,25 +15,37 @@
  * limitations under the License.
  */
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 const EditorSlice = createSlice({
   name: 'editor',
   initialState: {
-    reqString : ''
+    command: '',
+    commandHistory: [],
+    commandFavorites: [],
   },
   reducers: {
     setCommand: {
       reducer: (state, action) => {
-        return { reqString: action.payload.reqString}
+        state.command = action.payload.command;
       },
-      prepare: (reqString) => {
-        return { payload : {reqString}}
-      }
-    }
-  }
-})
+      prepare: (command) => ({ payload: { command } }),
+    },
+    addCommandHistory: {
+      reducer: (state, action) => {
+        state.commandHistory.push(action.payload.command);
+      },
+      prepare: (command) => ({ payload: { command } }),
+    },
+    addCommandFavorites: {
+      reducer: (state, action) => {
+        state.commandFavorites.push(action.payload.command);
+      },
+      prepare: (command) => ({ payload: { command } }),
+    },
+  },
+});
 
-export const { setCommand } = EditorSlice.actions
+export const { setCommand, addCommandHistory, addCommandFavorites } = EditorSlice.actions;
 
-export default EditorSlice.reducer
+export default EditorSlice.reducer;

@@ -17,7 +17,7 @@ const fs = require('fs');
 const winston = require('winston');
 const winstonDaily = require('winston-daily-rotate-file');
 
-const logDir = __dirname + '/../logs';
+const logDir = process.env.LOG_DIR || 'logs';
 const { combine, timestamp, printf } = winston.format;
 
 const logFormat = printf((info) => {

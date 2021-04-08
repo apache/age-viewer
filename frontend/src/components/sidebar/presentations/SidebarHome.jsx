@@ -14,214 +14,399 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import { Fragment } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { Modal } from 'antd';
 import uuid from 'react-uuid';
+import { connect, useDispatch } from 'react-redux';
+import { VerticalLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
 
-
-const genLabelQuery = (eleType, labelName) => {
+const genLabelQuery = (eleType, labelName, database) => {
+  function age() {
     if (eleType === 'node') {
-        if (labelName === '*') {
-            return "MATCH (V) RETURN V"
-        } else {
-            return "MATCH (V) WHERE LABEL(V) = '" + labelName + "' RETURN V"
-        }
+      if (labelName === '*') {
+        return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V)
+          RETURN V
+$$) as (V agtype);`;
+      }
+      return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V:${labelName})
+          RETURN V
+$$) as (V agtype);`;
     }
-    else if (eleType === 'edge') {
-        if (labelName === '*') {
-            return "MATCH (V)-[R]->(V2) RETURN *"
-        } else {
-            return "MATCH (V)-[R]->(V2) WHERE LABEL(R) = '" + labelName + "' RETURN *"
-        }
+    if (eleType === 'edge') {
+      if (labelName === '*') {
+        return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V)-[R]-(V2)
+          RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);`;
+      }
+      return `SELECT * from cypher('${database.graph}', $$
+          MATCH (V)-[R:${labelName}]-(V2)
+          RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);`;
     }
-}
+    return '';
+  }
+  function agens() {
+    if (eleType === 'node') {
+      if (labelName === '*') {
+        return 'MATCH (V) RETURN V';
+      }
+      return `MATCH (V) WHERE LABEL(V) = '${labelName}' RETURN V`;
+    }
+    if (eleType === 'edge') {
+      if (labelName === '*') {
+        return 'MATCH (V)-[R]->(V2) RETURN *';
+      }
+      return `MATCH (V)-[R]->(V2) WHERE LABEL(R) = '${labelName}' RETURN *`;
+    }
+    return '';
+  }
+  if (database.flavor === 'AGE') {
+    return age();
+  }
+  if (database.flavor === 'AGENS') {
+    return agens();
+  }
+  return '';
+};
 
 const genPropQuery = (eleType, propertyName) => {
-    if (eleType === 'v') {
-        return "MATCH (V) WHERE V." + propertyName + " IS NOT NULL RETURN V"
-    }
-    else if (eleType === 'e') {
-        return "MATCH (V)-[R]->(V2) WHERE R." + propertyName + " IS NOT NULL RETURN *"
-    }
-}
-
-const ColoredLine = () => (
-    <hr
-        style={{
-            color: '#B0B0B0',
-            backgroundColor: '#B0B0B0',
-            marginTop: 0,
-            height: 0.3
-        }}
-    />
-);
-
-const StyleWrap = {display: 'flex', flexWrap: 'wrap'};
-const StyleJustifyCenter = {display: 'flex', justifyContent: 'center'};
-const StyleTextright = {marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold'};
-const StyleTextLeft = {fontSize: '13px', fontWeight: 'bold'}
-
-
-const NodeList = ({nodes, setCommand}) => {
-    let list;
-    if(nodes) {
-        list = nodes.map(item => (
-            <NodeItems
-                key={uuid()}
-                label={item.label}
-                cnt={item.cnt}
-                setCommand={setCommand}
-            />
-        ));
-        return (
-            <div style={StyleWrap}>
-                {list}
-            </div>
-        )
-    }
-    else {
-        return null;
-    }
+  if (eleType === 'v') {
+    return `MATCH (V) WHERE V.${propertyName} IS NOT NULL RETURN V`;
+  }
+  if (eleType === 'e') {
+    return `MATCH (V)-[R]->(V2) WHERE R.${propertyName} IS NOT NULL RETURN *`;
+  }
+  return '';
 };
 
-const NodeItems = ({label, cnt, setCommand}) => (
-    <Fragment>
-        <span className="nodeLabel px-3 py-2 mx-1 my-1 badge badge-pill badge-dark" onClick={() => setCommand(genLabelQuery("node", label))}>{label}({cnt})</span>
-    </Fragment>
-);
-
-const EdgeList = ({edges, setCommand}) => {
-    let list;
-    if(edges) {
-        list = edges.map(item => (
-            <EdgeItems
-                key={uuid()}
-                label={item.label}
-                cnt={item.cnt}
-                setCommand={setCommand}
-            />
-        ));
-        return (
-        <div style={StyleWrap}>
-            {list}
-        </div>
-        )
-    }
-    else {
-        return null;
-    }
-};
-
-const EdgeItems = ({label, cnt, setCommand}) => (
-    <Fragment>
-        <span className="edgeLabel px-3 py-2 mx-1 my-1 badge badge-light" onClick={() => setCommand(genLabelQuery("edge", label))}>{label}({cnt})</span>
-    </Fragment>
-);
-
-const PropertyList = ({propertyKeys, setCommand}) => {
-    let list;
-    if(propertyKeys) {
-        list = propertyKeys.map(item => (
-            <PropertyItems
-                key={uuid()}
-                propertyName={item.key}
-                keyType={item.key_type}
-                setCommand={setCommand}
-            />
-        ));
-        return (
-        <div style={StyleWrap}>
-            {list}
-        </div>
-        )
-    }
-    else {
-        return null;
-    }
-};
-
-const PropertyItems =({propertyName, keyType, setCommand}) => (
-    <Fragment>
-        <span className={keyType === 'v' ? 'nodeLabel px-3 py-2 mx-1 my-1 badge badge-pill badge-dark' : 'edgeLabel px-3 py-2 mx-1 my-1 badge badge-light'} onClick={() => setCommand(genPropQuery(keyType, propertyName))}>{propertyName}</span>
-    </Fragment>
-);
-
-const ConnectedText =({userName, roleName}) => (
-    <div>
-        <h6>
-        <div style={StyleJustifyCenter}>
-            <div className="col-sm-6" style={StyleTextright}>Username:</div><div className="col-sm-6" style={StyleTextLeft}>{userName}</div>
-        </div>
-        <div style={StyleJustifyCenter}>
-            <div className="col-sm-6" style={StyleTextright}>Roles:</div><div className="col-sm-6" style={StyleTextLeft}>{roleName}</div>
-        </div>
-        </h6>
-    </div>
-);
-
-
-const DBMSText =({dbname, graph}) => (
-    <div>
-        <h6>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Version:</div><div className="col-sm-6" style={StyleTextLeft}>-</div>
-            </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Edition:</div><div className="col-sm-6" style={StyleTextLeft}>-</div>
-            </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Databases:</div><div className="col-sm-6" style={StyleTextLeft}>{dbname}</div>
-            </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Graph Path:</div><div className="col-sm-6" style={StyleTextLeft}>{graph}</div>
-            </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Information:</div><div className="col-sm-6" style={StyleTextLeft}></div>
-            </div>
-            <div style={StyleJustifyCenter}>
-                <div className="col-sm-6" style={StyleTextright}>Query List:</div><div className="col-sm-6" style={StyleTextLeft}></div>
-            </div>
-        </h6>
-    </div>
-);
-
-
-const SidebarHome = ({edges, nodes, propertyKeys, setCommand, dbname, graph, role }) => {
+const NodeList = ({ nodes, setCommand }) => {
+  let list;
+  if (nodes) {
+    list = nodes.map((item) => (
+      <NodeItems
+        key={uuid()}
+        label={item.label}
+        cnt={item.cnt}
+        setCommand={setCommand}
+      />
+    ));
     return (
-        <div className="sidebar-home">
-            <div className="sidebar sidebar-header">
-                <h4>Database Information</h4>
-            </div>
-            <div className="sidebar sidebar-body">
-                <div className="form-group">
-                    <label htmlFor="exampleFormControlSelect1"><b>Vertex Label</b></label>
-                    <ColoredLine />
-                    <NodeList nodes={nodes} setCommand={setCommand}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="exampleFormControlSelect1"><b>Edge Label</b></label>
-                    <ColoredLine />
-                    <EdgeList edges={edges} setCommand={setCommand}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="exampleFormControlSelect1"><b>Properties</b></label>
-                    <ColoredLine />
-                    <PropertyList propertyKeys={propertyKeys} setCommand={setCommand}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="exampleFormControlSelect1"><b>Connected as</b></label>
-                    <ColoredLine />
-                    <ConnectedText userName={role.user_name} roleName={role.role_name} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="exampleFormControlSelect1"><b>DBMS</b></label>
-                    <ColoredLine />
-                    <DBMSText  dbname={dbname} graph={graph} />
-                </div>
-
-            </div>
-        </div>
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: '80px',
+        overflowY: 'auto',
+        marginTop: '12px',
+      }}
+      >
+        {list}
+      </div>
     );
-}
+  }
 
-export default SidebarHome
+  return null;
+};
+NodeList.propTypes = {
+  nodes: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
+
+const NodeItems = connect((state) => ({
+  database: state.database,
+}), {})(
+  ({
+    label, cnt, setCommand, database,
+  }) => (
+    <button
+      type="button"
+      className="node-item"
+      onClick={() => setCommand(genLabelQuery('node', label, database))}
+    >
+      {label}
+      (
+      {cnt}
+      )
+    </button>
+  ),
+);
+NodeItems.propTypes = {
+  database: PropTypes.shape({
+    flavor: PropTypes.string,
+  }).isRequired,
+  label: PropTypes.string.isRequired,
+  cnt: PropTypes.number.isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
+
+const EdgeList = ({ edges, setCommand }) => {
+  let list;
+  if (edges) {
+    list = edges.map((item) => (
+      <EdgeItems
+        key={uuid()}
+        label={item.label}
+        cnt={item.cnt}
+        setCommand={setCommand}
+      />
+    ));
+    return (
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: '80px',
+        overflowY: 'auto',
+        marginTop: '12px',
+      }}
+      >
+        {list}
+      </div>
+    );
+  }
+
+  return null;
+};
+EdgeList.propTypes = {
+  edges: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
+
+const EdgeItems = connect((state) => ({
+  database: state.database,
+}), {})(({
+  label, cnt, setCommand, database,
+}) => (
+  <button
+    type="button"
+    className="edge-item"
+    onClick={() => setCommand(genLabelQuery('edge', label, database))}
+  >
+    {label}
+    (
+    {cnt}
+    )
+  </button>
+));
+EdgeItems.propTypes = {
+  database: PropTypes.shape({
+    flavor: PropTypes.string,
+  }).isRequired,
+  label: PropTypes.string.isRequired,
+  cnt: PropTypes.number.isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
+
+const PropertyList = ({ propertyKeys, setCommand }) => {
+  let list;
+  if (propertyKeys) {
+    list = propertyKeys.map((item) => (
+      <PropertyItems
+        key={uuid()}
+        propertyName={item.key}
+        keyType={item.key_type}
+        setCommand={setCommand}
+      />
+    ));
+    return (
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: '80px',
+        overflowY: 'auto',
+        marginTop: '12px',
+      }}
+      >
+        {list}
+      </div>
+    );
+  }
+
+  return null;
+};
+PropertyList.propTypes = {
+  propertyKeys: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    key_type: PropTypes.string,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
+
+const PropertyItems = ({ propertyName, keyType, setCommand }) => (
+  <button
+    type="button"
+    className={`${keyType === 'v' ? 'propertie-item' : 'propertie-item'} propertie-item`}
+    onClick={() => setCommand(genPropQuery(keyType, propertyName))}
+  >
+    {propertyName}
+  </button>
+);
+PropertyItems.propTypes = {
+  propertyName: PropTypes.string.isRequired,
+  keyType: PropTypes.string.isRequired,
+  setCommand: PropTypes.func.isRequired,
+};
+
+const ConnectedText = ({ userName, roleName }) => (
+  <div>
+    <h6>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <SubLabelRight label="Username :" classes="col-sm-6" />
+        <SubLabelLeft label={userName} classes="col-sm-6" />
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <SubLabelRight label="Roles :" classes="col-sm-6" />
+        <SubLabelLeft label={roleName} classes="col-sm-6" />
+      </div>
+    </h6>
+  </div>
+);
+
+ConnectedText.propTypes = {
+  userName: PropTypes.string.isRequired,
+  roleName: PropTypes.string.isRequired,
+};
+
+const DBMSText = ({ dbname, graph }) => (
+  <div>
+    <h6>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <SubLabelRight label="Databases :" classes="col-sm-6" />
+        <SubLabelLeft label={dbname} classes="col-sm-6" />
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <SubLabelRight label="Graph Path :" classes="col-sm-6" />
+        <SubLabelLeft label={graph} classes="col-sm-6" />
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <SubLabelRight label="Information :" classes="col-sm-6" />
+        <SubLabelLeft label="-" classes="col-sm-6" />
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <SubLabelRight label="Query List :" classes="col-sm-6" />
+        <SubLabelLeft label="-" classes="col-sm-6" />
+      </div>
+    </h6>
+  </div>
+);
+
+DBMSText.propTypes = {
+  dbname: PropTypes.string.isRequired,
+  graph: PropTypes.string.isRequired,
+};
+
+const SidebarHome = ({
+  edges,
+  nodes,
+  propertyKeys,
+  setCommand,
+  command,
+  trimFrame,
+  addFrame,
+  getMetaData,
+}) => {
+  const dispatch = useDispatch();
+  const { confirm } = Modal;
+
+  const requestDisconnect = () => {
+    const refKey = uuid();
+    dispatch(() => trimFrame('ServerDisconnect'));
+    dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
+  };
+
+  const refreshSidebarHome = () => {
+    getMetaData();
+  };
+
+  return (
+    <div className="sidebar-home">
+      <div className="sidebar sidebar-body">
+        <div className="form-group sidebar-item">
+          <b>Node Label</b>
+          <br />
+          <NodeList nodes={nodes} setCommand={setCommand} />
+        </div>
+        <VerticalLine />
+        <div className="form-group sidebar-item">
+          <b>Edge Label</b>
+          <br />
+          <EdgeList edges={edges} setCommand={setCommand} />
+        </div>
+        <VerticalLine />
+        <div className="form-group sidebar-item">
+          <b>Properties</b>
+          <br />
+          <PropertyList propertyKeys={propertyKeys} setCommand={setCommand} />
+        </div>
+        <VerticalLine />
+        <div className="form-group sidebar-item-disconnect">
+          <button
+            className="frame-head-button btn btn-link"
+            type="button"
+            onClick={() => refreshSidebarHome()}
+          >
+            <i className="icon-refresh" />
+          </button>
+          <br />
+          <b>Refresh</b>
+          <div style={{
+            border: '1px solid #C4C4C4',
+            opacity: '1',
+            width: '80%',
+            height: '0',
+            margin: '3px auto',
+          }}
+          />
+          <button
+            className="frame-head-button btn btn-link"
+            type="button"
+            onClick={() => confirm({
+              title: 'Are you sure you want to close this window?',
+              onOk() {
+                requestDisconnect();
+              },
+              onCancel() {
+                return false;
+              },
+            })}
+          >
+            <i className="icon-close-session" />
+          </button>
+          <br />
+          <b>Close Session</b>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+SidebarHome.propTypes = {
+  edges: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  nodes: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    cnt: PropTypes.number,
+  })).isRequired,
+  propertyKeys: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    key_type: PropTypes.string,
+  })).isRequired,
+  setCommand: PropTypes.func.isRequired,
+  command: PropTypes.string.isRequired,
+  trimFrame: PropTypes.func.isRequired,
+  addFrame: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
+};
+
+export default SidebarHome;

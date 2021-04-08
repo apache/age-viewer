@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /*
  * Copyright 2020 Bitnine Co., Ltd.
  *
@@ -14,25 +15,103 @@
  * limitations under the License.
  */
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import { about, setting } from '../../conf/config';
+import { saveToCookie } from '../cookie/CookieUtil';
 
 const SidebarSettingSlice = createSlice({
   name: 'setting',
   initialState: {
-    theme: 'default'
+    theme: setting.theme,
+    maxNumOfFrames: setting.maxNumOfFrames,
+    maxNumOfHistories: setting.maxNumOfHistories,
+    maxDataOfGraph: setting.maxDataOfGraph,
+    maxDataOfTable: setting.maxDataOfTable,
+    releaseDate: about.releaseDate,
+    version: about.version,
+    license: about.license,
   },
   reducers: {
+    resetSetting: () => {
+      saveToCookie('theme', setting.theme);
+      saveToCookie('maxNumOfFrames', setting.maxNumOfFrames);
+      saveToCookie('maxNumOfHistories', setting.maxNumOfHistories);
+      saveToCookie('maxDataOfGraph', setting.maxDataOfGraph);
+      saveToCookie('maxDataOfTable', setting.maxDataOfTable);
+      saveToCookie('releaseDate', about.releaseDate);
+      saveToCookie('version', about.version);
+      saveToCookie('license', about.license);
+
+      return {
+        theme: setting.theme,
+        maxNumOfFrames: setting.maxNumOfFrames,
+        maxNumOfHistories: setting.maxNumOfHistories,
+        maxDataOfGraph: setting.maxDataOfGraph,
+        maxDataOfTable: setting.maxDataOfTable,
+        releaseDate: about.releaseDate,
+        version: about.version,
+        license: about.license,
+      };
+    },
     changeTheme: {
       reducer: (state, action) => {
-        state.theme = action.payload.theme
+        state.theme = action.payload.theme;
       },
-      prepare: (event) => {
-        return { payload : {theme : event.target.value}}
-      }
-    }
-  }
-})
+      prepare: (event) => ({ payload: { theme: event.target.value } }),
+    },
+    changeMaxNumOfFrames: {
+      reducer: (state, action) => {
+        state.maxNumOfFrames = action.payload.maxNumOfFrames;
+      },
+      prepare: (event) => ({ payload: { maxNumOfFrames: event } }),
+    },
+    changeMaxNumOfHistories: {
+      reducer: (state, action) => {
+        state.maxNumOfHistories = action.payload.maxNumOfHistories;
+      },
+      prepare: (event) => ({ payload: { maxNumOfHistories: event } }),
+    },
+    changeMaxDataOfGraph: {
+      reducer: (state, action) => {
+        state.maxDataOfGraph = action.payload.maxDataOfGraph;
+      },
+      prepare: (event) => ({ payload: { maxDataOfGraph: event } }),
+    },
+    changeMaxDataOfTable: {
+      reducer: (state, action) => {
+        state.maxDataOfTable = action.payload.maxDataOfTable;
+      },
+      prepare: (event) => ({ payload: { maxDataOfTable: event } }),
+    },
+    changeSettings: {
+      reducer: (state, action) => {
+        state.theme = action.payload.theme;
+        state.maxNumOfFrames = action.payload.maxNumOfFrames;
+        state.maxNumOfHistories = action.payload.maxNumOfHistories;
+        state.maxDataOfGraph = action.payload.maxDataOfGraph;
+        state.maxDataOfTable = action.payload.maxDataOfTable;
+      },
+      prepare: (settings) => ({
+        payload: {
+          theme: settings.theme,
+          maxNumOfFrames: settings.maxNumOfFrames,
+          maxNumOfHistories: settings.maxNumOfHistories,
+          maxDataOfGraph: settings.maxDataOfGraph,
+          maxDataOfTable: settings.maxDataOfTable,
+        },
+      }),
+    },
+  },
+});
 
-export const { changeTheme } = SidebarSettingSlice.actions
+export const {
+  changeTheme,
+  changeMaxNumOfFrames,
+  changeMaxNumOfHistories,
+  changeMaxDataOfGraph,
+  changeMaxDataOfTable,
+  changeSettings,
+  resetSetting,
+} = SidebarSettingSlice.actions;
 
-export default SidebarSettingSlice.reducer
+export default SidebarSettingSlice.reducer;

@@ -14,17 +14,35 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const NavigatorItem = ({ itemInfo, activeMenuName, onClick }) => {
-    const [ menuName, fwCode ] = itemInfo;
-    return (
-        <li className="nav-item">
-            <a id={"side-"+ menuName + "-tab"} className={"nav-link" + (activeMenuName === menuName ? " active show " : "") } data-classname="fixed-left" data-toggle="pill"
-                href="/#" role="tab" aria-controls={"side-" + menuName} aria-selected="true" onClick={() => onClick(menuName)}><i
-                    className={"fa fa-" + fwCode}></i></a>
-        </li>
-    );
-}
+  const [menuName, fwCode] = itemInfo;
+  return (
+    <li className="nav-item">
+      <a
+        id={`side-${menuName}-tab`}
+        className={`nav-link${activeMenuName === menuName ? ' active show ' : ''}`}
+        data-classname="fixed-left"
+        data-toggle="pill"
+        href="/#"
+        role="tab"
+        aria-controls={`side-${menuName}`}
+        aria-selected="true"
+        onClick={() => onClick(menuName)}
+      >
+        <FontAwesomeIcon icon={fwCode} />
+      </a>
+    </li>
+  );
+};
 
-export default NavigatorItem
+NavigatorItem.propTypes = {
+  itemInfo: PropTypes.arrayOf(PropTypes.any).isRequired,
+  activeMenuName: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
+export default NavigatorItem;

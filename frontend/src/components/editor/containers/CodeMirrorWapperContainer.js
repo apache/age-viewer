@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-import {connect} from 'react-redux'
-import CodeMirrorWapper from '../presentations/CodeMirrorWapper'
-const mapStateToProps = (state, ownProps)  => {
-    return {
-        reqString : state.editor.reqString
-    }
-}
+import { connect } from 'react-redux';
+import CodeMirrorWrapper from '../presentations/CodeMirrorWrapper';
 
+const mapStateToProps = (state) => ({
+  commandHistory: state.editor.commandHistory.slice(
+    Math.max((state.editor.commandHistory.length - state.setting.maxNumOfHistories === 0
+      ? state.editor.commandHistory.length : state.setting.maxNumOfHistories), 0),
+  ),
+  commandFavorites: state.editor.commandFavorites.slice(0),
+});
 
-const mapDispatchToProps = { }
+const mapDispatchToProps = { };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CodeMirrorWapper);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CodeMirrorWrapper);

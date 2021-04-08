@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import {connect} from 'react-redux'
-import Frames from '../presentations/Frames'
-import {addFrame} from '../../../features/frame/FrameSlice'
-const mapStateToProps = (state)  => {
-    return {
-        frameList: state.frames,
-        queryResult : state.cypher.queryResult,
-        database: state.database
-    }
-}
+import { connect } from 'react-redux';
+import Frames from '../presentations/Frames';
+import { addFrame } from '../../../features/frame/FrameSlice';
 
-const mapDispatchToProps = { addFrame }
+const mapStateToProps = (state) => ({
+  frameList: state.frames,
+  queryResult: state.cypher.queryResult,
+  database: state.database,
+  maxNumOfFrames: state.setting.maxNumOfFrames,
+});
+
+const mapDispatchToProps = { addFrame };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Frames);

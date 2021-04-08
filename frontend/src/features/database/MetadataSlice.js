@@ -14,23 +14,41 @@
  * limitations under the License.
  */
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
   async () => {
     try {
-      const response = await fetch('/api/v1/db/meta')
+      const response = await fetch('/api/v1/db/meta');
       if (response.ok) { return await response.json(); }
-      throw response
+      throw response;
     } catch (error) {
       const errorDetail = {
-        name: 'Database Connection Failed'
-        , statusText: error.statusText
-      }
-      throw errorDetail
+        name: 'Database Connection Failed',
+        statusText: error.statusText,
+      };
+      throw errorDetail;
     }
-  })
+  },
+);
+
+export const getMetaChartData = createAsyncThunk(
+  'database/getMetaChartData',
+  async () => {
+    try {
+      const response = await fetch('/api/v1/db/metaChart');
+      if (response.ok) { return await response.json(); }
+      throw response;
+    } catch (error) {
+      const errorDetail = {
+        name: 'Database Connection Failed',
+        statusText: error.statusText,
+      };
+      throw errorDetail;
+    }
+  },
+);
 
 const MetadataSlice = createSlice({
   name: 'metadata',
@@ -43,38 +61,57 @@ const MetadataSlice = createSlice({
     graph: '',
     role: {
       user_name: '',
-      role_name: ''
-    }
+      role_name: '',
+    },
+    rows: [],
   },
   reducers: {
+    resetMetaData: () => ({
+      edges: [],
+      nodes: [],
+      propertyKeys: [],
+      status: 'init',
+      dbname: '',
+      graph: '',
+      role: {
+        user_name: '',
+        role_name: '',
+      },
+
+    }),
   },
   extraReducers: {
     [getMetaData.fulfilled]: (state, action) => {
       if (action.payload) {
-        return {
+        return Object.assign(state, {
           edges: action.payload.edges,
           nodes: action.payload.nodes,
           propertyKeys: action.payload.propertyKeys,
           status: 'connected',
           dbname: action.payload.database,
           graph: action.payload.graph,
-          role: action.payload.role
-
-        }
-      } else {
-        return {
-          edges: [],
-          nodes: [],
-          propertyKeys: [],
-          status: 'disconnected',
-          dbname: action.payload.database,
-          graph: action.payload.graph,
-          role: action.payload.role
-
-        }
+          role: action.payload.role,
+        });
       }
-    }
-  }
-})
+      return Object.assign(state, {
+        edges: [],
+        nodes: [],
+        propertyKeys: [],
+        status: 'disconnected',
+        dbname: action.payload.database,
+        graph: action.payload.graph,
+        role: action.payload.role,
+      });
+    },
+    [getMetaChartData.fulfilled]: (state, action) => {
+      if (action.payload) {
+        return Object.assign(state, { rows: action.payload });
+      }
+      return Object.assign(state, { rows: [] });
+    },
+  },
+});
 
-export default MetadataSlice.reducer
+export const { resetMetaData } = MetadataSlice.actions;
+
+export default MetadataSlice.reducer;

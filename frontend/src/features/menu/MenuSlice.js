@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /*
  * Copyright 2020 Bitnine Co., Ltd.
  *
@@ -14,33 +15,32 @@
  * limitations under the License.
  */
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import { faCog, faHome, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const MenuSlice = createSlice({
   name: 'navigator',
   initialState: {
-    menuList: [['home', 'home'], ['setting', 'cog']],
-    activeMenu: 'init',
-    isActive: false
+    menuList: [['home', faHome], ['setting', faCog], ['about', faInfoCircle]],
+    activeMenu: 'home',
+    isActive: true,
   },
   reducers: {
     toggleMenu: {
       reducer: (state, action) => {
-        let isActive = true
+        let isActive = true;
         if (state.activeMenu === action.payload.selectedMenuName) {
-          action.payload.selectedMenuName = ''
-          isActive = false
+          action.payload.selectedMenuName = '';
+          isActive = false;
         }
-        state.activeMenu = action.payload.selectedMenuName
-        state.isActive = isActive
+        state.activeMenu = action.payload.selectedMenuName;
+        state.isActive = isActive;
       },
-      prepare: (selectedMenuName) => {
-        return { payload : {selectedMenuName}}
-      }
-    }
-  }
-})
+      prepare: (selectedMenuName) => ({ payload: { selectedMenuName } }),
+    },
+  },
+});
 
-export const { toggleMenu } = MenuSlice.actions
+export const { toggleMenu } = MenuSlice.actions;
 
-export default MenuSlice.reducer
+export default MenuSlice.reducer;

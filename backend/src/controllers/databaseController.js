@@ -13,81 +13,79 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const express = require('express');
 const sessionService = require('../services/sessionService');
-const router = express.Router();
+const winston = require('winston');
 
-// Get connection status
-router.get('', async (req, res, next) => {
-    let connectorService = sessionService.get(req.sessionID);
-    if (connectorService.isConnected()) {
-        try {
-            await connectorService.getConnectionStatus();
-            res.status(200).json(connectorService.getConnectionInfo()).end();
-        } catch (err) {
-            let error = new Error(err.message);
-            error.status = 500;
-            next(error);
+class DatabseController {
+
+    async connectDatabase(req, res, next) {
+        let databaseService = sessionService.get(req.sessionID);
+        if (!databaseService.isConnected()) {
+            await databaseService.connectDatabase(req.body);
         }
-    } else {
-        let error = new Error('Not connected');
-        error.status = 500;
-        next(error);
+        const connectionInfo = databaseService.getConnectionInfo();
+        res.status(200).json(connectionInfo).end();
     }
-});
 
-// Connect Database
-router.post('/connect', async (req, res, next) => {
-    let connectorService = sessionService.get(req.sessionID);
-    if (connectorService.isConnected()) {
-        res.status(200).json(connectorService.getConnectionInfo()).end();
-    } else {
-        try {
-            await connectorService.connectDatabase(req.body);
-            res.status(200).json(connectorService.getConnectionInfo()).end();
-        } catch (err) {
-            let error = new Error(err.message);
-            error.status = 500;
-            next(error);
-        }
-    }
-});
+    async disconnectDatabase(req, res, next) {
+        let databaseService = sessionService.get(req.sessionID);
+        if (databaseService.isConnected()) {
+            let isDisconnect = await databaseService.disconnectDatabase();
 
-// Disconnect Database
-router.get('/disconnect', async (req, res, next) => {
-    let connectorService = sessionService.get(req.sessionID);
-    if (connectorService.isConnected()) {
-        let isDisconnect = await connectorService.disconnectDatabase();
-
-        if (isDisconnect) {
-            res.status(200).json({ msg: 'Disconnect Successful' }).end();
+            if (isDisconnect) {
+                res.status(200).json({msg: 'Disconnect Successful'}).end();
+            } else {
+                res.status(500).json({msg: 'Already Disconnected'}).end();
+            }
         } else {
-            res.status(500).json({ msg: 'Already Disconnected' }).end();
+            throw new Error('Not connected');
         }
-    } else {
-        let error = new Error('Not connected');
-        error.status = 500;
-        next(error);
     }
-});
 
-// Get database meta information
-router.get('/meta', async (req, res, next) => {
-    let connectorService = sessionService.get(req.sessionID);
-    if (connectorService.isConnected()) {
-        let metadata = null;
-        try {
-            metadata = await connectorService.getMetaData();
+    async getStatus(req, res, next) {
+        let databaseService = sessionService.get(req.sessionID);
+        if (databaseService.isConnected()) {
+            await databaseService.getConnectionStatus();
+            res.status(200).json(databaseService.getConnectionInfo()).end();
+        } else {
+            throw new Error('Not connected');
+        }
+    }
+
+    async getMetadata(req, res, next) {
+        let databaseService = sessionService.get(req.sessionID);
+        if (databaseService.isConnected()) {
+            let metadata = await databaseService.getMetaData();
             res.status(200).json(metadata).end();
-        } catch (error) {
-            res.status(500).json(metadata).end();
+        } else {
+            throw new Error('Not connected');
         }
-    } else {
-        let error = new Error('Not connected');
-        error.status = 500;
-        next(error);
     }
-});
 
-module.exports = router;
+    async getMetaChart(req, res, next) {
+        let databaseService = sessionService.get(req.sessionID);
+        if (databaseService.isConnected()) {
+            let metadata = [];
+            try {
+                let graphLabels = await databaseService.getGraphLabels();
+                for (let labels of graphLabels) {
+                    let countResults = await databaseService.getGraphLabelCount(labels.la_name, labels.la_kind)
+                    for (let idx in countResults) {
+                        if (idx > 0) {
+                            labels.la_name = labels.la_name + "-" + idx
+                            labels.la_oid = labels.la_oid + (idx * 0.1)
+                        }
+                        metadata.push(Object.assign({}, labels, countResults[idx]))
+                    }
+                }
+                res.status(200).json(metadata).end();
+            } catch (error) {
+                res.status(500).json(metadata).end();
+            }
+        } else {
+            throw new Error('Not connected');
+        }
+    }
+}
+
+module.exports = DatabseController;
