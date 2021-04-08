@@ -70,7 +70,7 @@ const DefaultTemplate = ({
   });
 
   return (
-    <div>
+    <div className="default-template">
       <input
         type="radio"
         className="theme-switch"

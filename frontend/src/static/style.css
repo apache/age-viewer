@@ -72,8 +72,7 @@ body {
     align-items: stretch;
     position: relative;
     max-height: calc(100% - 105px);
-    overflow-y: scroll ;
-    position: fixed;
+    overflow-y: scroll ;    
 }
 
 .wrapper-extension-padding {
@@ -83,8 +82,15 @@ body {
     align-items: stretch;
     position: relative;
     max-height: calc(100% - 300px);
-    overflow-y: scroll ;
-    position: fixed;
+    overflow-y: scroll ;    
+}
+/* ---------------------------------------------------
+    DEFAULT TEMPLATE STYLE
+----------------------------------------------------- */
+.default-template{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 /* ---------------------------------------------------
