@@ -3,6 +3,10 @@
 
 AGViewer is graph visualisation tool, for AgensGraph or Apache AGE.
 
+# Recommend Node Version & install module
+- node js 14.16.0
+- npm install pm2
+
 # How to use this image
 ```
 docker run \
