@@ -11,5 +11,19 @@ docker run \
     bitnine/agviewer:latest
 ```
 
+# How to run using command
+```
+npm run setup
+npm run start
+```
+# How to build using command
+```
+npm run setup-backend
+npm run build-front
+pm2 stop ag-viewer-develop
+pm2 delete ag-viewer-develop
+pm2 start ecosystem.config.js
+```
+
 # License
 AGViewer is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
