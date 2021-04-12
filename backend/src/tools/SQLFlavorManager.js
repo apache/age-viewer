@@ -5,6 +5,7 @@ import Flavors from "../config/Flavors";
 
 const sqlBasePath = path.join(__dirname, '../../sql');
 
+// todo: util.format -> ejs
 function getQuery(flavor = Flavors.AGENS, name) {
     const defaultSqlPath = path.join(sqlBasePath, `./${name}/default.sql`);
     let sqlPath = path.join(sqlBasePath, `./${name}/${flavor}.sql`);

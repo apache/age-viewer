@@ -75,7 +75,7 @@ class DatabaseService {
 
     async getEdges() {
         let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_edges'), agensDatabaseHelper._graph));
+        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_edges'), agensDatabaseHelper._graph, agensDatabaseHelper._graph));
         return queryResult.rows;
     }
 
