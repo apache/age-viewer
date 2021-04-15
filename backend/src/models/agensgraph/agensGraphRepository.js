@@ -17,7 +17,7 @@
 import Flavors from '../../config/Flavors';
 import PgConfig from '../../config/Pg'
 
-require('agensgraph');
+require('@bitnine-oss/ag-driver');
 import pg from 'pg';
 import types from 'pg-types';
 import {setAGETypes} from '../../tools/AGEParser';
