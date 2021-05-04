@@ -18,7 +18,7 @@ const Frame = ({
   reqString, content,
   // isPinned, pinFrame,
   refKey, removeFrame,
-  onSearch, onSearchCancel, onDownload, onRefresh,
+  onSearch, onThick, onSearchCancel, onDownload, onRefresh,
   bodyNoPadding,
 }) => {
   const [isFullScreen, setFullScreen] = useState(false);
@@ -70,6 +70,17 @@ const Frame = ({
               <i className="icon-filter" />
             </Button>
           ) : null}
+          {onThick ? (
+            <Button
+              size="large"
+              type="link"
+              className={styles.FrameButton}
+              onClick={() => onThick()}
+              title="Filter/Search"
+            >
+              굵기
+            </Button>
+          ) : null }
           {false ? ( // en:Functionality is hidden due to functional problems // ko:기능이 동작하지 않아 감춤
             <Dropdown
               trigger={['click']}
@@ -164,6 +175,7 @@ const Frame = ({
 
 Frame.defaultProps = {
   onSearch: null,
+  onThick: null,
   onSearchCancel: null,
   onDownload: null,
   onRefresh: null,
@@ -178,6 +190,7 @@ Frame.propTypes = {
   refKey: PropTypes.string.isRequired,
   removeFrame: PropTypes.func.isRequired,
   onSearch: PropTypes.func,
+  onThick: PropTypes.func,
   onSearchCancel: PropTypes.func,
   onDownload: PropTypes.func,
   onRefresh: PropTypes.func,

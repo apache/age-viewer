@@ -78,7 +78,6 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         setSelectedCaption(legendData.edgeLegend[event.data.label].caption);
       }
     }
-
     setFooterData(event);
   };
 
@@ -170,6 +169,10 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
       setLegendData({ ...legendData, edgeLegend: edgeLegendObj });
     }
     dispatch(() => props.setLabels(elementType, label, { size }));
+  };
+
+  const applyEdgeThicknessCytoscapeElements = () => {
+    console.log(cytoscapeObject);
   };
 
   const changeCaptionOnCytoscapeElements = (elementType, label, caption) => {
@@ -290,9 +293,13 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     getLabels() {
       return Object.keys(props.data.legend.nodeLegend);
     },
+    getEdges() {
+      return Object.keys(props.data.legend.edgeLegend);
+    },
     getCaptionsFromCytoscapeObject,
     applyFilterOnCytoscapeElements,
     resetFilterOnCytoscapeElements,
+    applyEdgeThicknessCytoscapeElements,
   }));
 
   return (
