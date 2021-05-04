@@ -115,11 +115,11 @@ const Editor = ({
               lineHeight: '30px',
             }}
             >
-              <spna>
+              <span>
                 Query
                 <br />
                 Editor
-              </spna>
+              </span>
             </div>
             <div className="form-control col-11 editor-code-wrapper">
               <CodeMirror
