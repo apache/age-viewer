@@ -1,15 +1,18 @@
-function AGTypeParse(input) {
-    // todo: need to work with antlr4
+import antlr4 from 'antlr4';
+import AgtypeLexer from './AgtypeLexer';
+import AgtypeParser from './AgtypeParser';
+import CustomAgTypeListener from './CustomAgTypeListener';
 
-    const inputLength = input.length;
-    let splitJson;
-    if (input.endsWith("::edge")) {
-        splitJson = input.substring(0, inputLength - 6)
-    } else {
-        // ::vertex
-        splitJson = input.substring(0, inputLength - 8);
-    }
-    return JSON.parse(splitJson);
+function AGTypeParse(input) {
+    const chars = new antlr4.InputStream(input);
+    const lexer = new AgtypeLexer(chars);
+    const tokens = new antlr4.CommonTokenStream(lexer);
+    const parser = new AgtypeParser(tokens);
+    parser.buildParseTrees = true;
+    const tree = parser.agType();
+    const printer = new CustomAgTypeListener();
+    antlr4.tree.ParseTreeWalker.DEFAULT.walk(printer, tree);
+    return printer.getResult();
 }
 
 async function setAGETypes(client, types) {
