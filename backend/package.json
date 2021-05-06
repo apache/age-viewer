@@ -12,7 +12,6 @@
         "start": "babel-node src/bin/www",
         "start:dev": "nodemon --watch src/app.js --watch src/ --exec 'babel-node' src/bin/www",
         "build": "babel -d ./build ./src -s",
-        "start-test": "babel-node src/tools/test.js",
         "start:production": "node ./build/bin/www.js"
     },
     "dependencies": {
