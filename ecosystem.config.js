@@ -2,7 +2,7 @@ module.exports = {
   apps: [{
     name: "ag-viewer",
     namespace: "ag-viewer",
-    script: "cd backend && npx babel-node ./bin/www",
+    script: "cd backend && node ./build/bin/www",
     watch: false,
     env: {
       name: "ag-viewer-develop",
@@ -21,4 +21,3 @@ module.exports = {
     }
   }
 }
-

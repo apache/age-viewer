@@ -107,7 +107,7 @@ const GraphFilterModal = ({
             onChange={(value) => {
               filterList[index].property = value;
             }}
-            style={{ minWidth: 120 }}
+            style={{ minWidth: 300 }}
           >
             <Select.Option value={null} disabled>Select</Select.Option>
             {propertyElements}
@@ -135,7 +135,7 @@ const GraphFilterModal = ({
     );
   }, [propertyElements, filterList]);
   return (
-    <Modal title="Filter on Graph" visible={visible} onOk={onOk} onCancel={() => setVisible(false)}>
+    <Modal title="Filter on Graph" visible={visible} onOk={onOk} onCancel={() => setVisible(false)} width={800}>
       {
         filterElements
       }
