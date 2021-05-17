@@ -78,6 +78,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         setSelectedCaption(legendData.edgeLegend[event.data.label].caption);
       }
     }
+
     setFooterData(event);
   };
 
@@ -171,31 +172,67 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     dispatch(() => props.setLabels(elementType, label, { size }));
   };
 
-  const applyEdgeThicknessCytoscapeElements = () => {
-    console.log(cytoscapeObject);
+  const changeCaptionOnCytoscapeElements = (elementType, label, caption) => {
+    if (caption === null) {
+      cytoscapeObject.elements(`${elementType}[label = "${label}"]`).style('label', '');
+    } else {
+      cytoscapeObject.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => {
+        let displayValue = '< NULL >';
+        if (caption === 'gid') {
+          const idValue = ele.data('id');
+          if (idValue !== null && idValue !== undefined) {
+            displayValue = `[ ${idValue} ]`;
+          }
+        } else if (caption === 'label') {
+          const labelValue = ele.data('label');
+          if (labelValue !== null && labelValue !== undefined) {
+            displayValue = `[ :${labelValue} ]`;
+          }
+        } else if (ele !== null && ele !== undefined) {
+          const anonValue = ele.data('properties')[caption];
+          if (anonValue !== null && anonValue !== undefined) {
+            displayValue = anonValue;
+          }
+        }
+        return displayValue;
+      });
+    }
   };
 
-  const changeCaptionOnCytoscapeElements = (elementType, label, caption) => {
-    cytoscapeObject.elements(`${elementType}[label = "${label}"]`).style('label', (ele) => {
-      let displayValue = '< NULL >';
-      if (caption === 'gid') {
-        const idValue = ele.data('id');
-        if (idValue !== null && idValue !== undefined) {
-          displayValue = `[ ${idValue} ]`;
-        }
-      } else if (caption === 'label') {
-        const labelValue = ele.data('label');
-        if (labelValue !== null && labelValue !== undefined) {
-          displayValue = `[ :${labelValue} ]`;
-        }
-      } else if (ele !== null && ele !== undefined) {
-        const anonValue = ele.data('properties')[caption];
-        if (anonValue !== null && anonValue !== undefined) {
-          displayValue = anonValue;
-        }
+  const applyEdgeThicknessCytoscapeElements = (thickness) => {
+    const edgeSizes = [1, 6, 11, 16, 21];
+    if (thickness !== null) {
+      const range = thickness.max - thickness.min;
+      const edgeSizeByRate = (rate) => {
+        let size = edgeSizes[0];
+        size = (rate >= 0) ? edgeSizes[0] : size;
+        size = (rate >= 20) ? edgeSizes[1] : size;
+        size = (rate >= 40) ? edgeSizes[2] : size;
+        size = (rate >= 60) ? edgeSizes[3] : size;
+        size = (rate >= 80) ? edgeSizes[4] : size;
+        size = (rate >= 100) ? edgeSizes[4] : size;
+        return size;
+      };
+      if (cytoscapeObject) {
+        cytoscapeObject.elements().forEach((e) => {
+          const ele = e;
+          if (ele.group() === 'edges') {
+            if (ele.data().label === thickness.edge && ele.data().properties[thickness.property]) {
+              const propertyValue = ele.data().properties[thickness.property];
+              const propertyRate = (propertyValue / range) * 100;
+              ele.style('width', edgeSizeByRate(propertyRate).toString());
+            }
+          }
+        });
       }
-      return displayValue;
-    });
+    } else if (cytoscapeObject) {
+      cytoscapeObject.elements().forEach((e) => {
+        const ele = e;
+        if (ele.group() === 'edges') {
+          ele.style('width', '');
+        }
+      });
+    }
   };
 
   const applyFilterOnCytoscapeElements = (filters) => {
@@ -245,16 +282,26 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     }).addClass(gFilteredClassName);
 
     // Step2. Edge Highlight from not filtered nodes.
+    const targetAndSourceNodeList = [];
     for (let nodeIndex = 0; nodeIndex < notFilteredNodeLength; nodeIndex += 1) {
       const currentNode = notFilteredNodes[nodeIndex];
       const edges = currentNode.connectedEdges();
       const edgesSize = edges.length;
       for (let edgeIndex = 0; edgeIndex < edgesSize; edgeIndex += 1) {
         const currentEdge = edges[edgeIndex];
+        const edgeTargetNode = currentEdge.target();
+        const edgeSourceNode = currentEdge.source();
         const connectedWithHighlightNode = currentEdge.connectedNodes().not(`.${gFilteredClassName}`).filter((ele) => ele !== currentNode);
-        if (connectedWithHighlightNode.length === 0) currentEdge.addClass(gFilteredClassName);
+        if (connectedWithHighlightNode.length === 0) {
+          currentEdge.addClass(gFilteredClassName);
+        } else {
+          targetAndSourceNodeList.push(edgeTargetNode);
+          targetAndSourceNodeList.push(edgeSourceNode);
+        }
       }
     }
+    // Step3 . Edge Highlighting target And source filtered remove
+    targetAndSourceNodeList.forEach((node) => { node.removeClass(gFilteredClassName); });
 
     cytoscapeObject.elements(`.${gFilteredClassName}`).style('opacity', '0.1');
   };

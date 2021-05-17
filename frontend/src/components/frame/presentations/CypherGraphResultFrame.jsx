@@ -25,7 +25,7 @@ import CypherResultCytoscapeContainer
   from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
-import EdgeThicknessSettingModal from '../../cypherresult/components/EdgeThicknessSettingModal';
+import EdgeThicknessMenu from '../../cypherresult/components/EdgeThicknessMenu';
 import Frame from '../Frame';
 
 const CypherResultFrame = ({
@@ -149,6 +149,16 @@ const CypherResultFrame = ({
         bodyNoPadding
         onSearch={() => setFilterModalVisible(true)}
         onThick={() => setThicknessModalVisible(true)}
+        thicnessMenu={
+          (
+            <EdgeThicknessMenu
+              onSubmit={(thicness) => {
+                setGlobalThickness(thicness);
+              }}
+              properties={edgeProperties}
+            />
+          )
+        }
         onSearchCancel={() => setGlobalFilter(null)}
         onRefresh={refreshFrame}
         onDownload={(type) => {
@@ -191,17 +201,8 @@ const CypherResultFrame = ({
         properties={filterProperties}
         globalFilter={globalFilter}
       />
-      <EdgeThicknessSettingModal
-        onSubmit={(thicness) => {
-          setGlobalThickness(thicness);
-        }}
-        visible={thicknessModalVisible}
-        setVisible={setThicknessModalVisible}
-        setThickess={setGlobalThickness}
-        globalThickness={globalThickness}
-        properties={edgeProperties}
-      />
     </>
+
   );
 };
 
