@@ -251,7 +251,19 @@ const CypherResultCytoscapeFooter = ({
                   </strong>
                 </button>
               ))}
-
+              <button
+                onClick={() => [
+                  updateLabelCaption(footerData.data.type, footerData.data.label, null),
+                  captionChange(footerData.data.type, footerData.data.label, null)]}
+                key={uuid()}
+                type="button"
+                className={`btn captionSelector ${selectedCaption === null ? ' btn-secondary ' : ' btn-outline-dark '}`}
+              >
+                <strong>
+                  &lt;
+                  &gt;
+                </strong>
+              </button>
             </span>
           </div>
           <button

@@ -9,8 +9,9 @@ import {
   // faPaperclip,
   faSync, faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-
-import { Button, Dropdown, Menu } from 'antd';
+import {
+  Button, Dropdown, Menu, Popover,
+} from 'antd';
 import PropTypes from 'prop-types';
 import styles from './Frame.module.scss';
 
@@ -18,7 +19,7 @@ const Frame = ({
   reqString, content,
   // isPinned, pinFrame,
   refKey, removeFrame,
-  onSearch, onSearchCancel, onDownload, onRefresh,
+  onSearch, onThick, thicnessMenu, onSearchCancel, onDownload, onRefresh,
   bodyNoPadding,
 }) => {
   const [isFullScreen, setFullScreen] = useState(false);
@@ -48,6 +49,19 @@ const Frame = ({
           </strong>
         </div>
         <div className={styles.ButtonArea}>
+          {onThick ? (
+            <Popover placement="bottomLeft" content={thicnessMenu} trigger="click">
+              <Button
+                size="large"
+                type="link"
+                className={styles.FrameButton}
+                title="Edge Weight"
+                onClick={() => onThick()}
+              >
+                <i className="icon-edge-weight" />
+              </Button>
+            </Popover>
+          ) : null }
           {onSearchCancel ? (
             <Button
               size="large"
@@ -164,7 +178,9 @@ const Frame = ({
 
 Frame.defaultProps = {
   onSearch: null,
+  onThick: null,
   onSearchCancel: null,
+  thicnessMenu: null,
   onDownload: null,
   onRefresh: null,
   bodyNoPadding: false,
@@ -178,6 +194,8 @@ Frame.propTypes = {
   refKey: PropTypes.string.isRequired,
   removeFrame: PropTypes.func.isRequired,
   onSearch: PropTypes.func,
+  onThick: PropTypes.func,
+  thicnessMenu: PropTypes.func,
   onSearchCancel: PropTypes.func,
   onDownload: PropTypes.func,
   onRefresh: PropTypes.func,
