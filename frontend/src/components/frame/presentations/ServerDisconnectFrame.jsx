@@ -28,8 +28,6 @@ const ServerDisconnectFrame = ({
   reqString,
   disconnectToAgensGraph,
   addFrame,
-  removeFrame,
-  pinFrame,
   addAlert,
   setCommand,
   resetMetaData,
@@ -48,34 +46,31 @@ const ServerDisconnectFrame = ({
 
   return (
     <Frame
-      content={(
-        <Row>
-          <Col span={6}>
-            <h3>Disconnected Succesfully</h3>
-            <p>You are successfully disconnected from Agensgraph.</p>
-          </Col>
-          <Col span={18}>
-            <p>
-              You may run
-              <a href="/#" className="badge badge-light" onClick={() => { setCommand(':server connect'); }}>
-                <FontAwesomeIcon
-                  icon={faPlayCircle}
-                  size="lg"
-                />
-                :server connection
-              </a>
-              {' '}
-              to establish new connection
-            </p>
-          </Col>
-        </Row>
-)}
       reqString={reqString}
       isPinned={isPinned}
-      pinFrame={pinFrame}
-      removeFrame={removeFrame}
       refKey={refKey}
-    />
+    >
+      <Row>
+        <Col span={6}>
+          <h3>Disconnected Succesfully</h3>
+          <p>You are successfully disconnected from Agensgraph.</p>
+        </Col>
+        <Col span={18}>
+          <p>
+            You may run
+            <a href="/#" className="badge badge-light" onClick={() => { setCommand(':server connect'); }}>
+              <FontAwesomeIcon
+                icon={faPlayCircle}
+                size="lg"
+              />
+              :server connection
+            </a>
+            {' '}
+            to establish new connection
+          </p>
+        </Col>
+      </Row>
+    </Frame>
   );
 };
 
@@ -85,8 +80,6 @@ ServerDisconnectFrame.propTypes = {
   reqString: PropTypes.string.isRequired,
   disconnectToAgensGraph: PropTypes.func.isRequired,
   addFrame: PropTypes.func.isRequired,
-  removeFrame: PropTypes.func.isRequired,
-  pinFrame: PropTypes.func.isRequired,
   addAlert: PropTypes.func.isRequired,
   setCommand: PropTypes.func.isRequired,
   resetMetaData: PropTypes.func.isRequired,
