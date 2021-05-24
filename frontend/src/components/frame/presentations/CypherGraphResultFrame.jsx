@@ -32,8 +32,6 @@ const CypherResultFrame = ({
   refKey,
   isPinned,
   reqString,
-  removeFrame,
-  pinFrame,
 }) => {
   const chartAreaRef = createRef();
   const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
@@ -170,28 +168,25 @@ const CypherResultFrame = ({
             downloadPng();
           }
         }}
-        content={(
-          <div className="d-flex h-100">
-            <div style={{ height: '100%', width: '100%' }} id={`${refKey}-graph`} className="selected-frame-tab">
-              <CypherResultCytoscapeContainer
-                key={cytoscapeContainerKey}
-                ref={chartAreaRef}
-                refKey={refKey}
-              />
-            </div>
-            <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
-              <CypherResultTableContainer
-                refKey={refKey}
-              />
-            </div>
-          </div>
-        )}
         reqString={reqString}
         isPinned={isPinned}
-        pinFrame={pinFrame}
-        removeFrame={removeFrame}
         refKey={refKey}
-      />
+      >
+        <div className="d-flex h-100">
+          <div style={{ height: '100%', width: '100%' }} id={`${refKey}-graph`} className="selected-frame-tab">
+            <CypherResultCytoscapeContainer
+              key={cytoscapeContainerKey}
+              ref={chartAreaRef}
+              refKey={refKey}
+            />
+          </div>
+          <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
+            <CypherResultTableContainer
+              refKey={refKey}
+            />
+          </div>
+        </div>
+      </Frame>
       <GraphFilterModal
         onSubmit={(filters) => {
           setGlobalFilter(filters);
@@ -210,8 +205,6 @@ CypherResultFrame.propTypes = {
   refKey: PropTypes.string.isRequired,
   isPinned: PropTypes.bool.isRequired,
   reqString: PropTypes.string.isRequired,
-  removeFrame: PropTypes.func.isRequired,
-  pinFrame: PropTypes.func.isRequired,
 };
 
 export default CypherResultFrame;

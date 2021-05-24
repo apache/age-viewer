@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+import FeatureRouter from "./routes/FeatureRouter";
+
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
-const uuid = require('node-uuid');
+const uuid = require('uuid');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -45,7 +47,7 @@ app.use(
         saveUninitialized: true,
         proxy: true,
         genid: (req) => {
-            return uuid.v1();
+            return uuid.v4();
         },
     })
 );
@@ -58,6 +60,7 @@ app.use('/agensviewer', sessionRouter, agcloudRouter);
 app.use('/api/v1/*', sessionRouter);
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
+app.use('/api/v1/feature', FeatureRouter);
 
 // Error Handler
 app.use(function (err, req, res, next) {

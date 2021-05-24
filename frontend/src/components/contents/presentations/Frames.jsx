@@ -23,6 +23,7 @@ import ServerConnect from '../../frame/containers/ServerConnectContainer';
 import ServerDisconnect from '../../frame/containers/ServerDisconnectContainer';
 import CypherGraphResult from '../../frame/containers/CypherGraphResultContainers';
 import CypherResult from '../../frame/containers/CypherResultContainers';
+import CSV from '../../csv';
 
 const Frames = ({
   database,
@@ -60,6 +61,16 @@ const Frames = ({
             refKey={frame.frameProps.key}
             reqString={frame.frameProps.reqString}
             playTarget={frame.frameProps.playTarget}
+            isPinned={frame.isPinned}
+          />
+        );
+      }
+      if (frame.frameName === 'CSV') {
+        return (
+          <CSV
+            key={frame.frameProps.key}
+            refKey={frame.frameProps.key}
+            reqString={frame.frameProps.reqString}
             isPinned={frame.isPinned}
           />
         );

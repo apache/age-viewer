@@ -24,7 +24,7 @@ import Frame from '../Frame';
 import FrameStyles from '../Frame.module.scss';
 
 const ServerStatusFrame = ({
-  refKey, isPinned, reqString, serverInfo, removeFrame, pinFrame, data,
+  refKey, isPinned, reqString, serverInfo, data,
 }) => {
   const [elements, setElements] = useState({ edges: [], nodes: [] });
   const {
@@ -112,11 +112,10 @@ const ServerStatusFrame = ({
     <Frame
       reqString={reqString}
       isPinned={isPinned}
-      pinFrame={pinFrame}
-      content={setContent()}
       refKey={refKey}
-      removeFrame={removeFrame}
-    />
+    >
+      {setContent()}
+    </Frame>
   );
 };
 
@@ -132,8 +131,6 @@ ServerStatusFrame.propTypes = {
     graph: PropTypes.string,
     status: PropTypes.string,
   }).isRequired,
-  removeFrame: PropTypes.func.isRequired,
-  pinFrame: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.any.isRequired,
 };
