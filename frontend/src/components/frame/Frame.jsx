@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
@@ -12,7 +12,7 @@ import { removeFrame } from '../../features/frame/FrameSlice';
 const Frame = ({
   reqString, children, refKey,
   onSearch, onSearchCancel, onRefresh,
-  onThick, thicnessMenu, onRefresh,
+  onThick, thicnessMenu,
   bodyNoPadding,
 }) => {
   const dispatch = useDispatch();
@@ -176,7 +176,6 @@ Frame.defaultProps = {
   onThick: null,
   onSearchCancel: null,
   thicnessMenu: null,
-  onDownload: null,
   onRefresh: null,
   bodyNoPadding: false,
 };
@@ -189,7 +188,6 @@ Frame.propTypes = {
   onThick: PropTypes.func,
   thicnessMenu: PropTypes.func,
   onSearchCancel: PropTypes.func,
-  // onDownload: PropTypes.func,
   onRefresh: PropTypes.func,
   bodyNoPadding: PropTypes.bool,
 };
