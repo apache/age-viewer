@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-
 import { Button } from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -13,6 +12,7 @@ import { removeFrame } from '../../features/frame/FrameSlice';
 const Frame = ({
   reqString, children, refKey,
   onSearch, onSearchCancel, onRefresh,
+  onThick, thicnessMenu, onRefresh,
   bodyNoPadding,
 }) => {
   const dispatch = useDispatch();
@@ -43,6 +43,19 @@ const Frame = ({
           </strong>
         </div>
         <div className={styles.ButtonArea}>
+          {onThick ? (
+            <Popover placement="bottomLeft" content={thicnessMenu} trigger="click">
+              <Button
+                size="large"
+                type="link"
+                className={styles.FrameButton}
+                title="Edge Weight"
+                onClick={() => onThick()}
+              >
+                <i className="icon-edge-weight" />
+              </Button>
+            </Popover>
+          ) : null }
           {onSearchCancel ? (
             <Button
               size="large"
@@ -160,8 +173,10 @@ const Frame = ({
 
 Frame.defaultProps = {
   onSearch: null,
+  onThick: null,
   onSearchCancel: null,
-  // onDownload: null,
+  thicnessMenu: null,
+  onDownload: null,
   onRefresh: null,
   bodyNoPadding: false,
 };
@@ -171,6 +186,8 @@ Frame.propTypes = {
   children: PropTypes.element.isRequired,
   refKey: PropTypes.string.isRequired,
   onSearch: PropTypes.func,
+  onThick: PropTypes.func,
+  thicnessMenu: PropTypes.func,
   onSearchCancel: PropTypes.func,
   // onDownload: PropTypes.func,
   onRefresh: PropTypes.func,

@@ -21,14 +21,8 @@ const getLabel = (ele, captionProp) => {
   }
   const props = ele.data('properties');
   if (props[captionProp] === undefined) {
-    if (ele.isNode()) {
-      selectedLabel.node[ele.data('label')] = 'gid';
-    } else {
-      selectedLabel.edge[ele.data('label')] = 'gid';
-    }
-    return `[ ${ele.data('id')} ]`;
+    return '';
   }
-
   if (ele.isNode()) {
     selectedLabel.node[ele.data('label')] = captionProp;
   } else {

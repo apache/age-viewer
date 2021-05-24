@@ -25,6 +25,7 @@ import CypherResultCytoscapeContainer
   from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
+import EdgeThicknessMenu from '../../cypherresult/components/EdgeThicknessMenu';
 import Frame from '../Frame';
 
 const CypherResultFrame = ({
@@ -36,9 +37,13 @@ const CypherResultFrame = ({
   const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [thicknessModalVisible, setThicknessModalVisible] = useState(false);
 
   const [filterProperties, setFilterProperties] = useState([]);
+  const [edgeProperties, setEdgeProperties] = useState([]);
   const [globalFilter, setGlobalFilter] = useState(null);
+  const [globalThickness, setGlobalThickness] = useState(null);
+
   useEffect(() => {
     if (chartAreaRef.current && filterModalVisible) {
       const labels = chartAreaRef.current.getLabels()
@@ -53,7 +58,18 @@ const CypherResultFrame = ({
         ).flat();
       setFilterProperties(labels);
     }
-  }, [filterModalVisible]);
+    if (chartAreaRef.current && thicknessModalVisible) {
+      const edges = chartAreaRef.current.getEdges()
+        .map((edge) => {
+          const propertiesIter = Array.from(chartAreaRef.current.getCaptionsFromCytoscapeObject('edge', edge));
+          return propertiesIter.map((value) => ({
+            edge,
+            property: value,
+          }));
+        }).flat();
+      setEdgeProperties(edges);
+    }
+  }, [filterModalVisible, thicknessModalVisible]);
 
   useEffect(() => {
     if (globalFilter) {
@@ -62,6 +78,10 @@ const CypherResultFrame = ({
       chartAreaRef.current.resetFilterOnCytoscapeElements();
     }
   }, [globalFilter]);
+
+  useEffect(() => {
+    chartAreaRef.current.applyEdgeThicknessCytoscapeElements(globalThickness);
+  }, [globalThickness]);
 
   const refreshFrame = () => {
     setCytoscapeContainerKey(uuid());
@@ -126,6 +146,17 @@ const CypherResultFrame = ({
       <Frame
         bodyNoPadding
         onSearch={() => setFilterModalVisible(true)}
+        onThick={() => setThicknessModalVisible(true)}
+        thicnessMenu={
+          (
+            <EdgeThicknessMenu
+              onSubmit={(thicness) => {
+                setGlobalThickness(thicness);
+              }}
+              properties={edgeProperties}
+            />
+          )
+        }
         onSearchCancel={() => setGlobalFilter(null)}
         onRefresh={refreshFrame}
         onDownload={(type) => {
