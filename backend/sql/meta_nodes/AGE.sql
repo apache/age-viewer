@@ -1,4 +1,4 @@
-SELECT label, count(label) as cnt
+SELECT label, count(label)::INTEGER as cnt
 FROM (
          SELECT ag_catalog._label_name(oid, v)::text as label
          from cypher('%s', $$

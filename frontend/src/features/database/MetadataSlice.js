@@ -21,7 +21,21 @@ export const getMetaData = createAsyncThunk(
   async () => {
     try {
       const response = await fetch('/api/v1/db/meta');
-      if (response.ok) { return await response.json(); }
+      if (response.ok) {
+        let allCountEdge = 0;
+        let allCountNode = 0;
+        const ret = await response.json();
+        ret.nodes.forEach((item) => {
+          allCountNode += item.cnt;
+        });
+
+        ret.edges.forEach((item) => {
+          allCountEdge += item.cnt;
+        });
+        ret.nodes.unshift({ label: '*', cnt: allCountNode });
+        ret.edges.unshift({ label: '*', cnt: allCountEdge });
+        return ret;
+      }
       throw response;
     } catch (error) {
       const errorDetail = {
@@ -38,7 +52,9 @@ export const getMetaChartData = createAsyncThunk(
   async () => {
     try {
       const response = await fetch('/api/v1/db/metaChart');
-      if (response.ok) { return await response.json(); }
+      if (response.ok) {
+        return await response.json();
+      }
       throw response;
     } catch (error) {
       const errorDetail = {
