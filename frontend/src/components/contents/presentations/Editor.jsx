@@ -51,6 +51,8 @@ const Editor = ({
     const refKey = uuid();
     if (command.toUpperCase().startsWith(':PLAY')) {
       dispatch(() => addFrame(command, 'Contents', refKey));
+    } else if (command.toUpperCase().startsWith(':CSV')) {
+      dispatch(() => addFrame(command, 'CSV', refKey));
     } else if (command.toUpperCase() === ':SERVER STATUS') {
       dispatch(() => trimFrame('ServerStatus'));
       dispatch(() => addFrame(command, 'ServerStatus', refKey));
@@ -115,11 +117,11 @@ const Editor = ({
               lineHeight: '30px',
             }}
             >
-              <span>
+              <spna>
                 Query
                 <br />
                 Editor
-              </span>
+              </spna>
             </div>
             <div className="form-control col-11 editor-code-wrapper">
               <CodeMirror

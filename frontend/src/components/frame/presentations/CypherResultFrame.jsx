@@ -20,29 +20,24 @@ import CypherResultTableContainer from '../../cypherresult/containers/CypherResu
 import Frame from '../Frame';
 
 const CypherResultFrame = ({
-  refKey, isPinned, reqString, removeFrame, pinFrame,
+  refKey, isPinned, reqString,
 }) => (
   <Frame
     reqString={reqString}
     isPinned={isPinned}
-    pinFrame={pinFrame}
-    removeFrame={removeFrame}
     refKey={refKey}
     bodyNoPadding
-    content={(
-      <div className="d-flex h-100">
-        <CypherResultTableContainer refKey={refKey} />
-      </div>
-      )}
-  />
+  >
+    <div className="d-flex h-100">
+      <CypherResultTableContainer refKey={refKey} />
+    </div>
+  </Frame>
 );
 
 CypherResultFrame.propTypes = {
   refKey: PropTypes.string.isRequired,
   isPinned: PropTypes.bool.isRequired,
   reqString: PropTypes.string.isRequired,
-  removeFrame: PropTypes.func.isRequired,
-  pinFrame: PropTypes.func.isRequired,
 };
 
 export default CypherResultFrame;

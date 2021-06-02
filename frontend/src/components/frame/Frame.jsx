@@ -1,43 +1,37 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleDown,
-  faAngleUp,
-  faCompressAlt,
-  faDownload,
-  faExpandAlt,
-  // faPaperclip,
-  faSync, faTimes,
+  faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  Button, Dropdown, Menu, Popover,
-} from 'antd';
+import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
+import { removeFrame } from '../../features/frame/FrameSlice';
 
 const Frame = ({
-  reqString, content,
-  // isPinned, pinFrame,
-  refKey, removeFrame,
-  onSearch, onThick, thicnessMenu, onSearchCancel, onDownload, onRefresh,
+  reqString, children, refKey,
+  onSearch, onSearchCancel, onRefresh,
+  onThick, thicnessMenu,
   bodyNoPadding,
 }) => {
+  const dispatch = useDispatch();
   const [isFullScreen, setFullScreen] = useState(false);
   const [isExpand, setExpand] = useState(true);
 
-  const downloadMenu = () => (
-    <Menu onClick={(e) => onDownload(e)}>
-      <Menu.Item key="png">
-        Save as PNG
-      </Menu.Item>
-      <Menu.Item key="json">
-        Save as JSON
-      </Menu.Item>
-      <Menu.Item key="csv">
-        Save as CSV
-      </Menu.Item>
-    </Menu>
-  );
+  // const downloadMenu = () => (
+  //   <Menu onClick={(e) => onDownload(e)}>
+  //     <Menu.Item key="png">
+  //       Save as PNG
+  //     </Menu.Item>
+  //     <Menu.Item key="json">
+  //       Save as JSON
+  //     </Menu.Item>
+  //     <Menu.Item key="csv">
+  //       Save as CSV
+  //     </Menu.Item>
+  //   </Menu>
+  // );
 
   return (
     <div className={`${styles.Frame} ${isFullScreen ? styles.FullScreen : ''}`}>
@@ -84,25 +78,26 @@ const Frame = ({
               <i className="icon-filter" />
             </Button>
           ) : null}
-          {false ? ( // en:Functionality is hidden due to functional problems // ko:기능이 동작하지 않아 감춤
-            <Dropdown
-              trigger={['click']}
-              overlay={downloadMenu}
-            >
-              <Button
-                size="large"
-                type="link"
-                className={styles.FrameButton}
-              >
-                <FontAwesomeIcon
-                  icon={faDownload}
-                  size="lg"
-                />
-                <FontAwesomeIcon icon={faAngleDown} />
-              </Button>
-            </Dropdown>
-          )
-            : null}
+          {/* {false ? ( // en:Functionality is hidden due to */}
+          {/* functional problems // ko:기능이 동작하지 않아 감춤 */}
+          {/*  <Dropdown */}
+          {/*    trigger={['click']} */}
+          {/*    overlay={downloadMenu} */}
+          {/*  > */}
+          {/*    <Button */}
+          {/*      size="large" */}
+          {/*      type="link" */}
+          {/*      className={styles.FrameButton} */}
+          {/*    > */}
+          {/*      <FontAwesomeIcon */}
+          {/*        icon={faDownload} */}
+          {/*        size="lg" */}
+          {/*      /> */}
+          {/*      <FontAwesomeIcon icon={faAngleDown} /> */}
+          {/*    </Button> */}
+          {/*  </Dropdown> */}
+          {/* ) */}
+          {/*  : null} */}
           <Button
             size="large"
             type="link"
@@ -159,7 +154,7 @@ const Frame = ({
             size="large"
             type="link"
             className={`${styles.FrameButton}`}
-            onClick={() => removeFrame(refKey)}
+            onClick={() => dispatch(removeFrame(refKey))}
             title="Close Window"
           >
             <FontAwesomeIcon
@@ -170,7 +165,7 @@ const Frame = ({
         </div>
       </div>
       <div className={`${styles.FrameBody} ${isExpand ? '' : styles.Contract} ${bodyNoPadding ? styles.NoPadding : ''}`}>
-        {content}
+        {children}
       </div>
     </div>
   );
@@ -181,23 +176,18 @@ Frame.defaultProps = {
   onThick: null,
   onSearchCancel: null,
   thicnessMenu: null,
-  onDownload: null,
   onRefresh: null,
   bodyNoPadding: false,
 };
 
 Frame.propTypes = {
   reqString: PropTypes.string.isRequired,
-  content: PropTypes.element.isRequired,
-  // isPinned: PropTypes.bool.isRequired,
-  // pinFrame: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
   refKey: PropTypes.string.isRequired,
-  removeFrame: PropTypes.func.isRequired,
   onSearch: PropTypes.func,
   onThick: PropTypes.func,
   thicnessMenu: PropTypes.func,
   onSearchCancel: PropTypes.func,
-  onDownload: PropTypes.func,
   onRefresh: PropTypes.func,
   bodyNoPadding: PropTypes.bool,
 };
