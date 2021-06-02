@@ -218,8 +218,11 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
           const ele = e;
           if (ele.group() === 'edges') {
             if (ele.data().label === thickness.edge && ele.data().properties[thickness.property]) {
-              const propertyValue = ele.data().properties[thickness.property];
-              const propertyRate = (propertyValue / range) * 100;
+              const tempValue = ele.data().properties[thickness.property];
+              const propertyValue = (Number.isNaN(tempValue))
+                ? Number(tempValue)
+                : Number(tempValue.replace(',', ''));
+              const propertyRate = ((propertyValue - thickness.min) / range) * 100;
               ele.style('width', edgeSizeByRate(propertyRate).toString());
             }
           }
