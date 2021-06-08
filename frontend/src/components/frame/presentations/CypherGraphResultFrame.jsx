@@ -44,9 +44,11 @@ const CypherResultFrame = ({
   const [globalFilter, setGlobalFilter] = useState(null);
   const [globalThickness, setGlobalThickness] = useState(null);
 
+  const [chartLegend, setChartLegend] = useState({ edgeLegend: {}, nodeLegend: {} });
+
   useEffect(() => {
     if (chartAreaRef.current && filterModalVisible) {
-      const labels = chartAreaRef.current.getLabels()
+      const labels = Object.keys(chartLegend.nodeLegend)
         .map(
           (label) => {
             const propertiesIter = Array.from(chartAreaRef.current.getCaptionsFromCytoscapeObject('node', label));
@@ -59,7 +61,7 @@ const CypherResultFrame = ({
       setFilterProperties(labels);
     }
     if (chartAreaRef.current && thicknessModalVisible) {
-      const edges = chartAreaRef.current.getEdges()
+      const edges = Object.keys(chartLegend.edgeLegend)
         .map((edge) => {
           const propertiesIter = Array.from(chartAreaRef.current.getCaptionsFromCytoscapeObject('edge', edge));
           return propertiesIter.map((value) => ({
@@ -69,7 +71,7 @@ const CypherResultFrame = ({
         }).flat();
       setEdgeProperties(edges);
     }
-  }, [filterModalVisible, thicknessModalVisible]);
+  }, [filterModalVisible, thicknessModalVisible, chartLegend]);
 
   useEffect(() => {
     if (globalFilter) {
@@ -178,6 +180,7 @@ const CypherResultFrame = ({
               key={cytoscapeContainerKey}
               ref={chartAreaRef}
               refKey={refKey}
+              setChartLegend={setChartLegend}
             />
           </div>
           <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
