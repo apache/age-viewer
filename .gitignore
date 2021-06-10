@@ -144,3 +144,4 @@ frontend/build
 
 # Itellij Configuration
 .idea
+frontend/src/conf/config.js
