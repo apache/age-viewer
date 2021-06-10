@@ -59,6 +59,10 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     props.data,
   ]);
 
+  useEffect(() => {
+    props.setChartLegend(props.data.legend);
+  }, []);
+
   const getCaptionsFromCytoscapeObject = (elementType, label) => {
     const elementsObject = cytoscapeObject.elements(`${elementType}[label = "${label}"]`).jsons();
     let extendedSet = new Set([]);
@@ -85,6 +89,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
   const addLegendData = (addedLegendData) => {
     setIsReloading(false);
     setLegendData(addedLegendData);
+    props.setChartLegend(addedLegendData);
   };
 
   const changeColorOnCytoscapeElements = (elementType, label, color) => {
@@ -410,6 +415,7 @@ CypherResultCytoscape.propTypes = {
   }).isRequired,
   setLabels: PropTypes.func.isRequired,
   refKey: PropTypes.string.isRequired,
+  setChartLegend: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscape;

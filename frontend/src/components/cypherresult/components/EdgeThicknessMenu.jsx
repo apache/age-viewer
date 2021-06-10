@@ -85,7 +85,7 @@ const EdgeThicknessSettingModal = ({
         onChange={(e) => setStdProperty(e.target.value)}
         style={{ width: '95%' }}
       >
-        <option className={`${style.option}`} value="">Select Node</option>
+        <option className={`${style.option}`} value="">Select Property</option>
         {selectionPropertie()}
       </select>
       <input

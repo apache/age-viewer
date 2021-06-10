@@ -46,6 +46,7 @@ const mapStateToProps = (state, ownProps) => {
     data: generateElements(),
     maxDataOfGraph: state.setting.maxDataOfGraph,
     maxDataOfTable: state.setting.maxDataOfTable,
+    setChartLegend: ownProps.setChartLegend,
   };
 };
 
