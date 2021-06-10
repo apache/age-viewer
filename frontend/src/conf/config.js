@@ -10,4 +10,6 @@ export const setting = {
   maxNumOfHistories: 0,
   maxDataOfGraph: 0,
   maxDataOfTable: 0,
+  connectionStatusSkip: true,
+  closeWhenDisconnect: true,
 };

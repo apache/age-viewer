@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
+import { setting } from '../../../conf/config';
 
 const Editor = ({
   setCommand,
@@ -62,8 +63,10 @@ const Editor = ({
       dispatch(() => addAlert('ErrorNoDatabaseConnected'));
       dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
     } else if (database.status === 'disconnected' && command.toUpperCase() === ':SERVER CONNECT') {
-      dispatch(() => trimFrame('ServerConnect'));
-      dispatch(() => addFrame(':server connect', 'ServerConnect'));
+      if (!setting.closeWhenDisconnect) {
+        dispatch(() => trimFrame('ServerConnect'));
+        dispatch(() => addFrame(':server connect', 'ServerConnect'));
+      }
     } else if (database.status === 'disconnected' && command.toUpperCase().match('(MATCH|CREATE).*')) {
       dispatch(() => trimFrame('ServerConnect'));
       dispatch(() => addAlert('ErrorNoDatabaseConnected'));
@@ -73,9 +76,11 @@ const Editor = ({
       dispatch(() => addAlert('NoticeServerDisconnected'));
       dispatch(() => addFrame(command, 'ServerDisconnect', refKey));
     } else if (database.status === 'connected' && command.toUpperCase() === ':SERVER CONNECT') {
-      dispatch(() => trimFrame('ServerStatus'));
-      dispatch(() => addAlert('NoticeAlreadyConnected'));
-      dispatch(() => addFrame(command, 'ServerStatus', refKey));
+      if (!setting.connectionStatusSkip) {
+        dispatch(() => trimFrame('ServerStatus'));
+        dispatch(() => addAlert('NoticeAlreadyConnected'));
+        dispatch(() => addFrame(command, 'ServerStatus', refKey));
+      }
     } else if (database.status === 'connected') {
       const reqStringValue = command;
       dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
@@ -192,6 +197,7 @@ Editor.propTypes = {
   isActive: PropTypes.bool.isRequired,
   database: PropTypes.shape({
     status: PropTypes.string.isRequired,
+    host: PropTypes.string.isRequired,
   }).isRequired,
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,

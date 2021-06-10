@@ -24,6 +24,7 @@ import ServerDisconnect from '../../frame/containers/ServerDisconnectContainer';
 import CypherGraphResult from '../../frame/containers/CypherGraphResultContainers';
 import CypherResult from '../../frame/containers/CypherResultContainers';
 import CSV from '../../csv';
+import { setting } from '../../../conf/config';
 
 const Frames = ({
   database,
@@ -37,13 +38,17 @@ const Frames = ({
 
   useEffect(() => {
     if (database.status === 'connected' && frameList.length === 0) {
-      dispatch(() => addFrame(':server status', 'ServerStatus'));
+      if (!setting.connectionStatusSkip) {
+        dispatch(() => addFrame(':server status', 'ServerStatus'));
+      }
     }
 
     if (database.status === 'disconnected') {
       const serverConnectFrames = frameList.filter((frame) => (frame.frameName.toUpperCase() === 'SERVERCONNECT'));
-      if (serverConnectFrames.length === 0) {
+      if (!setting.closeWhenDisconnect) {
         dispatch(() => addFrame(':server connect', 'ServerConnect'));
+      } else if (serverConnectFrames.length === 0) {
+        window.close();
       }
     }
   }, [database.status]);
@@ -145,6 +150,7 @@ Frames.defaultProps = {
 Frames.propTypes = {
   database: PropTypes.shape({
     status: PropTypes.string.isRequired,
+    host: PropTypes.string.isRequired,
   }).isRequired,
   frameList: PropTypes.arrayOf(
     PropTypes.shape({
