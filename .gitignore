@@ -138,10 +138,12 @@ sketch
 
 ### react frontend ###
 frontend/build
-frontend/src/conf/config.js
+# frontend/src/conf/config.js
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,react
 
 
 # Itellij Configuration
 .idea
+backend/package-lock.json
+frontend/package-lock.json
