@@ -145,3 +145,5 @@ frontend/src/conf/config.js
 
 # Itellij Configuration
 .idea
+backend/package-lock.json
+frontend/package-lock.json
