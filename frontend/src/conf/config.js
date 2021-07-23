@@ -11,5 +11,5 @@ export const setting = {
   maxDataOfGraph: 0,
   maxDataOfTable: 0,
   connectionStatusSkip: false,
-  closeWhenDisconnesct: false,
+  closeWhenDisconnect: false,
 };
