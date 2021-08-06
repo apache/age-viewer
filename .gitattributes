@@ -1,0 +1,16 @@
+*.scss text eol=lf
+*.css text eol=lf
+
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.jsx text eol=lf
+
+*.md text eol=lf
+
+*.java text eol=lf
+*.kt text eol=lf
+*.kts text eol=lf
+
+*.svg text eol=lf
+*.sh text eol=lf

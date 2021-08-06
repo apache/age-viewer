@@ -96,6 +96,26 @@ const CypherResultCytoscapeFooter = ({
               icon={footerExpanded ? faAngleUp : faAngleDown}
             />
           </button>
+          Layout :&nbsp;
+          <select
+            id="selectLayout"
+            className="col-1 custom-select custom-select-sm layout-select"
+            defaultValue={cytoscapeLayout}
+            onChange={(e) => [setCytoscapeLayout(e.target.value)]}
+          >
+            <option value="random">Random</option>
+            <option value="grid">Grid</option>
+            <option value="breadthFirst">Breadth-First</option>
+            <option value="concentric">Concentric</option>
+            <option value="cola">Cola</option>
+            <option value="cose">Cose</option>
+            <option value="coseBilkent">Cose-Bilkent</option>
+            <option value="dagre">Dagre</option>
+            <option value="klay">Klay</option>
+            <option value="euler">Euler</option>
+            <option value="avsdf">Avsdf</option>
+            <option value="spread">Spread</option>
+          </select>
         </div>
       );
     }
@@ -275,6 +295,26 @@ const CypherResultCytoscapeFooter = ({
               icon={footerExpanded ? faAngleUp : faAngleDown}
             />
           </button>
+          Layout :&nbsp;
+          <select
+            id="selectLayout"
+            className="col-1 custom-select custom-select-sm layout-select"
+            defaultValue={cytoscapeLayout}
+            onChange={(e) => [setCytoscapeLayout(e.target.value)]}
+          >
+            <option value="random">Random</option>
+            <option value="grid">Grid</option>
+            <option value="breadthFirst">Breadth-First</option>
+            <option value="concentric">Concentric</option>
+            <option value="cola">Cola</option>
+            <option value="cose">Cose</option>
+            <option value="coseBilkent">Cose-Bilkent</option>
+            <option value="dagre">Dagre</option>
+            <option value="klay">Klay</option>
+            <option value="euler">Euler</option>
+            <option value="avsdf">Avsdf</option>
+            <option value="spread">Spread</option>
+          </select>
         </div>
       );
     }
