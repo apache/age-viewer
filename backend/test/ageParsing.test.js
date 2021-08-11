@@ -2,6 +2,27 @@ import {AGTypeParse}  from "../src/tools/AGEParser";
 const assert = require('assert').strict;
 
 describe('Test Connector Api', () => {
+    it('Object Circulating', (done) => {
+        const ret = AGTypeParse('{"id": 1688849860263937, "label": "car", "properties": {"a": {"b":{"c":{"d":[1, 2, "A"]}}}}}::vertex');
+        assert.deepStrictEqual(ret, {
+            id: 1688849860263937,
+            label: 'car',
+            properties: {
+                a: {
+                    b: {
+                        c: {
+                            d: [
+                                1,
+                                2,
+                                'A'
+                            ]
+                        }
+                    }
+                }
+            }
+        });
+        done();
+    });
 
     it('Null Properties', (done) => {
         const ret = AGTypeParse('{"id": 1688849860263937, "label": "car", "properties": {}}::vertex');

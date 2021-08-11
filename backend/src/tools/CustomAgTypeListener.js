@@ -3,84 +3,128 @@ import AgtypeListener from "./AgtypeListener";
 class CustomAgTypeListener extends AgtypeListener {
     rootObject = null;
     objectInsider = [];
+    prevObject = null;
+    lastObject = null;
     lastValue = null;
 
+    mergeArrayOrObject(key) {
+        if(this.prevObject instanceof Array){
+            this.mergeArray();
+        }else{
+            this.mergeObject(key);
+        }
+    }
+
+    mergeArray() {
+        this.prevObject.push(this.lastObject);
+        this.lastObject = this.prevObject;
+        this.objectInsider.shift();
+        this.prevObject = this.objectInsider[1];
+    }
+
+    mergeObject(key) {
+        this.prevObject[key] = this.lastObject;
+        this.lastObject = this.prevObject;
+        this.objectInsider.shift();
+        this.prevObject = this.objectInsider[1];
+    }
+
+    createNewObject(){
+        const newObject = {};
+        this.objectInsider.unshift(newObject);
+        this.prevObject = this.lastObject;
+        this.lastObject = newObject;
+    }
+
+    createNewArray(){
+        const newObject = [];
+        this.objectInsider.unshift(newObject);
+        this.prevObject = this.lastObject;
+        this.lastObject = newObject;
+    }
+
+    pushIfArray(value) {
+        if(this.lastObject instanceof Array){
+            this.lastObject.push(value);
+            return true;
+        }
+        return false;
+    }
+
     exitStringValue(ctx) {
-        this.lastValue = this.stripQuotes(ctx.getText());
+        const value = this.stripQuotes(ctx.getText());
+        if(!this.pushIfArray(value)){
+            this.lastValue = value;
+        }
     }
 
     exitIntegerValue(ctx) {
-        this.lastValue = parseInt(ctx.getText());
+        const value = parseInt(ctx.getText());
+        if(!this.pushIfArray(value)){
+            this.lastValue = value;
+        }
     }
 
     exitFloatValue(ctx) {
-        this.lastValue = parseFloat(ctx.getText());
+        const value = parseFloat(ctx.getText());
+        if(!this.pushIfArray(value)){
+            this.lastValue = value;
+        }
     }
 
     exitTrueBoolean(ctx) {
-        this.lastValue = true;
+        const value = true;
+        if(!this.pushIfArray(value)){
+            this.lastValue = value;
+        }
     }
 
     exitFalseBoolean(ctx) {
-        this.lastValue = false;
+        const value = false;
+        if(!this.pushIfArray(value)){
+            this.lastValue = value;
+        }
     }
 
     exitNullValue(ctx) {
-        this.lastValue = null;
+        const value = null;
+        if(!this.pushIfArray(value)){
+            this.lastValue = value;
+        }
     }
+
+
+    exitFloatLiteral(ctx) {
+        const value = ctx.getText();
+        if(!this.pushIfArray(value)){
+            this.lastValue = value;
+        }
+    }
+
 
     enterObjectValue(ctx) {
-        this.objectInsider.unshift({});
-        this.lastValue = this.objectInsider[0];
-    }
-
-    exitObjectValue(ctx) {
-        if(this.objectInsider.length >= 2){
-            const currentObject = this.objectInsider.shift();
-            if (this.objectInsider[0] instanceof Array) {
-                this.objectInsider[0].push(currentObject);
-            }else{
-                this.lastValue = currentObject;
-            }
-        }
+        this.createNewObject();
     }
 
     enterArrayValue(ctx) {
-        this.objectInsider.unshift([]);
-        this.lastValue = this.objectInsider[0];
+        this.createNewArray();
     }
 
-    exitArrayValue(ctx) {
-        if(this.objectInsider.length >= 2) {
-            const currentObject = this.objectInsider.shift();
-            if (this.objectInsider[0] instanceof Array) {
-                // if objectInsider == Object then is pair or root
-                this.objectInsider[0].push(currentObject);
-            }else{
-                this.lastValue = currentObject;
-            }
+    exitObjectValue(ctx) {
+        if(this.prevObject instanceof Array){
+            this.mergeArray();
         }
     }
-
 
     exitPair(ctx) {
         const name = this.stripQuotes(ctx.STRING().getText());
 
         if (this.lastValue !== undefined) {
-            this.objectInsider[0][name] = this.lastValue;
+            this.lastObject[name] = this.lastValue;
             this.lastValue = undefined;
         } else {
-            const lastValue = this.objectInsider.shift();
-            if (this.objectInsider[0] instanceof Array) {
-                this.objectInsider[0].push(lastValue);
-            } else {
-                this.objectInsider[0][name] = lastValue;
-            }
+            this.mergeArrayOrObject(name);
         }
-    }
-
-    exitFloatLiteral(ctx) {
-        this.lastValue = ctx.getText();
     }
 
     exitAgType(ctx) {
