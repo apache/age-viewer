@@ -35,9 +35,13 @@ class CustomAgTypeListener extends AgtypeListener {
     }
 
     exitObjectValue(ctx) {
-        if (this.objectInsider.length >= 2 && this.objectInsider[1] instanceof Array) {
+        if(this.objectInsider.length >= 2){
             const currentObject = this.objectInsider.shift();
-            this.objectInsider[0].push(currentObject);
+            if (this.objectInsider[0] instanceof Array) {
+                this.objectInsider[0].push(currentObject);
+            }else{
+                this.lastValue = currentObject;
+            }
         }
     }
 
@@ -47,10 +51,14 @@ class CustomAgTypeListener extends AgtypeListener {
     }
 
     exitArrayValue(ctx) {
-        if (this.objectInsider.length >= 2 && this.objectInsider[1] instanceof Array) {
-            // if objectInsider == Object then is pair or root
+        if(this.objectInsider.length >= 2) {
             const currentObject = this.objectInsider.shift();
-            this.objectInsider[0].push(currentObject);
+            if (this.objectInsider[0] instanceof Array) {
+                // if objectInsider == Object then is pair or root
+                this.objectInsider[0].push(currentObject);
+            }else{
+                this.lastValue = currentObject;
+            }
         }
     }
 
