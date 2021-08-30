@@ -1,5 +1,5 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-# Goal of incubating Apache AViewer
+# Goal of incubating Apache AGViewer
 
 Incubating Apache AGViewer is graph visualisation tool, for AgensGraph or Apache incubating-AGE.
 
