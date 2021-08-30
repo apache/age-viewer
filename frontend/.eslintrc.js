@@ -18,5 +18,6 @@ module.exports = {
   plugins: ['babel', 'react', 'import', 'react-hooks'],
   rules: {
     'linebreak-style': 0, // fow winodw user
+    "react/destructuring-assignment": [<enabled>, 'always'],
   },
 };
