@@ -1,7 +1,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-# Goal of AGViewer
+# Goal of incubating Apache AViewer
 
-AGViewer is graph visualisation tool, for AgensGraph or Apache AGE.
+Incubating Apache AGViewer is graph visualisation tool, for AgensGraph or Apache incubating-AGE.
 
 # Recommend Node Version & install module
 - node js 14.16.0
@@ -30,4 +30,4 @@ pm2 start ecosystem.config.js
 ```
 
 # License
-AGViewer is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
+Apache incubating AGViewer is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
