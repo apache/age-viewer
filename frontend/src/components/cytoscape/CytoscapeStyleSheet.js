@@ -35,22 +35,22 @@ export const stylesheet = [
   {
     selector: 'node',
     style: {
-      width(ele) { return ele == null ? 55 : ele.data('size'); },
-      height(ele) { return ele == null ? 55 : ele.data('size'); },
+      width(ele) { return ele ? ele.data('size') : 55; },
+      height(ele) { return ele ? ele.data('size') : 55; },
       label(ele) {
         const captionProp = ele.data('caption');
         return getLabel(ele, captionProp);
       },
-      'background-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
+      'background-color': function (ele) { return ele ? ele.data('backgroundColor') : '#FFF'; },
       'border-width': '3px',
-      'border-color': function (ele) { return ele == null ? '#FFF' : ele.data('borderColor'); },
+      'border-color': function (ele) { return ele ? ele.data('borderColor') : '#FFF'; },
       'border-opacity': 0.6,
       'text-valign': 'center',
       'text-halign': 'center',
-      color(ele) { return ele == null ? '#FFF' : ele.data('fontColor'); },
+      color(ele) { return ele ? ele.data('fontColor') : '#FFF'; },
       'font-size': '10px',
       'text-wrap': 'ellipsis',
-      'text-max-width': function (ele) { return ele == null ? 55 : ele.data('size'); },
+      'text-max-width': function (ele) { return ele ? ele.data('size') : 55; },
     },
   },
   {
@@ -70,16 +70,16 @@ export const stylesheet = [
   {
     selector: 'edge',
     style: {
-      width(ele) { return ele == null ? 1 : ele.data('size'); },
+      width(ele) { return ele ? ele.data('size') : 1; },
       label(ele) { const captionProp = ele.data('caption'); return getLabel(ele, captionProp); },
       'text-background-color': '#FFF',
       'text-background-opacity': 1,
       'text-background-padding': '3px',
-      'line-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
-      'target-arrow-color': function (ele) { return ele == null ? '#FFF' : ele.data('backgroundColor'); },
+      'line-color': function (ele) { return ele ? ele.data('backgroundColor') : '#FFF'; },
+      'target-arrow-color': function (ele) { return ele ? ele.data('backgroundColor') : '#FFF'; },
       'target-arrow-shape': 'triangle',
       'curve-style': 'bezier',
-      color(ele) { return ele == null ? '#FFF' : ele.data('fontColor'); },
+      color(ele) { return ele ? ele.data('fontColor') : '#FFF'; },
       'font-size': '10px',
       'text-rotation': 'autorotate',
     },
@@ -87,7 +87,7 @@ export const stylesheet = [
   {
     selector: 'edge.highlight',
     style: {
-      width(ele) { return ele == null ? 1 : ele.data('size'); },
+      width(ele) { return ele ? ele.data('size') : 1; },
       'line-color': '#B2EBF4',
       'target-arrow-color': '#B2EBF4',
       'target-arrow-shape': 'triangle',
@@ -97,7 +97,7 @@ export const stylesheet = [
   {
     selector: 'edge:selected',
     style: {
-      width(ele) { return ele == null ? 1 : ele.data('size'); },
+      width(ele) { return ele ? ele.data('size') : 1; },
       'line-color': '#B2EBF4',
       'target-arrow-color': '#B2EBF4',
       'target-arrow-shape': 'triangle',
