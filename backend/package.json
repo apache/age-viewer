@@ -9,6 +9,7 @@
         "test:cypher": "mocha -r @babel/register --exit --timeout 10000 ./test/cypher.api.test.js",
         "test:session": "mocha -r @babel/register --exit --timeout 10000 ./test/session.api.test.js",
         "test:query": "mocha -r @babel/register --exit --timeout 10000 ./test/cypher.service.test.js",
+        "test:ageParsing": "mocha -r @babel/register --exit --timeout 10000 ./test/ageParsing.test.js",
         "start": "babel-node src/bin/www",
         "start:dev": "nodemon --watch src/app.js --watch src/ --exec 'babel-node' src/bin/www",
         "build": "babel -d ./build ./src -s",
