@@ -41,7 +41,7 @@ app.get('/', function (req, res) {
 
 app.use(
     session({
-        secret: 'bitnine123!',
+        secret: 'apache-age-viewer',
         secure: true,
         resave: false,
         saveUninitialized: true,
