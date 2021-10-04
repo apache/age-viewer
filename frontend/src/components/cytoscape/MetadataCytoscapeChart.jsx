@@ -62,6 +62,7 @@ const MetadataCytoscapeChart = ({ elements }) => {
       stylesheet={stylesheet}
       cy={cyCallback}
       className={styles.MetaChart}
+      wheelSensitivity={0.3}
     />
   );
 };
