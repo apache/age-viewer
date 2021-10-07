@@ -21,8 +21,7 @@ import { Parser } from 'json2csv';
 import PropTypes from 'prop-types';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faTable } from '@fortawesome/free-solid-svg-icons';
-import CypherResultCytoscapeContainer
-  from '../../cypherresult/containers/CypherResultCytoscapeContainer';
+import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
 import EdgeThicknessMenu from '../../cypherresult/components/EdgeThicknessMenu';
