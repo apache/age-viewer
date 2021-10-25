@@ -35,7 +35,7 @@ export const connectToAgensGraph = createAsyncThunk(
       const errorJson = await error.json();
       const errorDetail = {
         name: 'Failed to Retrieve Connection Information',
-        message: errorJson.message,
+        message: `[${errorJson.severity}]:(${errorJson.code}) ${errorJson.message} `,
         statusText: error.statusText,
       };
       throw errorDetail;
@@ -58,8 +58,10 @@ export const getConnectionStatus = createAsyncThunk(
       if (response.ok) { return await response.json(); }
       throw response;
     } catch (error) {
+      const errorJson = await error.json();
       const errorDetail = {
         name: 'Failed to Retrieve Connection Information',
+        message: `[${errorJson.severity}]:(${errorJson.code}) ${errorJson.message} `,
         statusText: error.statusText,
       };
       throw errorDetail;

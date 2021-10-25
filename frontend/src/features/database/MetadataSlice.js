@@ -40,6 +40,7 @@ export const getMetaData = createAsyncThunk(
     } catch (error) {
       const errorDetail = {
         name: 'Database Connection Failed',
+        message: `[${error.severity}]:(${error.code}) ${error.message} `,
         statusText: error.statusText,
       };
       throw errorDetail;
@@ -59,6 +60,7 @@ export const getMetaChartData = createAsyncThunk(
     } catch (error) {
       const errorDetail = {
         name: 'Database Connection Failed',
+        message: `[${error.severity}]:(${error.code}) ${error.message} `,
         statusText: error.statusText,
       };
       throw errorDetail;
