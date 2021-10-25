@@ -320,7 +320,7 @@ a[data-toggle="collapse"] {
 }
 
 .btn-link {
-    color: #ffffff !important;
+    color: #c4c4c4 !important;
 }
 .btn-link:hover {
     color: #2756FF !important;
@@ -421,11 +421,13 @@ a.nav-link.active {
 }
 
 .chart-footer-area .graphFrameFooter {
+    flex: 1;
     height: 37px;
     overflow: hidden;
 }
 
 .chart-footer-area .graphFrameFooter.expandedGraphFrameFooter {
+    flex: 1;
     height: initial !important;
     overflow: initial !important;
 }
