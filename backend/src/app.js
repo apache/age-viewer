@@ -66,7 +66,13 @@ app.use('/api/v1/feature', FeatureRouter);
 app.use(function (err, req, res, next) {
     // TODO: logger
     console.error(err);
-    res.status(err.status || 500).json({message: err.message});
+    res.status(err.status || 500).json(
+        {
+            severity: err.severity || '',
+            message: err.message || '',
+            code: err.code || ''
+        }
+    );
 });
 
 process.on('uncaughtException', function (exception) {
