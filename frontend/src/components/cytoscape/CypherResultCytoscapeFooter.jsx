@@ -69,7 +69,7 @@ const CypherResultCytoscapeFooter = ({
 
       return (
         <div className="d-flex pl-3">
-          <div className={`mr-auto graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
+          <div className={`graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
             <Badge
               className="px-3 py-1"
               pill={isEdge === false}
@@ -99,7 +99,7 @@ const CypherResultCytoscapeFooter = ({
           Layout :&nbsp;
           <select
             id="selectLayout"
-            className="col-1 custom-select custom-select-sm layout-select"
+            className="col-2 custom-select custom-select-sm layout-select"
             defaultValue={cytoscapeLayout}
             onChange={(e) => [setCytoscapeLayout(e.target.value)]}
           >
@@ -134,7 +134,7 @@ const CypherResultCytoscapeFooter = ({
           Layout :&nbsp;
           <select
             id="selectLayout"
-            className="col-1 custom-select custom-select-sm layout-select"
+            className="col-2 custom-select custom-select-sm layout-select"
             defaultValue={cytoscapeLayout}
             onChange={(e) => [setCytoscapeLayout(e.target.value)]}
           >
@@ -234,7 +234,7 @@ const CypherResultCytoscapeFooter = ({
 
       return (
         <div className="d-flex pl-3">
-          <div className={`mr-auto graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
+          <div className={`graphFrameFooter ${footerExpanded ? 'expandedGraphFrameFooter' : ''}`}>
             <Badge
               className="px-3 py-1"
               pill={isEdge === false}
@@ -298,7 +298,7 @@ const CypherResultCytoscapeFooter = ({
           Layout :&nbsp;
           <select
             id="selectLayout"
-            className="col-1 custom-select custom-select-sm layout-select"
+            className="col-2 custom-select custom-select-sm layout-select"
             defaultValue={cytoscapeLayout}
             onChange={(e) => [setCytoscapeLayout(e.target.value)]}
           >
@@ -324,7 +324,7 @@ const CypherResultCytoscapeFooter = ({
         <div className="px-1">Layout : </div>
         <select
           id="selectLayout"
-          className="col-1 custom-select custom-select-sm layout-select"
+          className="col-2 custom-select custom-select-sm layout-select"
           defaultValue={cytoscapeLayout}
           onChange={(e) => [setCytoscapeLayout(e.target.value)]}
         >
