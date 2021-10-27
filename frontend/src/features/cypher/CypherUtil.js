@@ -391,7 +391,7 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
             const [pathAlias, pathVal] = valueEntry;
             generateElements(pathAlias, pathVal);
           });
-        } else {
+        } else if (val) {
           generateElements(alias, val);
         }
       });
