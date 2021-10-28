@@ -52,7 +52,7 @@ class CypherService {
             try {
                 cypherRow = this._convertRowToResult(targetItem)
             } catch (e) {
-                console.error("FixMe!")
+                console.error("FixMe: _convertRowToResult error")
             }
         }
         result = {
@@ -80,16 +80,20 @@ class CypherService {
         return resultSet.rows.map((row) => {
             let convetedObject = {};
             for (let k in row) {
-                let typeName = row[k].constructor.name;
-                if (typeName === 'Path') {
-                    convetedObject[k] = this.convertPath(row[k]);
-                } else if (typeName === 'Vertex') {
-                    convetedObject[k] = this.convertVertex(row[k]);
-                } else if (typeName === 'Edge') {
-                    convetedObject[k] = this.convertEdge(row[k]);
+                if (row[k]) {
+                    let typeName = row[k].constructor.name;
+                    if (typeName === 'Path') {
+                        convetedObject[k] = this.convertPath(row[k]);
+                    } else if (typeName === 'Vertex') {
+                        convetedObject[k] = this.convertVertex(row[k]);
+                    } else if (typeName === 'Edge') {
+                        convetedObject[k] = this.convertEdge(row[k]);
+                    } else {
+                        convetedObject[k] = row[k];
+                    }
                 } else {
-                    convetedObject[k] = row[k];
-                }
+                    convetedObject[k] = null;
+                }                
             }
             return convetedObject;
         });
