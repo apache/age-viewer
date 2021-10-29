@@ -93,7 +93,7 @@ class CypherService {
                     }
                 } else {
                     convetedObject[k] = null;
-                }                
+                }
             }
             return convetedObject;
         });
