@@ -1,5 +1,5 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-# Goal of incubating Apache AGE Viewer
+# Goal of Apache AGE Viewer (Incubating)
 
 Apache AGE Viewer(Incubating) is graph visualisation tool, for Apache AGE(Incubating). 
 This is a sub-project of the Apache AGE (incubating) project.
