@@ -2,6 +2,13 @@
   "name": "ag-viewer-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.2",
@@ -61,6 +68,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
