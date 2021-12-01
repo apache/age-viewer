@@ -27,6 +27,7 @@ npm run start
 ```
 npm run setup-backend
 npm run build-front
+npm run build-back
 pm2 stop ag-viewer-develop
 pm2 delete ag-viewer-develop
 pm2 start ecosystem.config.js
