@@ -52,7 +52,7 @@ cytoscape.use(cxtmenu);
 
 const CypherResultCytoscapeCharts = ({
   elements, cytoscapeObject, setCytoscapeObject, cytoscapeLayout, maxDataOfGraph,
-  onElementsMouseover, addLegendData,
+  onElementsMouseover, addLegendData, flavor, graph,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
@@ -164,19 +164,35 @@ const CypherResultCytoscapeCharts = ({
               (<FontAwesomeIcon icon={faProjectDiagram} size="lg" />),
             ),
             select(ele) {
-              fetch('/api/v1/cypher',
-                {
-                  method: 'POST',
-                  headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ cmd: `MATCH (S)-[R]-(T) WHERE id(S) = '${ele.id()}' RETURN S, R, T` }),
-                })
-                .then((res) => res.json())
-                .then((data) => {
-                  addElements(ele.id(), data);
-                });
+              if (flavor === 'AGENS') {
+                fetch('/api/v1/cypher',
+                  {
+                    method: 'POST',
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cmd: `MATCH (S)-[R]-(T) WHERE id(S) = '${ele.id()}' RETURN S, R, T` }),
+                  })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    addElements(ele.id(), data);
+                  });
+              } else {
+                fetch('/api/v1/cypher',
+                  {
+                    method: 'POST',
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S)-[R]-(T) WHERE id(S) = ${ele.id()} RETURN S, R, T $$) as (S agtype, R agtype, T agtype);` }),
+                  })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    addElements(ele.id(), data);
+                  });
+              }
             },
           },
 
@@ -271,6 +287,8 @@ CypherResultCytoscapeCharts.propTypes = {
   maxDataOfGraph: PropTypes.number.isRequired,
   onElementsMouseover: PropTypes.func.isRequired,
   addLegendData: PropTypes.func.isRequired,
+  flavor: PropTypes.string.isRequired,
+  graph: PropTypes.string.isRequired,
 };
 
 export default CypherResultCytoscapeCharts;
