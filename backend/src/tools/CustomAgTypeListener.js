@@ -155,7 +155,7 @@ class CustomAgTypeListener extends AgtypeListener {
     }
 
     getResult() {
-        return this.rootObject;
+        return this.rootObject || this.lastValue;
     }
 }
 

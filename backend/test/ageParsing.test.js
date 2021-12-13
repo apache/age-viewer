@@ -72,6 +72,7 @@ describe('Test Connector Api', () => {
         ]);
         done();
     });
+
     it('Edge', (done) => {
         const ret = AGTypeParse('{"id": 1125899906842625, "label": "used_by", "end_id": 844424930131970, "start_id": 844424930131969, "properties": {"quantity": 1}}::edge');
         assert.deepStrictEqual(ret, {
@@ -84,4 +85,9 @@ describe('Test Connector Api', () => {
         done();
     });
 
+    it('String', (done) => {
+        const ret = AGTypeParse('"parent"');
+        assert.deepStrictEqual(ret, 'parent');
+        done();
+    });
 });
