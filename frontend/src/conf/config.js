@@ -19,7 +19,7 @@
 
 export const about = {
   releaseDate: '2020 SEP 09',
-  version: 'v0.5.0-Beta',
+  version: 'v1.0.0',
   license: 'MIT License',
 };
 
