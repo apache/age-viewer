@@ -1,6 +1,6 @@
 {
-    "name": "Apache AGE Viewer",
-    "short_name": "AGE Viewer",
+    "name": "Incubating AGE Viewer",
+    "short_name": "Incubating AGE Viewer",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "display": "standalone"
