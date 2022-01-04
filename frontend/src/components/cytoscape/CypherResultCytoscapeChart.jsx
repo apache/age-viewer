@@ -35,7 +35,7 @@ import {
   faProjectDiagram,
   faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
-import cxtmenu from '../../lib/cytoscape-cxtmenu-bitnine';
+import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
 import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
