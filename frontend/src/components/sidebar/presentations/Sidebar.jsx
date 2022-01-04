@@ -21,7 +21,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SidebarHome from '../containers/SidebarHome';
 import SidebarSetting from '../containers/SidebarSetting';
-import SidebarAbout from '../containers/SidebarAbout';
 
 const Sidebar = ({ activeMenuName, isActive }) => (
   <div id="sidebar" className={isActive ? ' active ' : 'inactive'}>
@@ -31,9 +30,6 @@ const Sidebar = ({ activeMenuName, isActive }) => (
       </div>
       <div className={`tab-pane fade${activeMenuName === 'setting' ? ' active show ' : ''}`} role="tabpanel" aria-labelledby="side-setting-tab">
         <SidebarSetting />
-      </div>
-      <div className={`tab-pane fade${activeMenuName === 'about' ? ' active show ' : ''}`} role="tabpanel" aria-labelledby="side-about-tab">
-        <SidebarAbout />
       </div>
     </div>
   </div>
