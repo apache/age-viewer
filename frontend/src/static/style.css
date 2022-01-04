@@ -213,14 +213,14 @@ a[data-toggle="collapse"] {
 .editor-code-wrapper{
     margin-top: 1px;
     min-height: 60px;
-    padding: 0px;
+    padding: 0;
     resize: vertical;
     overflow: auto;
     border: 1px solid;
 }
 
-.editor-button-wrapper{
-    margin-left: -60px !important;
+.editor-button-wrapper {
+    margin-left: -50px !important;
     height: 60px;
 }
 
@@ -410,7 +410,7 @@ a.nav-link.active {
 }
 
 .alert {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .chart-frame-area {
@@ -460,8 +460,8 @@ a.nav-link.active {
 }
 
 .graph-tabpanel {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .nodeLegend, .edgeLegend {
@@ -502,7 +502,7 @@ a.nav-link.active {
 .colorSelector {
     width: 15px;
     height: 15px;
-    padding: 6px 0px;
+    padding: 6px 0;
     border-radius: 15px;
     font-size: 8px;
     text-align: center;
@@ -522,7 +522,7 @@ a.nav-link.active {
 
 .sizeSelector.node {
     background-color: darkgrey;
-    padding: 6px 0px;
+    padding: 6px 0;
     border-radius: 15px;
     font-size: 8px;
     text-align: center;
@@ -532,7 +532,7 @@ a.nav-link.active {
 
 .sizeSelector.edge {
     background-color: darkgrey;
-    padding: 6px 0px;
+    padding: 6px 0;
     font-size: 8px;
     text-align: center;
     margin-left: 5px;
@@ -598,14 +598,14 @@ a.nav-link.active {
 }
 
 .carousel-inner {
-    margin: 0px 25px 10px 25px;
+    margin: 0 25px 10px 25px;
     width: initial;
     height: 100%;
     overflow:auto;
 }
 
 .carousel-indicators {
-    bottom: 0px;
+    bottom: 0;
 }
 
 .carousel-indicators li {
@@ -681,4 +681,36 @@ textarea.editorTextarea
 
 .layout-select {
     margin-top: .15rem !important;
+}
+
+.close_session {
+    background-color: #142B80;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin: 5px 0;
+}
+.close_session:active {
+    position:relative;
+    top:1px;
+}
+
+.refresh_button {
+    background-color: #18CCC5;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin: 5px 0;
+}
+.refresh_button:active {
+    position:relative;
+    top:1px;
 }

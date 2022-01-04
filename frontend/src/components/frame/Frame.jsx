@@ -27,6 +27,9 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
 import { removeFrame } from '../../features/frame/FrameSlice';
+import EdgeWeight from '../../icons/EdgeWeight';
+import IconFilter from '../../icons/IconFilter';
+import IconSearchCancel from '../../icons/IconSearchCancel';
 
 const Frame = ({
   reqString, children, refKey,
@@ -71,7 +74,7 @@ const Frame = ({
                 title="Edge Weight"
                 onClick={() => onThick()}
               >
-                <i className="icon-edge-weight" />
+                <EdgeWeight />
               </Button>
             </Popover>
           ) : null }
@@ -83,7 +86,7 @@ const Frame = ({
               onClick={() => onSearchCancel()}
               title="Cancel Search"
             >
-              <i className="icon-search-cancel" />
+              <IconSearchCancel />
             </Button>
           ) : null}
           {onSearch ? (
@@ -94,7 +97,7 @@ const Frame = ({
               onClick={() => onSearch()}
               title="Filter/Search"
             >
-              <i className="icon-filter" />
+              <IconFilter />
             </Button>
           ) : null}
           {/* {false ? ( // en:Functionality is hidden due to */}

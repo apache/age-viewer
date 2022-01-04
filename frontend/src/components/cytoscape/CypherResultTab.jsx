@@ -22,6 +22,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTable } from '@fortawesome/free-solid-svg-icons';
+import IconGraph from '../../icons/IconGraph';
 
 class CypherResultTab extends Component {
   constructor(props) {
@@ -56,7 +57,7 @@ class CypherResultTab extends Component {
           style={{ width: '50%', fontSize: '14px', color: this.currentTab === 'graph' ? '#142B80' : '#495057' }}
           onClick={() => activeTab(this.refKey, 'graph')}
         >
-          <i className="icon-graph" style={{ fontSize: '25px' }} />
+          <IconGraph />
           <br />
           <b style={{ fontSize: '14px;' }}>Graph</b>
         </button>

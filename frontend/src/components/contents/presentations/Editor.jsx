@@ -21,10 +21,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 import { setting } from '../../../conf/config';
+import IconPlay from '../../../icons/IconPlay';
 
 const Editor = ({
   setCommand,
@@ -147,7 +150,10 @@ const Editor = ({
                 />
               </button> */}
               <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onClick={() => clearCommand()}>
-                <i className="icon-eraser" />
+                <FontAwesomeIcon
+                  icon={faTimesCircle}
+                  size="1x"
+                />
               </button>
               <button
                 className="frame-head-button btn btn-link"
@@ -155,7 +161,7 @@ const Editor = ({
                 onClick={() => onClick()}
                 title="Run Query"
               >
-                <i className="icon-play" />
+                <IconPlay />
               </button>
               <button
                 className="frame-head-button btn btn-link"
