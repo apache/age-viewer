@@ -16,16 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import Flavors from "../config/Flavors";
 
-const express = require("express");
-const AgcloudController = require("../controllers/agcloudController");
+const sessionService = require('../services/sessionService');
+const winston = require('winston');
+const logger = winston.createLogger();
 
-const router = express.Router();
-const agcloudController = new AgcloudController();
+class RemoteLoginController {
+    async connectDatabase(req, res, next) {
+        let databaseService = sessionService.get(req.sessionID);
+        if (databaseService.isConnected() || !req.body) {
+            res.redirect('/');
+        } else {
+            const params = {
+                flavor: Flavors.AGENS,
+                ...req.body
+            }
+            await databaseService.connectDatabase(params);
+            res.redirect('/');
+        }
+    }
+}
 
-const {wrap} = require('../common/Routes');
-
-// Execute Cypher Query
-router.post("/", wrap(agcloudController.connectDatabase));
-
-module.exports = router;
+module.exports = RemoteLoginController;

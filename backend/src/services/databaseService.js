@@ -19,8 +19,7 @@
 
 import {getQuery} from "../tools/SQLFlavorManager";
 import * as util from "util";
-
-const AgensGraphRepository = require('../models/agensgraph/agensGraphRepository');
+import GraphRepository from '../models/GraphRepository';
 
 class DatabaseService {
     constructor() {
@@ -97,7 +96,7 @@ class DatabaseService {
     async connectDatabase(connectionInfo) {
         let agensDatabaseHelper = this._agensDatabaseHelper;
         if (agensDatabaseHelper == null) {
-            this._agensDatabaseHelper = new AgensGraphRepository(connectionInfo);
+            this._agensDatabaseHelper = new GraphRepository(connectionInfo);
             agensDatabaseHelper = this._agensDatabaseHelper;
         }
 
@@ -135,7 +134,7 @@ class DatabaseService {
         }
 
         try {
-            let client = await AgensGraphRepository.getConnection(agensDatabaseHelper.getConnectionInfo());
+            let client = await GraphRepository.getConnection(agensDatabaseHelper.getConnectionInfo());
             client.release();
         } catch (err) {
             return false;

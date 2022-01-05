@@ -22,8 +22,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
 import './static/style.css';
 import './static/navbar-fixed-left.css';
-import './static/google-Poppins.css';
-import './static/icons/css/fontello.css';
 import MainPage from './pages/Main/MainPage';
 
 const App = () => (

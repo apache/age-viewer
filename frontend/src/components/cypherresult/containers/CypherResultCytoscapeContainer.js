@@ -50,6 +50,8 @@ const mapStateToProps = (state, ownProps) => {
     maxDataOfGraph: state.setting.maxDataOfGraph,
     maxDataOfTable: state.setting.maxDataOfTable,
     setChartLegend: ownProps.setChartLegend,
+    flavor: state.database.flavor,
+    graph: state.database.graph,
   };
 };
 

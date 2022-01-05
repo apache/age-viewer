@@ -17,15 +17,15 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import SidebarAbout from '../presentations/SidebarAbout';
+const express = require("express");
+const RemoteLoginController = require("../controllers/RemoteLoginController");
 
-const mapStateToProps = (state) => ({
-  releaseDate: state.setting.releaseDate,
-  version: state.setting.version,
-  license: state.setting.license,
-});
+const router = express.Router();
+const remoteLoginController = new RemoteLoginController();
 
-const mapDispatchToProps = { };
+const {wrap} = require('../common/Routes');
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarAbout);
+// Execute Cypher Query
+router.post("/", wrap(remoteLoginController.connectDatabase));
+
+module.exports = router;

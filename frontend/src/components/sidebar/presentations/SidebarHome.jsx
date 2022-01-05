@@ -23,6 +23,8 @@ import PropTypes from 'prop-types';
 import { Modal } from 'antd';
 import uuid from 'react-uuid';
 import { connect, useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRedo, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { VerticalLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
 
 const genLabelQuery = (eleType, labelName, database) => {
@@ -353,11 +355,16 @@ const SidebarHome = ({
         <VerticalLine />
         <div className="form-group sidebar-item-disconnect">
           <button
-            className="frame-head-button btn btn-link"
+            className="frame-head-button refresh_button btn btn-link"
             type="button"
             onClick={() => refreshSidebarHome()}
           >
-            <i className="icon-refresh" />
+            <FontAwesomeIcon
+              icon={faRedo}
+              size="1x"
+              color="white"
+              flip="horizontal"
+            />
           </button>
           <br />
           <b>Refresh</b>
@@ -370,8 +377,9 @@ const SidebarHome = ({
           }}
           />
           <button
-            className="frame-head-button btn btn-link"
+            className="frame-head-button close_session btn btn-link"
             type="button"
+            color="#142B80"
             onClick={() => confirm({
               title: 'Are you sure you want to close this window?',
               onOk() {
@@ -382,7 +390,11 @@ const SidebarHome = ({
               },
             })}
           >
-            <i className="icon-close-session" />
+            <FontAwesomeIcon
+              icon={faTimes}
+              size="1x"
+              color="white"
+            />
           </button>
           <br />
           <b>Close Session</b>

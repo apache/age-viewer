@@ -29,7 +29,7 @@ const logger = require('morgan');
 const {stream} = require('./config/winston');
 const cypherRouter = require('./routes/cypherRouter');
 const databaseRouter = require('./routes/databaseRouter');
-const agcloudRouter = require('./routes/agcloudRouter');
+const remoteLoginRouter = require('./routes/remoteLoginRouter');
 const sessionRouter = require('./routes/sessionRouter');
 const app = express();
 
@@ -59,7 +59,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
-app.use('/agensviewer', sessionRouter, agcloudRouter);
+app.use('/agensviewer', sessionRouter, remoteLoginRouter);
 app.use('/api/v1/*', sessionRouter);
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);

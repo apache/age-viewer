@@ -19,12 +19,12 @@
 
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { faCog, faHome, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faHome } from '@fortawesome/free-solid-svg-icons';
 
 const MenuSlice = createSlice({
   name: 'navigator',
   initialState: {
-    menuList: [['home', faHome], ['setting', faCog], ['about', faInfoCircle]],
+    menuList: [['home', faHome], ['setting', faCog]],
     activeMenu: 'home',
     isActive: true,
   },

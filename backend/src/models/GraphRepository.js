@@ -17,16 +17,16 @@
  * under the License.
  */
 
-import Flavors from '../../config/Flavors';
-import PgConfig from '../../config/Pg'
+import Flavors from '../config/Flavors';
+import PgConfig from '../config/Pg'
 
 require('@bitnine-oss/ag-driver');
 import pg from 'pg';
 import types from 'pg-types';
-import {setAGETypes} from '../../tools/AGEParser';
+import {setAGETypes} from '../tools/AGEParser';
 
 
-class AgensGraphRepository {
+class GraphRepository {
     constructor({host, port, database, graph, user, password, flavor} = {}) {
         if (!flavor) {
             throw new Error('Flavor is required.');
@@ -97,7 +97,7 @@ class AgensGraphRepository {
      */
     async getConnection() {
         if (!this._pool) {
-            this._pool = AgensGraphRepository.newConnectionPool(this.getPoolConnectionInfo());
+            this._pool = GraphRepository.newConnectionPool(this.getPoolConnectionInfo());
         }
         const client = await this._pool.connect();
         if (this.flavor === 'AGE') {
@@ -158,4 +158,4 @@ class AgensGraphRepository {
     }
 }
 
-module.exports = AgensGraphRepository;
+module.exports = GraphRepository;
