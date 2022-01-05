@@ -5,18 +5,9 @@ Apache AGE Viewer(Incubating) is graph visualisation tool, for Apache AGE(Incuba
 This is a sub-project of the Apache AGE (incubating) project.
 
 
-
 # Recommend Node Version & install module
 - node js 14.16.0
 - npm install pm2
-
-# How to use this image
-```
-docker run \
-    --publish=3001:3001 \
-    --name=agviewer \
-    bitnine/agviewer:latest
-```
 
 # How to run using command
 ```
