@@ -29,7 +29,7 @@ const ServerDisconnectFrame = ({
   refKey,
   isPinned,
   reqString,
-  disconnectToAgensGraph,
+  disconnectToDatabase,
   addFrame,
   addAlert,
   setCommand,
@@ -38,14 +38,14 @@ const ServerDisconnectFrame = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(() => disconnectToAgensGraph().then((response) => {
-      if (response.type === 'database/disconnectToAgensGraph/fulfilled') {
+    dispatch(() => disconnectToDatabase().then((response) => {
+      if (response.type === 'database/disconnectToDatabase/fulfilled') {
         resetMetaData();
       }
     }));
     /* dispatch(() => addFrame(':server connect')); */
     /* dispatch(() => addAlert('NoticeServerDisconnected')); */
-  }, [dispatch, disconnectToAgensGraph, addFrame, addAlert]);
+  }, [dispatch, disconnectToDatabase, addFrame, addAlert]);
 
   return (
     <Frame
@@ -56,7 +56,7 @@ const ServerDisconnectFrame = ({
       <Row>
         <Col span={6}>
           <h3>Disconnected Succesfully</h3>
-          <p>You are successfully disconnected from Agensgraph.</p>
+          <p>You are successfully disconnected from Database.</p>
         </Col>
         <Col span={18}>
           <p>
@@ -81,7 +81,7 @@ ServerDisconnectFrame.propTypes = {
   refKey: PropTypes.string.isRequired,
   isPinned: PropTypes.bool.isRequired,
   reqString: PropTypes.string.isRequired,
-  disconnectToAgensGraph: PropTypes.func.isRequired,
+  disconnectToDatabase: PropTypes.func.isRequired,
   addFrame: PropTypes.func.isRequired,
   addAlert: PropTypes.func.isRequired,
   setCommand: PropTypes.func.isRequired,

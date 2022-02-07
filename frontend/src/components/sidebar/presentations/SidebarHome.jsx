@@ -55,26 +55,8 @@ $$) as (V agtype, R agtype, V2 agtype);`;
     }
     return '';
   }
-  function agens() {
-    if (eleType === 'node') {
-      if (labelName === '*') {
-        return 'MATCH (V) RETURN V';
-      }
-      return `MATCH (V) WHERE LABEL(V) = '${labelName}' RETURN V`;
-    }
-    if (eleType === 'edge') {
-      if (labelName === '*') {
-        return 'MATCH (V)-[R]->(V2) RETURN *';
-      }
-      return `MATCH (V)-[R]->(V2) WHERE LABEL(R) = '${labelName}' RETURN *`;
-    }
-    return '';
-  }
   if (database.flavor === 'AGE') {
     return age();
-  }
-  if (database.flavor === 'AGENS') {
-    return agens();
   }
   return '';
 };

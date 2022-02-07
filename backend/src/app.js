@@ -16,9 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import FeatureRouter from "./routes/FeatureRouter";
-
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -29,7 +26,6 @@ const logger = require('morgan');
 const {stream} = require('./config/winston');
 const cypherRouter = require('./routes/cypherRouter');
 const databaseRouter = require('./routes/databaseRouter');
-const remoteLoginRouter = require('./routes/remoteLoginRouter');
 const sessionRouter = require('./routes/sessionRouter');
 const app = express();
 
@@ -59,11 +55,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
-app.use('/agensviewer', sessionRouter, remoteLoginRouter);
 app.use('/api/v1/*', sessionRouter);
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
-app.use('/api/v1/feature', FeatureRouter);
 
 // Error Handler
 app.use(function (err, req, res, next) {

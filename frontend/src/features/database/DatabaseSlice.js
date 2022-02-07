@@ -19,8 +19,8 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export const connectToAgensGraph = createAsyncThunk(
-  'database/connectToAgensGraph',
+export const connectToDatabase = createAsyncThunk(
+  'database/connectToDatabase',
   async (formData) => {
     try {
       const response = await fetch('/api/v1/db/connect',
@@ -46,8 +46,8 @@ export const connectToAgensGraph = createAsyncThunk(
   },
 );
 
-export const disconnectToAgensGraph = createAsyncThunk(
-  'database/disconnectToAgensGraph',
+export const disconnectToDatabase = createAsyncThunk(
+  'database/disconnectToDatabase',
   async () => {
     await fetch('/api/v1/db/disconnect');
   },
@@ -80,7 +80,7 @@ const DatabaseSlice = createSlice({
   reducers: {
   },
   extraReducers: {
-    [connectToAgensGraph.fulfilled]: (state, action) => ({
+    [connectToDatabase.fulfilled]: (state, action) => ({
       host: action.payload.host,
       port: action.payload.port,
       user: action.payload.user,
@@ -90,7 +90,7 @@ const DatabaseSlice = createSlice({
       flavor: action.payload.flavor,
       status: 'connected',
     }),
-    [connectToAgensGraph.rejected]: () => ({
+    [connectToDatabase.rejected]: () => ({
       host: '',
       port: '',
       user: '',
@@ -100,7 +100,7 @@ const DatabaseSlice = createSlice({
       flavor: '',
       status: 'disconnected',
     }),
-    [disconnectToAgensGraph.fulfilled]: () => ({
+    [disconnectToDatabase.fulfilled]: () => ({
       host: '',
       port: '',
       user: '',

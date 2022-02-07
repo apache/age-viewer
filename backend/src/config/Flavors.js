@@ -18,6 +18,5 @@
  */
 
 export default {
-    AGE: 'AGE',
-    AGENS: 'AGENS'
+    AGE: 'AGE'
 }

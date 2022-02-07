@@ -20,7 +20,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { slides as northwindSlides } from '../../../documents/tutorial/northwind';
 import Frame from '../Frame';
 import FrameStyles from '../Frame.module.scss';
 import { removeFrame } from '../../../features/frame/FrameSlice';
@@ -33,16 +32,12 @@ const ContentFrame = ({
   playTarget,
 }) => {
   const dispatch = useDispatch();
-  const [slides, setSlides] = useState([]);
+  const [slides] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
-    if (playTarget.toLowerCase() === 'northwind') {
-      setSlides(northwindSlides);
-    } else {
-      dispatch(addAlert('ErrorPlayLoadFail', playTarget));
-      dispatch(removeFrame(refKey));
-    }
+    dispatch(addAlert('ErrorPlayLoadFail', playTarget));
+    dispatch(removeFrame(refKey));
   }, []);
 
   const genCarousel = () => {

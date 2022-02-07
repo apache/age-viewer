@@ -18,7 +18,7 @@
  */
 
 import { connect } from 'react-redux';
-import { disconnectToAgensGraph } from '../../../features/database/DatabaseSlice';
+import { disconnectToDatabase } from '../../../features/database/DatabaseSlice';
 import { resetMetaData } from '../../../features/database/MetadataSlice';
 import { addFrame, pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
@@ -29,7 +29,7 @@ const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = {
-  disconnectToAgensGraph, addFrame, removeFrame, pinFrame, addAlert, setCommand, resetMetaData,
+  disconnectToDatabase, addFrame, removeFrame, pinFrame, addAlert, setCommand, resetMetaData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServerDisconnectFrame);

@@ -25,7 +25,7 @@ class CypherController {
         let connectorService = sessionService.get(req.sessionID);
         if (connectorService.isConnected()) {
             let cypherService = new CypherService(
-                connectorService.agensDatabaseHelper
+                connectorService.graphRepository
             );
             let data = await cypherService.executeCypher(req.body.cmd);
             res.status(200).json(data).end();

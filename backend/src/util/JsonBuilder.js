@@ -17,14 +17,8 @@
  * under the License.
  */
 
-import Flavors from "../config/Flavors";
-
-export function stringWrap(valstr, flavor){
-    let valueWrapped = JSON.stringify(valstr);
-    if (flavor === Flavors.AGENS) {
-        valueWrapped = '\'' + valueWrapped.substring(1, valueWrapped.length - 1) + '\'';
-    }
-    return valueWrapped;
+export function stringWrap(valstr, flavor) {
+    return JSON.stringify(valstr);
 }
 
 export function JsonStringify(flavor, record) {
@@ -47,12 +41,8 @@ export async function createVertex(client, graphPathStr, label, record, flavor) 
     if (flavor === 'AGE') {
         return AGECreateVertex(client, graphPathStr, createQ);
     } else {
-        return AgensGraphCreateVertex(client, graphPathStr, createQ);
+        throw new Error(`Unknown flavor ${flavor}`)
     }
-}
-
-async function AgensGraphCreateVertex(client, graphPathStr, createQ) {
-    await client.query(createQ);
 }
 
 async function AGECreateVertex(client, graphPathStr, createQ) {
@@ -66,12 +56,8 @@ export async function createEdge(client, label, record, graphPathStr, edgeStartL
     if (flavor === 'AGE') {
         return AGECreateEdge(client, graphPathStr, createQ);
     } else {
-        return AgensGraphCreateEdge(client, graphPathStr, createQ);
+        throw new Error(`Unknown flavor ${flavor}`)
     }
-}
-
-async function AgensGraphCreateEdge(client, graphPathStr, createQ) {
-    await client.query(createQ);
 }
 
 async function AGECreateEdge(client, graphPathStr, createQ) {

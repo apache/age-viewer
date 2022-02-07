@@ -20,7 +20,6 @@
 import Flavors from '../config/Flavors';
 import PgConfig from '../config/Pg'
 
-require('@bitnine-oss/ag-driver');
 import pg from 'pg';
 import types from 'pg-types';
 import {setAGETypes} from '../tools/AGEParser';
@@ -62,8 +61,6 @@ class GraphRepository {
         client.connect();
         if (flavor === Flavors.AGE) {
             await setAGETypes(client, types);
-        } else if (flavor === Flavors.AGENS) {
-            await client.query(`set graph_path = ${graph}`)
         } else {
             throw new Error(`Unknown flavor ${flavor}`)
         }

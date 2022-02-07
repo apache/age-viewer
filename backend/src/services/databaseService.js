@@ -23,7 +23,7 @@ import GraphRepository from '../models/GraphRepository';
 
 class DatabaseService {
     constructor() {
-        this._agensDatabaseHelper = null;
+        this._graphRepository = null;
     }
 
     async getMetaData() {
@@ -43,10 +43,10 @@ class DatabaseService {
     }
 
     async getGraphLabels() {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let graphRepository = this._graphRepository;
         let queryResult = {};
         try {
-            queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'graph_labels'), [this.getConnectionInfo().graph]);
+            queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'graph_labels'), [this.getConnectionInfo().graph]);
         } catch (error) {
             throw error;
         }
@@ -55,70 +55,70 @@ class DatabaseService {
     }
 
     async getGraphLabelCount(labelName, labelKind) {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
+        let graphRepository = this._graphRepository;
         let query = null;
 
         if (labelKind === 'v') {
-            query = util.format(getQuery(agensDatabaseHelper.flavor, 'label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
+            query = util.format(getQuery(graphRepository.flavor, 'label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
         } else if (labelKind === 'e') {
-            query = util.format(getQuery(agensDatabaseHelper.flavor, 'label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
+            query = util.format(getQuery(graphRepository.flavor, 'label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
         }
 
-        let queryResult = await agensDatabaseHelper.execute(query);
+        let queryResult = await graphRepository.execute(query);
 
         return queryResult.rows;
     }
 
     async getNodes() {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_nodes'), agensDatabaseHelper._graph, agensDatabaseHelper._graph));
+        let graphRepository = this._graphRepository;
+        let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_nodes'), graphRepository._graph, graphRepository._graph));
         return queryResult.rows;
     }
 
     async getEdges() {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(util.format(getQuery(agensDatabaseHelper.flavor, 'meta_edges'), agensDatabaseHelper._graph, agensDatabaseHelper._graph));
+        let graphRepository = this._graphRepository;
+        let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_edges'), graphRepository._graph, graphRepository._graph));
         return queryResult.rows;
     }
 
     async getPropertyKeys() {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'property_keys'));
+        let graphRepository = this._graphRepository;
+        let queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'property_keys'));
         return queryResult.rows;
     }
 
     async getRole() {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        let queryResult = await agensDatabaseHelper.execute(getQuery(agensDatabaseHelper.flavor, 'get_role'), [this.getConnectionInfo().user]);
+        let graphRepository = this._graphRepository;
+        let queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'get_role'), [this.getConnectionInfo().user]);
         return queryResult.rows[0];
     }
 
     async connectDatabase(connectionInfo) {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        if (agensDatabaseHelper == null) {
-            this._agensDatabaseHelper = new GraphRepository(connectionInfo);
-            agensDatabaseHelper = this._agensDatabaseHelper;
+        let graphRepository = this._graphRepository;
+        if (graphRepository == null) {
+            this._graphRepository = new GraphRepository(connectionInfo);
+            graphRepository = this._graphRepository;
         }
 
         try {
-            let client = await agensDatabaseHelper.getConnection(agensDatabaseHelper.getConnectionInfo(), true);
+            let client = await graphRepository.getConnection(graphRepository.getConnectionInfo(), true);
             client.release();
         } catch (e) {
-            this._agensDatabaseHelper = null;
+            this._graphRepository = null;
             throw e;
         }
         return true;
     }
 
     async disconnectDatabase() {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        if (agensDatabaseHelper == null) {
+        let graphRepository = this._graphRepository;
+        if (graphRepository == null) {
             console.log('Already Disconnected');
             return false;
         } else {
-            let isRelease = await this._agensDatabaseHelper.releaseConnection();
+            let isRelease = await this._graphRepository.releaseConnection();
             if (isRelease) {
-                this._agensDatabaseHelper = null;
+                this._graphRepository = null;
                 return true;
             } else {
                 console.log('Failed releaseConnection()');
@@ -128,13 +128,13 @@ class DatabaseService {
     }
 
     async getConnectionStatus() {
-        let agensDatabaseHelper = this._agensDatabaseHelper;
-        if (agensDatabaseHelper == null) {
+        let graphRepository = this._graphRepository;
+        if (graphRepository == null) {
             return false;
         }
 
         try {
-            let client = await GraphRepository.getConnection(agensDatabaseHelper.getConnectionInfo());
+            let client = await GraphRepository.getConnection(graphRepository.getConnectionInfo());
             client.release();
         } catch (err) {
             return false;
@@ -145,15 +145,15 @@ class DatabaseService {
     getConnectionInfo() {
         if (this.isConnected() === false)
             throw new Error("Not connected");
-        return this._agensDatabaseHelper.getConnectionInfo();
+        return this._graphRepository.getConnectionInfo();
     }
 
     isConnected() {
-        return this._agensDatabaseHelper != null;
+        return this._graphRepository != null;
     }
 
-    get agensDatabaseHelper() {
-        return this._agensDatabaseHelper;
+    get graphRepository() {
+        return this._graphRepository;
     }
 
     convertEdge({label, id, start, end, props}) {

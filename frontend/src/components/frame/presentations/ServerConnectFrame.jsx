@@ -26,7 +26,7 @@ import { useDispatch } from 'react-redux';
 import Frame from '../Frame';
 
 import styles from './ServerConnectFrame.module.scss';
-import { connectToAgensGraph } from '../../../features/database/DatabaseSlice';
+import { connectToDatabase as connectToDatabaseApi } from '../../../features/database/DatabaseSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
 import { getMetaChartData, getMetaData } from '../../../features/database/MetadataSlice';
@@ -48,8 +48,8 @@ const ServerConnectFrame = ({
 }) => {
   const dispatch = useDispatch();
 
-  const connectToDatabase = (data) => dispatch(connectToAgensGraph(data)).then((response) => {
-    if (response.type === 'database/connectToAgensGraph/fulfilled') {
+  const connectToDatabase = (data) => dispatch(connectToDatabaseApi(data)).then((response) => {
+    if (response.type === 'database/connectToDatabase/fulfilled') {
       dispatch(addAlert('NoticeServerConnected'));
       dispatch(trimFrame('ServerConnect'));
       dispatch(getMetaData()).then((metadataResponse) => {
@@ -61,7 +61,7 @@ const ServerConnectFrame = ({
       });
 
       dispatch(addFrame(':server status', 'ServerStatus'));
-    } else if (response.type === 'database/connectToAgensGraph/rejected') {
+    } else if (response.type === 'database/connectToDatabase/rejected') {
       dispatch(addAlert('ErrorServerConnectFail', response.error.message));
     }
   });
@@ -90,7 +90,6 @@ const ServerConnectFrame = ({
                   allowClear
                 >
                   <Select.Option value="AGE">Apache AGE</Select.Option>
-                  <Select.Option value="AGENS">AgensGraph</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="host" label="Connect URL" rules={[{ required: true }]}>

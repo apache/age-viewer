@@ -18,7 +18,7 @@
  */
 
 import { connect } from 'react-redux';
-import { connectToAgensGraph } from '../../../features/database/DatabaseSlice';
+import { connectToDatabase } from '../../../features/database/DatabaseSlice';
 import { getMetaChartData, getMetaData } from '../../../features/database/MetadataSlice';
 import {
   addFrame, pinFrame, removeFrame, trimFrame,
@@ -29,7 +29,7 @@ import ServerConnectFrame from '../presentations/ServerConnectFrame';
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
-  connectToAgensGraph,
+  connectToDatabase,
   addFrame,
   trimFrame,
   removeFrame,

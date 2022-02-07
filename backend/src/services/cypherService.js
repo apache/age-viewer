@@ -17,11 +17,9 @@
  * under the License.
  */
 
-import Flavors from "../config/Flavors";
-
 class CypherService {
-    constructor(agensDatabaseHelper) {
-        this._agensDatabaseHelper = agensDatabaseHelper;
+    constructor(graphRepository) {
+        this._graphRepository = graphRepository;
     }
 
     async executeCypher(query) {
@@ -29,7 +27,7 @@ class CypherService {
             throw new Error('Query not entered!');
         } else {
             try {
-                let resultSet = await this._agensDatabaseHelper.execute(query);
+                let resultSet = await this._graphRepository.execute(query);
                 return this.createResult(resultSet);
             } catch (err) {
                 throw err;
@@ -38,12 +36,7 @@ class CypherService {
     }
 
     createResult(resultSet) {
-        let result = {
-            rows: null,
-            columns: null,
-            rowCount: null,
-            command: null,
-        };
+        let result;
 
         let targetItem = resultSet;
         if (Array.isArray(resultSet)) {
@@ -51,13 +44,6 @@ class CypherService {
         }
 
         let cypherRow = targetItem.rows;
-        if(this._agensDatabaseHelper.flavor === Flavors.AGENS){
-            try {
-                cypherRow = this._convertRowToResult(targetItem)
-            } catch (e) {
-                console.error("FixMe: _convertRowToResult error")
-            }
-        }
         result = {
             rows: cypherRow,
             columns: this._getColumns(targetItem),

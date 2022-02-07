@@ -89,7 +89,7 @@ const ServerStatusFrame = ({
           <Row>
             <Col span={6}>
               <h3>Connection Status</h3>
-              <p>You are currently not connected to AgensGraph</p>
+              <p>You are currently not connected to Database</p>
             </Col>
             <Col span={18}>
               <p>
@@ -102,7 +102,7 @@ const ServerStatusFrame = ({
                   :server connect
                 </a>
                 {' '}
-                to access to Agensgraph.
+                to access to Database.
               </p>
             </Col>
           </Row>
