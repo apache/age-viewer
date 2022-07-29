@@ -1,7 +1,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-# Goal of Apache AGE Viewer (Incubating)
+# Goal of Apache AGE Viewer
 
-Apache AGE Viewer(Incubating) is graph visualisation tool, for Apache AGE(Incubating). 
+Apache AGE Viewer(Incubating) is graph visualisation tool, for Apache AGE. 
 This is a sub-project of the Apache AGE (incubating) project.
 
 
@@ -25,4 +25,4 @@ pm2 start ecosystem.config.js
 ```
 
 # License
-Apache AGE Viewer(Incubating) is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
+Apache AGE Viewer is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
