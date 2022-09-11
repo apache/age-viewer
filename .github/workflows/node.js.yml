@@ -1,4 +1,4 @@
-name: AGViewer build
+name: AGEViewer build
 
 on:
   push:
