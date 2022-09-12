@@ -45,7 +45,7 @@ const cxtmenu = function (params) {
   let commands = [];
   const c2d = canvas.getContext('2d');
 
-  let r = 100; // defailt radius;
+  let r = 100; // default radius
   let containerSize = (r + options.activePadding) * 2;
   let activeCommandI;
   let offset;
