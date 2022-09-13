@@ -18,7 +18,7 @@
     "start:production": "node ./build/bin/www.js"
   },
   "dependencies": {
-    "antlr4": "^4.9.2",
+    "antlr4": "4.9.3",
     "cookie-parser": "~1.4.5",
     "cors": "^2.8.5",
     "csv": "^5.5.0",
