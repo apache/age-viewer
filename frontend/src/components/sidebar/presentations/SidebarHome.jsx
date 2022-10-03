@@ -257,7 +257,6 @@ const ConnectedText = ({ userName, roleName }) => (
     </h6>
   </div>
 );
-
 ConnectedText.propTypes = {
   userName: PropTypes.string.isRequired,
   roleName: PropTypes.string.isRequired,
@@ -285,7 +284,6 @@ const DBMSText = ({ dbname, graph }) => (
     </h6>
   </div>
 );
-
 DBMSText.propTypes = {
   dbname: PropTypes.string.isRequired,
   graph: PropTypes.string.isRequired,

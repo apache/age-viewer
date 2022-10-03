@@ -25,17 +25,6 @@ const mapStateToProps = (state) => ({
   isActive: state.navigator.isActive,
 });
 
-/*
-const  mapDispatchToProps = (dispatch) => {
-    return {
-        onThemeChange: function(e) {
-            const selectedTheme = e.target.value
-            dispatch({type: 'CHANGE_THEME', theme : selectedTheme})
-        }
-    }
-}
-*/
-
 const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
