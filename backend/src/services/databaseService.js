@@ -77,7 +77,7 @@ class DatabaseService {
         let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), this.getConnectionInfo().graph));
         return this.parseMeta(queryResult[1].rows);
     }
-    
+    /* 
     async getNodes() {
         let graphRepository = this._graphRepository;
         let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_nodes'), graphRepository._graph, graphRepository._graph));
@@ -89,7 +89,7 @@ class DatabaseService {
         let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_edges'), graphRepository._graph, graphRepository._graph));
         return queryResult.rows;
     }
-
+    */
     async getPropertyKeys() {
         let graphRepository = this._graphRepository;
         let queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'property_keys'));
