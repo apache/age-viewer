@@ -29,7 +29,6 @@ export const getMetaData = createAsyncThunk(
         let allCountNode = 0;
         const ret = await response.json();
 
-        // refactor for new query
         ret.nodes.forEach((item) => {
           allCountNode += item.cnt;
         });
@@ -37,10 +36,9 @@ export const getMetaData = createAsyncThunk(
         ret.edges.forEach((item) => {
           allCountEdge += item.cnt;
         });
-        // adds total to beginning of array
+
         ret.nodes.unshift({ label: '*', cnt: allCountNode });
         ret.edges.unshift({ label: '*', cnt: allCountEdge });
-        console.log('labels in getMeta', ret);
         return ret;
       }
       throw response;

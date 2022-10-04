@@ -20,6 +20,7 @@
 import {getQuery} from "../tools/SQLFlavorManager";
 import * as util from "util";
 import GraphRepository from '../models/GraphRepository';
+import { start } from "repl";
 
 class DatabaseService {
     constructor() {
@@ -32,8 +33,8 @@ class DatabaseService {
         try {
             let connectionInfo = this.getConnectionInfo();
             let {nodes, edges} = await this.readMetaData();
-            //metadata.nodes = await this.getNodes();
-            //metadata.edges = await this.getEdges();
+            metadata.nodes = nodes;
+            metadata.edges = edges;
             metadata.propertyKeys = await this.getPropertyKeys();
             metadata.graph = connectionInfo.graph;
             metadata.database = connectionInfo.database;
@@ -74,8 +75,9 @@ class DatabaseService {
     async readMetaData(){
         let gr = this._graphRepository;
         let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), this.getConnectionInfo().graph));
-        console.log(queryResult[1].rows);
+        return this.parseMeta(queryResult[1].rows);
     }
+    
     async getNodes() {
         let graphRepository = this._graphRepository;
         let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_nodes'), graphRepository._graph, graphRepository._graph));
@@ -175,18 +177,24 @@ class DatabaseService {
     parseMeta(data){
         const meta = {
             edges:[],
-            nodes:[],
-            property_keys:[]
-
-        }
+            nodes:[]
+        };
         const vertex = '_ag_label_vertex';
         const edge = '_ag_label_edge';
-        const cur = null;
-        data.forEach(element => {
-            if ( element.label === vertex){
-
+        let cur = null;
+        data.forEach((element, index) => {
+            if ( element.label === vertex ){
+                cur = 'nodes';
             }
+            else if ( element.label === edge ){
+                cur = 'edges';
+            }
+            else{
+                meta[cur].push(element);
+            }
+
         });
+        return meta;
     }
 }
 
