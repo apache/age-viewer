@@ -84,14 +84,6 @@ const ServerConnectFrame = ({
               layout="vertical"
               onFinish={(values) => connectToDatabase(values)}
             >
-              <Form.Item name="flavor" label="Database Type" rules={[{ required: true }]}>
-                <Select
-                  placeholder="Select a flavor of Database"
-                  allowClear
-                >
-                  <Select.Option value="AGE">Apache AGE</Select.Option>
-                </Select>
-              </Form.Item>
               <Form.Item name="host" label="Connect URL" rules={[{ required: true }]}>
                 <Input placeholder="192.168.0.1" />
               </Form.Item>
