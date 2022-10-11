@@ -33,7 +33,6 @@ import { getMetaChartData, getMetaData } from '../../../features/database/Metada
 
 const FormInitialValue = {
   database: '',
-  flavor: null,
   graph: '',
   host: '',
   password: '',
