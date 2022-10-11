@@ -28,6 +28,7 @@ export const getMetaData = createAsyncThunk(
         let allCountEdge = 0;
         let allCountNode = 0;
         const ret = await response.json();
+
         ret.nodes.forEach((item) => {
           allCountNode += item.cnt;
         });
@@ -35,6 +36,7 @@ export const getMetaData = createAsyncThunk(
         ret.edges.forEach((item) => {
           allCountEdge += item.cnt;
         });
+
         ret.nodes.unshift({ label: '*', cnt: allCountNode });
         ret.edges.unshift({ label: '*', cnt: allCountEdge });
         return ret;
