@@ -20,6 +20,7 @@
 import {getQuery} from "../tools/SQLFlavorManager";
 import * as util from "util";
 import GraphRepository from '../models/GraphRepository';
+import { start } from "repl";
 
 class DatabaseService {
     constructor() {
@@ -28,10 +29,12 @@ class DatabaseService {
 
     async getMetaData() {
         let metadata = {};
+        
         try {
             let connectionInfo = this.getConnectionInfo();
-            metadata.nodes = await this.getNodes();
-            metadata.edges = await this.getEdges();
+            let {nodes, edges} = await this.readMetaData();
+            metadata.nodes = nodes;
+            metadata.edges = edges;
             metadata.propertyKeys = await this.getPropertyKeys();
             metadata.graph = connectionInfo.graph;
             metadata.database = connectionInfo.database;
@@ -68,7 +71,13 @@ class DatabaseService {
 
         return queryResult.rows;
     }
-
+    
+    async readMetaData(){
+        let gr = this._graphRepository;
+        let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), this.getConnectionInfo().graph));
+        return this.parseMeta(queryResult[1].rows);
+    }
+    /* 
     async getNodes() {
         let graphRepository = this._graphRepository;
         let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_nodes'), graphRepository._graph, graphRepository._graph));
@@ -80,7 +89,7 @@ class DatabaseService {
         let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_edges'), graphRepository._graph, graphRepository._graph));
         return queryResult.rows;
     }
-
+    */
     async getPropertyKeys() {
         let graphRepository = this._graphRepository;
         let queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'property_keys'));
@@ -164,6 +173,28 @@ class DatabaseService {
             end: `${end.oid}.${end.id}`,
             properties: props,
         };
+    }
+    parseMeta(data){
+        const meta = {
+            edges:[],
+            nodes:[]
+        };
+        const vertex = '_ag_label_vertex';
+        const edge = '_ag_label_edge';
+        let cur = null;
+        data.forEach((element, index) => {
+            if ( element.label === vertex ){
+                cur = 'nodes';
+            }
+            else if ( element.label === edge ){
+                cur = 'edges';
+            }
+            else{
+                meta[cur].push(element);
+            }
+
+        });
+        return meta;
     }
 }
 
