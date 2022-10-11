@@ -163,6 +163,6 @@ frontend/src/conf/config.js
 
 # Itellij Configuration
 .idea
-./package-lock.json
+/package-lock.json
 backend/package-lock.json
 frontend/package-lock.json
