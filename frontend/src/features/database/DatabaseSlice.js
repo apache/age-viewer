@@ -78,6 +78,9 @@ const DatabaseSlice = createSlice({
     status: 'init',
   },
   reducers: {
+    setGraphName: (gname)=>({
+      graph:gname
+    })
   },
   extraReducers: {
     [connectToDatabase.fulfilled]: (state, action) => ({
@@ -133,7 +136,7 @@ const DatabaseSlice = createSlice({
   },
 });
 
-/*
-export const { } = DatabaseSlice.actions
-*/
+
+export const { setGraphName } = DatabaseSlice.actions
+
 export default DatabaseSlice.reducer;
