@@ -26,7 +26,7 @@ import { getQuery } from '../tools/SQLFlavorManager';
 
 
 class GraphRepository {
-    constructor({host, port, database, graph, user, password, flavor, graphs={}} = {}) {
+    constructor({host, port, database, graph, user, password, flavor, graphs=[]} = {}) {
         if (!flavor) {
             throw new Error('Flavor is required.');
         }
@@ -90,8 +90,10 @@ class GraphRepository {
     }
 
     async initGraphNames(){
-        const names = await this.execute(getQuery(this.flavor, 'get_graph_names'));
-        this._graphs = names.map((item)=>item.schema_name);
+        const { rows } = await this.execute(getQuery(this.flavor, 'get_graph_names'));
+        this._graphs = rows.map((item)=>item.schema_name);
+        // set current graph to first name
+        this.setCurrentGraph(this._graphs[0]);
     }
     
     /**
