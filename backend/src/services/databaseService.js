@@ -29,6 +29,7 @@ class DatabaseService {
 
     async getMetaData(graphName) {
         await this._graphRepository.initGraphNames();
+        const {graphs} = this._graphRepository.getConnectionInfo();
         if(graphName){
             if(graphs.includes(graphName)){
                 return await this.getMetaDataSingle(graphName);
@@ -37,32 +38,28 @@ class DatabaseService {
             }
             
         }else{
-            return await this.getMetaDataMultiple();
+            return await this.getMetaDataMultiple(graphs);
         }
 
     }
 
-    async getMetaDataMultiple(){
+    async getMetaDataMultiple(graphs){
         const metadata = {};
-        const {graphs} = this.getConnectionInfo();
-        for (var gname of graphs){
-            // synchronous due to _graph changing in _graphRepository
-            metadata[gname] = await this.getMetaDataSingle(gname)
-        }
-        
+        await Promise.all(graphs.map(async(gname)=>{
+            metadata[gname] = await this.getMetaDataSingle(gname);
+        }))
         return metadata;
     }
 
     async getMetaDataSingle(curGraph){
         let metadata = {};
-        this._graphRepository.setCurrentGraph(curGraph);
-        const {database, graph} = this.getConnectionInfo();
+        const {database} = this.getConnectionInfo();
         try {
-            let {nodes, edges} = await this.readMetaData(graph);
+            let {nodes, edges} = await this.readMetaData(curGraph);
             metadata.nodes = nodes;
             metadata.edges = edges;
             metadata.propertyKeys = await this.getPropertyKeys();
-            metadata.graph = graph;
+            metadata.graph = curGraph;
             metadata.database = database;
             metadata.role = await this.getRole();
         } catch (error) {

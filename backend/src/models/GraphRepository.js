@@ -104,11 +104,9 @@ class GraphRepository {
             this._pool = GraphRepository.newConnectionPool(this.getPoolConnectionInfo());
         }
         const client = await this._pool.connect();
-        if (this.flavor === 'AGE') {
-            await setAGETypes(client, types);
-        } else {
-            await client.query(`set graph_path = ${this._graph}`);
-        }
+
+        await setAGETypes(client, types);
+
         return client;
     }
 
