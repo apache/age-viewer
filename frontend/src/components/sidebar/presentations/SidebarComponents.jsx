@@ -18,6 +18,8 @@
  */
 
 import React from 'react';
+import uuid from 'react-uuid';
+import { Button, Dropdown, Menu } from 'antd';
 import PropTypes from 'prop-types';
 
 const StyleTextRight = {
@@ -75,4 +77,34 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-export { SubLabelRight, SubLabelLeft, SubLabelLeftWithLink };
+const GraphSelectDropdown = ({ graphs }) => {
+  const handleGraphClick = (e) => {
+    console.log(e);
+  };
+
+  const menu = (
+    <Menu
+      onClick={handleGraphClick}
+      items={graphs.map((gname) => ({
+        label: gname,
+        key: uuid(),
+      }
+      ))}
+    />
+  );
+  return (
+    <Dropdown overlay={menu} trigger={['click']}>
+      <Button>
+        Select Graph
+      </Button>
+    </Dropdown>
+  );
+};
+
+GraphSelectDropdown.propTypes = {
+  graphs: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export {
+  SubLabelRight, SubLabelLeft, SubLabelLeftWithLink, GraphSelectDropdown,
+};

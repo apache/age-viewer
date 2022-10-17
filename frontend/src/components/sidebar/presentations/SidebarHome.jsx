@@ -25,7 +25,9 @@ import uuid from 'react-uuid';
 import { connect, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRedo, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { VerticalLine, SubLabelLeft, SubLabelRight } from './SidebarComponents';
+import {
+  VerticalLine, SubLabelLeft, SubLabelRight, GraphSelectDropdown,
+} from './SidebarComponents';
 
 const genLabelQuery = (eleType, labelName, database) => {
   function age() {
@@ -378,6 +380,15 @@ const SidebarHome = ({
           </button>
           <br />
           <b>Close Session</b>
+          <div style={{
+            border: '1px solid #C4C4C4',
+            opacity: '1',
+            width: '80%',
+            height: '0',
+            margin: '3px auto',
+          }}
+          />
+          <GraphSelectDropdown graphs={['example']} />
         </div>
       </div>
     </div>

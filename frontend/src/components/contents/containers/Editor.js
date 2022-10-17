@@ -20,7 +20,7 @@
 import { connect } from 'react-redux';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
-import { getConnectionStatus } from '../../../features/database/DatabaseSlice';
+import { getConnectionStatus, setGraphName } from '../../../features/database/DatabaseSlice';
 import { executeCypherQuery } from '../../../features/cypher/CypherSlice';
 import { addCommandHistory, addCommandFavorites, setCommand } from '../../../features/editor/EditorSlice';
 import { toggleMenu } from '../../../features/menu/MenuSlice';
@@ -44,6 +44,7 @@ const mapDispatchToProps = {
   addCommandHistory,
   addCommandFavorites,
   toggleMenu,
+  setGraphName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

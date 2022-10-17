@@ -28,7 +28,6 @@ import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 import { setting } from '../../../conf/config';
 import IconPlay from '../../../icons/IconPlay';
-import { getMetaData } from '../../../features/database/MetadataSlice';
 
 const Editor = ({
   setCommand,
@@ -91,7 +90,6 @@ const Editor = ({
       }
     } else if (database.status === 'connected') {
       const reqStringValue = command;
-      dispatch(getMetaData());
       dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
         if (response.type === 'cypher/executeCypherQuery/fulfilled') {
           addFrame(reqStringValue, 'CypherResultFrame', refKey);
