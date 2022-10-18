@@ -77,9 +77,10 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-const GraphSelectDropdown = ({ graphs }) => {
+const GraphSelectDropdown = ({ graphs, changeCurrentGraph }) => {
   const handleGraphClick = (e) => {
     console.log(e);
+    changeCurrentGraph('');
   };
 
   const menu = (
@@ -103,6 +104,7 @@ const GraphSelectDropdown = ({ graphs }) => {
 
 GraphSelectDropdown.propTypes = {
   graphs: PropTypes.arrayOf(PropTypes.string).isRequired,
+  changeCurrentGraph: PropTypes.func.isRequired,
 };
 
 export {

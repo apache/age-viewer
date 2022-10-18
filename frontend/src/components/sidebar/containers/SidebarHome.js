@@ -21,20 +21,24 @@ import { connect } from 'react-redux';
 import SidebarHome from '../presentations/SidebarHome';
 import { setCommand } from '../../../features/editor/EditorSlice';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
-import { getMetaData } from '../../../features/database/MetadataSlice';
+import { getMetaData, changeCurrentGraph } from '../../../features/database/MetadataSlice';
 
-const mapStateToProps = (state) => ({
-  edges: state.metadata.edges,
-  nodes: state.metadata.nodes,
-  propertyKeys: state.metadata.propertyKeys,
-  dbname: state.metadata.dbname,
-  graph: state.metadata.graph,
-  role: state.metadata.role,
-  command: state.editor.command,
-});
+const mapStateToProps = (state) => {
+  const currentGraphData = state.metadata.graphs[state.metadata.currentGraph] || '';
+  return {
+    graphs: Object.keys(state.metadata.graphs),
+    edges: currentGraphData.edges,
+    nodes: currentGraphData.nodes,
+    propertyKeys: currentGraphData.propertyKeys,
+    dbname: state.metadata.dbname,
+    status: state.metadata.status,
+    role: currentGraphData.role,
+    command: state.editor.command,
+  };
+};
 
 const mapDispatchToProps = {
-  setCommand, addFrame, trimFrame, getMetaData,
+  setCommand, addFrame, trimFrame, getMetaData, changeCurrentGraph,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SidebarHome);

@@ -294,12 +294,14 @@ DBMSText.propTypes = {
 const SidebarHome = ({
   edges,
   nodes,
+  graphs,
   propertyKeys,
   setCommand,
   command,
   trimFrame,
   addFrame,
   getMetaData,
+  changeCurrentGraph,
 }) => {
   const dispatch = useDispatch();
   const { confirm } = Modal;
@@ -388,7 +390,7 @@ const SidebarHome = ({
             margin: '3px auto',
           }}
           />
-          <GraphSelectDropdown graphs={['example']} />
+          <GraphSelectDropdown graphs={graphs} changeCurrentGraph={changeCurrentGraph} />
         </div>
       </div>
     </div>
@@ -413,6 +415,8 @@ SidebarHome.propTypes = {
   trimFrame: PropTypes.func.isRequired,
   addFrame: PropTypes.func.isRequired,
   getMetaData: PropTypes.func.isRequired,
+  changeCurrentGraph: PropTypes.func.isRequired,
+  graphs: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default SidebarHome;

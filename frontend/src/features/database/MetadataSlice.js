@@ -25,20 +25,21 @@ export const getMetaData = createAsyncThunk(
     try {
       const response = await fetch('/api/v1/db/meta');
       if (response.ok) {
-        let allCountEdge = 0;
-        let allCountNode = 0;
         const ret = await response.json();
+        Object.keys(ret).forEach((gname) => {
+          let allCountEdge = 0;
+          let allCountNode = 0;
+          console.log(ret[gname].nodes.forEach((item) => {
+            allCountNode += item.cnt;
+          }));
 
-        ret.nodes.forEach((item) => {
-          allCountNode += item.cnt;
+          console.log(ret[gname].edges.forEach((item) => {
+            allCountEdge += item.cnt;
+          }));
+          ret[gname].nodes.unshift({ label: '*', cnt: allCountNode });
+          ret[gname].edges.unshift({ label: '*', cnt: allCountEdge });
         });
-
-        ret.edges.forEach((item) => {
-          allCountEdge += item.cnt;
-        });
-
-        ret.nodes.unshift({ label: '*', cnt: allCountNode });
-        ret.edges.unshift({ label: '*', cnt: allCountEdge });
+        console.log(ret);
         return ret;
       }
       throw response;
@@ -76,54 +77,30 @@ export const getMetaChartData = createAsyncThunk(
 const MetadataSlice = createSlice({
   name: 'metadata',
   initialState: {
-    edges: [],
-    nodes: [],
-    propertyKeys: [],
+    graphs: {},
     status: 'init',
     dbname: '',
-    graph: '',
-    role: {
-      user_name: '',
-      role_name: '',
-    },
-    rows: [],
+    currentGraph: '',
   },
   reducers: {
-    resetMetaData: () => ({
-      edges: [],
-      nodes: [],
-      propertyKeys: [],
-      status: 'init',
-      dbname: '',
-      graph: '',
-      role: {
-        user_name: '',
-        role_name: '',
-      },
-
-    }),
+    resetMetaData: (state) => (state.initialState),
+    changeCurrentGraph: (state, action) => ({ ...state, currentGraph: action.payload }),
   },
   extraReducers: {
     [getMetaData.fulfilled]: (state, action) => {
+      console.log('fullfilled', state, action);
       if (action.payload) {
         return Object.assign(state, {
-          edges: action.payload.edges,
-          nodes: action.payload.nodes,
-          propertyKeys: action.payload.propertyKeys,
+          graphs: action.payload,
           status: 'connected',
           dbname: action.payload.database,
-          graph: action.payload.graph,
-          role: action.payload.role,
+          currentGraph: Object.keys(action.payload)[0],
         });
       }
       return Object.assign(state, {
-        edges: [],
-        nodes: [],
-        propertyKeys: [],
+        ...state.initialState,
         status: 'disconnected',
         dbname: action.payload.database,
-        graph: action.payload.graph,
-        role: action.payload.role,
       });
     },
     [getMetaChartData.fulfilled]: (state, action) => {
@@ -135,6 +112,6 @@ const MetadataSlice = createSlice({
   },
 });
 
-export const { resetMetaData } = MetadataSlice.actions;
+export const { resetMetaData, changeCurrentGraph } = MetadataSlice.actions;
 
 export default MetadataSlice.reducer;
