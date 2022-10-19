@@ -77,7 +77,12 @@ const DatabaseSlice = createSlice({
   initialState: {
     status: 'init',
   },
-  reducers: {},
+  reducers: {
+    changeGraph: (state, action) => ({
+      ...state,
+      graph: action.payload.graphName,
+    }),
+  },
   extraReducers: {
     [connectToDatabase.fulfilled]: (state, action) => ({
       host: action.payload.host,
@@ -131,5 +136,6 @@ const DatabaseSlice = createSlice({
     }),
   },
 });
+export const { changeGraph } = DatabaseSlice.actions;
 
 export default DatabaseSlice.reducer;

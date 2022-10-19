@@ -21,12 +21,13 @@ import { connect } from 'react-redux';
 import SidebarHome from '../presentations/SidebarHome';
 import { setCommand } from '../../../features/editor/EditorSlice';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
+import { changeGraph } from '../../../features/database/DatabaseSlice';
 import { getMetaData, changeCurrentGraph } from '../../../features/database/MetadataSlice';
 
 const mapStateToProps = (state) => {
   const currentGraphData = state.metadata.graphs[state.metadata.currentGraph] || '';
   return {
-    graphs: Object.keys(state.metadata.graphs),
+    graphs: Object.entries(state.metadata.graphs).map(([k, v]) => [k, v.id]),
     edges: currentGraphData.edges,
     nodes: currentGraphData.nodes,
     propertyKeys: currentGraphData.propertyKeys,
@@ -38,7 +39,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  setCommand, addFrame, trimFrame, getMetaData, changeCurrentGraph,
+  setCommand, addFrame, trimFrame, getMetaData, changeCurrentGraph, changeGraph,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SidebarHome);

@@ -18,6 +18,7 @@
  */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import uuid from 'react-uuid';
 
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
@@ -29,17 +30,17 @@ export const getMetaData = createAsyncThunk(
         Object.keys(ret).forEach((gname) => {
           let allCountEdge = 0;
           let allCountNode = 0;
-          console.log(ret[gname].nodes.forEach((item) => {
+          ret[gname].nodes.forEach((item) => {
             allCountNode += item.cnt;
-          }));
+          });
 
-          console.log(ret[gname].edges.forEach((item) => {
+          ret[gname].edges.forEach((item) => {
             allCountEdge += item.cnt;
-          }));
+          });
           ret[gname].nodes.unshift({ label: '*', cnt: allCountNode });
           ret[gname].edges.unshift({ label: '*', cnt: allCountEdge });
+          ret[gname].id = uuid();
         });
-        console.log(ret);
         return ret;
       }
       throw response;
@@ -84,24 +85,28 @@ const MetadataSlice = createSlice({
   },
   reducers: {
     resetMetaData: (state) => (state.initialState),
-    changeCurrentGraph: (state, action) => ({ ...state, currentGraph: action.payload }),
+    changeCurrentGraph: (state, action) => ({
+      ...state,
+      currentGraph: Object.entries(state.graphs)
+        .find(([, data]) => data.id === action.payload.id)[0],
+    }),
   },
   extraReducers: {
     [getMetaData.fulfilled]: (state, action) => {
-      console.log('fullfilled', state, action);
       if (action.payload) {
-        return Object.assign(state, {
+        return {
+          ...state,
           graphs: action.payload,
           status: 'connected',
           dbname: action.payload.database,
-          currentGraph: Object.keys(action.payload)[0],
-        });
+          currentGraph: state.currentGraph !== '' ? state.currentGraph : Object.keys(action.payload)[0],
+        };
       }
-      return Object.assign(state, {
-        ...state.initialState,
+      return {
+        ...state,
         status: 'disconnected',
         dbname: action.payload.database,
-      });
+      };
     },
     [getMetaChartData.fulfilled]: (state, action) => {
       if (action.payload) {

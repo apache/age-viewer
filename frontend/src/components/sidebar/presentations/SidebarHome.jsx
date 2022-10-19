@@ -302,6 +302,7 @@ const SidebarHome = ({
   addFrame,
   getMetaData,
   changeCurrentGraph,
+  changeGraph,
 }) => {
   const dispatch = useDispatch();
   const { confirm } = Modal;
@@ -390,7 +391,11 @@ const SidebarHome = ({
             margin: '3px auto',
           }}
           />
-          <GraphSelectDropdown graphs={graphs} changeCurrentGraph={changeCurrentGraph} />
+          <GraphSelectDropdown
+            graphs={graphs}
+            changeCurrentGraph={changeCurrentGraph}
+            changeGraphDB={changeGraph}
+          />
         </div>
       </div>
     </div>
@@ -416,7 +421,8 @@ SidebarHome.propTypes = {
   addFrame: PropTypes.func.isRequired,
   getMetaData: PropTypes.func.isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
-  graphs: PropTypes.arrayOf(PropTypes.string).isRequired,
+  graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  changeGraph: PropTypes.func.isRequired,
 };
 
 export default SidebarHome;

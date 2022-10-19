@@ -18,7 +18,6 @@
  */
 
 import React from 'react';
-import uuid from 'react-uuid';
 import { Button, Dropdown, Menu } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -77,18 +76,18 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-const GraphSelectDropdown = ({ graphs, changeCurrentGraph }) => {
+const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
   const handleGraphClick = (e) => {
-    console.log(e);
-    changeCurrentGraph('');
+    changeCurrentGraph({ id: e.key });
+    changeGraphDB({ graphName: e.domEvent.target.innerText });
   };
 
   const menu = (
     <Menu
       onClick={handleGraphClick}
-      items={graphs.map((gname) => ({
+      items={graphs.map(([gname, graphId]) => ({
         label: gname,
-        key: uuid(),
+        key: graphId,
       }
       ))}
     />
@@ -103,8 +102,9 @@ const GraphSelectDropdown = ({ graphs, changeCurrentGraph }) => {
 };
 
 GraphSelectDropdown.propTypes = {
-  graphs: PropTypes.arrayOf(PropTypes.string).isRequired,
+  graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
+  changeGraphDB: PropTypes.func.isRequired,
 };
 
 export {
