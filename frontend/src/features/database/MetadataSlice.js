@@ -53,26 +53,6 @@ export const getMetaData = createAsyncThunk(
   },
 );
 
-export const getMetaChartData = createAsyncThunk(
-  'database/getMetaChartData',
-  async () => {
-    try {
-      const response = await fetch('/api/v1/db/metaChart');
-      if (response.ok) {
-        return await response.json();
-      }
-      throw response;
-    } catch (error) {
-      const errorDetail = {
-        name: 'Database Connection Failed',
-        message: `[${error.severity}]:(${error.code}) ${error.message} `,
-        statusText: error.statusText,
-      };
-      throw errorDetail;
-    }
-  },
-);
-
 const MetadataSlice = createSlice({
   name: 'metadata',
   initialState: {
@@ -125,12 +105,6 @@ const MetadataSlice = createSlice({
         graph: action.payload.graph,
         role: action.payload.role,
       });
-    },
-    [getMetaChartData.fulfilled]: (state, action) => {
-      if (action.payload) {
-        return Object.assign(state, { rows: action.payload });
-      }
-      return Object.assign(state, { rows: [] });
     },
   },
 });
