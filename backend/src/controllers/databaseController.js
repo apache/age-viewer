@@ -64,31 +64,6 @@ class DatabaseController {
             throw new Error('Not connected');
         }
     }
-
-    async getMetaChart(req, res, next) {
-        let databaseService = sessionService.get(req.sessionID);
-        if (databaseService.isConnected()) {
-            let metadata = [];
-            try {
-                let graphLabels = await databaseService.getGraphLabels();
-                for (let labels of graphLabels) {
-                    let countResults = await databaseService.getGraphLabelCount(labels.la_name, labels.la_kind)
-                    for (let idx in countResults) {
-                        if (idx > 0) {
-                            labels.la_name = labels.la_name + "-" + idx
-                            labels.la_oid = labels.la_oid + (idx * 0.1)
-                        }
-                        metadata.push(Object.assign({}, labels, countResults[idx]))
-                    }
-                }
-                res.status(200).json(metadata).end();
-            } catch (error) {
-                res.status(500).json(metadata).end();
-            }
-        } else {
-            throw new Error('Not connected');
-        }
-    }
 }
 
 module.exports = DatabaseController;
