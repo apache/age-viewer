@@ -91,7 +91,7 @@ class GraphRepository {
 
     async initGraphNames(){
         const { rows } = await this.execute(getQuery(this.flavor, 'get_graph_names'));
-        this._graphs = rows.map((item)=>item.schema_name);
+        this._graphs = rows.map((item)=>item.name);
         // set current graph to first name
         this.setCurrentGraph(this._graphs[0]);
     }
