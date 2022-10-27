@@ -131,6 +131,7 @@ const CypherSlice = createSlice({
         command: 'ERROR',
         query: action.meta.arg[1],
         key: action.meta.arg[0],
+        complete: true,
         message: action.error.message,
       };
     },
