@@ -111,14 +111,17 @@ const CypherSlice = createSlice({
       // state.queryResult[action.payload.key].response = action.payload
       Object.assign(state.queryResult[action.payload.key], {
         ...action.payload,
-        ...state.queryResult[action.payload.key],
         complete: true,
       });
+      console.log(current(state));
     },
     [executeCypherQuery.pending]: (state, action) => {
       console.log('pending state', current(state), action);
-      state.queryResult[action.payload.key] = {};
-      Object.assign(state.queryResult[action.payload.key], {
+      const key = action.meta.arg[0];
+      const command = action.meta.arg[1];
+      state.queryResult[key] = {};
+      Object.assign(state.queryResult[key], {
+        command,
         complete: false,
         requestId: action.meta.requestId,
       });
