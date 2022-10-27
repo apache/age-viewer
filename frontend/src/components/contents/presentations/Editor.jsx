@@ -33,6 +33,7 @@ const Editor = ({
   setCommand,
   command,
   addFrame,
+  removeFrame,
   trimFrame,
   addAlert,
   alertList,
@@ -88,12 +89,12 @@ const Editor = ({
         dispatch(() => addFrame(command, 'ServerStatus', refKey));
       }
     } else if (database.status === 'connected') {
-      const reqStringValue = command;
-      dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
-        if (response.type === 'cypher/executeCypherQuery/fulfilled') {
-          addFrame(reqStringValue, 'CypherResultFrame', refKey);
-        } else if (response.type === 'cypher/executeCypherQuery/rejected') {
-          addFrame(reqStringValue, 'CypherResultFrame', refKey);
+      addFrame(command, 'CypherResultFrame', refKey);
+      dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
+        if (response.type === 'cypher/executeCypherQuery/rejected') {
+          // remove previously added frame if error
+          removeFrame();
+          addFrame(command, 'CypherResultFrame', refKey);
           dispatch(() => addAlert('ErrorCypherQuery'));
         }
       }));
@@ -193,6 +194,7 @@ Editor.propTypes = {
   setCommand: PropTypes.func.isRequired,
   command: PropTypes.string.isRequired,
   addFrame: PropTypes.func.isRequired,
+  removeFrame: PropTypes.func.isRequired,
   trimFrame: PropTypes.func.isRequired,
   addAlert: PropTypes.func.isRequired,
   alertList: PropTypes.arrayOf(PropTypes.shape({

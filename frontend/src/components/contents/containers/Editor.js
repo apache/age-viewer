@@ -18,7 +18,7 @@
  */
 
 import { connect } from 'react-redux';
-import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
+import { addFrame, trimFrame, removeFrame } from '../../../features/frame/FrameSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { getConnectionStatus } from '../../../features/database/DatabaseSlice';
 import { executeCypherQuery } from '../../../features/cypher/CypherSlice';
@@ -38,6 +38,7 @@ const mapDispatchToProps = {
   setCommand,
   addFrame,
   trimFrame,
+  removeFrame,
   addAlert,
   getConnectionStatus,
   executeCypherQuery,

@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line no-unused-vars
 const validateSamePathVariableReturn = (cypherQuery) => {
@@ -111,6 +111,11 @@ const CypherSlice = createSlice({
       state.queryResult[action.payload.key] = {};
       // state.queryResult[action.payload.key].response = action.payload
       Object.assign(state.queryResult[action.payload.key], action.payload);
+    },
+    [executeCypherQuery.pending]: (state, action) => {
+      console.log('pending state', current(state), action);
+
+      Object.assign();
     },
     [executeCypherQuery.rejected]: (state, action) => {
       state.queryResult[action.meta.arg[0]] = {
