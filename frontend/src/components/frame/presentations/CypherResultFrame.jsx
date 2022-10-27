@@ -19,12 +19,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Spinner } from 'react-bootstrap';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import Frame from '../Frame';
 
 const CypherResultFrame = ({
-  refKey, isPinned, reqString, queryComplete,
+  refKey, isPinned, reqString,
 }) => (
   <Frame
     reqString={reqString}
@@ -32,30 +31,13 @@ const CypherResultFrame = ({
     refKey={refKey}
     bodyNoPadding
   >
-    {console.log('query complete', queryComplete)}
-    {
-      queryComplete.complete
-        ? (
-          <div className="d-flex h-100">
-            <CypherResultTableContainer refKey={refKey} />
-          </div>
-        )
-        : (
-          <div className="d-flex h-100">
-            <Spinner animation="border" />
-          </div>
-        )
-    }
-
+    <div className="d-flex h-100">
+      <CypherResultTableContainer refKey={refKey} />
+    </div>
   </Frame>
 );
 
 CypherResultFrame.propTypes = {
-  queryComplete: PropTypes.shape(
-    {
-      complete: PropTypes.bool.isRequired,
-    },
-  ).isRequired,
   refKey: PropTypes.string.isRequired,
   isPinned: PropTypes.bool.isRequired,
   reqString: PropTypes.string.isRequired,

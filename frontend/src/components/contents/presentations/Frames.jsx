@@ -116,13 +116,11 @@ const Frames = ({
       if (frame.frameName === 'CypherResultFrame') {
         console.log(queryResult, frame);
         console.log(queryResult[frame.frameProps.key].command.match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*'));
-        if (false && Object.prototype.hasOwnProperty.call(queryResult, frame.frameProps.key)
-          && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
-            .match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*')) {
+        if (queryResult[frame.frameProps.key].complete && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
+          .match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*')) {
           console.log('no graph');
           return (
             <CypherResult
-              queryComplete={queryResult[frame.frameProps.key]}
               key={frame.frameProps.key}
               refKey={frame.frameProps.key}
               reqString={frame.frameProps.reqString}

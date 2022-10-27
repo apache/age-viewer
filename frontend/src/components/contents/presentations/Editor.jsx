@@ -93,7 +93,7 @@ const Editor = ({
       dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
         if (response.type === 'cypher/executeCypherQuery/rejected') {
           // remove previously added frame if error
-          removeFrame();
+          removeFrame({ refKey });
           addFrame(command, 'CypherResultFrame', refKey);
           dispatch(() => addAlert('ErrorCypherQuery'));
         }

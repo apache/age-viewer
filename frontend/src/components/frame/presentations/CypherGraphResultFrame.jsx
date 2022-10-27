@@ -201,7 +201,7 @@ const CypherResultFrame = ({
               </div>
             )
             : (
-              <div className="d-flex h-100">
+              <div className="d-flex h-100" style={{ alignContent: 'center' }}>
                 <Spinner animation="border" />
               </div>
             )
