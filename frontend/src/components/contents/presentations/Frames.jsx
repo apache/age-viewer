@@ -114,10 +114,8 @@ const Frames = ({
         );
       }
       if (frame.frameName === 'CypherResultFrame') {
-        console.log('frame check', frameList);
         if (queryResult[frame.frameProps.key].complete && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
           .match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*')) {
-          console.log('no graph');
           return (
             <CypherResult
               key={frame.frameProps.key}

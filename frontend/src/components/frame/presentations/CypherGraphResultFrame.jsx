@@ -35,7 +35,6 @@ const CypherResultFrame = ({
   isPinned,
   reqString,
 }) => {
-  console.log('component crf', queryComplete);
   const chartAreaRef = createRef();
   const [cytoscapeContainerKey, setCytoscapeContainerKey] = useState(uuid());
 
@@ -89,9 +88,7 @@ const CypherResultFrame = ({
     if (!chartAreaRef.current) return;
     chartAreaRef.current.applyEdgeThicknessCytoscapeElements(globalThickness);
   }, [globalThickness]);
-  useEffect(() => {
-    console.log('complete');
-  }, queryComplete.complete);
+
   const refreshFrame = () => {
     setCytoscapeContainerKey(uuid());
   };
