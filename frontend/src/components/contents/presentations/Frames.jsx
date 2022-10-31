@@ -114,7 +114,7 @@ const Frames = ({
         );
       }
       if (frame.frameName === 'CypherResultFrame') {
-        console.log('frame check', queryResult[frame.frameProps.key].complete, frame);
+        console.log('frame check', frameList);
         if (queryResult[frame.frameProps.key].complete && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
           .match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*')) {
           console.log('no graph');
@@ -138,7 +138,7 @@ const Frames = ({
       }
       return '';
     }));
-  }, [frameList]);
+  }, [frameList, queryResult]);
 
   return (
     <div className="container-fluid frame-area pt-3">

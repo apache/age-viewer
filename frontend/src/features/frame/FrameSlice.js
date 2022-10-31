@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 import uuid from 'react-uuid';
 
 const FrameSlice = createSlice({
@@ -48,8 +48,8 @@ const FrameSlice = createSlice({
     removeFrame: {
       reducer: (state, action) => {
         const frameKey = action.payload.refKey;
-        state.splice(state.findIndex((frame) => (frame.frameProps.key === frameKey)), 1);
-        state.map((frame) => { if (frame.orgIndex) { frame.orgIndex -= 1; } return frame; });
+        console.log('current frames before removal', current(state));
+        return state.filter((frame) => frame.frameProps.key !== frameKey);
       },
       prepare: (refKey) => ({ payload: { refKey } }),
 
