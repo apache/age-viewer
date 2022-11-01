@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { Button, Dropdown, Menu } from 'antd';
+import { Select } from 'antd';
 import PropTypes from 'prop-types';
 
 const StyleTextRight = {
@@ -77,27 +77,27 @@ SubLabelLeftWithLink.propTypes = {
 };
 
 const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
+  const selectStyle = {
+    marginTop: '1rem',
+  };
   const handleGraphClick = (e) => {
-    changeCurrentGraph({ id: e.key });
-    changeGraphDB({ graphName: e.domEvent.target.innerText });
+    const graphName = graphs.find((graph) => graph[1] === e)[0];
+    changeCurrentGraph({ id: e });
+    changeGraphDB({ graphName });
   };
 
-  const menu = (
-    <Menu
-      onClick={handleGraphClick}
-      items={graphs.map(([gname, graphId]) => ({
-        label: gname,
-        key: graphId,
-      }
-      ))}
-    />
+  const options = (
+    graphs.map(([gname, graphId]) => (<option value={graphId}>{gname}</option>))
   );
   return (
-    <Dropdown overlay={menu} trigger={['click']}>
-      <Button>
-        Select Graph
-      </Button>
-    </Dropdown>
+    <div>
+      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
+        {options}
+      </Select>
+      <b>
+        Current Graph
+      </b>
+    </div>
   );
 };
 
