@@ -75,14 +75,14 @@ const ServerConnectFrame = ({
       <Row>
         <Col span={6}>
           <h3>Connect to Database</h3>
-          <p>Database access might require and authenticated connection.</p>
+          <p>Database access might require an authenticated connection.</p>
         </Col>
         <Col span={18}>
           <div className={styles.FrameWrapper}>
             <Form
               initialValues={FormInitialValue}
               layout="vertical"
-              onFinish={(values) => connectToDatabase(values)}
+              onFinish={connectToDatabase}
             >
               <Form.Item name="flavor" label="Database Type" rules={[{ required: true }]}>
                 <Select
@@ -99,9 +99,6 @@ const ServerConnectFrame = ({
                 <InputNumber placeholder="5432" className={styles.FullWidth} />
               </Form.Item>
               <Form.Item name="database" label="Database Name" rules={[{ required: true }]}>
-                <Input placeholder="postgres" />
-              </Form.Item>
-              <Form.Item name="graph" label="Graph Path" rules={[{ required: true }]}>
                 <Input placeholder="postgres" />
               </Form.Item>
               <Form.Item name="user" label="User Name" rules={[{ required: true }]}>

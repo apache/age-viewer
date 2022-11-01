@@ -27,17 +27,40 @@ class DatabaseService {
         this._graphRepository = null;
     }
 
-    async getMetaData() {
+    async getMetaData(graphName) {
+        await this._graphRepository.initGraphNames();
+        const {graphs} = this._graphRepository.getConnectionInfo();
+        if(graphName){
+            if(graphs.includes(graphName)){
+                return await this.getMetaDataSingle(graphName);
+            }else{
+                throw new Error('graph does not exist');
+            }
+            
+        }else{
+            return await this.getMetaDataMultiple(graphs);
+        }
+
+    }
+
+    async getMetaDataMultiple(graphs){
+        const metadata = {};
+        await Promise.all(graphs.map(async(gname)=>{
+            metadata[gname] = await this.getMetaDataSingle(gname);
+        }))
+        return metadata;
+    }
+
+    async getMetaDataSingle(curGraph){
         let metadata = {};
-        
+        const {database} = this.getConnectionInfo();
         try {
-            let connectionInfo = this.getConnectionInfo();
-            let {nodes, edges} = await this.readMetaData();
+            let {nodes, edges} = await this.readMetaData(curGraph);
             metadata.nodes = nodes;
             metadata.edges = edges;
             metadata.propertyKeys = await this.getPropertyKeys();
-            metadata.graph = connectionInfo.graph;
-            metadata.database = connectionInfo.database;
+            metadata.graph = curGraph;
+            metadata.database = database;
             metadata.role = await this.getRole();
         } catch (error) {
             throw error;
@@ -72,9 +95,9 @@ class DatabaseService {
         return queryResult.rows;
     }
     
-    async readMetaData(){
+    async readMetaData(graphName){
         let gr = this._graphRepository;
-        let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), this.getConnectionInfo().graph));
+        let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), graphName));
         return this.parseMeta(queryResult[1].rows);
     }
     /* 
