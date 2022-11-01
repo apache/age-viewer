@@ -22,6 +22,7 @@ import uuid from 'react-uuid';
 import { saveAs } from 'file-saver';
 import { Parser } from 'json2csv';
 import PropTypes from 'prop-types';
+import { Spinner } from 'react-bootstrap';
 import CypherResultCytoscapeContainer from '../../cypherresult/containers/CypherResultCytoscapeContainer';
 import CypherResultTableContainer from '../../cypherresult/containers/CypherResultTableContainer';
 import GraphFilterModal from '../../cypherresult/components/GraphFilterModal';
@@ -29,6 +30,7 @@ import EdgeThicknessMenu from '../../cypherresult/components/EdgeThicknessMenu';
 import Frame from '../Frame';
 
 const CypherResultFrame = ({
+  queryComplete,
   refKey,
   isPinned,
   reqString,
@@ -74,6 +76,7 @@ const CypherResultFrame = ({
   }, [filterModalVisible, thicknessModalVisible, chartLegend]);
 
   useEffect(() => {
+    if (!chartAreaRef.current) return;
     if (globalFilter) {
       chartAreaRef.current.applyFilterOnCytoscapeElements(globalFilter);
     } else {
@@ -82,6 +85,7 @@ const CypherResultFrame = ({
   }, [globalFilter]);
 
   useEffect(() => {
+    if (!chartAreaRef.current) return;
     chartAreaRef.current.applyEdgeThicknessCytoscapeElements(globalThickness);
   }, [globalThickness]);
 
@@ -174,21 +178,33 @@ const CypherResultFrame = ({
         isPinned={isPinned}
         refKey={refKey}
       >
-        <div className="d-flex h-100">
-          <div style={{ height: '100%', width: '100%' }} id={`${refKey}-graph`} className="selected-frame-tab">
-            <CypherResultCytoscapeContainer
-              key={cytoscapeContainerKey}
-              ref={chartAreaRef}
-              refKey={refKey}
-              setChartLegend={setChartLegend}
-            />
-          </div>
-          <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
-            <CypherResultTableContainer
-              refKey={refKey}
-            />
-          </div>
-        </div>
+        {
+          queryComplete.complete
+            ? (
+              <div className="d-flex h-100">
+                <div style={{ height: '100%', width: '100%' }} id={`${refKey}-graph`} className="selected-frame-tab">
+                  <CypherResultCytoscapeContainer
+                    key={cytoscapeContainerKey}
+                    ref={chartAreaRef}
+                    refKey={refKey}
+                    setChartLegend={setChartLegend}
+                  />
+                </div>
+                <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
+                  <CypherResultTableContainer
+                    refKey={refKey}
+                  />
+                </div>
+              </div>
+            )
+            : (
+              <div style={{ alignContent: 'center' }}>
+                <div style={{ marginLeft: '50%', padding: '20px' }} id={`${refKey}-loading`}>
+                  <Spinner animation="border" />
+                </div>
+              </div>
+            )
+        }
       </Frame>
       <GraphFilterModal
         onSubmit={(filters) => {
@@ -205,6 +221,11 @@ const CypherResultFrame = ({
 };
 
 CypherResultFrame.propTypes = {
+  queryComplete: PropTypes.shape(
+    {
+      complete: PropTypes.bool.isRequired,
+    },
+  ).isRequired,
   refKey: PropTypes.string.isRequired,
   isPinned: PropTypes.bool.isRequired,
   reqString: PropTypes.string.isRequired,

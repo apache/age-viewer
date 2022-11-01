@@ -114,9 +114,8 @@ const Frames = ({
         );
       }
       if (frame.frameName === 'CypherResultFrame') {
-        if (Object.prototype.hasOwnProperty.call(queryResult, frame.frameProps.key)
-          && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
-            .match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*')) {
+        if (queryResult[frame.frameProps.key].complete && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
+          .match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*')) {
           return (
             <CypherResult
               key={frame.frameProps.key}
@@ -137,7 +136,7 @@ const Frames = ({
       }
       return '';
     }));
-  }, [frameList]);
+  }, [frameList, queryResult]);
 
   return (
     <div className="container-fluid frame-area pt-3">

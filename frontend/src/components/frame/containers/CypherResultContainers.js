@@ -21,8 +21,9 @@ import { connect } from 'react-redux';
 import { pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
 import CypherResultFrame from '../presentations/CypherResultFrame';
 
-const mapStateToProps = () => ({
-});
+const mapStateToProps = () => (
+  {}
+);
 
 const mapDispatchToProps = { removeFrame, pinFrame };
 

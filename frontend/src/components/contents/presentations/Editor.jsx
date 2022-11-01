@@ -88,12 +88,9 @@ const Editor = ({
         dispatch(() => addFrame(command, 'ServerStatus', refKey));
       }
     } else if (database.status === 'connected') {
-      const reqStringValue = command;
-      dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
-        if (response.type === 'cypher/executeCypherQuery/fulfilled') {
-          addFrame(reqStringValue, 'CypherResultFrame', refKey);
-        } else if (response.type === 'cypher/executeCypherQuery/rejected') {
-          addFrame(reqStringValue, 'CypherResultFrame', refKey);
+      addFrame(command, 'CypherResultFrame', refKey);
+      dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
+        if (response.type === 'cypher/executeCypherQuery/rejected') {
           dispatch(() => addAlert('ErrorCypherQuery'));
         }
       }));

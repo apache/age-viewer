@@ -48,8 +48,7 @@ const FrameSlice = createSlice({
     removeFrame: {
       reducer: (state, action) => {
         const frameKey = action.payload.refKey;
-        state.splice(state.findIndex((frame) => (frame.frameProps.key === frameKey)), 1);
-        state.map((frame) => { if (frame.orgIndex) { frame.orgIndex -= 1; } return frame; });
+        return state.filter((frame) => frame.frameProps.key !== frameKey);
       },
       prepare: (refKey) => ({ payload: { refKey } }),
 
