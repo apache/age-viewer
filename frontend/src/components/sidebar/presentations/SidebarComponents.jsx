@@ -79,24 +79,25 @@ SubLabelLeftWithLink.propTypes = {
 const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
   const selectStyle = {
     marginTop: '1rem',
+    minWidth: 200,
   };
-  const handleGraphClick = (e) => {
-    const graphName = graphs.find((graph) => graph[1] === e)[0];
-    changeCurrentGraph({ id: e });
-    changeGraphDB({ graphName });
+  const handleGraphClick = (_, e) => {
+    changeCurrentGraph({ id: e['data-gid'] });
+    changeGraphDB({ graphName: e.value });
   };
 
   const options = (
-    graphs.map(([gname, graphId]) => (<option value={graphId}>{gname}</option>))
+    graphs.map(([gname, graphId]) => (
+      <Select.Option value={gname} data-gid={graphId}>{gname}</Select.Option>
+    ))
   );
   return (
-    <div>
-      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
+    <div style={{ minWidth: 200 }}>
+      <Select onSelect={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
         {options}
       </Select>
-      <b>
-        Current Graph
-      </b>
+      <br />
+      <b>Current Graph</b>
     </div>
   );
 };
