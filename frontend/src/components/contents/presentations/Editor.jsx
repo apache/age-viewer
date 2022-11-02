@@ -55,7 +55,6 @@ const Editor = ({
   };
 
   const onClick = () => {
-    console.log('in editor presentation command is ', command);
     const refKey = uuid();
     if (command.toUpperCase().startsWith(':PLAY')) {
       dispatch(() => addFrame(command, 'Contents', refKey));
