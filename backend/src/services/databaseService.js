@@ -208,14 +208,12 @@ class DatabaseService {
         data.forEach((element, index) => {
             if ( element.label === vertex ){
                 cur = 'nodes';
+                meta[cur].push(element);
             }
             else if ( element.label === edge ){
                 cur = 'edges';
-            }
-            else{
                 meta[cur].push(element);
             }
-
         });
         return meta;
     }
