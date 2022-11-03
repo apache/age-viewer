@@ -38,7 +38,6 @@ const Frames = ({
 }) => {
   const dispatch = useDispatch();
   const [frames, setFrames] = useState(null);
-
   useEffect(() => {
     if (database.status === 'connected' && frameList.length === 0) {
       if (!setting.connectionStatusSkip) {
@@ -61,7 +60,7 @@ const Frames = ({
       if (index > maxNumOfFrames && maxNumOfFrames !== 0) {
         return '';
       }
-
+      console.log(frame.frameName);
       if (frame.frameName === 'Contents') {
         return (
           <Contents

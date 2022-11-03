@@ -30,7 +30,6 @@ const FrameSlice = createSlice({
         const reqString = action.payload.reqString.trim();
         const firstNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false));
         const { frameName } = action.payload;
-
         const frameProps = {
           reqString,
           key: action.payload.refKey ? action.payload.refKey : uuid(),

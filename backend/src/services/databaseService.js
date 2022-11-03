@@ -55,9 +55,8 @@ class DatabaseService {
         let metadata = {};
         const {database} = this.getConnectionInfo();
         try {
-            let {nodes, edges} = await this.readMetaData(curGraph);
-            metadata.nodes = nodes;
-            metadata.edges = edges;
+            metadata.nodes = await this.getNodes(curGraph);
+            metadata.edges = await this.getEdges(curGraph);
             metadata.propertyKeys = await this.getPropertyKeys();
             metadata.graph = curGraph;
             metadata.database = database;
@@ -94,25 +93,25 @@ class DatabaseService {
 
         return queryResult.rows;
     }
-    
+    /*
     async readMetaData(graphName){
         let gr = this._graphRepository;
         let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), graphName));
         return this.parseMeta(queryResult[1].rows);
     }
-    /* 
-    async getNodes() {
-        let graphRepository = this._graphRepository;
-        let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_nodes'), graphRepository._graph, graphRepository._graph));
+    */
+    async getNodes(graphName) {
+        let gr = this._graphRepository;
+        let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_nodes'), graphName, graphName));
         return queryResult.rows;
     }
 
-    async getEdges() {
-        let graphRepository = this._graphRepository;
-        let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_edges'), graphRepository._graph, graphRepository._graph));
+    async getEdges(graphName) {
+        let gr = this._graphRepository;
+        let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_edges'), graphName, graphName));
         return queryResult.rows;
     }
-    */
+
     async getPropertyKeys() {
         let graphRepository = this._graphRepository;
         let queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'property_keys'));
@@ -197,6 +196,7 @@ class DatabaseService {
             properties: props,
         };
     }
+    /*
     parseMeta(data){
         const meta = {
             edges:[],
@@ -217,6 +217,7 @@ class DatabaseService {
         });
         return meta;
     }
+    */
 }
 
 module.exports = DatabaseService;
