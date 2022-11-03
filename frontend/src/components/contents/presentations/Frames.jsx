@@ -60,7 +60,6 @@ const Frames = ({
       if (index > maxNumOfFrames && maxNumOfFrames !== 0) {
         return '';
       }
-      console.log(frame.frameName);
       if (frame.frameName === 'Contents') {
         return (
           <Contents
