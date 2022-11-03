@@ -31,6 +31,7 @@ import IconPlay from '../../../icons/IconPlay';
 
 const Editor = ({
   setCommand,
+  activeRequests,
   command,
   addFrame,
   trimFrame,
@@ -45,6 +46,7 @@ const Editor = ({
 }) => {
   const dispatch = useDispatch();
   const [alerts, setAlerts] = useState([]);
+  const [activePromises, setPromises] = useState({});
 
   // const favoritesCommand = () => {
   //   dispatch(() => addCommandFavorites(command));
@@ -89,15 +91,34 @@ const Editor = ({
       }
     } else if (database.status === 'connected') {
       addFrame(command, 'CypherResultFrame', refKey);
-      dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
+      const req = dispatch(() => executeCypherQuery([refKey, command]));
+      req.then((response) => {
         if (response.type === 'cypher/executeCypherQuery/rejected') {
           dispatch(() => addAlert('ErrorCypherQuery'));
         }
-      }));
+      });
+      activePromises[refKey] = req;
+      setPromises({ ...activePromises });
+      console.log('active promises', activePromises);
     }
     dispatch(() => addCommandHistory(command));
     clearCommand();
   };
+
+  useEffect(() => {
+    console.log('requests updated', activePromises, activeRequests);
+    const reqCancel = Object.keys(activePromises).filter((ref) => !activeRequests.includes(ref));
+    console.log('cancel these', reqCancel);
+    reqCancel.forEach((ref) => {
+      try {
+        activePromises[ref].abort();
+      } catch (e) {
+        console.log('request complete');
+      }
+      delete activePromises[ref];
+    });
+    setPromises({ ...activePromises });
+  }, [activeRequests]);
 
   useEffect(() => {
     setAlerts(
@@ -188,6 +209,7 @@ const Editor = ({
 
 Editor.propTypes = {
   setCommand: PropTypes.func.isRequired,
+  activeRequests: PropTypes.arrayOf(PropTypes.string).isRequired,
   command: PropTypes.string.isRequired,
   addFrame: PropTypes.func.isRequired,
   trimFrame: PropTypes.func.isRequired,

@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line no-unused-vars
 const validateSamePathVariableReturn = (cypherQuery) => {
@@ -81,8 +81,8 @@ export const executeCypherQuery = createAsyncThunk(
 
 );
 
-const removeActive = (state, action) => {
-  state.activeRequests.filter((ref) => ref !== action.payload.key);
+const removeActive = (state, key) => {
+  state.activeRequests = state.activeRequests.filter((ref) => ref !== key);
 };
 
 const CypherSlice = createSlice({
@@ -111,22 +111,24 @@ const CypherSlice = createSlice({
       },
       prepare: (elementType, label, property) => ({ payload: { elementType, label, property } }),
     },
+    removeActiveRequests: (state, action) => removeActive(state, action.payload),
   },
   extraReducers: {
     [executeCypherQuery.fulfilled]: (state, action) => {
+      console.log(current(state));
       // state.queryResult[action.payload.key].response = action.payload
       Object.assign(state.queryResult[action.payload.key], {
         ...action.payload,
         complete: true,
       });
-      removeActive(state, action);
+      removeActive(state, action.payload.key);
     },
     [executeCypherQuery.pending]: (state, action) => {
       const key = action.meta.arg[0];
       const command = action.meta.arg[1];
       const rid = action.meta.requestId;
       state.queryResult[key] = {};
-      state.activeRequests.push(key);
+      state.activeRequests = [...state.activeRequests, key];
       Object.assign(state.queryResult[key], {
         command,
         complete: false,
@@ -134,6 +136,7 @@ const CypherSlice = createSlice({
       });
     },
     [executeCypherQuery.rejected]: (state, action) => {
+      removeActive(state, action.meta.arg[0]);
       state.queryResult[action.meta.arg[0]] = {
         command: 'ERROR',
         query: action.meta.arg[1],
@@ -141,11 +144,10 @@ const CypherSlice = createSlice({
         complete: true,
         message: action.error.message,
       };
-      removeActive(state, action);
     },
   },
 });
 
-export const { setLabels } = CypherSlice.actions;
+export const { setLabels, removeActiveRequests } = CypherSlice.actions;
 
 export default CypherSlice.reducer;
