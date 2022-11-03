@@ -81,10 +81,15 @@ export const executeCypherQuery = createAsyncThunk(
 
 );
 
+const removeActive = (state, action) => {
+  state.activeRequests.filter((ref) => ref !== action.payload.key);
+};
+
 const CypherSlice = createSlice({
   name: 'cypher',
   initialState: {
     queryResult: {},
+    activeRequests: [],
     labels: { nodeLabels: {}, edgeLabels: {} },
   },
   reducers: {
@@ -114,15 +119,18 @@ const CypherSlice = createSlice({
         ...action.payload,
         complete: true,
       });
+      removeActive(state, action);
     },
     [executeCypherQuery.pending]: (state, action) => {
       const key = action.meta.arg[0];
       const command = action.meta.arg[1];
+      const rid = action.meta.requestId;
       state.queryResult[key] = {};
+      state.activeRequests.push(key);
       Object.assign(state.queryResult[key], {
         command,
         complete: false,
-        requestId: action.meta.requestId,
+        requestId: rid,
       });
     },
     [executeCypherQuery.rejected]: (state, action) => {
@@ -133,6 +141,7 @@ const CypherSlice = createSlice({
         complete: true,
         message: action.error.message,
       };
+      removeActive(state, action);
     },
   },
 });
