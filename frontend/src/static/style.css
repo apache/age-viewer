@@ -698,6 +698,9 @@ textarea.editorTextarea
     position:relative;
     top:1px;
 }
+.close_session:hover {
+    opacity: 0.6;
+}
 
 .refresh_button {
     background-color: #18CCC5;
@@ -713,4 +716,7 @@ textarea.editorTextarea
 .refresh_button:active {
     position:relative;
     top:1px;
+}
+.refresh_button:hover {
+    opacity: 0.6;
 }

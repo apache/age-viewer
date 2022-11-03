@@ -38,7 +38,6 @@ const Frames = ({
 }) => {
   const dispatch = useDispatch();
   const [frames, setFrames] = useState(null);
-
   useEffect(() => {
     if (database.status === 'connected' && frameList.length === 0) {
       if (!setting.connectionStatusSkip) {
@@ -61,7 +60,6 @@ const Frames = ({
       if (index > maxNumOfFrames && maxNumOfFrames !== 0) {
         return '';
       }
-
       if (frame.frameName === 'Contents') {
         return (
           <Contents
@@ -114,7 +112,7 @@ const Frames = ({
         );
       }
       if (frame.frameName === 'CypherResultFrame') {
-        if (queryResult[frame.frameProps.key].complete && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
+        if (queryResult[frame.frameProps.key]?.complete && (queryResult[frame.frameProps.key].command !== null ? queryResult[frame.frameProps.key].command.toUpperCase() : 'NULL')
           .match('(ERROR|GRAPH|CREATE|UPDATE|COPY|NULL).*')) {
           return (
             <CypherResult
