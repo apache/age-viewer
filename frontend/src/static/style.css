@@ -17,7 +17,7 @@
  * under the License.
  */
 
-:root {
+ :root {
     /* Light Mode */
     --light-text: #222430;
     --light-bg: #ffffff;
@@ -214,9 +214,9 @@ a[data-toggle="collapse"] {
     margin-top: 1px;
     min-height: 60px;
     padding: 0;
-    resize: vertical;
-    overflow: auto;
     border: 1px solid;
+    height:auto;
+    max-height: 500px;
 }
 
 .editor-button-wrapper {
@@ -242,6 +242,12 @@ a[data-toggle="collapse"] {
 .CodeMirror-scroll {
     margin-top: -25px;
     padding-top: 25px;
+}
+.CodeMirror-scroll {
+    max-height: inherit;
+}
+.CodeMirror-hscrollbar {
+    height: 10px;
 }
 
 /* ---------------------------------------------------
@@ -698,6 +704,9 @@ textarea.editorTextarea
     position:relative;
     top:1px;
 }
+.close_session:hover {
+    opacity: 0.6;
+}
 
 .refresh_button {
     background-color: #18CCC5;
@@ -713,4 +722,7 @@ textarea.editorTextarea
 .refresh_button:active {
     position:relative;
     top:1px;
+}
+.refresh_button:hover {
+    opacity: 0.6;
 }
