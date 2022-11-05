@@ -215,8 +215,10 @@ a[data-toggle="collapse"] {
     min-height: 60px;
     padding: 0;
     border: 1px solid;
+    resize: vertical;
+    overflow: auto;
     height:auto;
-    max-height: 500px;
+    max-height: 600px;
 }
 
 .editor-button-wrapper {
