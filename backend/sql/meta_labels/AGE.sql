@@ -16,29 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import { connect } from 'react-redux';
-import { connectToDatabase } from '../../../features/database/DatabaseSlice';
-import { getMetaChartData, getMetaData } from '../../../features/database/MetadataSlice';
-import {
-  addFrame, pinFrame, removeFrame, trimFrame,
-} from '../../../features/frame/FrameSlice';
-import { addAlert } from '../../../features/alert/AlertSlice';
-import ServerConnectFrame from '../presentations/ServerConnectFrame';
-
-const mapStateToProps = (state) => ({
-  currentGraph: state.metadata.currentGraph,
-});
-
-const mapDispatchToProps = {
-  connectToDatabase,
-  addFrame,
-  trimFrame,
-  removeFrame,
-  pinFrame,
-  addAlert,
-  getMetaData,
-  getMetaChartData,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ServerConnectFrame);
+ANALYZE;
+SELECT table_name AS label, column_name AS column
+FROM information_schema.columns
+WHERE information_schema.columns.table_schema = '%s' AND column_name NOT IN ('id','start_id');
