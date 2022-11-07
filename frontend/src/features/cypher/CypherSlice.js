@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line no-unused-vars
 const validateSamePathVariableReturn = (cypherQuery) => {
@@ -50,9 +50,6 @@ export const executeCypherQuery = createAsyncThunk(
   'cypher/executeCypherQuery',
   async (args, thunkAPI) => {
     try {
-      // validateSamePathVariableReturn(args[1]);
-      // validateVlePathVariableReturn(args[1]);
-
       const response = await fetch('/api/v1/cypher',
         {
           method: 'POST',
@@ -115,8 +112,6 @@ const CypherSlice = createSlice({
   },
   extraReducers: {
     [executeCypherQuery.fulfilled]: (state, action) => {
-      console.log(current(state));
-      // state.queryResult[action.payload.key].response = action.payload
       Object.assign(state.queryResult[action.payload.key], {
         ...action.payload,
         complete: true,

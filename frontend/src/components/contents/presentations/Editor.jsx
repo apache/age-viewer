@@ -94,27 +94,22 @@ const Editor = ({
       const req = dispatch(() => executeCypherQuery([refKey, command]));
       req.then((response) => {
         if (response.type === 'cypher/executeCypherQuery/rejected') {
-          dispatch(() => addAlert('ErrorCypherQuery'));
+          if (response.error.name !== 'AbortError') {
+            dispatch(() => addAlert('ErrorCypherQuery'));
+          }
         }
       });
       activePromises[refKey] = req;
       setPromises({ ...activePromises });
-      console.log('active promises', activePromises);
     }
     dispatch(() => addCommandHistory(command));
     clearCommand();
   };
 
   useEffect(() => {
-    console.log('requests updated', activePromises, activeRequests);
     const reqCancel = Object.keys(activePromises).filter((ref) => !activeRequests.includes(ref));
-    console.log('cancel these', reqCancel);
     reqCancel.forEach((ref) => {
-      try {
-        activePromises[ref].abort();
-      } catch (e) {
-        console.log('request complete');
-      }
+      activePromises[ref].abort();
       delete activePromises[ref];
     });
     setPromises({ ...activePromises });
