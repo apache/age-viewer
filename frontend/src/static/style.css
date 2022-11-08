@@ -192,6 +192,7 @@ a[data-toggle="collapse"] {
     right: 0;
     z-index: 0;
     padding: 20px 15px 0 15px;
+    overflow-y: auto;
 }
 
 .editor {
@@ -218,7 +219,6 @@ a[data-toggle="collapse"] {
     resize: vertical;
     overflow: auto;
     height:auto;
-    max-height: 600px;
 }
 
 .editor-button-wrapper {
@@ -245,9 +245,7 @@ a[data-toggle="collapse"] {
     margin-top: -25px;
     padding-top: 25px;
 }
-.CodeMirror-scroll {
-    max-height: inherit;
-}
+
 .CodeMirror-hscrollbar {
     height: 10px;
 }
