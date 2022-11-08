@@ -25,7 +25,6 @@ import Contents from '../presentations/Contents';
 const mapStateToProps = (state) => ({
   database: state.database,
   isActive: state.navigator.isActive,
-  currentGraph: state.metadata.currentGraph,
 });
 
 const mapDispatchToProps = { getConnectionStatus, getMetaData, getMetaChartData };

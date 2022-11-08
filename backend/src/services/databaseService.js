@@ -28,64 +28,40 @@ class DatabaseService {
     }
 
     async getMetaData(graphName) {
-        const { currentGraph } = graphName;
         await this._graphRepository.initGraphNames();
         const {graphs} = this._graphRepository.getConnectionInfo();
-        if(currentGraph){
-            if(graphs.includes(currentGraph)){
-                return await this.getMetaDataSingle(currentGraph,graphs);
+        if(graphName){
+            if(graphs.includes(graphName)){
+                return await this.getMetaDataSingle(graphName);
             }else{
                 throw new Error('graph does not exist');
             }
             
         }else{
-            return await this.getMetaDataSingle([],graphs);
+            return await this.getMetaDataMultiple(graphs);
         }
 
     }
 
-    // async getMetaDataMultiple(graphs){
-    //     const metadata = {};
-    //     await Promise.all(graphs.map(async(gname)=>{
-    //         metadata[gname] = await this.getMetaDataSingle(gname);
-    //     }))
-    //     return metadata;
-    // }
-
-    async getMetaDataSingle(curGraph,graphs){
+    async getMetaDataMultiple(graphs){
         const metadata = {};
-        let data = {};
+        await Promise.all(graphs.map(async(gname)=>{
+            metadata[gname] = await this.getMetaDataSingle(gname);
+        }))
+        return metadata;
+    }
+
+    async getMetaDataSingle(curGraph){
+        let metadata = {};
         const {database} = this.getConnectionInfo();
         try {
-            if(curGraph.length <= 0) {
-                let label = await this.readMetaLabel(graphs[0]);
-                let count = await this.readMetaData(graphs[0]);
-                let {nodes, edges} = this.parseMeta(label,count);
-                data.nodes = nodes;
-                data.edges = edges;
-                data.propertyKeys = await this.getPropertyKeys();
-                data.graph = graphs[0];
-                data.database = database;
-                data.role = await this.getRole();
-                metadata[graphs[0]] = data;
-                graphs.forEach((gname) => {
-                    if(gname !== graphs[0]) metadata[gname] = {};
-                })
-            } else {
-                let label = await this.readMetaLabel(curGraph);
-                let count = await this.readMetaData(curGraph);
-                let {nodes, edges} = this.parseMeta(label,count);
-                data.nodes = nodes;
-                data.edges = edges;
-                data.propertyKeys = await this.getPropertyKeys();
-                data.graph = curGraph;
-                data.database = database;
-                data.role = await this.getRole();
-                metadata[curGraph] = data;
-                graphs.forEach((gname) => {
-                    if(gname !== curGraph) metadata[gname] = {};
-                })
-            }
+            let {nodes, edges} = await this.readMetaData(curGraph);
+            metadata.nodes = nodes;
+            metadata.edges = edges;
+            metadata.propertyKeys = await this.getPropertyKeys();
+            metadata.graph = curGraph;
+            metadata.database = database;
+            metadata.role = await this.getRole();
         } catch (error) {
             throw error;
         }
@@ -121,16 +97,9 @@ class DatabaseService {
     
     async readMetaData(graphName){
         let gr = this._graphRepository;
-        let count_queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), graphName));
-        return count_queryResult[1].rows;
+        let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), graphName));
+        return this.parseMeta(queryResult[1].rows);
     }
-
-    async readMetaLabel(graphName) {
-        let gr = this._graphRepository;
-        let label_queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_labels'), graphName));
-        return label_queryResult[1].rows;
-    }
-
     /* 
     async getNodes() {
         let graphRepository = this._graphRepository;
@@ -228,25 +197,26 @@ class DatabaseService {
             properties: props,
         };
     }
-    parseMeta(label,count){
+    parseMeta(data){
         const meta = {
             edges:[],
             nodes:[]
         };
-        let temp = {}
-        count.forEach(e => {
-            temp[e.label] = e.cnt;
-        })
-        let prev;
-        label.forEach(e => {
-            if(e.column === 'end_id') {
-                meta['edges'].push({'label': e.label,'cnt': temp[e.label]});
+        const vertex = '_ag_label_vertex';
+        const edge = '_ag_label_edge';
+        let cur = null;
+        data.forEach((element, index) => {
+            if ( element.label === vertex ){
+                cur = 'nodes';
             }
-            else if(e.label !== prev) {
-                meta['nodes'].push({'label': e.label, 'cnt': temp[e.label]});
+            else if ( element.label === edge ){
+                cur = 'edges';
             }
-            prev = e.label;
-        })
+            else{
+                meta[cur].push(element);
+            }
+
+        });
         return meta;
     }
 }
