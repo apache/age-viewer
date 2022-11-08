@@ -28,43 +28,58 @@ class DatabaseService {
     }
 
     async getMetaData(graphName) {
+        const { currentGraph } = graphName;
         await this._graphRepository.initGraphNames();
         const {graphs} = this._graphRepository.getConnectionInfo();
-        if(graphName){
-            if(graphs.includes(graphName)){
-                return await this.getMetaDataSingle(graphName);
-            }else{
-                throw new Error('graph does not exist');
+
+        if(currentGraph){
+            if(graphs.includes(currentGraph)){
+                return await this.getMetaDataSingle(currentGraph,graphs);
             }
-            
-        }else{
-            return await this.getMetaDataMultiple(graphs);
+        } else if(graphs.length > 0) {
+            return await this.graphNameInitialize(graphs);
+        } else{
+            throw new Error('graph does not exist');
+            // return await this.getMetaDataMultiple(graphs);
         }
 
     }
 
-    async getMetaDataMultiple(graphs){
-        const metadata = {};
-        await Promise.all(graphs.map(async(gname)=>{
-            metadata[gname] = await this.getMetaDataSingle(gname);
-        }))
-        return metadata;
-    }
+    // async getMetaDataMultiple(graphs){
+    //     const metadata = {};
+    //     await Promise.all(graphs.map(async(gname)=>{
+    //         metadata[gname] = await this.getMetaDataSingle(gname);
+    //     }))
+    //     return metadata;
+    // }
 
-    async getMetaDataSingle(curGraph){
+    async getMetaDataSingle(curGraph, graphs){
         let metadata = {};
+        let data = {};
         const {database} = this.getConnectionInfo();
         try {
             let {nodes, edges} = await this.readMetaData(curGraph);
-            metadata.nodes = nodes;
-            metadata.edges = edges;
-            metadata.propertyKeys = await this.getPropertyKeys();
-            metadata.graph = curGraph;
-            metadata.database = database;
-            metadata.role = await this.getRole();
+            data.nodes = nodes;
+            data.edges = edges;
+            data.propertyKeys = await this.getPropertyKeys();
+            data.graph = curGraph;
+            data.database = database;
+            data.role = await this.getRole();
+            metadata[curGraph] = data;
+            graphs.forEach((gname) => {
+                if(gname !== curGraph) metadata[gname] = {};
+            })
         } catch (error) {
             throw error;
         }
+        return metadata;
+    }
+
+    async graphNameInitialize(graphs) {
+        let metadata = {};
+        graphs.forEach((gname) => {
+            metadata[gname] = {};
+        })
         return metadata;
     }
 

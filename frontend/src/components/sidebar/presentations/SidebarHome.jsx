@@ -303,6 +303,7 @@ const SidebarHome = ({
   getMetaData,
   changeCurrentGraph,
   changeGraph,
+  currentGraph,
 }) => {
   const dispatch = useDispatch();
   const { confirm } = Modal;
@@ -314,7 +315,7 @@ const SidebarHome = ({
   };
 
   const refreshSidebarHome = () => {
-    getMetaData();
+    getMetaData({ currentGraph });
   };
 
   return (
@@ -423,6 +424,7 @@ SidebarHome.propTypes = {
   changeCurrentGraph: PropTypes.func.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeGraph: PropTypes.func.isRequired,
+  currentGraph: PropTypes.string.isRequired,
 };
 
 export default SidebarHome;
