@@ -22,31 +22,23 @@ import uuid from 'react-uuid';
 
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
-  async (arg) => {
+  async () => {
     try {
-      const response = await fetch('/api/v1/db/meta',
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(arg),
-        });
+      const response = await fetch('/api/v1/db/meta');
       if (response.ok) {
         const ret = await response.json();
         Object.keys(ret).forEach((gname) => {
           let allCountEdge = 0;
           let allCountNode = 0;
-          ret[gname].nodes?.forEach((item) => {
+          ret[gname].nodes.forEach((item) => {
             allCountNode += item.cnt;
           });
 
-          ret[gname].edges?.forEach((item) => {
+          ret[gname].edges.forEach((item) => {
             allCountEdge += item.cnt;
           });
-          ret[gname].nodes?.unshift({ label: '*', cnt: allCountNode });
-          ret[gname].edges?.unshift({ label: '*', cnt: allCountEdge });
+          ret[gname].nodes.unshift({ label: '*', cnt: allCountNode });
+          ret[gname].edges.unshift({ label: '*', cnt: allCountEdge });
           ret[gname].id = uuid();
         });
         return ret;

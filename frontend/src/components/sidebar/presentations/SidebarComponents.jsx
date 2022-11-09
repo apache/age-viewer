@@ -79,7 +79,6 @@ SubLabelLeftWithLink.propTypes = {
 const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
   const selectStyle = {
     marginTop: '1rem',
-    display: 'block',
   };
   const handleGraphClick = (e) => {
     const graphName = graphs.find((graph) => graph[1] === e)[0];
