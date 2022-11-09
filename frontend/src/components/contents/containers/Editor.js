@@ -24,7 +24,6 @@ import { getConnectionStatus } from '../../../features/database/DatabaseSlice';
 import { executeCypherQuery } from '../../../features/cypher/CypherSlice';
 import { addCommandHistory, addCommandFavorites, setCommand } from '../../../features/editor/EditorSlice';
 import { toggleMenu } from '../../../features/menu/MenuSlice';
-import { getMetaData } from '../../../features/database/MetadataSlice';
 
 import Editor from '../presentations/Editor';
 
@@ -46,7 +45,6 @@ const mapDispatchToProps = {
   addCommandHistory,
   addCommandFavorites,
   toggleMenu,
-  getMetaData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

@@ -45,6 +45,7 @@ const ServerConnectFrame = ({
   refKey,
   isPinned,
   reqString,
+  currentGraph,
 }) => {
   const dispatch = useDispatch();
 
@@ -52,7 +53,7 @@ const ServerConnectFrame = ({
     if (response.type === 'database/connectToDatabase/fulfilled') {
       dispatch(addAlert('NoticeServerConnected'));
       dispatch(trimFrame('ServerConnect'));
-      dispatch(getMetaData()).then((metadataResponse) => {
+      dispatch(getMetaData({ currentGraph })).then((metadataResponse) => {
         if (metadataResponse.type === 'database/getMetaData/fulfilled') {
           dispatch(getMetaChartData());
         } else if (metadataResponse.type === 'database/getMetaData/rejected') {
@@ -122,6 +123,7 @@ ServerConnectFrame.propTypes = {
   refKey: PropTypes.string.isRequired,
   isPinned: PropTypes.bool.isRequired,
   reqString: PropTypes.string.isRequired,
+  currentGraph: PropTypes.string.isRequired,
 };
 
 export default ServerConnectFrame;

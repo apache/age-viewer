@@ -41,7 +41,6 @@ const Editor = ({
   executeCypherQuery,
   addCommandHistory,
   toggleMenu,
-  getMetaData,
   // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
@@ -94,7 +93,7 @@ const Editor = ({
       dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
         if (response.type === 'cypher/executeCypherQuery/rejected') {
           dispatch(() => addAlert('ErrorCypherQuery'));
-        } else { dispatch(() => getMetaData()); }
+        }
       }));
     }
     dispatch(() => addCommandHistory(command));
@@ -210,7 +209,6 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  getMetaData: PropTypes.func.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,
 };
 
