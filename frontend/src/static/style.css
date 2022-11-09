@@ -192,7 +192,6 @@ a[data-toggle="collapse"] {
     right: 0;
     z-index: 0;
     padding: 20px 15px 0 15px;
-    overflow-y: auto;
 }
 
 .editor {
@@ -215,10 +214,9 @@ a[data-toggle="collapse"] {
     margin-top: 1px;
     min-height: 60px;
     padding: 0;
-    border: 1px solid;
     resize: vertical;
     overflow: auto;
-    height:auto;
+    border: 1px solid;
 }
 
 .editor-button-wrapper {
@@ -244,10 +242,6 @@ a[data-toggle="collapse"] {
 .CodeMirror-scroll {
     margin-top: -25px;
     padding-top: 25px;
-}
-
-.CodeMirror-hscrollbar {
-    height: 10px;
 }
 
 /* ---------------------------------------------------
@@ -704,9 +698,6 @@ textarea.editorTextarea
     position:relative;
     top:1px;
 }
-.close_session:hover {
-    opacity: 0.6;
-}
 
 .refresh_button {
     background-color: #18CCC5;
@@ -722,7 +713,4 @@ textarea.editorTextarea
 .refresh_button:active {
     position:relative;
     top:1px;
-}
-.refresh_button:hover {
-    opacity: 0.6;
 }
