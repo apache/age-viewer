@@ -34,6 +34,7 @@ import {
   faLockOpen,
   faProjectDiagram,
   faWindowClose,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
@@ -194,6 +195,28 @@ const CypherResultCytoscapeCharts = ({
               (<FontAwesomeIcon icon={faWindowClose} size="lg" />),
             ),
             select() {
+            },
+          },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faTrash} size="lg" />),
+            ),
+            select(ele) {
+              fetch('/api/v1/cypher',
+                {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S) WHERE id(S) = ${ele.id()} DETACH DELETE S $$) as (S agtype);` }),
+                })
+                .then((res) => {
+                  if (res.ok) {
+                    ele.remove();
+                  }
+                });
             },
           },
         ],
