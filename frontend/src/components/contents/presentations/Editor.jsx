@@ -42,7 +42,6 @@ const Editor = ({
   executeCypherQuery,
   addCommandHistory,
   toggleMenu,
-  getMetaData,
   // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
@@ -226,7 +225,6 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  getMetaData: PropTypes.func.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,
 };
 
