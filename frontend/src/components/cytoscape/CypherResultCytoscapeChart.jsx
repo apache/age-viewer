@@ -34,6 +34,7 @@ import {
   faLockOpen,
   faProjectDiagram,
   faWindowClose,
+  faEye,
 } from '@fortawesome/free-solid-svg-icons';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
@@ -51,7 +52,7 @@ cytoscape.use(spread);
 cytoscape.use(cxtmenu);
 
 const CypherResultCytoscapeCharts = ({
-  elements, cytoscapeObject, setCytoscapeObject, cytoscapeLayout, maxDataOfGraph,
+  elements, setElements, cytoscapeObject, setCytoscapeObject, cytoscapeLayout, maxDataOfGraph,
   onElementsMouseover, addLegendData, graph,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
@@ -196,6 +197,35 @@ const CypherResultCytoscapeCharts = ({
             select() {
             },
           },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faEye} size="lg" />),
+            ),
+            select(ele) {
+              const node = [];
+              const edge = [];
+              const neighboor = [];
+              elements.edges.forEach((e) => {
+                if (e.data.target === ele.id() || e.data.source === ele.id()) {
+                  edge.push(e);
+                  neighboor.push(e.data.target);
+                  neighboor.push(e.data.source);
+                }
+              });
+              elements.nodes.forEach((e) => {
+                if (e.data.id === ele.id() || neighboor.includes(e.data.id)) {
+                  node.push(e);
+                }
+              });
+              const newElement = {
+                edges: edge,
+                nodes: node,
+              };
+              setElements(newElement);
+            },
+          },
+
         ],
         fillColor: 'rgba(210, 213, 218, 1)',
         activeFillColor: 'rgba(166, 166, 166, 1)',
@@ -264,6 +294,7 @@ CypherResultCytoscapeCharts.propTypes = {
       data: PropTypes.any,
     })),
   }).isRequired,
+  setElements: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   cytoscapeObject: PropTypes.any,
   setCytoscapeObject: PropTypes.func.isRequired,

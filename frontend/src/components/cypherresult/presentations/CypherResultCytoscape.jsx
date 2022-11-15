@@ -53,14 +53,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
       setLegendData(props.data.legend);
       setElements(props.data.elements);
     }
-  }, [
-    setIsReloading,
-    elements.edges.length,
-    elements.nodes.length,
-    legendData.edgeLegend,
-    legendData.nodeLegend,
-    props.data,
-  ]);
+  }, []);
 
   useEffect(() => {
     props.setChartLegend(props.data.legend);
@@ -374,6 +367,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         onElementsMouseover={getFooterData}
         legendData={legendData}
         elements={elements}
+        setElements={setElements}
         setCytoscapeObject={setCytoscapeObject}
         cytoscapeObject={cytoscapeObject}
         cytoscapeLayout={cytoscapeLayout}
