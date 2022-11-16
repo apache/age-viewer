@@ -20,7 +20,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Col, Form, Input, InputNumber, Row, Select,
+  Button, Col, Form, Input, InputNumber, Row,
 } from 'antd';
 import { useDispatch } from 'react-redux';
 import Frame from '../Frame';
@@ -33,7 +33,6 @@ import { getMetaChartData, getMetaData } from '../../../features/database/Metada
 
 const FormInitialValue = {
   database: '',
-  flavor: null,
   graph: '',
   host: '',
   password: '',
@@ -84,14 +83,6 @@ const ServerConnectFrame = ({
               layout="vertical"
               onFinish={connectToDatabase}
             >
-              <Form.Item name="flavor" label="Database Type" rules={[{ required: true }]}>
-                <Select
-                  placeholder="Select a flavor of Database"
-                  allowClear
-                >
-                  <Select.Option value="AGE">Apache AGE</Select.Option>
-                </Select>
-              </Form.Item>
               <Form.Item name="host" label="Connect URL" rules={[{ required: true }]}>
                 <Input placeholder="192.168.0.1" />
               </Form.Item>

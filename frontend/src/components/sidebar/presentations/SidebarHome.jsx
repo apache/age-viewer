@@ -123,7 +123,7 @@ const NodeItems = connect((state) => ({
 );
 NodeItems.propTypes = {
   database: PropTypes.shape({
-    flavor: PropTypes.string,
+    graph: PropTypes.string,
   }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
@@ -183,7 +183,7 @@ const EdgeItems = connect((state) => ({
 ));
 EdgeItems.propTypes = {
   database: PropTypes.shape({
-    flavor: PropTypes.string,
+    graph: PropTypes.string,
   }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
