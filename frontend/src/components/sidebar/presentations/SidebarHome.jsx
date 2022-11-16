@@ -30,36 +30,31 @@ import {
 } from './SidebarComponents';
 
 const genLabelQuery = (eleType, labelName, database) => {
-  function age() {
-    if (eleType === 'node') {
-      if (labelName === '*') {
-        return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)
-          RETURN V
-$$) as (V agtype);`;
-      }
+  if (eleType === 'node') {
+    if (labelName === '*') {
       return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V:${labelName})
-          RETURN V
+        MATCH (V)
+        RETURN V
 $$) as (V agtype);`;
     }
-    if (eleType === 'edge') {
-      if (labelName === '*') {
-        return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)-[R]-(V2)
-          RETURN V,R,V2
-$$) as (V agtype, R agtype, V2 agtype);`;
-      }
+    return `SELECT * from cypher('${database.graph}', $$
+        MATCH (V:${labelName})
+        RETURN V
+$$) as (V agtype);`;
+  }
+  if (eleType === 'edge') {
+    if (labelName === '*') {
       return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)-[R:${labelName}]-(V2)
-          RETURN V,R,V2
+        MATCH (V)-[R]-(V2)
+        RETURN V,R,V2
 $$) as (V agtype, R agtype, V2 agtype);`;
     }
-    return '';
+    return `SELECT * from cypher('${database.graph}', $$
+        MATCH (V)-[R:${labelName}]-(V2)
+        RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);`;
   }
-  if (database.flavor === 'AGE') {
-    return age();
-  }
+
   return '';
 };
 
