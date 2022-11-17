@@ -34,6 +34,7 @@ import {
   faLockOpen,
   faProjectDiagram,
   faWindowClose,
+  faHighlighter,
 } from '@fortawesome/free-solid-svg-icons';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
@@ -194,6 +195,27 @@ const CypherResultCytoscapeCharts = ({
               (<FontAwesomeIcon icon={faWindowClose} size="lg" />),
             ),
             select() {
+            },
+          },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faHighlighter} size="lg" />),
+            ),
+            select(ele) {
+              if (ele.style().borderColor === 'rgb(232,228,6)') {
+                let border;
+                elements.nodes.forEach((e) => {
+                  if (e.data.id === ele.id()) border = e.data.borderColor;
+                });
+                ele.style('borderColor', border);
+                ele.style('borderWidth', '3px');
+                ele.style('borderOpacity', '0.6');
+              } else {
+                ele.style('borderColor', '#e8e406');
+                ele.style('borderWidth', '10px');
+                ele.style('borderOpacity', '1');
+              }
             },
           },
         ],
