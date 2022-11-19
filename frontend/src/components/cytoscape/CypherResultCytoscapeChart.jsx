@@ -56,7 +56,6 @@ const CypherResultCytoscapeCharts = ({
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
-
   const addEventOnElements = (targetElements) => {
     targetElements.bind('mouseover', (e) => {
       onElementsMouseover({ type: 'elements', data: e.target.data() });
@@ -164,6 +163,20 @@ const CypherResultCytoscapeCharts = ({
               (<FontAwesomeIcon icon={faProjectDiagram} size="lg" />),
             ),
             select(ele) {
+              const elAnimate = ele.animation({
+                style: {
+                  'border-color': 'green',
+                  'border-width': '11px',
+                },
+                duration: 1000,
+              });
+              elAnimate.play();
+              const animateTimer = setInterval(() => {
+                if (elAnimate.complete()) {
+                  elAnimate.reverse().play();
+                }
+              }, 1000);
+
               fetch('/api/v1/cypher',
                 {
                   method: 'POST',
@@ -175,6 +188,8 @@ const CypherResultCytoscapeCharts = ({
                 })
                 .then((res) => res.json())
                 .then((data) => {
+                  elAnimate.rewind().stop();
+                  clearInterval(animateTimer);
                   addElements(ele.id(), data);
                 });
             },
