@@ -41,6 +41,7 @@ const Editor = ({
   executeCypherQuery,
   addCommandHistory,
   toggleMenu,
+  getMetaData,
   // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
@@ -55,6 +56,7 @@ const Editor = ({
   };
 
   const onClick = () => {
+    console.log('in editor presentation command is ', command);
     const refKey = uuid();
     if (command.toUpperCase().startsWith(':PLAY')) {
       dispatch(() => addFrame(command, 'Contents', refKey));
@@ -88,14 +90,11 @@ const Editor = ({
         dispatch(() => addFrame(command, 'ServerStatus', refKey));
       }
     } else if (database.status === 'connected') {
-      const reqStringValue = command;
-      dispatch(() => executeCypherQuery([refKey, reqStringValue]).then((response) => {
-        if (response.type === 'cypher/executeCypherQuery/fulfilled') {
-          addFrame(reqStringValue, 'CypherResultFrame', refKey);
-        } else if (response.type === 'cypher/executeCypherQuery/rejected') {
-          addFrame(reqStringValue, 'CypherResultFrame', refKey);
+      addFrame(command, 'CypherResultFrame', refKey);
+      dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
+        if (response.type === 'cypher/executeCypherQuery/rejected') {
           dispatch(() => addAlert('ErrorCypherQuery'));
-        }
+        } else { dispatch(() => getMetaData()); }
       }));
     }
     dispatch(() => addCommandHistory(command));
@@ -211,6 +210,7 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,
 };
 

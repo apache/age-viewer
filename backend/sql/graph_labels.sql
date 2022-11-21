@@ -17,14 +17,4 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
-import CypherResultFrame from '../presentations/CypherResultFrame';
-
-const mapStateToProps = () => (
-  {}
-);
-
-const mapDispatchToProps = { removeFrame, pinFrame };
-
-export default connect(mapStateToProps, mapDispatchToProps)(CypherResultFrame);
+SELECT oid as la_oid, name as la_name, kind as la_kind FROM ag_catalog.ag_label;

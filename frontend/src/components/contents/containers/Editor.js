@@ -18,12 +18,13 @@
  */
 
 import { connect } from 'react-redux';
-import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
+import { addFrame, trimFrame, removeFrame } from '../../../features/frame/FrameSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { getConnectionStatus } from '../../../features/database/DatabaseSlice';
 import { executeCypherQuery } from '../../../features/cypher/CypherSlice';
 import { addCommandHistory, addCommandFavorites, setCommand } from '../../../features/editor/EditorSlice';
 import { toggleMenu } from '../../../features/menu/MenuSlice';
+import { getMetaData } from '../../../features/database/MetadataSlice';
 
 import Editor from '../presentations/Editor';
 
@@ -38,12 +39,14 @@ const mapDispatchToProps = {
   setCommand,
   addFrame,
   trimFrame,
+  removeFrame,
   addAlert,
   getConnectionStatus,
   executeCypherQuery,
   addCommandHistory,
   addCommandFavorites,
   toggleMenu,
+  getMetaData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

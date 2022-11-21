@@ -108,15 +108,28 @@ const CypherSlice = createSlice({
   },
   extraReducers: {
     [executeCypherQuery.fulfilled]: (state, action) => {
-      state.queryResult[action.payload.key] = {};
       // state.queryResult[action.payload.key].response = action.payload
-      Object.assign(state.queryResult[action.payload.key], action.payload);
+      Object.assign(state.queryResult[action.payload.key], {
+        ...action.payload,
+        complete: true,
+      });
+    },
+    [executeCypherQuery.pending]: (state, action) => {
+      const key = action.meta.arg[0];
+      const command = action.meta.arg[1];
+      state.queryResult[key] = {};
+      Object.assign(state.queryResult[key], {
+        command,
+        complete: false,
+        requestId: action.meta.requestId,
+      });
     },
     [executeCypherQuery.rejected]: (state, action) => {
       state.queryResult[action.meta.arg[0]] = {
         command: 'ERROR',
         query: action.meta.arg[1],
         key: action.meta.arg[0],
+        complete: true,
         message: action.error.message,
       };
     },

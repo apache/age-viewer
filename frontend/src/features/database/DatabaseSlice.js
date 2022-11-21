@@ -78,6 +78,10 @@ const DatabaseSlice = createSlice({
     status: 'init',
   },
   reducers: {
+    changeGraph: (state, action) => ({
+      ...state,
+      graph: action.payload.graphName,
+    }),
   },
   extraReducers: {
     [connectToDatabase.fulfilled]: (state, action) => ({
@@ -87,7 +91,6 @@ const DatabaseSlice = createSlice({
       password: action.payload.password,
       database: action.payload.database,
       graph: action.payload.graph,
-      flavor: action.payload.flavor,
       status: 'connected',
     }),
     [connectToDatabase.rejected]: () => ({
@@ -97,7 +100,6 @@ const DatabaseSlice = createSlice({
       password: '',
       database: '',
       graph: '',
-      flavor: '',
       status: 'disconnected',
     }),
     [disconnectToDatabase.fulfilled]: () => ({
@@ -107,7 +109,6 @@ const DatabaseSlice = createSlice({
       password: '',
       database: '',
       graph: '',
-      flavor: '',
       status: 'disconnected',
     }),
     [getConnectionStatus.fulfilled]: (state, action) => ({
@@ -117,7 +118,6 @@ const DatabaseSlice = createSlice({
       password: action.payload.password,
       database: action.payload.database,
       graph: action.payload.graph,
-      flavor: action.payload.flavor,
       status: 'connected',
     }),
     [getConnectionStatus.rejected]: () => ({
@@ -127,13 +127,10 @@ const DatabaseSlice = createSlice({
       password: '',
       database: '',
       graph: '',
-      flavor: '',
       status: 'disconnected',
     }),
   },
 });
+export const { changeGraph } = DatabaseSlice.actions;
 
-/*
-export const { } = DatabaseSlice.actions
-*/
 export default DatabaseSlice.reducer;

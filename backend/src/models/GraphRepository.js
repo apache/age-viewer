@@ -16,38 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import Flavors from '../config/Flavors';
 import PgConfig from '../config/Pg'
 
 import pg from 'pg';
 import types from 'pg-types';
 import {setAGETypes} from '../tools/AGEParser';
+import { getQuery } from '../tools/SQLFlavorManager';
 
 
 class GraphRepository {
-    constructor({host, port, database, graph, user, password, flavor} = {}) {
-        if (!flavor) {
-            throw new Error('Flavor is required.');
-        }
-
+    constructor({host, port, database, graph, user, password, graphs=[]} = {}) {
         this._host = host;
         this._port = port;
         this._database = database;
+        this._graphs = graphs;
         this._graph = graph;
         this._user = user;
         this._password = password;
-        this.flavor = flavor;
     }
 
     static async getConnection({
                                    host,
                                    port,
                                    database,
-                                   graph,
                                    user,
                                    password,
-                                   flavor
                                } = {},
                                closeConnection = true) {
         const client = new pg.Client({
@@ -59,12 +52,7 @@ class GraphRepository {
             }
         )
         client.connect();
-        if (flavor === Flavors.AGE) {
-            await setAGETypes(client, types);
-        } else {
-            throw new Error(`Unknown flavor ${flavor}`)
-        }
-
+        await setAGETypes(client, types);
         if (closeConnection === true) {
             await client.end();
         }
@@ -89,6 +77,13 @@ class GraphRepository {
         return result;
     }
 
+    async initGraphNames(){
+        const { rows } = await this.execute(getQuery('get_graph_names'));
+        this._graphs = rows.map((item)=>item.name);
+        // set current graph to first name
+        this.setCurrentGraph(this._graphs[0]);
+    }
+    
     /**
      * Get connectionInfo
      */
@@ -97,11 +92,9 @@ class GraphRepository {
             this._pool = GraphRepository.newConnectionPool(this.getPoolConnectionInfo());
         }
         const client = await this._pool.connect();
-        if (this.flavor === 'AGE') {
-            await setAGETypes(client, types);
-        } else {
-            await client.query(`set graph_path = ${this._graph}`);
-        }
+
+        await setAGETypes(client, types);
+
         return client;
     }
 
@@ -149,9 +142,13 @@ class GraphRepository {
             database: this._database,
             user: this._user,
             password: this._password,
+            graphs: this._graphs,
             graph: this._graph,
-            flavor: this.flavor,
         };
+    }
+
+    setCurrentGraph(name){
+        this._graph = name;
     }
 }
 

@@ -18,6 +18,7 @@
  */
 
 import React from 'react';
+import { Select } from 'antd';
 import PropTypes from 'prop-types';
 
 const StyleTextRight = {
@@ -75,4 +76,37 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-export { SubLabelRight, SubLabelLeft, SubLabelLeftWithLink };
+const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
+  const selectStyle = {
+    marginTop: '1rem',
+  };
+  const handleGraphClick = (e) => {
+    const graphName = graphs.find((graph) => graph[1] === e)[0];
+    changeCurrentGraph({ id: e });
+    changeGraphDB({ graphName });
+  };
+
+  const options = (
+    graphs.map(([gname, graphId]) => (<option value={graphId}>{gname}</option>))
+  );
+  return (
+    <div>
+      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
+        {options}
+      </Select>
+      <b>
+        Current Graph
+      </b>
+    </div>
+  );
+};
+
+GraphSelectDropdown.propTypes = {
+  graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  changeCurrentGraph: PropTypes.func.isRequired,
+  changeGraphDB: PropTypes.func.isRequired,
+};
+
+export {
+  SubLabelRight, SubLabelLeft, SubLabelLeftWithLink, GraphSelectDropdown,
+};
