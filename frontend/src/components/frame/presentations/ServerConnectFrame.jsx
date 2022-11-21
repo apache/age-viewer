@@ -54,26 +54,12 @@ const ServerConnectFrame = ({
       dispatch(getMetaData()).then((metadataResponse) => {
         if (metadataResponse.type === 'database/getMetaData/fulfilled') {
           const graphName = Object.keys(metadataResponse.payload)[0];
-<<<<<<< HEAD
-<<<<<<< HEAD
           /* dispatch(getMetaChartData()); */
           dispatch(changeGraph({ graphName }));
         }
         if (metadataResponse.type === 'database/getMetaData/rejected') {
-=======
-          dispatch(getMetaChartData());
-          dispatch(changeGraph({ graphName }));
-        } /*else if (metadataResponse.type === 'database/getMetaData/rejected') {
->>>>>>> fac17f5 (resolve merge conflict)
           dispatch(addAlert('ErrorMetaFail'));
         }
-=======
-          /* dispatch(getMetaChartData()); */
-          dispatch(changeGraph({ graphName }));
-        } /* else if (metadataResponse.type === 'database/getMetaData/rejected') {
-          dispatch(addAlert('ErrorMetaFail'));
-        } */
->>>>>>> 506f609 (correction of formatting and residues)
       });
 
       dispatch(addFrame(':server status', 'ServerStatus'));
