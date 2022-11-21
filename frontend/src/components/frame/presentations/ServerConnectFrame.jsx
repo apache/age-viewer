@@ -29,7 +29,7 @@ import styles from './ServerConnectFrame.module.scss';
 import { connectToDatabase as connectToDatabaseApi, changeGraph } from '../../../features/database/DatabaseSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
-import { /*getMetaChartData,*/ getMetaData } from '../../../features/database/MetadataSlice';
+import { /* getMetaChartData, */ getMetaData } from '../../../features/database/MetadataSlice';
 
 const FormInitialValue = {
   database: '',
@@ -55,6 +55,7 @@ const ServerConnectFrame = ({
         if (metadataResponse.type === 'database/getMetaData/fulfilled') {
           const graphName = Object.keys(metadataResponse.payload)[0];
 <<<<<<< HEAD
+<<<<<<< HEAD
           /* dispatch(getMetaChartData()); */
           dispatch(changeGraph({ graphName }));
         }
@@ -66,6 +67,13 @@ const ServerConnectFrame = ({
 >>>>>>> fac17f5 (resolve merge conflict)
           dispatch(addAlert('ErrorMetaFail'));
         }
+=======
+          /* dispatch(getMetaChartData()); */
+          dispatch(changeGraph({ graphName }));
+        } /* else if (metadataResponse.type === 'database/getMetaData/rejected') {
+          dispatch(addAlert('ErrorMetaFail'));
+        } */
+>>>>>>> 506f609 (correction of formatting and residues)
       });
 
       dispatch(addFrame(':server status', 'ServerStatus'));
