@@ -44,6 +44,33 @@ class DatabaseService {
         }
         return metadata;
     }
+    /*
+    async getGraphLabels() {
+        let graphRepository = this._graphRepository;
+        let queryResult = {};
+        try {
+            queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'graph_labels'), [this.getConnectionInfo().graph]);
+        } catch (error) {
+            throw error;
+        }
+
+        return queryResult.rows;
+    }
+
+    async getGraphLabelCount(labelName, labelKind) {
+        let graphRepository = this._graphRepository;
+        let query = null;
+
+        if (labelKind === 'v') {
+            query = util.format(getQuery(graphRepository.flavor, 'label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
+        } else if (labelKind === 'e') {
+            query = util.format(getQuery(graphRepository.flavor, 'label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
+        }
+
+        let queryResult = await graphRepository.execute(query);
+
+        return queryResult.rows;
+    }*/
     
     async readMetaData(){
         let gr = this._graphRepository;
