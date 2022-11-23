@@ -1,14 +1,38 @@
 
-.ModalContainer{
+.ModalContainer {
     display: flex;
-    max-width: max-content;
-    flex-wrap: nowrap;
 }
 
 .Modal {
-    margin: 20px;;
+    margin: 20px;
 }
 
-#modalRow{
-    padding: 5%;
+#modalBody {
+    justify-content: center;
+    align-items: center;
+}
+
+#modalHeader {
+    text-align: center;
+    justify-content: center;
+}
+
+#modalRow {
+    padding: 1%;
+    justify-content: space-between;
+}
+
+#modalCol {
+
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+
+#removeFile:hover {
+    cursor: pointer;
+    opacity: -20%;
+}
+#removeFile{
+    color: red;
 }

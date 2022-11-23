@@ -2,9 +2,11 @@ import React, { useState, useRef } from 'react';
 import {
   /* Form, */ Modal, Row, Col, Button, ListGroup,
 } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
-import style from './GraphInit.scss';
+import './GraphInit.scss';
 
 const InitGraphModal = ({ show, setShow }) => {
   const [nodeFiles, setNodeFiles] = useState([]);
@@ -13,12 +15,13 @@ const InitGraphModal = ({ show, setShow }) => {
   const nodeInputRef = useRef();
 
   const handleSelectNodeFiles = (e) => {
-    console.log(e.target.files);
     setNodeFiles([...nodeFiles, ...e.target.files]);
+    nodeInputRef.current.value = '';
   };
 
   const handleSelectEdgeFiles = (e) => {
     setEdgeFiles([...edgeFiles, ...e.target.files]);
+    edgeInputRef.current.value = '';
   };
 
   const removeNodeFile = (e) => {
@@ -32,14 +35,19 @@ const InitGraphModal = ({ show, setShow }) => {
     edgeFiles.splice(index, 1);
     setEdgeFiles([...edgeFiles]);
   };
+
+  const handleSubmit = () => {
+    // implement body
+  };
+
   return (
-    <div className={style.ModalContainer}>
-      <Modal className={style.Modal} show={show} onHide={() => setShow(!show)}>
-        <Modal.Header style={{ alignItems: 'center', justifyContent: 'center' }} closeButton>
+    <div>
+      <Modal className="ModalContainer" show={show} onHide={() => setShow(!show)}>
+        <Modal.Header id="modalHeader" closeButton>
           <h2>Create Graph</h2>
         </Modal.Header>
-        <Modal.Body>
-          <Row id={style.modalRow}>
+        <Modal.Body id="modalBody">
+          <Row id="modalRow">
             <Col>
               <Button onClick={() => nodeInputRef.current.click()}>
                 Upload Nodes
@@ -53,14 +61,21 @@ const InitGraphModal = ({ show, setShow }) => {
               </Button>
             </Col>
           </Row>
-          <Row id={style.modalRow}>
+          <Row id="modalRow">
             <Col>
               <ListGroup>
                 {
                   nodeFiles.map((file, i) => (
                     <ListGroup.Item key={uuid()}>
-                      {file.name}
-                      <Button size="small" data-index={i} onClick={removeNodeFile}> x </Button>
+                      <Row id="modalRow">
+                        {file.name}
+                        <FontAwesomeIcon
+                          id="removeFile"
+                          data-index={i}
+                          onClick={removeNodeFile}
+                          icon={faMinusCircle}
+                        />
+                      </Row>
                     </ListGroup.Item>
                   ))
               }
@@ -72,8 +87,15 @@ const InitGraphModal = ({ show, setShow }) => {
                 {
                   edgeFiles.map((file, i) => (
                     <ListGroup.Item key={uuid()}>
-                      {file.name}
-                      <Button size="small" data-index={i} onClick={removeEdgeFile}> x </Button>
+                      <Row id="modalRow">
+                        {file.name}
+                        <FontAwesomeIcon
+                          id="removeFile"
+                          data-index={i}
+                          onClick={removeEdgeFile}
+                          icon={faMinusCircle}
+                        />
+                      </Row>
                     </ListGroup.Item>
                   ))
               }
@@ -84,7 +106,7 @@ const InitGraphModal = ({ show, setShow }) => {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button>
+          <Button onClick={handleSubmit}>
             Done
           </Button>
         </Modal.Footer>
