@@ -19,7 +19,9 @@
 
 import React from 'react';
 import { Select } from 'antd';
+import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import './Components.scss';
 
 const StyleTextRight = {
   marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold',
@@ -77,10 +79,6 @@ SubLabelLeftWithLink.propTypes = {
 };
 
 const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
-  const selectStyle = {
-    marginTop: '1rem',
-    minWidth: 200,
-  };
   const handleGraphClick = (_, e) => {
     changeCurrentGraph({ id: e['data-gid'] });
     changeGraphDB({ graphName: e.value });
@@ -92,13 +90,12 @@ const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
     ))
   );
   return (
-    <div style={{ minWidth: 200 }}>
-      <Select onSelect={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
+    <Col id="graphSelectionContainer">
+      <Select onSelect={handleGraphClick} placeholder="Select Graph">
         {options}
       </Select>
-      <br />
       <b>Current Graph</b>
-    </div>
+    </Col>
   );
 };
 
