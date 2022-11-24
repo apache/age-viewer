@@ -19,12 +19,11 @@
 
 #modalRow {
     padding: 1%;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 #modalCol {
-
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     align-content: center;
 }
@@ -35,4 +34,9 @@
 }
 #removeFile{
     color: red;
+}
+
+#graphNameInput{
+    justify-content: space-around;
+    margin: 4px 0 4px 0;
 }

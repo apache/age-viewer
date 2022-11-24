@@ -7,10 +7,12 @@ import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import './GraphInit.scss';
+import { Divider } from 'antd';
 
 const InitGraphModal = ({ show, setShow }) => {
   const [nodeFiles, setNodeFiles] = useState([]);
   const [edgeFiles, setEdgeFiles] = useState([]);
+  const [/* graphName */, setGraphName] = useState('');
   const edgeInputRef = useRef();
   const nodeInputRef = useRef();
 
@@ -38,6 +40,7 @@ const InitGraphModal = ({ show, setShow }) => {
 
   const handleSubmit = () => {
     // implement body
+
   };
 
   return (
@@ -47,6 +50,11 @@ const InitGraphModal = ({ show, setShow }) => {
           <h2>Create Graph</h2>
         </Modal.Header>
         <Modal.Body id="modalBody">
+          <Row id="graphNameInput">
+            <span>Graph Name</span>
+            <input type="text" onChange={(val) => setGraphName(val)} />
+          </Row>
+          <Divider />
           <Row id="modalRow">
             <Col>
               <Button onClick={() => nodeInputRef.current.click()}>
@@ -68,6 +76,7 @@ const InitGraphModal = ({ show, setShow }) => {
                   nodeFiles.map((file, i) => (
                     <ListGroup.Item key={uuid()}>
                       <Row id="modalRow">
+                        <input placeholder="label name" required />
                         {file.name}
                         <FontAwesomeIcon
                           id="removeFile"
