@@ -19,7 +19,9 @@
 
 import React from 'react';
 import { Select } from 'antd';
+import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import './Components.scss';
 
 const StyleTextRight = {
   marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold',
@@ -96,17 +98,18 @@ const GraphSelectDropdown = ({
     marginTop: '1rem',
     display: 'block',
   };
-  const handleGraphClick = (e) => {
-    const graphName = graphs.find((graph) => graph[1] === e)[0];
-    changeCurrentGraph({ id: e });
-    changeGraphDB({ graphName });
+  const handleGraphClick = (_, e) => {
+    changeCurrentGraph({ id: e['data-gid'] });
+    changeGraphDB({ graphName: e.value });
   };
 
   const options = (
-    graphs.map(([gname, graphId]) => (<option value={graphId}>{gname}</option>))
+    graphs.map(([gname, graphId]) => (
+      <Select.Option value={gname} data-gid={graphId}>{gname}</Select.Option>
+    ))
   );
   return (
-    <div id="graphSelectDropdown">
+    <Col id="graphSelectionContainer">
       <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle} value={currentGraph}>
         {options}
       </Select>
@@ -114,7 +117,7 @@ const GraphSelectDropdown = ({
       <b>
         Current Graph
       </b>
-    </div>
+    </Col>
   );
 };
 
