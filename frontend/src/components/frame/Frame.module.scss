@@ -83,7 +83,7 @@
 }
 
 .ButtonArea {
-
+  // margin: auto 18%;
 }
 
 .FullScreen {
@@ -132,4 +132,20 @@
 
 .FullScreen .FlexContentWrapper {
   height: 100% !important;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 670px) {
+
+  .FrameHeader{
+    display: block;
+  }
+
+  // .ButtonArea {
+  //   margin: auto 18%;
+  //   display: flex;
+  // }
 }
