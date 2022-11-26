@@ -26,40 +26,35 @@ import { connect, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRedo, faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
-  VerticalLine, SubLabelLeft, SubLabelRight, GraphSelectDropdown,
+  VerticalLine, HorizontalLine, SubLabelLeft, SubLabelRight, GraphSelectDropdown,
 } from './SidebarComponents';
 
 const genLabelQuery = (eleType, labelName, database) => {
-  function age() {
-    if (eleType === 'node') {
-      if (labelName === '*') {
-        return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)
-          RETURN V
-$$) as (V agtype);`;
-      }
+  if (eleType === 'node') {
+    if (labelName === '*') {
       return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V:${labelName})
-          RETURN V
+        MATCH (V)
+        RETURN V
 $$) as (V agtype);`;
     }
-    if (eleType === 'edge') {
-      if (labelName === '*') {
-        return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)-[R]-(V2)
-          RETURN V,R,V2
-$$) as (V agtype, R agtype, V2 agtype);`;
-      }
+    return `SELECT * from cypher('${database.graph}', $$
+        MATCH (V:${labelName})
+        RETURN V
+$$) as (V agtype);`;
+  }
+  if (eleType === 'edge') {
+    if (labelName === '*') {
       return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)-[R:${labelName}]-(V2)
-          RETURN V,R,V2
+        MATCH (V)-[R]-(V2)
+        RETURN V,R,V2
 $$) as (V agtype, R agtype, V2 agtype);`;
     }
-    return '';
+    return `SELECT * from cypher('${database.graph}', $$
+        MATCH (V)-[R:${labelName}]-(V2)
+        RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);`;
   }
-  if (database.flavor === 'AGE') {
-    return age();
-  }
+
   return '';
 };
 
@@ -128,7 +123,7 @@ const NodeItems = connect((state) => ({
 );
 NodeItems.propTypes = {
   database: PropTypes.shape({
-    flavor: PropTypes.string,
+    graph: PropTypes.string,
   }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
@@ -188,7 +183,7 @@ const EdgeItems = connect((state) => ({
 ));
 EdgeItems.propTypes = {
   database: PropTypes.shape({
-    flavor: PropTypes.string,
+    graph: PropTypes.string,
   }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
@@ -294,6 +289,7 @@ DBMSText.propTypes = {
 const SidebarHome = ({
   edges,
   nodes,
+  currentGraph,
   graphs,
   propertyKeys,
   setCommand,
@@ -337,65 +333,62 @@ const SidebarHome = ({
           <br />
           <PropertyList propertyKeys={propertyKeys} setCommand={setCommand} />
         </div>
-        <VerticalLine />
+        <div id="lastHorizontalLine">
+          <VerticalLine />
+        </div>
+      </div>
+      <div className="sidebar-item-disconnect-outer">
         <div className="form-group sidebar-item-disconnect">
-          <button
-            className="frame-head-button refresh_button btn btn-link"
-            type="button"
-            onClick={() => refreshSidebarHome()}
-          >
-            <FontAwesomeIcon
-              icon={faRedo}
-              size="1x"
-              color="white"
-              flip="horizontal"
+          <div className="sidebar-item-disconnect-buttons">
+            <button
+              className="frame-head-button refresh_button btn btn-link"
+              type="button"
+              onClick={() => refreshSidebarHome()}
+            >
+              <FontAwesomeIcon
+                icon={faRedo}
+                size="1x"
+                color="white"
+                flip="horizontal"
+              />
+            </button>
+            <br />
+            <b>Refresh</b>
+          </div>
+          <HorizontalLine />
+          <div className="sidebar-item-disconnect-buttons">
+            <button
+              className="frame-head-button close_session btn btn-link"
+              type="button"
+              color="#142B80"
+              onClick={() => confirm({
+                title: 'Are you sure you want to close this window?',
+                onOk() {
+                  requestDisconnect();
+                },
+                onCancel() {
+                  return false;
+                },
+              })}
+            >
+              <FontAwesomeIcon
+                icon={faTimes}
+                size="1x"
+                color="white"
+              />
+            </button>
+            <br />
+            <b>Close Session</b>
+          </div>
+          <HorizontalLine />
+          <div className="sidebar-item-disconnect-buttons">
+            <GraphSelectDropdown
+              currentGraph={currentGraph}
+              graphs={graphs}
+              changeCurrentGraph={changeCurrentGraph}
+              changeGraphDB={changeGraph}
             />
-          </button>
-          <br />
-          <b>Refresh</b>
-          <div style={{
-            border: '1px solid #C4C4C4',
-            opacity: '1',
-            width: '80%',
-            height: '0',
-            margin: '3px auto',
-          }}
-          />
-          <button
-            className="frame-head-button close_session btn btn-link"
-            type="button"
-            color="#142B80"
-            onClick={() => confirm({
-              title: 'Are you sure you want to close this window?',
-              onOk() {
-                requestDisconnect();
-              },
-              onCancel() {
-                return false;
-              },
-            })}
-          >
-            <FontAwesomeIcon
-              icon={faTimes}
-              size="1x"
-              color="white"
-            />
-          </button>
-          <br />
-          <b>Close Session</b>
-          <div style={{
-            border: '1px solid #C4C4C4',
-            opacity: '1',
-            width: '80%',
-            height: '0',
-            margin: '3px auto',
-          }}
-          />
-          <GraphSelectDropdown
-            graphs={graphs}
-            changeCurrentGraph={changeCurrentGraph}
-            changeGraphDB={changeGraph}
-          />
+          </div>
         </div>
       </div>
     </div>
@@ -421,6 +414,7 @@ SidebarHome.propTypes = {
   addFrame: PropTypes.func.isRequired,
   getMetaData: PropTypes.func.isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
+  currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeGraph: PropTypes.func.isRequired,
 };

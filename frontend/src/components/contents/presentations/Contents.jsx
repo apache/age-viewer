@@ -24,7 +24,7 @@ import FramesContainer from '../containers/Frames';
 import styles from './Contents.module.scss';
 
 const Contents = ({
-  database, isActive, getConnectionStatus, getMetaData, getMetaChartData,
+  database, isActive, getConnectionStatus, getMetaData, /* getMetaChartData, */
 }) => {
   const dispatch = useDispatch();
 
@@ -34,7 +34,7 @@ const Contents = ({
         getConnectionStatus().then((response) => {
           if (response.type === 'database/getConnectionStatus/fulfilled') {
             getMetaData();
-            getMetaChartData();
+            /* getMetaChartData(); */
           }
         });
       });
@@ -57,7 +57,7 @@ Contents.propTypes = {
   isActive: PropTypes.bool.isRequired,
   getConnectionStatus: PropTypes.func.isRequired,
   getMetaData: PropTypes.func.isRequired,
-  getMetaChartData: PropTypes.func.isRequired,
+  /* getMetaChartData: PropTypes.func.isRequired, */
 };
 
 export default Contents;
