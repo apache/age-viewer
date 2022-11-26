@@ -72,7 +72,7 @@ class DatabaseService {
         let graphRepository = this._graphRepository;
         let queryResult = {};
         try {
-            queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'graph_labels'), [this.getConnectionInfo().graph]);
+            queryResult = await graphRepository.execute(getQuery('graph_labels'), [this.getConnectionInfo().graph]);
         } catch (error) {
             throw error;
         }
@@ -85,9 +85,9 @@ class DatabaseService {
         let query = null;
 
         if (labelKind === 'v') {
-            query = util.format(getQuery(graphRepository.flavor, 'label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
+            query = util.format(getQuery('label_count_vertex'), `${this.getConnectionInfo().graph}.${labelName}`);
         } else if (labelKind === 'e') {
-            query = util.format(getQuery(graphRepository.flavor, 'label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
+            query = util.format(getQuery('label_count_edge'), `${this.getConnectionInfo().graph}.${labelName}`);
         }
 
         let queryResult = await graphRepository.execute(query);
@@ -97,31 +97,19 @@ class DatabaseService {
     
     async readMetaData(graphName){
         let gr = this._graphRepository;
-        let queryResult = await gr.execute(util.format(getQuery(gr.flavor, 'meta_data'), graphName));
+        let queryResult = await gr.execute(util.format(getQuery('meta_data'), graphName));
         return this.parseMeta(queryResult[1].rows);
     }
-    /* 
-    async getNodes() {
-        let graphRepository = this._graphRepository;
-        let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_nodes'), graphRepository._graph, graphRepository._graph));
-        return queryResult.rows;
-    }
 
-    async getEdges() {
-        let graphRepository = this._graphRepository;
-        let queryResult = await graphRepository.execute(util.format(getQuery(graphRepository.flavor, 'meta_edges'), graphRepository._graph, graphRepository._graph));
-        return queryResult.rows;
-    }
-    */
     async getPropertyKeys() {
         let graphRepository = this._graphRepository;
-        let queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'property_keys'));
+        let queryResult = await graphRepository.execute(getQuery('property_keys'));
         return queryResult.rows;
     }
 
     async getRole() {
         let graphRepository = this._graphRepository;
-        let queryResult = await graphRepository.execute(getQuery(graphRepository.flavor, 'get_role'), [this.getConnectionInfo().user]);
+        let queryResult = await graphRepository.execute(getQuery('get_role'), [this.getConnectionInfo().user]);
         return queryResult.rows[0];
     }
 

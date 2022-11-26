@@ -34,6 +34,7 @@ import {
   faLockOpen,
   faProjectDiagram,
   faWindowClose,
+  faHighlighter,
 } from '@fortawesome/free-solid-svg-icons';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
@@ -56,7 +57,6 @@ const CypherResultCytoscapeCharts = ({
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
-
   const addEventOnElements = (targetElements) => {
     targetElements.bind('mouseover', (e) => {
       onElementsMouseover({ type: 'elements', data: e.target.data() });
@@ -164,6 +164,20 @@ const CypherResultCytoscapeCharts = ({
               (<FontAwesomeIcon icon={faProjectDiagram} size="lg" />),
             ),
             select(ele) {
+              const elAnimate = ele.animation({
+                style: {
+                  'border-color': 'green',
+                  'border-width': '11px',
+                },
+                duration: 1000,
+              });
+              elAnimate.play();
+              const animateTimer = setInterval(() => {
+                if (elAnimate.complete()) {
+                  elAnimate.reverse().play();
+                }
+              }, 1000);
+
               fetch('/api/v1/cypher',
                 {
                   method: 'POST',
@@ -175,6 +189,8 @@ const CypherResultCytoscapeCharts = ({
                 })
                 .then((res) => res.json())
                 .then((data) => {
+                  elAnimate.rewind().stop();
+                  clearInterval(animateTimer);
                   addElements(ele.id(), data);
                 });
             },
@@ -194,6 +210,27 @@ const CypherResultCytoscapeCharts = ({
               (<FontAwesomeIcon icon={faWindowClose} size="lg" />),
             ),
             select() {
+            },
+          },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faHighlighter} size="lg" />),
+            ),
+            select(ele) {
+              if (ele.style().borderColor === 'rgb(232,228,6)') {
+                let border;
+                elements.nodes.forEach((e) => {
+                  if (e.data.id === ele.id()) border = e.data.borderColor;
+                });
+                ele.style('borderColor', border);
+                ele.style('borderWidth', '3px');
+                ele.style('borderOpacity', '0.6');
+              } else {
+                ele.style('borderColor', '#e8e406');
+                ele.style('borderWidth', '10px');
+                ele.style('borderOpacity', '1');
+              }
             },
           },
         ],
