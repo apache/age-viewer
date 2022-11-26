@@ -89,7 +89,9 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
+const GraphSelectDropdown = ({
+  currentGraph, graphs, changeCurrentGraph, changeGraphDB,
+}) => {
   const selectStyle = {
     marginTop: '1rem',
   };
@@ -104,15 +106,19 @@ const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
   );
   return (
     <div id="graphSelectDropdown">
-      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
+      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle} value={currentGraph}>
         {options}
       </Select>
-      <b>Current Graph</b>
+      <br />
+      <b>
+        Current Graph
+      </b>
     </div>
   );
 };
 
 GraphSelectDropdown.propTypes = {
+  currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
   changeGraphDB: PropTypes.func.isRequired,

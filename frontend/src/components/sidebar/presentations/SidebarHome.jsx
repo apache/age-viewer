@@ -30,36 +30,31 @@ import {
 } from './SidebarComponents';
 
 const genLabelQuery = (eleType, labelName, database) => {
-  function age() {
-    if (eleType === 'node') {
-      if (labelName === '*') {
-        return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)
-          RETURN V
-$$) as (V agtype);`;
-      }
+  if (eleType === 'node') {
+    if (labelName === '*') {
       return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V:${labelName})
-          RETURN V
+        MATCH (V)
+        RETURN V
 $$) as (V agtype);`;
     }
-    if (eleType === 'edge') {
-      if (labelName === '*') {
-        return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)-[R]-(V2)
-          RETURN V,R,V2
-$$) as (V agtype, R agtype, V2 agtype);`;
-      }
+    return `SELECT * from cypher('${database.graph}', $$
+        MATCH (V:${labelName})
+        RETURN V
+$$) as (V agtype);`;
+  }
+  if (eleType === 'edge') {
+    if (labelName === '*') {
       return `SELECT * from cypher('${database.graph}', $$
-          MATCH (V)-[R:${labelName}]-(V2)
-          RETURN V,R,V2
+        MATCH (V)-[R]-(V2)
+        RETURN V,R,V2
 $$) as (V agtype, R agtype, V2 agtype);`;
     }
-    return '';
+    return `SELECT * from cypher('${database.graph}', $$
+        MATCH (V)-[R:${labelName}]-(V2)
+        RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);`;
   }
-  if (database.flavor === 'AGE') {
-    return age();
-  }
+
   return '';
 };
 
@@ -128,7 +123,7 @@ const NodeItems = connect((state) => ({
 );
 NodeItems.propTypes = {
   database: PropTypes.shape({
-    flavor: PropTypes.string,
+    graph: PropTypes.string,
   }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
@@ -188,7 +183,7 @@ const EdgeItems = connect((state) => ({
 ));
 EdgeItems.propTypes = {
   database: PropTypes.shape({
-    flavor: PropTypes.string,
+    graph: PropTypes.string,
   }).isRequired,
   label: PropTypes.string.isRequired,
   cnt: PropTypes.number.isRequired,
@@ -294,6 +289,7 @@ DBMSText.propTypes = {
 const SidebarHome = ({
   edges,
   nodes,
+  currentGraph,
   graphs,
   propertyKeys,
   setCommand,
@@ -387,6 +383,7 @@ const SidebarHome = ({
           <HorizontalLine />
           <div className="sidebar-item-disconnect-buttons">
             <GraphSelectDropdown
+              currentGraph={currentGraph}
               graphs={graphs}
               changeCurrentGraph={changeCurrentGraph}
               changeGraphDB={changeGraph}
@@ -417,6 +414,7 @@ SidebarHome.propTypes = {
   addFrame: PropTypes.func.isRequired,
   getMetaData: PropTypes.func.isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
+  currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeGraph: PropTypes.func.isRequired,
 };

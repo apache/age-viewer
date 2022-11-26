@@ -165,3 +165,5 @@ frontend/src/conf/config.js
 .idea
 backend/package-lock.json
 frontend/package-lock.json
+# VS Code Configuration
+.vscode/launch.json
