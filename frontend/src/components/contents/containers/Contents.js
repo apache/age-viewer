@@ -19,7 +19,7 @@
 
 import { connect } from 'react-redux';
 import { getConnectionStatus } from '../../../features/database/DatabaseSlice';
-import { getMetaData, getMetaChartData } from '../../../features/database/MetadataSlice';
+import { getMetaData/* getMetaChartData */ } from '../../../features/database/MetadataSlice';
 import Contents from '../presentations/Contents';
 
 const mapStateToProps = (state) => ({
@@ -27,6 +27,6 @@ const mapStateToProps = (state) => ({
   isActive: state.navigator.isActive,
 });
 
-const mapDispatchToProps = { getConnectionStatus, getMetaData, getMetaChartData };
+const mapDispatchToProps = { getConnectionStatus, getMetaData /* getMetaChartData */ };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contents);

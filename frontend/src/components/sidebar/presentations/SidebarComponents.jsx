@@ -49,6 +49,19 @@ export const VerticalLine = () => (
   />
 );
 
+export const HorizontalLine = () => (
+  <div
+    className="horizontalLine"
+    style={{
+      border: '1px solid #C4C4C4',
+      opacity: '1',
+      width: '80%',
+      height: '0',
+      margin: '3px auto',
+    }}
+  />
+);
+
 const SubLabelRight = ({ label, classes }) => (
   <div className={classes} style={StyleTextRight}>{label}</div>
 );
@@ -76,7 +89,9 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
+const GraphSelectDropdown = ({
+  currentGraph, graphs, changeCurrentGraph, changeGraphDB,
+}) => {
   const selectStyle = {
     marginTop: '1rem',
     display: 'block',
@@ -91,10 +106,11 @@ const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
     graphs.map(([gname, graphId]) => (<option value={graphId}>{gname}</option>))
   );
   return (
-    <div>
-      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
+    <div id="graphSelectDropdown">
+      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle} value={currentGraph}>
         {options}
       </Select>
+      <br />
       <b>
         Current Graph
       </b>
@@ -103,6 +119,7 @@ const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
 };
 
 GraphSelectDropdown.propTypes = {
+  currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
   changeGraphDB: PropTypes.func.isRequired,

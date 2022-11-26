@@ -20,20 +20,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Col, Form, Input, InputNumber, Row, Select,
+  Button, Col, Form, Input, InputNumber, Row,
 } from 'antd';
 import { useDispatch } from 'react-redux';
 import Frame from '../Frame';
 
 import styles from './ServerConnectFrame.module.scss';
-import { connectToDatabase as connectToDatabaseApi } from '../../../features/database/DatabaseSlice';
+import { connectToDatabase as connectToDatabaseApi, changeGraph } from '../../../features/database/DatabaseSlice';
 import { addAlert } from '../../../features/alert/AlertSlice';
 import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
-import { getMetaChartData, getMetaData } from '../../../features/database/MetadataSlice';
+import { /* getMetaChartData, */ getMetaData } from '../../../features/database/MetadataSlice';
 
 const FormInitialValue = {
   database: '',
-  flavor: null,
   graph: '',
   host: '',
   password: '',
@@ -54,8 +53,11 @@ const ServerConnectFrame = ({
       dispatch(trimFrame('ServerConnect'));
       dispatch(getMetaData()).then((metadataResponse) => {
         if (metadataResponse.type === 'database/getMetaData/fulfilled') {
-          dispatch(getMetaChartData());
-        } else if (metadataResponse.type === 'database/getMetaData/rejected') {
+          const graphName = Object.keys(metadataResponse.payload)[0];
+          /* dispatch(getMetaChartData()); */
+          dispatch(changeGraph({ graphName }));
+        }
+        if (metadataResponse.type === 'database/getMetaData/rejected') {
           dispatch(addAlert('ErrorMetaFail'));
         }
       });
@@ -84,14 +86,6 @@ const ServerConnectFrame = ({
               layout="vertical"
               onFinish={connectToDatabase}
             >
-              <Form.Item name="flavor" label="Database Type" rules={[{ required: true }]}>
-                <Select
-                  placeholder="Select a flavor of Database"
-                  allowClear
-                >
-                  <Select.Option value="AGE">Apache AGE</Select.Option>
-                </Select>
-              </Form.Item>
               <Form.Item name="host" label="Connect URL" rules={[{ required: true }]}>
                 <Input placeholder="192.168.0.1" />
               </Form.Item>
