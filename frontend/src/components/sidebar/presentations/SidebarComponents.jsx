@@ -91,7 +91,9 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-const GraphSelectDropdown = ({ currentGraph, graphs, changeCurrentGraph, changeGraphDB }) => {
+const GraphSelectDropdown = ({
+  currentGraph, graphs, changeCurrentGraph, changeGraphDB,
+}) => {
   const selectStyle = {
     marginTop: '1rem',
   };
