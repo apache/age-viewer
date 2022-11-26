@@ -54,7 +54,7 @@ export const getMetaData = createAsyncThunk(
     }
   },
 );
-
+/*
 export const getMetaChartData = createAsyncThunk(
   'database/getMetaChartData',
   async () => {
@@ -74,6 +74,7 @@ export const getMetaChartData = createAsyncThunk(
     }
   },
 );
+*/
 
 const MetadataSlice = createSlice({
   name: 'metadata',
@@ -108,12 +109,12 @@ const MetadataSlice = createSlice({
         dbname: action.payload.database,
       };
     },
-    [getMetaChartData.fulfilled]: (state, action) => {
+    /* [getMetaChartData.fulfilled]: (state, action) => {
       if (action.payload) {
         return Object.assign(state, { rows: action.payload });
       }
       return Object.assign(state, { rows: [] });
-    },
+    }, */
   },
 });
 

@@ -64,7 +64,7 @@ class DatabaseController {
             throw new Error('Not connected');
         }
     }
-
+    /*
     async getMetaChart(req, res, next) {
         let databaseService = sessionService.get(req.sessionID);
         if (databaseService.isConnected()) {
@@ -88,7 +88,7 @@ class DatabaseController {
         } else {
             throw new Error('Not connected');
         }
-    }
+    }*/
 }
 
 module.exports = DatabaseController;
