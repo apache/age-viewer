@@ -289,6 +289,7 @@ DBMSText.propTypes = {
 const SidebarHome = ({
   edges,
   nodes,
+  currentGraph,
   graphs,
   propertyKeys,
   setCommand,
@@ -387,6 +388,7 @@ const SidebarHome = ({
           }}
           />
           <GraphSelectDropdown
+            currentGraph={currentGraph}
             graphs={graphs}
             changeCurrentGraph={changeCurrentGraph}
             changeGraphDB={changeGraph}
@@ -416,6 +418,7 @@ SidebarHome.propTypes = {
   addFrame: PropTypes.func.isRequired,
   getMetaData: PropTypes.func.isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
+  currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeGraph: PropTypes.func.isRequired,
 };
