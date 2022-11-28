@@ -190,20 +190,16 @@ class DatabaseService {
             edges:[],
             nodes:[]
         };
-        const vertex = '_ag_label_vertex';
-        const edge = '_ag_label_edge';
-        let cur = null;
+        const vertex_name = '_ag_label_vertex';
+        const edge_name = '_ag_label_edge';
+        
         data.forEach((element, index) => {
-            if ( element.label === vertex ){
-                cur = 'nodes';
+            if (element.name === vertex_name || element.name === edge_name){
+                return;
             }
-            else if ( element.label === edge ){
-                cur = 'edges';
-            }
-            else{
-                meta[cur].push(element);
-            }
-
+            
+            if (element.kind === 'v') meta.nodes.push(element);
+            if (element.kind === 'e') meta.edges.push(element);
         });
         return meta;
     }
