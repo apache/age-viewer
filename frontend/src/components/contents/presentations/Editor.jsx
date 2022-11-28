@@ -147,7 +147,7 @@ const Editor = ({
                 Editor
               </spna>
             </div>
-            <div className="form-control col-11 editor-code-wrapper">
+            <div id="codeMirrorEditor" className="form-control col-11 editor-code-wrapper">
               <CodeMirror
                 onClick={onClick}
                 value={command}

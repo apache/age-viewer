@@ -228,6 +228,7 @@ a[data-toggle="collapse"] {
     resize: vertical;
     overflow: auto;
     height:auto;
+    display: flex;
 }
 
 .editor-button-wrapper {
