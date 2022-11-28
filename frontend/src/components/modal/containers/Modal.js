@@ -18,17 +18,13 @@
  */
 
 import { connect } from 'react-redux';
-import DefaultTemplate from './presentations/DefaultTemplate';
-import { changeSettings } from '../../features/setting/SettingSlice';
+import { closeModal, removeGraphHistory, removeElementHistory } from '../../../features/modal/ModalSlice';
+import Modal from '../presentations/Modal';
 
 const mapStateToProps = (state) => ({
-  theme: state.setting.theme,
-  maxNumOfFrames: state.setting.maxNumOfFrames,
-  maxNumOfHistories: state.setting.maxNumOfHistories,
-  maxDataOfGraph: state.setting.maxDataOfGraph,
-  maxDataOfTable: state.setting.maxDataOfTable,
-  isOpen: state.modal.isOpen,
+  graphHistory: state.modal.graphHistory,
+  elementHistory: state.modal.elementHistory,
 });
+const mapDispatchToProps = { closeModal, removeGraphHistory, removeElementHistory };
 
-const mapDispatchToProps = { changeSettings };
-export default connect(mapStateToProps, mapDispatchToProps)(DefaultTemplate);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

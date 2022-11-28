@@ -380,6 +380,9 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         addLegendData={addLegendData}
         maxDataOfGraph={maxDataOfGraph}
         graph={props.graph}
+        openModal={props.openModal}
+        addGraphHistory={props.addGraphHistory}
+        addElementHistory={props.addElementHistory}
       />
       <CypherResultCytoscapeFooter
         captions={captions}
@@ -421,6 +424,9 @@ CypherResultCytoscape.propTypes = {
   refKey: PropTypes.string.isRequired,
   setChartLegend: PropTypes.func.isRequired,
   graph: PropTypes.string.isRequired,
+  openModal: PropTypes.func.isRequired,
+  addGraphHistory: PropTypes.func.isRequired,
+  addElementHistory: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscape;
