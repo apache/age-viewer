@@ -97,8 +97,8 @@ class DatabaseService {
     
     async readMetaData(graphName){
         let gr = this._graphRepository;
-        let queryResult = await gr.execute(util.format(getQuery('meta_data'), graphName));
-        return this.parseMeta(queryResult[1].rows);
+        let queryResult = await gr.execute(getQuery('meta_data'));
+        return this.parseMeta(queryResult.rows);
     }
 
     async getPropertyKeys() {
@@ -121,7 +121,7 @@ class DatabaseService {
         }
 
         try {
-            let client = await graphRepository.getConnection(graphRepository.getConnectionInfo(), true);
+            let client = await graphRepository.connect();
             client.release();
         } catch (e) {
             this._graphRepository = null;
@@ -154,7 +154,7 @@ class DatabaseService {
         }
 
         try {
-            let client = await GraphRepository.getConnection(graphRepository.getConnectionInfo());
+            let client = await graphRepository.getConnection();
             client.release();
         } catch (err) {
             return false;
@@ -192,7 +192,7 @@ class DatabaseService {
         };
         const vertex_name = '_ag_label_vertex';
         const edge_name = '_ag_label_edge';
-        
+
         data.forEach((element, index) => {
             if (element.name === vertex_name || element.name === edge_name){
                 return;
