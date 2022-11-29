@@ -97,7 +97,8 @@ class DatabaseService {
     
     async readMetaData(graphName){
         let gr = this._graphRepository;
-        let queryResult = await gr.execute(getQuery('meta_data'));
+        const {version} = gr.getConnectionInfo();
+        let queryResult = await gr.execute(util.format(getQuery('meta_data', version.split('.')[0]), graphName));
         return this.parseMeta(queryResult.rows);
     }
 
