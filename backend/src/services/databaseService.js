@@ -67,7 +67,7 @@ class DatabaseService {
         }
         return metadata;
     }
-
+    /*
     async getGraphLabels() {
         let graphRepository = this._graphRepository;
         let queryResult = {};
@@ -93,7 +93,7 @@ class DatabaseService {
         let queryResult = await graphRepository.execute(query);
 
         return queryResult.rows;
-    }
+    }*/
     
     async readMetaData(graphName){
         let gr = this._graphRepository;

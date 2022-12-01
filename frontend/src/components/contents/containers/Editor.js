@@ -33,6 +33,7 @@ const mapStateToProps = (state) => ({
   database: state.database,
   command: state.editor.command,
   isActive: state.navigator.isActive,
+  activeRequests: state.cypher.activeRequests,
 });
 
 const mapDispatchToProps = {
