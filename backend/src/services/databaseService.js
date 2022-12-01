@@ -21,6 +21,7 @@ import {getQuery} from "../tools/SQLFlavorManager";
 import * as util from "util";
 import GraphRepository from '../models/GraphRepository';
 import { start } from "repl";
+import { get } from "http";
 
 class DatabaseService {
     constructor() {
@@ -28,8 +29,10 @@ class DatabaseService {
     }
 
     async getMetaData(graphName) {
-        await this._graphRepository.initGraphNames();
-        const {graphs} = this._graphRepository.getConnectionInfo();
+        let gr = this._graphRepository;
+        await gr.initGraphNames();
+        const {graphs} = gr.getConnectionInfo();
+        await DatabaseService.analyzeGraph(gr);
         if(graphName){
             if(graphs.includes(graphName)){
                 return await this.getMetaDataSingle(graphName);
@@ -94,7 +97,10 @@ class DatabaseService {
 
         return queryResult.rows;
     }*/
-    
+    static async analyzeGraph(gr){
+        await gr.execute(getQuery('analyze_graph'));
+    }
+
     async readMetaData(graphName){
         let gr = this._graphRepository;
         const {version} = gr.getConnectionInfo();
