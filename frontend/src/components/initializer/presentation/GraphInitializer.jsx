@@ -50,69 +50,74 @@ const InitGraphModal = ({ show, setShow }) => {
           <h2>Create Graph</h2>
         </Modal.Header>
         <Modal.Body id="modalBody">
-          <Row id="graphNameInput">
-            <span>Graph Name</span>
-            <input type="text" onChange={(val) => setGraphName(val)} />
-          </Row>
-          <Divider />
-          <Row id="modalRow">
-            <Col>
+          <Col id="modalCol">
+            <Row id="graphNameInputRow">
+              <input
+                id="graphNameInput"
+                type="text"
+                placeholder="graph name"
+                onChange={(val) => setGraphName(val)}
+              />
+            </Row>
+            <Divider />
+            <Row className="modalRow">
               <Button onClick={() => nodeInputRef.current.click()}>
                 Upload Nodes
                 <input type="file" ref={nodeInputRef} onChange={handleSelectNodeFiles} multiple hidden />
               </Button>
-            </Col>
-            <Col>
               <Button onClick={() => edgeInputRef.current.click()}>
                 Upload Edges
                 <input type="file" ref={edgeInputRef} onChange={handleSelectEdgeFiles} multiple hidden />
               </Button>
-            </Col>
-          </Row>
-          <Row id="modalRow">
-            <Col>
-              <ListGroup>
-                {
-                  nodeFiles.map((file, i) => (
-                    <ListGroup.Item key={uuid()}>
-                      <Row id="modalRow">
-                        <input placeholder="label name" required />
-                        {file.name}
-                        <FontAwesomeIcon
-                          id="removeFile"
-                          data-index={i}
-                          onClick={removeNodeFile}
-                          icon={faMinusCircle}
-                        />
-                      </Row>
-                    </ListGroup.Item>
-                  ))
-              }
-              </ListGroup>
-            </Col>
-            <Col>
-              <ListGroup>
+            </Row>
+            <Row className="modalRow">
+              <Col className="fileCol">
+                <ListGroup className="readyFiles">
+                  {
+                    nodeFiles.map((file, i) => (
+                      <ListGroup.Item key={uuid()}>
+                        <Row className="modalRow">
+                          <input id="graphNameInput" placeholder="label name" required />
+                        </Row>
+                        <Row className="modalRow">
+                          <span>{file.name}</span>
+                          <FontAwesomeIcon
+                            id="removeFile"
+                            data-index={i}
+                            onClick={removeNodeFile}
+                            icon={faMinusCircle}
+                          />
+                        </Row>
+                      </ListGroup.Item>
+                    ))
+                }
+                </ListGroup>
+              </Col>
+              <Col className="fileCol">
+                <ListGroup className="readyFiles">
+                  {
+                    edgeFiles.map((file, i) => (
+                      <ListGroup.Item key={uuid()}>
+                        <Row className="modalRow">
+                          <input id="graphNameInput" placeholder="edge name" required />
+                        </Row>
+                        <Row className="modalRow">
+                          <span>{file.name}</span>
+                          <FontAwesomeIcon
+                            id="removeFile"
+                            data-index={i}
+                            onClick={removeEdgeFile}
+                            icon={faMinusCircle}
+                          />
+                        </Row>
+                      </ListGroup.Item>
+                    ))
+                }
+                </ListGroup>
+              </Col>
 
-                {
-                  edgeFiles.map((file, i) => (
-                    <ListGroup.Item key={uuid()}>
-                      <Row id="modalRow">
-                        {file.name}
-                        <FontAwesomeIcon
-                          id="removeFile"
-                          data-index={i}
-                          onClick={removeEdgeFile}
-                          icon={faMinusCircle}
-                        />
-                      </Row>
-                    </ListGroup.Item>
-                  ))
-              }
-              </ListGroup>
-            </Col>
-
-          </Row>
-
+            </Row>
+          </Col>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleSubmit}>

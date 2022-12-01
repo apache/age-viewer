@@ -17,7 +17,8 @@
     justify-content: center;
 }
 
-#modalRow {
+.modalRow {
+    display: flex;
     padding: 1%;
     justify-content: space-around;
 }
@@ -30,13 +31,25 @@
 
 #removeFile:hover {
     cursor: pointer;
-    opacity: -20%;
+    opacity: 30%;
 }
 #removeFile{
     color: red;
 }
 
-#graphNameInput{
+#graphNameInputRow{
     justify-content: space-around;
     margin: 4px 0 4px 0;
+}
+#graphNameInput{
+    padding: 5px;
+    margin: 2px;
+}
+
+.readyFiles{
+    display: block;
+}
+
+.fileCol{
+    margin: auto;
 }
