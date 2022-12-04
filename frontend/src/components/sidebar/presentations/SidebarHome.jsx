@@ -247,9 +247,6 @@ const GraphList = ({
   changeGraph,
 }) => {
   let list;
-  list = graphs.map((item) => (
-    console.log(item[0])
-  ));
   if (graphs) {
     list = graphs.map((item) => (
       <GraphItems
