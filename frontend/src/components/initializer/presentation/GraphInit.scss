@@ -4,12 +4,7 @@
 }
 
 .Modal {
-    margin: 20px;
-}
-
-#modalBody {
-    justify-content: center;
-    align-items: center;
+    margin: auto;
 }
 
 #modalHeader {
@@ -18,14 +13,12 @@
 }
 
 .modalRow {
-    display: flex;
     padding: 1%;
     justify-content: space-around;
+    flex-wrap: nowrap;
 }
 
-#modalCol {
-    justify-content: space-around;
-    align-items: center;
+.modalCol {
     align-content: center;
 }
 
@@ -48,8 +41,4 @@
 
 .readyFiles{
     display: block;
-}
-
-.fileCol{
-    margin: auto;
 }

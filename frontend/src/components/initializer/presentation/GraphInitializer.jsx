@@ -17,12 +17,26 @@ const InitGraphModal = ({ show, setShow }) => {
   const nodeInputRef = useRef();
 
   const handleSelectNodeFiles = (e) => {
-    setNodeFiles([...nodeFiles, ...e.target.files]);
+    console.log(e.target.files);
+    const files = Array.from(e.target.files).map((file) => (
+      {
+        data: file,
+        name: '',
+      }
+    ));
+    console.log(files);
+    setNodeFiles([...nodeFiles, ...files]);
     nodeInputRef.current.value = '';
   };
 
   const handleSelectEdgeFiles = (e) => {
-    setEdgeFiles([...edgeFiles, ...e.target.files]);
+    const files = Array.from(e.target.files).map((file) => (
+      {
+        data: file,
+        name: '',
+      }
+    ));
+    setEdgeFiles([...edgeFiles, ...files]);
     edgeInputRef.current.value = '';
   };
 
@@ -37,10 +51,19 @@ const InitGraphModal = ({ show, setShow }) => {
     edgeFiles.splice(index, 1);
     setEdgeFiles([...edgeFiles]);
   };
+  const setName = (name, index, type) => {
+    if (type === 'node') {
+      const fileProps = nodeFiles[index];
+      fileProps.name = name;
+    }
+    if (type === 'edge') {
+      const fileProps = edgeFiles[index];
+      fileProps.name = name;
+    }
+  };
 
   const handleSubmit = () => {
-    // implement body
-
+    console.log(nodeFiles, edgeFiles);
   };
 
   return (
@@ -49,8 +72,8 @@ const InitGraphModal = ({ show, setShow }) => {
         <Modal.Header id="modalHeader" closeButton>
           <h2>Create Graph</h2>
         </Modal.Header>
-        <Modal.Body id="modalBody">
-          <Col id="modalCol">
+        <Modal.Body>
+          <Col className="modalCol">
             <Row id="graphNameInputRow">
               <input
                 id="graphNameInput"
@@ -71,13 +94,21 @@ const InitGraphModal = ({ show, setShow }) => {
               </Button>
             </Row>
             <Row className="modalRow">
-              <Col className="fileCol">
+              <Col>
                 <ListGroup className="readyFiles">
                   {
-                    nodeFiles.map((file, i) => (
+                    nodeFiles.map(({ data: file }, i) => (
                       <ListGroup.Item key={uuid()}>
                         <Row className="modalRow">
-                          <input id="graphNameInput" placeholder="label name" required />
+                          <input
+                            id="graphNameInput"
+                            placeholder="label name"
+                            data-index={i}
+                            onChange={(e) => {
+                              setName(e.target.value, i, 'node');
+                            }}
+                            required
+                          />
                         </Row>
                         <Row className="modalRow">
                           <span>{file.name}</span>
@@ -93,13 +124,21 @@ const InitGraphModal = ({ show, setShow }) => {
                 }
                 </ListGroup>
               </Col>
-              <Col className="fileCol">
+              <Col>
                 <ListGroup className="readyFiles">
                   {
-                    edgeFiles.map((file, i) => (
+                    edgeFiles.map(({ data: file }, i) => (
                       <ListGroup.Item key={uuid()}>
                         <Row className="modalRow">
-                          <input id="graphNameInput" placeholder="edge name" required />
+                          <input
+                            id="graphNameInput"
+                            data-index={i}
+                            onChange={(e) => {
+                              setName(e.target.value, i, 'edge');
+                            }}
+                            placeholder="edge name"
+                            required
+                          />
                         </Row>
                         <Row className="modalRow">
                           <span>{file.name}</span>
