@@ -27,5 +27,6 @@ const {wrap} = require('../common/Routes');
 
 // Execute Cypher Query
 router.post("/", wrap(cypherController.executeCypher));
+router.post("/init", wrap(cypherController.createGraph));
 
 module.exports = router;

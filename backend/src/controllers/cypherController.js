@@ -33,6 +33,17 @@ class CypherController {
             throw new Error("Not connected");
         }
     }
+
+    static async createGraph(req, res) {
+        let db = sessionService.get(req.sessionID);
+        if (connectorService.isConnected()){
+            let cypherService = new CypherService(
+                db.graphRepository
+            );
+            await cypherService.executeCypher();
+            res.status(204).end();
+        }
+    }
 }
 
 module.exports = CypherController;
