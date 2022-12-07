@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import {
-  /* Form, */ Modal, Row, Col, Button, ListGroup,
+  /* Form, */ Modal, Row, Col, Button, ListGroup, Spinner, Alert,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
@@ -8,11 +8,14 @@ import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import './GraphInit.scss';
 import { Divider } from 'antd';
+import analyzeFiles from '../FileAnalyzer';
 
 const InitGraphModal = ({ show, setShow }) => {
   const [nodeFiles, setNodeFiles] = useState([]);
   const [edgeFiles, setEdgeFiles] = useState([]);
-  const [/* graphName */, setGraphName] = useState('');
+  const [graphName, setGraphName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const edgeInputRef = useRef();
   const nodeInputRef = useRef();
 
@@ -62,8 +65,138 @@ const InitGraphModal = ({ show, setShow }) => {
     }
   };
 
-  const handleSubmit = () => {
-    console.log(nodeFiles, edgeFiles);
+  const handleSubmit = async () => {
+    setLoading(true);
+    await analyzeFiles({ nodes: nodeFiles, edges: edgeFiles, graphName });
+
+    const sendFiles = new FormData();
+
+    nodeFiles.forEach((node) => sendFiles.append(`node_${node.name}`, node.data, node.data.name));
+    edgeFiles.forEach((edge) => sendFiles.append(`edge_${edge.name}`, edge.data, edge.data.name));
+    sendFiles.append('graphName', graphName);
+    const reqData = {
+      method: 'POST',
+      body: sendFiles,
+      mode: 'cors',
+
+    };
+    fetch('/api/v1/cypher/init', reqData)
+      .then(() => {
+        setLoading(false);
+        // set success alert reducer
+      })
+      .catch((err) => {
+        // setalert reducer
+        setLoading(false);
+        setError(err);
+        console.log(err);
+      });
+  };
+
+  const modalInputBody = () => (
+    <>
+      <Row id="graphNameInputRow">
+        <input
+          id="graphNameInput"
+          type="text"
+          placeholder="graph name"
+          onChange={(e) => setGraphName(e.target.value)}
+          required
+        />
+      </Row>
+      <Divider />
+      <Row className="modalRow">
+        <Button onClick={() => nodeInputRef.current.click()}>
+          Upload Nodes
+          <input type="file" ref={nodeInputRef} onChange={handleSelectNodeFiles} multiple hidden />
+        </Button>
+        <Button onClick={() => edgeInputRef.current.click()}>
+          Upload Edges
+          <input type="file" ref={edgeInputRef} onChange={handleSelectEdgeFiles} multiple hidden />
+        </Button>
+      </Row>
+      <Row className="modalRow">
+        <Col>
+          <ListGroup className="readyFiles">
+            {
+              nodeFiles.map(({ data: file, name }, i) => (
+                <ListGroup.Item key={uuid()}>
+                  <Row className="modalRow">
+                    <input
+                      id="graphNameInput"
+                      placeholder="label name"
+                      data-index={i}
+                      defaultValue={name}
+                      onChange={(e) => {
+                        setName(e.target.value, i, 'node');
+                      }}
+                      required
+                    />
+                  </Row>
+                  <Row className="modalRow">
+                    <span>{file.name}</span>
+                    <FontAwesomeIcon
+                      id="removeFile"
+                      data-index={i}
+                      onClick={removeNodeFile}
+                      icon={faMinusCircle}
+                    />
+                  </Row>
+                </ListGroup.Item>
+              ))
+          }
+          </ListGroup>
+        </Col>
+        <Col>
+          <ListGroup className="readyFiles">
+            {
+              edgeFiles.map(({ data: file, name }, i) => (
+                <ListGroup.Item key={uuid()}>
+                  <Row className="modalRow">
+                    <input
+                      id="graphNameInput"
+                      data-index={i}
+                      onChange={(e) => {
+                        setName(e.target.value, i, 'edge');
+                      }}
+                      placeholder="edge name"
+                      defaultValue={name}
+                      required
+                    />
+                  </Row>
+                  <Row className="modalRow">
+                    <span>{file.name}</span>
+                    <FontAwesomeIcon
+                      id="removeFile"
+                      data-index={i}
+                      onClick={removeEdgeFile}
+                      icon={faMinusCircle}
+                    />
+                  </Row>
+                </ListGroup.Item>
+              ))
+          }
+          </ListGroup>
+        </Col>
+      </Row>
+    </>
+  );
+
+  const modalBody = () => {
+    if (loading) return <Spinner animation="border" />;
+    if (error !== '') {
+      return (
+        <Alert variant="danger" onClose={() => setError('')} dismissible>
+          <Alert.Heading>
+            An error occured
+          </Alert.Heading>
+          <p>
+            {error}
+          </p>
+        </Alert>
+      );
+    }
+    return modalInputBody();
   };
 
   return (
@@ -74,88 +207,7 @@ const InitGraphModal = ({ show, setShow }) => {
         </Modal.Header>
         <Modal.Body>
           <Col className="modalCol">
-            <Row id="graphNameInputRow">
-              <input
-                id="graphNameInput"
-                type="text"
-                placeholder="graph name"
-                onChange={(val) => setGraphName(val)}
-              />
-            </Row>
-            <Divider />
-            <Row className="modalRow">
-              <Button onClick={() => nodeInputRef.current.click()}>
-                Upload Nodes
-                <input type="file" ref={nodeInputRef} onChange={handleSelectNodeFiles} multiple hidden />
-              </Button>
-              <Button onClick={() => edgeInputRef.current.click()}>
-                Upload Edges
-                <input type="file" ref={edgeInputRef} onChange={handleSelectEdgeFiles} multiple hidden />
-              </Button>
-            </Row>
-            <Row className="modalRow">
-              <Col>
-                <ListGroup className="readyFiles">
-                  {
-                    nodeFiles.map(({ data: file }, i) => (
-                      <ListGroup.Item key={uuid()}>
-                        <Row className="modalRow">
-                          <input
-                            id="graphNameInput"
-                            placeholder="label name"
-                            data-index={i}
-                            onChange={(e) => {
-                              setName(e.target.value, i, 'node');
-                            }}
-                            required
-                          />
-                        </Row>
-                        <Row className="modalRow">
-                          <span>{file.name}</span>
-                          <FontAwesomeIcon
-                            id="removeFile"
-                            data-index={i}
-                            onClick={removeNodeFile}
-                            icon={faMinusCircle}
-                          />
-                        </Row>
-                      </ListGroup.Item>
-                    ))
-                }
-                </ListGroup>
-              </Col>
-              <Col>
-                <ListGroup className="readyFiles">
-                  {
-                    edgeFiles.map(({ data: file }, i) => (
-                      <ListGroup.Item key={uuid()}>
-                        <Row className="modalRow">
-                          <input
-                            id="graphNameInput"
-                            data-index={i}
-                            onChange={(e) => {
-                              setName(e.target.value, i, 'edge');
-                            }}
-                            placeholder="edge name"
-                            required
-                          />
-                        </Row>
-                        <Row className="modalRow">
-                          <span>{file.name}</span>
-                          <FontAwesomeIcon
-                            id="removeFile"
-                            data-index={i}
-                            onClick={removeEdgeFile}
-                            icon={faMinusCircle}
-                          />
-                        </Row>
-                      </ListGroup.Item>
-                    ))
-                }
-                </ListGroup>
-              </Col>
-
-            </Row>
+            {modalBody()}
           </Col>
         </Modal.Body>
         <Modal.Footer>

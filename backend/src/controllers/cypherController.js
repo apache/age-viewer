@@ -34,13 +34,14 @@ class CypherController {
         }
     }
 
-    static async createGraph(req, res) {
+    async createGraph(req, res, next) {
         let db = sessionService.get(req.sessionID);
-        if (connectorService.isConnected()){
+        if (db.isConnected()){
             let cypherService = new CypherService(
                 db.graphRepository
             );
-            await cypherService.executeCypher();
+            console.log(req.body);
+            // await cypherService.createGraph();
             res.status(204).end();
         }
     }

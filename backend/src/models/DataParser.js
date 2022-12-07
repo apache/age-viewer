@@ -13,9 +13,13 @@ class GraphCreator {
     async createEdge(){
 
     }
+    async createGraph(){
+
+    }
     async parseData(){
         // iterate nodes and edges
         // {data:File(), name:'type name' }
         // add to query
+        
     }
 }
