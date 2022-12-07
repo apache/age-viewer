@@ -71,8 +71,8 @@ const InitGraphModal = ({ show, setShow }) => {
 
     const sendFiles = new FormData();
 
-    nodeFiles.forEach((node) => sendFiles.append(`node_${node.name}`, node.data, node.data.name));
-    edgeFiles.forEach((edge) => sendFiles.append(`edge_${edge.name}`, edge.data, edge.data.name));
+    nodeFiles.forEach((node) => sendFiles.append('nodes', node.data, node.name));
+    edgeFiles.forEach((edge) => sendFiles.append('edges', edge.data, edge.name));
     sendFiles.append('graphName', graphName);
     const reqData = {
       method: 'POST',

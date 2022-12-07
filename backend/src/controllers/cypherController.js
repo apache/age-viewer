@@ -40,7 +40,7 @@ class CypherController {
             let cypherService = new CypherService(
                 db.graphRepository
             );
-            console.log(req.body);
+            console.log(req);
             // await cypherService.createGraph();
             res.status(204).end();
         }
