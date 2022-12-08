@@ -19,6 +19,7 @@
 
 const CypherService = require("../services/cypherService");
 const sessionService = require("../services/sessionService");
+const GraphCreator = require("../models/DataParser");
 
 class CypherController {
     async executeCypher(req, res) {
@@ -40,7 +41,10 @@ class CypherController {
             let cypherService = new CypherService(
                 db.graphRepository
             );
-            console.log(req);
+            console.log(req.files, req.body);
+            let graph = new GraphCreator(req.files.nodes,req.files.edges, req.body.graphName);
+            await graph.parseData();
+            await cypherService.executeCypher(graph.query.join(' '));
             // await cypherService.createGraph();
             res.status(204).end();
         }

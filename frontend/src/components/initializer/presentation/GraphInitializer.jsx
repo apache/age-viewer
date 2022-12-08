@@ -8,7 +8,6 @@ import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import './GraphInit.scss';
 import { Divider } from 'antd';
-import analyzeFiles from '../FileAnalyzer';
 
 const InitGraphModal = ({ show, setShow }) => {
   const [nodeFiles, setNodeFiles] = useState([]);
@@ -67,7 +66,6 @@ const InitGraphModal = ({ show, setShow }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    await analyzeFiles({ nodes: nodeFiles, edges: edgeFiles, graphName });
 
     const sendFiles = new FormData();
 
