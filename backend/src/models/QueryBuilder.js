@@ -30,8 +30,8 @@ class QueryBuilder {
         return (
             this.ends.start +
             this.clause +
-            this.middle.join(', ') +
-            this.ends.end);
+            this.middle.join(', ')+
+            this.ends.end).trim();
     }
 }
 

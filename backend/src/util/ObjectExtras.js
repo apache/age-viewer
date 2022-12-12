@@ -3,7 +3,18 @@ const getDelete = (ob, name)=>{
     delete ob[name];
     return val;
 };
+const toAgeProps = (data, empty=false)=>{
+    let props = [];
+    Object.entries(data).forEach(([k, v])=>{
+        let val = typeof v === 'string' ? `'${v}'` : v;
+        props.push(`${k}:${val}`);
+    });
+    if (!empty && Object.keys(data).length === 0) return '';
+    console.log(`{${props.join(', ')}}`);
+    return `{${props.join(', ')}}`;
+}
 
 module.exports = {
-    getDelete
+    getDelete,
+    toAgeProps
 }

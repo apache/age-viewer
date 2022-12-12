@@ -1,5 +1,5 @@
 const Papa = require('papaparse');
-const { getDelete } = require('../util/ObjectExtras');
+const { getDelete, toAgeProps } = require('../util/ObjectExtras');
 const QueryBuilder = require('../models/QueryBuilder');
 
 class GraphCreator {
@@ -10,17 +10,27 @@ class GraphCreator {
         this.nodes = [];
         this.edges = [];
         this.query = {
-            graph: '',
+            graph: [],
+            labels:[],
             nodes: [],
             edges: []
         };
+    }
+    async createNodeLabel(label){
+        const makeLabel = `SELECT create_vlabel('${this.graphName}', '${label}');`
+        this.query.labels.push(makeLabel);
+    }
+
+    async createEdgeLabel(label){
+        const makeLabel = `SELECT create_elabel('${this.graphName}', '${label}');`;
+        this.query.labels.push(makeLabel); 
     }
 
     async createNode(node, type, qbuild = new QueryBuilder({
         graphName:this.graphName
     })){
         const CREATENODE = 
-        `(:${type} ${JSON.stringify(node)})`;
+        `(:${type} ${toAgeProps(node)})`;
 
         if (qbuild.clause === ''){
             qbuild.create();
@@ -42,16 +52,20 @@ class GraphCreator {
         const CREATEEDGE = 
         `MATCH
             (a:${startv} {id:${startid}}),
-            (b:${endv} {id: ${endid}})
-            CREATE (a)-[e:${type} ${JSON.stringify(eprops)}]->(b)`;
+            (b:${endv} {id:${endid}})
+            CREATE (a)-[e:${type} ${toAgeProps(eprops)}]->(b)`;
         
         qbuild.insertQuery(CREATEEDGE);
 
         this.query.edges.push(qbuild.getGeneratedQuery());
     }
-    async createGraph(){
-        const graph = `SELECT * FROM create_graph('${this.graphName}')`;
-        this.query.graph = graph;
+    async createGraph(drop=false){
+        if (drop){
+            const dropgraph = `SELECT drop_graph('${this.graphName}', true);`;
+            this.query.graph.push(dropgraph);
+        }
+        const creategraph = `SELECT create_graph('${this.graphName}');`;
+        this.query.graph.push(creategraph);
     }
     async readData(file, type, resolve){
         Papa.parse(file, {
@@ -76,9 +90,10 @@ class GraphCreator {
             graphName:this.graphName,
             returnAs:'v'
         });
-        this.createGraph();
-        // promise will return [] of objects where data property contains each node object
+        this.createGraph(req.body.dropGraph);
+
         this.nodes = await Promise.all(this.nodefiles.map((node) => new Promise((resolve) => {
+            this.createNodeLabel(node.originalname);
             this.readData(node.buffer.toString('utf8'), node.originalname, resolve);
         })));
         this.nodes.forEach((nodeFile)=>{
@@ -89,6 +104,7 @@ class GraphCreator {
         this.query.nodes.push(nodeQueryBuilder.getGeneratedQuery());
         
         this.edges = await Promise.all(this.edgefiles.map((edge) => new Promise((resolve) => {
+            this.createEdgeLabel(edge.originalname);
             this.readData(edge.buffer.toString('utf8'), edge.originalname, resolve);
         })));
         this.edges.forEach((edgeFile)=>{

@@ -42,18 +42,26 @@ class CypherController {
                 db.graphRepository
             );
             console.log(req.files, req.body);
-            let graph = new GraphCreator(req.files.nodes,req.files.edges, req.body.graphName);
-            await graph.parseData();
-            console.log(graph.query.nodes, graph.query.edges);
-            await cypherService.executeCypher(graph.query.graph);
-            await Promise.all(graph.query.nodes.map(async (q)=>{
-                return await cypherService.executeCypher(q);
-            }));
-            await Promise.all(graph.query.edges.map(async (q)=>{
-                return await cypherService.executeCypher(q);
-            }));
-            // await cypherService.createGraph();
-            res.status(204).end();
+            try {
+                let graph = new GraphCreator(req.files.nodes,req.files.edges, req.body.graphName);
+                await graph.parseData();
+                console.log(graph.query.nodes, graph.query.edges);
+                await cypherService.executeCypher(graph.query.graph);
+                await Promise.all(graph.query.labels.map(async (q)=>{
+                    return await cypherService.executeCypher(q);
+                }));
+                await Promise.all(graph.query.nodes.map(async (q)=>{
+                    return await cypherService.executeCypher(q);
+                }));
+                await Promise.all(graph.query.edges.map(async (q)=>{
+                    return await cypherService.executeCypher(q);
+                }));
+                // await cypherService.createGraph();
+                res.status(204).end();                
+            } catch (e){
+                throw e;
+            }
+
         }
     }
 }
