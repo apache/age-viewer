@@ -19,7 +19,7 @@
 
 import { connect } from 'react-redux';
 import { connectToDatabase } from '../../../features/database/DatabaseSlice';
-import { getMetaChartData, getMetaData } from '../../../features/database/MetadataSlice';
+import { /* getMetaChartData, */ getMetaData } from '../../../features/database/MetadataSlice';
 import {
   addFrame, pinFrame, removeFrame, trimFrame,
 } from '../../../features/frame/FrameSlice';
@@ -36,7 +36,7 @@ const mapDispatchToProps = {
   pinFrame,
   addAlert,
   getMetaData,
-  getMetaChartData,
+  /* getMetaChartData, */
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServerConnectFrame);

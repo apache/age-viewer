@@ -31,6 +31,7 @@ import IconPlay from '../../../icons/IconPlay';
 
 const Editor = ({
   setCommand,
+  activeRequests,
   command,
   addFrame,
   trimFrame,
@@ -41,11 +42,11 @@ const Editor = ({
   executeCypherQuery,
   addCommandHistory,
   toggleMenu,
-  getMetaData,
   // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
   const [alerts, setAlerts] = useState([]);
+  const [activePromises, setPromises] = useState({});
 
   // const favoritesCommand = () => {
   //   dispatch(() => addCommandFavorites(command));
@@ -56,7 +57,6 @@ const Editor = ({
   };
 
   const onClick = () => {
-    console.log('in editor presentation command is ', command);
     const refKey = uuid();
     if (command.toUpperCase().startsWith(':PLAY')) {
       dispatch(() => addFrame(command, 'Contents', refKey));
@@ -91,15 +91,29 @@ const Editor = ({
       }
     } else if (database.status === 'connected') {
       addFrame(command, 'CypherResultFrame', refKey);
-      dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
+      const req = dispatch(() => executeCypherQuery([refKey, command]));
+      req.then((response) => {
         if (response.type === 'cypher/executeCypherQuery/rejected') {
-          dispatch(() => addAlert('ErrorCypherQuery'));
-        } else { dispatch(() => getMetaData()); }
-      }));
+          if (response.error.name !== 'AbortError') {
+            dispatch(() => addAlert('ErrorCypherQuery'));
+          }
+        }
+      });
+      activePromises[refKey] = req;
+      setPromises({ ...activePromises });
     }
     dispatch(() => addCommandHistory(command));
     clearCommand();
   };
+
+  useEffect(() => {
+    const reqCancel = Object.keys(activePromises).filter((ref) => !activeRequests.includes(ref));
+    reqCancel.forEach((ref) => {
+      activePromises[ref].abort();
+      delete activePromises[ref];
+    });
+    setPromises({ ...activePromises });
+  }, [activeRequests]);
 
   useEffect(() => {
     setAlerts(
@@ -190,6 +204,7 @@ const Editor = ({
 
 Editor.propTypes = {
   setCommand: PropTypes.func.isRequired,
+  activeRequests: PropTypes.arrayOf(PropTypes.string).isRequired,
   command: PropTypes.string.isRequired,
   addFrame: PropTypes.func.isRequired,
   trimFrame: PropTypes.func.isRequired,
@@ -210,7 +225,6 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  getMetaData: PropTypes.func.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,
 };
 

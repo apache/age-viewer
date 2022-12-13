@@ -48,11 +48,8 @@ const validateVlePathVariableReturn = (cypherQuery) => {
 
 export const executeCypherQuery = createAsyncThunk(
   'cypher/executeCypherQuery',
-  async (args) => {
+  async (args, thunkAPI) => {
     try {
-      // validateSamePathVariableReturn(args[1]);
-      // validateVlePathVariableReturn(args[1]);
-
       const response = await fetch('/api/v1/cypher',
         {
           method: 'POST',
@@ -61,6 +58,7 @@ export const executeCypherQuery = createAsyncThunk(
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ cmd: args[1] }),
+          signal: thunkAPI.signal,
         });
       if (response.ok) {
         const res = await response.json();
@@ -80,10 +78,15 @@ export const executeCypherQuery = createAsyncThunk(
 
 );
 
+const removeActive = (state, key) => {
+  state.activeRequests = state.activeRequests.filter((ref) => ref !== key);
+};
+
 const CypherSlice = createSlice({
   name: 'cypher',
   initialState: {
     queryResult: {},
+    activeRequests: [],
     labels: { nodeLabels: {}, edgeLabels: {} },
   },
   reducers: {
@@ -105,26 +108,30 @@ const CypherSlice = createSlice({
       },
       prepare: (elementType, label, property) => ({ payload: { elementType, label, property } }),
     },
+    removeActiveRequests: (state, action) => removeActive(state, action.payload),
   },
   extraReducers: {
     [executeCypherQuery.fulfilled]: (state, action) => {
-      // state.queryResult[action.payload.key].response = action.payload
       Object.assign(state.queryResult[action.payload.key], {
         ...action.payload,
         complete: true,
       });
+      removeActive(state, action.payload.key);
     },
     [executeCypherQuery.pending]: (state, action) => {
       const key = action.meta.arg[0];
       const command = action.meta.arg[1];
+      const rid = action.meta.requestId;
       state.queryResult[key] = {};
+      state.activeRequests = [...state.activeRequests, key];
       Object.assign(state.queryResult[key], {
         command,
         complete: false,
-        requestId: action.meta.requestId,
+        requestId: rid,
       });
     },
     [executeCypherQuery.rejected]: (state, action) => {
+      removeActive(state, action.meta.arg[0]);
       state.queryResult[action.meta.arg[0]] = {
         command: 'ERROR',
         query: action.meta.arg[1],
@@ -136,6 +143,6 @@ const CypherSlice = createSlice({
   },
 });
 
-export const { setLabels } = CypherSlice.actions;
+export const { setLabels, removeActiveRequests } = CypherSlice.actions;
 
 export default CypherSlice.reducer;

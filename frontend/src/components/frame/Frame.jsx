@@ -28,6 +28,7 @@ import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
 import { removeFrame } from '../../features/frame/FrameSlice';
 import { setCommand } from '../../features/editor/EditorSlice';
+import { removeActiveRequests } from '../../features/cypher/CypherSlice';
 import EdgeWeight from '../../icons/EdgeWeight';
 import IconFilter from '../../icons/IconFilter';
 import IconSearchCancel from '../../icons/IconSearchCancel';
@@ -188,7 +189,10 @@ const Frame = ({
             size="large"
             type="link"
             className={`${styles.FrameButton}`}
-            onClick={() => dispatch(removeFrame(refKey))}
+            onClick={() => {
+              dispatch(removeFrame(refKey));
+              dispatch(removeActiveRequests(refKey));
+            }}
             title="Close Window"
           >
             <FontAwesomeIcon

@@ -39,6 +39,9 @@ const CodeMirrorWrapper = ({
         mode: 'cypher',
         tabSize: 4,
         lineNumbers: true,
+        spellcheck: false,
+        autocorrect: false,
+        autocapitalize: false,
         lineNumberFormatter: () => '$',
         extraKeys: {
           'Shift-Enter': (editor) => {
@@ -87,6 +90,9 @@ const CodeMirrorWrapper = ({
 
             editor.setValue(commandHistory[commandHistoryIndex + 1]);
             setCommandHistoryIndex(commandHistoryIndex + 1);
+          },
+          Enter: (editor) => {
+            editor.replaceSelection('\n', 'end');
           },
         },
       }}
