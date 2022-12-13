@@ -74,7 +74,12 @@ class CypherController {
                 // await cypherService.createGraph();
                 res.status(204).end();                
             } catch (e){
-                res.status(500).json(e).end();
+                const details = e.toString();
+                const err = {
+                    ...e,
+                    details
+                }
+                res.status(500).json(err).end();
             }
 
         }

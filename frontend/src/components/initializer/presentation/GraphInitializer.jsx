@@ -86,11 +86,13 @@ const InitGraphModal = ({ show, setShow }) => {
 
     };
     fetch('/api/v1/cypher/init', reqData)
-      .then((res) => {
+      .then(async (res) => {
         setLoading(false);
-        console.log(res);
+
         if (res.status !== 204) {
-          setError(res.data);
+          const resData = await res.json();
+          console.log(resData);
+          setError(resData);
         } else {
           setShow(false);
           dispatch(addAlert('CreateGraphSuccess'));
@@ -214,7 +216,10 @@ const InitGraphModal = ({ show, setShow }) => {
             An error occured
           </Alert.Heading>
           <p>
-            {error}
+            {`Error Code: ${error.code}`}
+          </p>
+          <p>
+            {`Error Details: ${error.details}`}
           </p>
         </Alert>
       );
