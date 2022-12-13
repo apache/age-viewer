@@ -34,6 +34,7 @@ class CypherService {
             }
         }
     }
+    
     createResult(resultSet) {
         let result;
 

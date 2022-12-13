@@ -38,9 +38,7 @@ class CypherController {
     async createGraph(req, res, next) {
         let db = sessionService.get(req.sessionID);
         if (db.isConnected()){
-            let cypherService = new CypherService(
-                db.graphRepository
-            );
+            let [client, transaction] = await db.graphRepository.createTransaction();
             console.log(req.files, req.body);
             try {
                 let graph = new GraphCreator({
@@ -49,37 +47,41 @@ class CypherController {
                     graphName: req.body.graphName,
                     dropGraph: req.body.dropGraph
                 });
+                
                 await graph.parseData();
                 const DROP = graph.query.graph.drop;
                 const CREATE = graph.query.graph.create;
-                console.log(graph.query.nodes, graph.query.edges);
                 if (DROP){
                     try{
-                       await cypherService.executeCypher(DROP); 
+                       await client.query(DROP);
                     }catch(e){
                         if(e.code !== '3F000') throw e;
                     }
                     
                 }
-                await cypherService.executeCypher(CREATE);
+                await client.query(CREATE);
+                await transaction('BEGIN');
                 await Promise.all(graph.query.labels.map(async (q)=>{
-                    return await cypherService.executeCypher(q);
+                    return await transaction(q);
                 }));
                 await Promise.all(graph.query.nodes.map(async (q)=>{
-                    return await cypherService.executeCypher(q);
+                    return await transaction(q);
                 }));
                 await Promise.all(graph.query.edges.map(async (q)=>{
-                    return await cypherService.executeCypher(q);
+                    return await transaction(q);
                 }));
-                // await cypherService.createGraph();
+                await transaction('COMMIT');
                 res.status(204).end();                
             } catch (e){
+                await transaction('ROLLBACK');
                 const details = e.toString();
                 const err = {
                     ...e,
                     details
                 }
                 res.status(500).json(err).end();
+            }finally{
+                client.release();
             }
 
         }
