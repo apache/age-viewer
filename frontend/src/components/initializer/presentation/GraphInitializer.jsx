@@ -14,8 +14,8 @@ import { changeGraph } from '../../../features/database/DatabaseSlice';
 import { changeCurrentGraph, getMetaData } from '../../../features/database/MetadataSlice';
 
 const InitGraphModal = ({ show, setShow }) => {
-  const [nodeFiles, setNodeFiles] = useState([]);
-  const [edgeFiles, setEdgeFiles] = useState([]);
+  const [nodeFiles, setNodeFiles] = useState({});
+  const [edgeFiles, setEdgeFiles] = useState({});
   const [graphName, setGraphName] = useState('');
   const [dropGraph, setDropGraph] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,46 +26,48 @@ const InitGraphModal = ({ show, setShow }) => {
 
   const handleSelectNodeFiles = (e) => {
     console.log(e.target.files);
-    const files = Array.from(e.target.files).map((file) => (
-      {
+    Array.from(e.target.files).forEach((file) => {
+      const key = uuid();
+      nodeFiles[key] = {
         data: file,
         name: '',
-      }
-    ));
-    console.log(files);
-    setNodeFiles([...nodeFiles, ...files]);
+      };
+    });
+    setNodeFiles({ ...nodeFiles });
     nodeInputRef.current.value = '';
   };
 
   const handleSelectEdgeFiles = (e) => {
-    const files = Array.from(e.target.files).map((file) => (
-      {
+    console.log(e.target.files);
+    Array.from(e.target.files).forEach((file) => {
+      const key = uuid();
+      edgeFiles[key] = {
         data: file,
         name: '',
-      }
-    ));
-    setEdgeFiles([...edgeFiles, ...files]);
+      };
+    });
+    setEdgeFiles({ ...edgeFiles });
+    console.log(edgeFiles);
     edgeInputRef.current.value = '';
   };
 
-  const removeNodeFile = (e) => {
-    const index = e.target.getAttribute('data-index');
-    nodeFiles.splice(index, 1);
-    setNodeFiles([...nodeFiles]);
+  const removeNodeFile = (k) => {
+    delete nodeFiles[k];
+    console.log(nodeFiles);
+    setNodeFiles({ ...nodeFiles });
   };
 
-  const removeEdgeFile = (e) => {
-    const index = e.target.getAttribute('data-index');
-    edgeFiles.splice(index, 1);
-    setEdgeFiles([...edgeFiles]);
+  const removeEdgeFile = (k) => {
+    delete edgeFiles[k];
+    setEdgeFiles({ ...edgeFiles });
   };
-  const setName = (name, index, type) => {
+  const setName = (name, key, type) => {
     if (type === 'node') {
-      const fileProps = nodeFiles[index];
+      const fileProps = nodeFiles[key];
       fileProps.name = name;
     }
     if (type === 'edge') {
-      const fileProps = edgeFiles[index];
+      const fileProps = edgeFiles[key];
       fileProps.name = name;
     }
   };
@@ -75,8 +77,8 @@ const InitGraphModal = ({ show, setShow }) => {
 
     const sendFiles = new FormData();
 
-    nodeFiles.forEach((node) => sendFiles.append('nodes', node.data, node.name));
-    edgeFiles.forEach((edge) => sendFiles.append('edges', edge.data, edge.name));
+    Object.entries(nodeFiles).forEach(([, node]) => sendFiles.append('nodes', node.data, node.name));
+    Object.entries(edgeFiles).forEach(([, edge]) => sendFiles.append('edges', edge.data, edge.name));
     sendFiles.append('graphName', graphName);
     sendFiles.append('dropGraph', dropGraph);
     const reqData = {
@@ -96,7 +98,7 @@ const InitGraphModal = ({ show, setShow }) => {
         } else {
           setShow(false);
           dispatch(addAlert('CreateGraphSuccess'));
-          await getMetaData();
+          getMetaData();
           dispatch(changeGraph(graphName));
           dispatch(changeCurrentGraph({ name: graphName }));
         }
@@ -143,16 +145,16 @@ const InitGraphModal = ({ show, setShow }) => {
         <Col>
           <ListGroup className="readyFiles">
             {
-              nodeFiles.map(({ data: file, name }, i) => (
-                <ListGroup.Item key={uuid()}>
+              Object.entries(nodeFiles).map(([k, { data: file, name }]) => (
+                <ListGroup.Item key={k}>
                   <Row className="modalRow">
                     <Input
                       id="graphNameInput"
                       placeholder="label name"
-                      data-index={i}
+                      data-key={k}
                       defaultValue={name}
                       onChange={(e) => {
-                        setName(e.target.value, i, 'node');
+                        setName(e.target.value, k, 'node');
                       }}
                       required
                     />
@@ -161,8 +163,8 @@ const InitGraphModal = ({ show, setShow }) => {
                     <span>{file.name}</span>
                     <FontAwesomeIcon
                       id="removeFile"
-                      data-index={i}
-                      onClick={removeNodeFile}
+                      data-id={k}
+                      onClick={() => removeNodeFile(k)}
                       icon={faMinusCircle}
                     />
                   </Row>
@@ -174,14 +176,14 @@ const InitGraphModal = ({ show, setShow }) => {
         <Col>
           <ListGroup className="readyFiles">
             {
-              edgeFiles.map(({ data: file, name }, i) => (
-                <ListGroup.Item key={uuid()}>
+              Object.entries(edgeFiles).map(([k, { data: file, name }]) => (
+                <ListGroup.Item key={k}>
                   <Row className="modalRow">
                     <Input
                       id="graphNameInput"
-                      data-index={i}
+                      data-key={k}
                       onChange={(e) => {
-                        setName(e.target.value, i, 'edge');
+                        setName(e.target.value, k, 'edge');
                       }}
                       placeholder="edge name"
                       defaultValue={name}
@@ -192,8 +194,8 @@ const InitGraphModal = ({ show, setShow }) => {
                     <span>{file.name}</span>
                     <FontAwesomeIcon
                       id="removeFile"
-                      data-index={i}
-                      onClick={removeEdgeFile}
+                      data-id={k}
+                      onClick={() => removeEdgeFile(k)}
                       icon={faMinusCircle}
                     />
                   </Row>
