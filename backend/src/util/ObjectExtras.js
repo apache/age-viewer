@@ -10,7 +10,6 @@ const toAgeProps = (data, empty=false)=>{
         props.push(`${k}:${val}`);
     });
     if (!empty && Object.keys(data).length === 0) return '';
-    console.log(`{${props.join(', ')}}`);
     return `{${props.join(', ')}}`;
 }
 

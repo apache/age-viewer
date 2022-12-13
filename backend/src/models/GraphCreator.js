@@ -65,10 +65,10 @@ class GraphCreator {
     }
     async createGraph(drop=false){
         if (drop){
-            const dropgraph = `SELECT drop_graph('${this.graphName}', true);`;
+            const dropgraph = `SELECT * FROM drop_graph('${this.graphName}', true);`;
             this.query.graph.drop = dropgraph;
         }
-        const creategraph = `SELECT create_graph('${this.graphName}');`;
+        const creategraph = `SELECT * FROM create_graph('${this.graphName}');`;
         this.query.graph.create = creategraph;
     }
     async readData(file, type, resolve){

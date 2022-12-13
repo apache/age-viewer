@@ -8,6 +8,10 @@ import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import './GraphInit.scss';
 import { Divider, Checkbox, Input } from 'antd';
+import { useDispatch } from 'react-redux';
+import { addAlert } from '../../../features/alert/AlertSlice';
+import { changeGraph } from '../../../features/database/DatabaseSlice';
+import { changeCurrentGraph, getMetaData } from '../../../features/database/MetadataSlice';
 
 const InitGraphModal = ({ show, setShow }) => {
   const [nodeFiles, setNodeFiles] = useState([]);
@@ -18,6 +22,7 @@ const InitGraphModal = ({ show, setShow }) => {
   const [error, setError] = useState('');
   const edgeInputRef = useRef();
   const nodeInputRef = useRef();
+  const dispatch = useDispatch();
 
   const handleSelectNodeFiles = (e) => {
     console.log(e.target.files);
@@ -86,6 +91,13 @@ const InitGraphModal = ({ show, setShow }) => {
         console.log(res);
         if (res.status !== 204) {
           setError(res.data);
+        } else {
+          setShow(false);
+          dispatch(addAlert('CreateGraphSuccess'));
+          dispatch(getMetaData()).then(() => {
+            dispatch(() => changeGraph(graphName));
+            dispatch(() => changeCurrentGraph(graphName));
+          });
         }
         // set success alert reducer
       })

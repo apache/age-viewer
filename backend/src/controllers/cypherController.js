@@ -54,7 +54,12 @@ class CypherController {
                 const CREATE = graph.query.graph.create;
                 console.log(graph.query.nodes, graph.query.edges);
                 if (DROP){
-                    await cypherService.executeCypher(DROP)
+                    try{
+                       await cypherService.executeCypher(DROP); 
+                    }catch(e){
+                        if(e.code !== '3F000') throw e;
+                    }
+                    
                 }
                 await cypherService.executeCypher(CREATE);
                 await Promise.all(graph.query.labels.map(async (q)=>{
@@ -69,7 +74,7 @@ class CypherController {
                 // await cypherService.createGraph();
                 res.status(204).end();                
             } catch (e){
-                throw e;
+                res.status(500).json(e).end();
             }
 
         }
