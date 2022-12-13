@@ -30,7 +30,7 @@
     color: red;
 }
 
-#graphNameInputRow{
+#graphInputRow{
     justify-content: space-around;
     margin: 4px 0 4px 0;
 }
@@ -38,7 +38,11 @@
     padding: 5px;
     margin: 2px;
 }
-
+.graphInputCol{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 .readyFiles{
     display: block;
 }

@@ -7,12 +7,13 @@ import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import './GraphInit.scss';
-import { Divider } from 'antd';
+import { Divider, Checkbox, Input } from 'antd';
 
 const InitGraphModal = ({ show, setShow }) => {
   const [nodeFiles, setNodeFiles] = useState([]);
   const [edgeFiles, setEdgeFiles] = useState([]);
   const [graphName, setGraphName] = useState('');
+  const [dropGraph, setDropGraph] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const edgeInputRef = useRef();
@@ -72,6 +73,7 @@ const InitGraphModal = ({ show, setShow }) => {
     nodeFiles.forEach((node) => sendFiles.append('nodes', node.data, node.name));
     edgeFiles.forEach((edge) => sendFiles.append('edges', edge.data, edge.name));
     sendFiles.append('graphName', graphName);
+    sendFiles.append('dropGraph', dropGraph);
     const reqData = {
       method: 'POST',
       body: sendFiles,
@@ -79,8 +81,12 @@ const InitGraphModal = ({ show, setShow }) => {
 
     };
     fetch('/api/v1/cypher/init', reqData)
-      .then(() => {
+      .then((res) => {
         setLoading(false);
+        console.log(res);
+        if (res.status !== 204) {
+          setError(res.data);
+        }
         // set success alert reducer
       })
       .catch((err) => {
@@ -93,15 +99,22 @@ const InitGraphModal = ({ show, setShow }) => {
 
   const modalInputBody = () => (
     <>
-      <Row id="graphNameInputRow">
-        <input
-          id="graphNameInput"
-          type="text"
-          placeholder="graph name"
-          onChange={(e) => setGraphName(e.target.value)}
-          required
-        />
-      </Row>
+      <Col className="graphInputCol">
+        <Row id="graphInputRow">
+          <Input
+            id="graphNameInput"
+            type="text"
+            placeholder="graph name"
+            onChange={(e) => setGraphName(e.target.value)}
+            required
+          />
+        </Row>
+        <Row id="graphInputRow">
+          <Checkbox onChange={(e) => setDropGraph(e.target.checked)}>
+            DROP graph if exists
+          </Checkbox>
+        </Row>
+      </Col>
       <Divider />
       <Row className="modalRow">
         <Button onClick={() => nodeInputRef.current.click()}>
@@ -120,7 +133,7 @@ const InitGraphModal = ({ show, setShow }) => {
               nodeFiles.map(({ data: file, name }, i) => (
                 <ListGroup.Item key={uuid()}>
                   <Row className="modalRow">
-                    <input
+                    <Input
                       id="graphNameInput"
                       placeholder="label name"
                       data-index={i}
@@ -151,7 +164,7 @@ const InitGraphModal = ({ show, setShow }) => {
               edgeFiles.map(({ data: file, name }, i) => (
                 <ListGroup.Item key={uuid()}>
                   <Row className="modalRow">
-                    <input
+                    <Input
                       id="graphNameInput"
                       data-index={i}
                       onChange={(e) => {

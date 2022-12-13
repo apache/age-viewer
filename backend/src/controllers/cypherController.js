@@ -19,7 +19,7 @@
 
 const CypherService = require("../services/cypherService");
 const sessionService = require("../services/sessionService");
-const GraphCreator = require("../models/DataParser");
+const GraphCreator = require("../models/GraphCreator");
 
 class CypherController {
     async executeCypher(req, res) {
@@ -43,10 +43,20 @@ class CypherController {
             );
             console.log(req.files, req.body);
             try {
-                let graph = new GraphCreator(req.files.nodes,req.files.edges, req.body.graphName);
+                let graph = new GraphCreator({
+                    nodes: req.files.nodes,
+                    edges: req.files.edges,
+                    graphName: req.body.graphName,
+                    dropGraph: req.body.dropGraph
+                });
                 await graph.parseData();
+                const DROP = graph.query.graph.drop;
+                const CREATE = graph.query.graph.create;
                 console.log(graph.query.nodes, graph.query.edges);
-                await cypherService.executeCypher(graph.query.graph);
+                if (DROP){
+                    await cypherService.executeCypher(DROP)
+                }
+                await cypherService.executeCypher(CREATE);
                 await Promise.all(graph.query.labels.map(async (q)=>{
                     return await cypherService.executeCypher(q);
                 }));

@@ -1,16 +1,20 @@
 const Papa = require('papaparse');
 const { getDelete, toAgeProps } = require('../util/ObjectExtras');
-const QueryBuilder = require('../models/QueryBuilder');
+const QueryBuilder = require('./QueryBuilder');
 
 class GraphCreator {
-    constructor(nodes, edges, graphName){
+    constructor({nodes, edges, graphName, dropGraph}={}){
         this.nodefiles = nodes;
         this.edgefiles = edges;
+        this.dropGraph = dropGraph;
         this.graphName = graphName;
         this.nodes = [];
         this.edges = [];
         this.query = {
-            graph: [],
+            graph: {
+                drop: null,
+                create: null,
+            },
             labels:[],
             nodes: [],
             edges: []
@@ -62,10 +66,10 @@ class GraphCreator {
     async createGraph(drop=false){
         if (drop){
             const dropgraph = `SELECT drop_graph('${this.graphName}', true);`;
-            this.query.graph.push(dropgraph);
+            this.query.graph.drop = dropgraph;
         }
         const creategraph = `SELECT create_graph('${this.graphName}');`;
-        this.query.graph.push(creategraph);
+        this.query.graph.create = creategraph;
     }
     async readData(file, type, resolve){
         Papa.parse(file, {
@@ -90,7 +94,7 @@ class GraphCreator {
             graphName:this.graphName,
             returnAs:'v'
         });
-        this.createGraph(req.body.dropGraph);
+        this.createGraph(this.dropGraph);
 
         this.nodes = await Promise.all(this.nodefiles.map((node) => new Promise((resolve) => {
             this.createNodeLabel(node.originalname);
