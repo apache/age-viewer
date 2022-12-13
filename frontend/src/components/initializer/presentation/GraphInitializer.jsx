@@ -99,8 +99,8 @@ const InitGraphModal = ({ show, setShow }) => {
           setShow(false);
           dispatch(addAlert('CreateGraphSuccess'));
           getMetaData();
-          dispatch(changeGraph(graphName));
-          dispatch(changeCurrentGraph({ name: graphName }));
+          changeCurrentGraph({ name: graphName });
+          changeGraph(graphName);
         }
         // set success alert reducer
       })
