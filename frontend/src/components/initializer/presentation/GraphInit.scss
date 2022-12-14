@@ -6,12 +6,6 @@
 .Modal {
     margin: auto;
 }
-
-#modalHeader {
-    text-align: center;
-    justify-content: center;
-}
-
 .modalRow {
     padding: 1%;
     justify-content: space-around;
@@ -45,4 +39,20 @@
 }
 .readyFiles{
     display: block;
+}
+
+.modal-header{
+    align-items: center;
+    margin: 8px;
+}
+.modal-footer{
+    justify-content: space-between;
+}
+
+#clearButton{
+    background-color: rgb(217, 142, 4);
+    border: none;
+}
+#clearButton:hover{
+    opacity: 10;
 }

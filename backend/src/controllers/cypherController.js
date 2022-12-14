@@ -39,7 +39,6 @@ class CypherController {
         let db = sessionService.get(req.sessionID);
         if (db.isConnected()){
             let [client, transaction] = await db.graphRepository.createTransaction();
-            console.log(req.files, req.body);
             try {
                 let graph = new GraphCreator({
                     nodes: req.files.nodes,

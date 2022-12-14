@@ -24,6 +24,14 @@ const InitGraphModal = ({ show, setShow }) => {
   const nodeInputRef = useRef();
   const dispatch = useDispatch();
 
+  const clearState = () => {
+    setNodeFiles({});
+    setEdgeFiles({});
+    setGraphName('');
+    setDropGraph(false);
+    setLoading(false);
+    setError('');
+  };
   const handleSelectNodeFiles = (e) => {
     Array.from(e.target.files).forEach((file) => {
       const key = uuid();
@@ -89,7 +97,7 @@ const InitGraphModal = ({ show, setShow }) => {
 
         if (res.status !== 204) {
           const resData = await res.json();
-          setError(resData);
+          throw resData;
         } else {
           setShow(false);
           dispatch(addAlert('CreateGraphSuccess'));
@@ -99,6 +107,7 @@ const InitGraphModal = ({ show, setShow }) => {
         }
       })
       .catch((err) => {
+        console.log('error', err);
         setLoading(false);
         setError(err);
       });
@@ -112,12 +121,18 @@ const InitGraphModal = ({ show, setShow }) => {
             id="graphNameInput"
             type="text"
             placeholder="graph name"
+            defaultValue={graphName}
+            value={graphName}
             onChange={(e) => setGraphName(e.target.value)}
             required
           />
         </Row>
         <Row id="graphInputRow">
-          <Checkbox onChange={(e) => setDropGraph(e.target.checked)}>
+          <Checkbox
+            onChange={(e) => setDropGraph(e.target.checked)}
+            defaultChecked={dropGraph}
+            checked={dropGraph}
+          >
             DROP graph if exists
           </Checkbox>
         </Row>
@@ -223,8 +238,10 @@ const InitGraphModal = ({ show, setShow }) => {
   return (
     <div>
       <Modal className="ModalContainer" show={show} onHide={() => setShow(!show)}>
-        <Modal.Header id="modalHeader" closeButton>
-          <h2>Create Graph</h2>
+        <Modal.Header closeButton>
+          <Row id="headerRow">
+            <Modal.Title>Create a Graph</Modal.Title>
+          </Row>
         </Modal.Header>
         <Modal.Body>
           <Col className="modalCol">
@@ -232,6 +249,9 @@ const InitGraphModal = ({ show, setShow }) => {
           </Col>
         </Modal.Body>
         <Modal.Footer>
+          <Button id="clearButton" onClick={clearState}>
+            Clear
+          </Button>
           <Button onClick={handleSubmit}>
             Done
           </Button>
