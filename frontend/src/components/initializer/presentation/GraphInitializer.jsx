@@ -25,7 +25,6 @@ const InitGraphModal = ({ show, setShow }) => {
   const dispatch = useDispatch();
 
   const handleSelectNodeFiles = (e) => {
-    console.log(e.target.files);
     Array.from(e.target.files).forEach((file) => {
       const key = uuid();
       nodeFiles[key] = {
@@ -38,7 +37,6 @@ const InitGraphModal = ({ show, setShow }) => {
   };
 
   const handleSelectEdgeFiles = (e) => {
-    console.log(e.target.files);
     Array.from(e.target.files).forEach((file) => {
       const key = uuid();
       edgeFiles[key] = {
@@ -47,13 +45,11 @@ const InitGraphModal = ({ show, setShow }) => {
       };
     });
     setEdgeFiles({ ...edgeFiles });
-    console.log(edgeFiles);
     edgeInputRef.current.value = '';
   };
 
   const removeNodeFile = (k) => {
     delete nodeFiles[k];
-    console.log(nodeFiles);
     setNodeFiles({ ...nodeFiles });
   };
 
@@ -93,7 +89,6 @@ const InitGraphModal = ({ show, setShow }) => {
 
         if (res.status !== 204) {
           const resData = await res.json();
-          console.log(resData);
           setError(resData);
         } else {
           setShow(false);
@@ -102,13 +97,10 @@ const InitGraphModal = ({ show, setShow }) => {
           changeCurrentGraph({ name: graphName });
           changeGraph(graphName);
         }
-        // set success alert reducer
       })
       .catch((err) => {
-        // setalert reducer
         setLoading(false);
         setError(err);
-        console.log(err);
       });
   };
 
@@ -134,11 +126,11 @@ const InitGraphModal = ({ show, setShow }) => {
       <Row className="modalRow">
         <Button onClick={() => nodeInputRef.current.click()}>
           Upload Nodes
-          <input type="file" ref={nodeInputRef} onChange={handleSelectNodeFiles} multiple hidden />
+          <input type="file" ref={nodeInputRef} onChange={handleSelectNodeFiles} accept=".csv" multiple hidden />
         </Button>
         <Button onClick={() => edgeInputRef.current.click()}>
           Upload Edges
-          <input type="file" ref={edgeInputRef} onChange={handleSelectEdgeFiles} multiple hidden />
+          <input type="file" ref={edgeInputRef} onChange={handleSelectEdgeFiles} accept=".csv" multiple hidden />
         </Button>
       </Row>
       <Row className="modalRow">
