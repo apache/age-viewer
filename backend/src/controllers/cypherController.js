@@ -45,7 +45,7 @@ class CypherController {
                     nodes: req.files.nodes,
                     edges: req.files.edges,
                     graphName: req.body.graphName,
-                    dropGraph: req.body.dropGraph
+                    dropGraph: req.body.dropGraph === 'true'
                 });
                 
                 await graph.parseData();
