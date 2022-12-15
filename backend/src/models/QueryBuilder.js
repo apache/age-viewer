@@ -27,11 +27,11 @@ class QueryBuilder {
     }
 
     getGeneratedQuery(){
-        return (
+        return ((
             this.ends.start +
             this.clause +
             this.middle.join(', ')+
-            this.ends.end).trim();
+            this.ends.end).trim());
     }
 }
 

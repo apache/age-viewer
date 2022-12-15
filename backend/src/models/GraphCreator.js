@@ -55,8 +55,8 @@ class GraphCreator {
         const eprops = edge;
         const CREATEEDGE = 
         `MATCH
-            (a:${startv} {id:${startid}}),
-            (b:${endv} {id:${endid}})
+            (a:${startv} {id:'${startid}'}),
+            (b:${endv} {id:'${endid}'})
             CREATE (a)-[e:${type} ${toAgeProps(eprops)}]->(b)`;
         
         qbuild.insertQuery(CREATEEDGE);
