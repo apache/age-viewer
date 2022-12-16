@@ -25,6 +25,7 @@ import { executeCypherQuery } from '../../../features/cypher/CypherSlice';
 import { addCommandHistory, addCommandFavorites, setCommand } from '../../../features/editor/EditorSlice';
 import { toggleMenu } from '../../../features/menu/MenuSlice';
 import { getMetaData } from '../../../features/database/MetadataSlice';
+import { setLabel } from '../../../features/layout/LayoutSlice';
 
 import Editor from '../presentations/Editor';
 
@@ -34,6 +35,7 @@ const mapStateToProps = (state) => ({
   command: state.editor.command,
   isActive: state.navigator.isActive,
   activeRequests: state.cypher.activeRequests,
+  isLabel: state.layout.isLabel,
 });
 
 const mapDispatchToProps = {
@@ -48,6 +50,7 @@ const mapDispatchToProps = {
   addCommandFavorites,
   toggleMenu,
   getMetaData,
+  setLabel,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

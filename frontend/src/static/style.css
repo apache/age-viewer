@@ -345,6 +345,26 @@ a[data-toggle="collapse"] {
     color: #ffffff;
 }
 
+.graph-item {
+    height: 35px;
+    background-color: #ffffff;
+    border: 1px solid #142B80;
+    border-radius: 5px;
+    opacity: 1;
+    color: #142B80;
+    margin: 0px 4px 4px 4px;
+}
+
+.graph-item-clicked {
+    height: 35px;
+    background-color: #2756FF;
+    border: 1px solid #142B80;
+    border-radius: 5px;
+    opacity: 1;
+    color: #ffffff;
+    margin: 0px 4px 4px 4px;
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
