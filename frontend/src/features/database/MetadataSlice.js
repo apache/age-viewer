@@ -89,7 +89,7 @@ const MetadataSlice = createSlice({
     changeCurrentGraph: (state, action) => ({
       ...state,
       currentGraph: Object.entries(state.graphs)
-        .find(([, data]) => data.id === action.payload.id)[0],
+        .find(([k, data]) => data.id === action.payload.id || k === action.payload.name)[0],
     }),
   },
   extraReducers: {
