@@ -201,7 +201,10 @@ class DatabaseService {
                 cur = 'edges';
             }
             else{
-                meta[cur].push(element);
+                if(meta[cur]){
+                    meta[cur].push(element);
+                }
+                
             }
 
         });
