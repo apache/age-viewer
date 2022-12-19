@@ -93,6 +93,13 @@ class GraphRepository {
         return result;
     }
 
+    async createTransaction(){
+        const client = await this.getConnection();
+        return [client, async (query, params=[])=>{
+            return [await client.query(query, params), client];
+        }]
+    }
+
     async initGraphNames(){
         const { rows } = await this.execute(getQuery('get_graph_names'));
         this._graphs = rows.map((item)=>item.name);

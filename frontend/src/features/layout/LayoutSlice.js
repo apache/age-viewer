@@ -17,18 +17,23 @@
  * under the License.
  */
 
-const express = require("express");
-const CypherController = require("../controllers/cypherController");
-const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({storage});
-const router = express.Router();
-const cypherController = new CypherController();
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
-const {wrap} = require('../common/Routes');
+const LayoutSlice = createSlice({
+  name: 'layout',
+  initialState: {
+    isLabel: false,
+  },
+  reducers: {
+    setLabel: {
+      reducer: (state) => {
+        state.isLabel = !state.isLabel;
+      },
+    },
+  },
+});
 
-// Execute Cypher Query
-router.post("/", wrap(cypherController.executeCypher));
-router.post("/init", upload.fields([{name:"edges"}, {name:"nodes"}]), wrap(cypherController.createGraph));
+export const { setLabel } = LayoutSlice.actions;
 
-module.exports = router;
+export default LayoutSlice.reducer;

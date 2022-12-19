@@ -19,6 +19,7 @@
 
 const CypherService = require("../services/cypherService");
 const sessionService = require("../services/sessionService");
+const GraphCreator = require("../models/GraphCreator");
 
 class CypherController {
     async executeCypher(req, res) {
@@ -31,6 +32,57 @@ class CypherController {
             res.status(200).json(data).end();
         } else {
             throw new Error("Not connected");
+        }
+    }
+
+    async createGraph(req, res, next) {
+        let db = sessionService.get(req.sessionID);
+        if (db.isConnected()){
+            let [client, transaction] = await db.graphRepository.createTransaction();
+            try {
+                let graph = new GraphCreator({
+                    nodes: req.files.nodes,
+                    edges: req.files.edges,
+                    graphName: req.body.graphName,
+                    dropGraph: req.body.dropGraph === 'true'
+                });
+                
+                await graph.parseData();
+                const DROP = graph.query.graph.drop;
+                const CREATE = graph.query.graph.create;
+                if (DROP){
+                    try{
+                       await client.query(DROP);
+                    }catch(e){
+                        if(e.code !== '3F000') throw e;
+                    }
+                    
+                }
+                await client.query(CREATE);
+                await transaction('BEGIN');
+                await Promise.all(graph.query.labels.map(async (q)=>{
+                    return await transaction(q);
+                }));
+                await Promise.all(graph.query.nodes.map(async (q)=>{
+                    return await transaction(q);
+                }));
+                await Promise.all(graph.query.edges.map(async (q)=>{
+                    return await transaction(q);
+                }));
+                await transaction('COMMIT');
+                res.status(204).end();                
+            } catch (e){
+                await transaction('ROLLBACK');
+                const details = e.toString();
+                const err = {
+                    ...e,
+                    details
+                }
+                res.status(500).json(err).end();
+            }finally{
+                client.release();
+            }
+
         }
     }
 }

@@ -22,7 +22,9 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
 import { Col, Row } from 'antd';
+import { Button } from 'react-bootstrap';
 import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart';
+import InitGraphModal from '../../initializer/presentation/GraphInitializer';
 import Frame from '../Frame';
 import FrameStyles from '../Frame.module.scss';
 
@@ -30,6 +32,7 @@ const ServerStatusFrame = ({
   refKey, isPinned, reqString, serverInfo, data,
 }) => {
   const [elements, setElements] = useState({ edges: [], nodes: [] });
+  const [showModal, setShow] = useState(false);
   const {
     host, port, user, database, graph, status,
   } = serverInfo;
@@ -44,6 +47,7 @@ const ServerStatusFrame = ({
     if (status === 'connected') {
       return (
         <div className={FrameStyles.FlexContentWrapper}>
+          <InitGraphModal show={showModal} setShow={setShow} />
           <Row>
             <Col span={6}>
               <h3>Connection Status</h3>
@@ -67,6 +71,11 @@ const ServerStatusFrame = ({
               <p>
                 Graph path has been set to&nbsp;
                 <strong>{graph}</strong>
+              </p>
+            </Col>
+            <Col>
+              <p>
+                <Button onClick={() => setShow(!showModal)}>Create Graph</Button>
               </p>
             </Col>
           </Row>
