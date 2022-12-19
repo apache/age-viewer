@@ -23,6 +23,7 @@ import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle, faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
+import store from '../../../app/store';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
@@ -98,6 +99,10 @@ const Editor = ({
         if (response.type === 'cypher/executeCypherQuery/rejected') {
           if (response.error.name !== 'AbortError') {
             dispatch(() => addAlert('ErrorCypherQuery'));
+            const currentCommand = store.getState().editor.command;
+            if (currentCommand === '') {
+              setCommand(command);
+            }
           }
         }
       });
