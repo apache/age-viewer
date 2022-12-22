@@ -30,6 +30,7 @@ class CypherResultTab extends Component {
     this.state = {};
     this.refKey = props.refKey;
     this.currentTab = props.currentTab;
+    this.setIsTable = props.setIsTable;
   }
 
   render() {
@@ -52,7 +53,7 @@ class CypherResultTab extends Component {
           className="btn"
           type="button"
           style={{ width: '50%', fontSize: '14px', color: this.currentTab === 'graph' ? '#142B80' : '#495057' }}
-          onClick={() => activeTab(this.refKey, 'graph')}
+          onClick={() => { activeTab(this.refKey, 'graph'); this.setIsTable(false); }}
         >
           <IconGraph />
           <br />
@@ -70,7 +71,7 @@ class CypherResultTab extends Component {
           className="btn"
           type="button"
           style={{ width: '50%', fontSize: '14px', color: this.currentTab === 'table' ? '#142B80' : '#495057' }}
-          onClick={() => activeTab(this.refKey, 'table')}
+          onClick={() => { activeTab(this.refKey, 'table'); this.setIsTable(true); }}
         >
           <FontAwesomeIcon icon={faTable} style={{ fontSize: '25px' }} />
           <br />
@@ -84,6 +85,7 @@ class CypherResultTab extends Component {
 CypherResultTab.propTypes = {
   refKey: PropTypes.string.isRequired,
   currentTab: PropTypes.string.isRequired,
+  setIsTable: PropTypes.func.isRequired,
 };
 
 export default CypherResultTab;

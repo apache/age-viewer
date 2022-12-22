@@ -42,11 +42,13 @@ const CypherResultFrame = ({
   const [thicknessModalVisible, setThicknessModalVisible] = useState(false);
 
   const [filterProperties, setFilterProperties] = useState([]);
+  const [filterTable, setFilterTable] = useState(null);
   const [edgeProperties, setEdgeProperties] = useState([]);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [globalThickness, setGlobalThickness] = useState(null);
 
   const [chartLegend, setChartLegend] = useState({ edgeLegend: {}, nodeLegend: {} });
+  const [isTable, setIsTable] = useState(false);
 
   useEffect(() => {
     if (chartAreaRef.current && filterModalVisible) {
@@ -77,10 +79,13 @@ const CypherResultFrame = ({
 
   useEffect(() => {
     if (!chartAreaRef.current) return;
-    if (globalFilter) {
+    if (globalFilter && !isTable) {
       chartAreaRef.current.applyFilterOnCytoscapeElements(globalFilter);
+    } else if (globalFilter && isTable) {
+      setFilterTable(globalFilter);
     } else {
       chartAreaRef.current.resetFilterOnCytoscapeElements();
+      setFilterTable();
     }
   }, [globalFilter]);
 
@@ -177,6 +182,7 @@ const CypherResultFrame = ({
         reqString={reqString}
         isPinned={isPinned}
         refKey={refKey}
+        isTable={isTable}
       >
         {
           queryComplete?.complete
@@ -188,11 +194,14 @@ const CypherResultFrame = ({
                     ref={chartAreaRef}
                     refKey={refKey}
                     setChartLegend={setChartLegend}
+                    setIsTable={setIsTable}
                   />
                 </div>
                 <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
                   <CypherResultTableContainer
                     refKey={refKey}
+                    filterTable={filterTable}
+                    setIsTable={setIsTable}
                   />
                 </div>
               </div>
@@ -214,6 +223,7 @@ const CypherResultFrame = ({
         setVisible={setFilterModalVisible}
         properties={filterProperties}
         globalFilter={globalFilter}
+        isTable={isTable}
       />
     </>
 
