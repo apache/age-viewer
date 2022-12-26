@@ -185,13 +185,11 @@ const getEdgeColor = (labelName) => {
 const getNodeSize = (labelName) => {
   let selectedSize = 0;
 
-  nodeLabelSizes.forEach((labelSize) => {
-    if (labelSize.labels.has(labelName)) {
-      selectedSize = labelSize.size;
-    }
-  });
+  const nSize = nodeLabelSizes.find((labelSize) => labelSize.labels.has(labelName));
 
-  if (selectedSize === 0) {
+  if (nSize) {
+    selectedSize = nSize.size;
+  } else {
     nodeLabelSizes[2].labels.add(labelName);
     selectedSize = nodeLabelSizes[2].size;
   }
@@ -202,13 +200,11 @@ const getNodeSize = (labelName) => {
 const getEdgeSize = (labelName) => {
   let selectedSize = 0;
 
-  edgeLabelSizes.forEach((labelSize) => {
-    if (labelSize.labels.has(labelName)) {
-      selectedSize = labelSize.size;
-    }
-  });
+  const eSize = edgeLabelSizes.find((labelSize) => labelSize.labels.has(labelName));
 
-  if (selectedSize === 0) {
+  if (eSize) {
+    selectedSize = eSize.size;
+  } else {
     edgeLabelSizes[0].labels.add(labelName);
     selectedSize = edgeLabelSizes[0].size;
   }
@@ -293,6 +289,7 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
     const labelName = val.label;
     let source = val.start;
     let target = val.end;
+    console.log(val);
 
     if (!source) {
       source = val.start_id;
@@ -341,6 +338,7 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
           classes: isNew ? 'new node' : 'edge',
         },
       );
+      console.log(edges);
     } else {
       if (!Object.prototype.hasOwnProperty.call(nodeLegend, labelName)) {
         nodeLegend[labelName] = {
@@ -380,7 +378,6 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
       );
     }
   }
-
   if (data) {
     data.forEach((row, index) => {
       if (index >= maxDataOfGraph && maxDataOfGraph !== 0) {
