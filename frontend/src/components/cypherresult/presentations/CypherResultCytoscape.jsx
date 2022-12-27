@@ -380,6 +380,8 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         addLegendData={addLegendData}
         maxDataOfGraph={maxDataOfGraph}
         graph={props.graph}
+        onAddSubmit={props.onAddSubmit}
+        onRemoveSubmit={props.onRemoveSubmit}
       />
       <CypherResultCytoscapeFooter
         captions={captions}
@@ -421,6 +423,8 @@ CypherResultCytoscape.propTypes = {
   refKey: PropTypes.string.isRequired,
   setChartLegend: PropTypes.func.isRequired,
   graph: PropTypes.string.isRequired,
+  onAddSubmit: PropTypes.func.isRequired,
+  onRemoveSubmit: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscape;

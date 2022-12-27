@@ -36,10 +36,13 @@ import {
   faWindowClose,
   faHighlighter,
 } from '@fortawesome/free-solid-svg-icons';
+import uuid from 'react-uuid';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
 import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
+import IconFilter from '../../icons/IconFilter';
+import IconSearchCancel from '../../icons/IconSearchCancel';
 import styles from '../frame/Frame.module.scss';
 
 cytoscape.use(COSEBilkent);
@@ -53,7 +56,7 @@ cytoscape.use(cxtmenu);
 
 const CypherResultCytoscapeCharts = ({
   elements, cytoscapeObject, setCytoscapeObject, cytoscapeLayout, maxDataOfGraph,
-  onElementsMouseover, addLegendData, graph,
+  onElementsMouseover, addLegendData, graph, onAddSubmit, onRemoveSubmit,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
@@ -233,6 +236,35 @@ const CypherResultCytoscapeCharts = ({
               }
             },
           },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<IconFilter size="lg" />),
+            ),
+            select(ele) {
+              const newFilterObject = {
+                key: uuid(),
+                keyword: ele.data().properties[ele.data().caption],
+                property: {
+                  label: ele.data().label,
+                  property: ele.data().caption,
+                },
+              };
+              onAddSubmit(newFilterObject);
+            },
+          },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<IconSearchCancel size="lg" />),
+            ),
+            select(ele) {
+              const keywordObject = {
+                keyword: ele.data().properties[ele.data().caption],
+              };
+              onRemoveSubmit(keywordObject);
+            },
+          },
         ],
         fillColor: 'rgba(210, 213, 218, 1)',
         activeFillColor: 'rgba(166, 166, 166, 1)',
@@ -309,6 +341,8 @@ CypherResultCytoscapeCharts.propTypes = {
   onElementsMouseover: PropTypes.func.isRequired,
   addLegendData: PropTypes.func.isRequired,
   graph: PropTypes.string.isRequired,
+  onAddSubmit: PropTypes.func.isRequired,
+  onRemoveSubmit: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscapeCharts;

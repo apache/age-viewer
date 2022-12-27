@@ -43,6 +43,8 @@ const CypherResultFrame = ({
 
   const [filterProperties, setFilterProperties] = useState([]);
   const [edgeProperties, setEdgeProperties] = useState([]);
+  const [addFilter, setAddFilter] = useState(null);
+  const [removeFilter, setRemoveFilter] = useState(null);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [globalThickness, setGlobalThickness] = useState(null);
 
@@ -83,6 +85,25 @@ const CypherResultFrame = ({
       chartAreaRef.current.resetFilterOnCytoscapeElements();
     }
   }, [globalFilter]);
+
+  useEffect(() => {
+    if (addFilter) {
+      if (globalFilter) setGlobalFilter([...globalFilter, addFilter]);
+      else setGlobalFilter([addFilter]);
+    }
+  }, [addFilter]);
+
+  useEffect(() => {
+    if (removeFilter) {
+      if (globalFilter) {
+        const newFilterList = globalFilter.filter((filterItem) => (
+          filterItem.keyword !== removeFilter.keyword
+        ));
+        if (newFilterList.length > 0) setGlobalFilter(newFilterList);
+        else setGlobalFilter(null);
+      }
+    }
+  }, [removeFilter]);
 
   useEffect(() => {
     if (!chartAreaRef.current) return;
@@ -188,6 +209,12 @@ const CypherResultFrame = ({
                     ref={chartAreaRef}
                     refKey={refKey}
                     setChartLegend={setChartLegend}
+                    onAddSubmit={(filters) => {
+                      setAddFilter(filters);
+                    }}
+                    onRemoveSubmit={(filters) => {
+                      setRemoveFilter(filters);
+                    }}
                   />
                 </div>
                 <div style={{ height: '100%', width: '100%' }} id={`${refKey}-table`} className="deselected-frame-tab">
