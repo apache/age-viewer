@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -185,16 +186,14 @@ const Frame = ({
             size="large"
             type="link"
             className={`${styles.FrameButton}`}
-            onClick={() => window.confirm({
-              title: 'Are you sure you want to close this window?',
-              onOk() {
+            onClick={() => {
+              if (window.confirm('Are you sure you want to close this window?')) {
                 dispatch(removeFrame(refKey));
                 dispatch(removeActiveRequests(refKey));
-              },
-              onCancel() {
+              } else {
                 return false;
-              },
-            })}
+              }
+            }}
             title="Close Window"
           >
             <FontAwesomeIcon icon={faTimes} size="lg" />
