@@ -19,7 +19,9 @@
 
 const express = require("express");
 const CypherController = require("../controllers/cypherController");
-
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({storage});
 const router = express.Router();
 const cypherController = new CypherController();
 
@@ -27,5 +29,6 @@ const {wrap} = require('../common/Routes');
 
 // Execute Cypher Query
 router.post("/", wrap(cypherController.executeCypher));
+router.post("/init", upload.fields([{name:"edges"}, {name:"nodes"}]), wrap(cypherController.createGraph));
 
 module.exports = router;

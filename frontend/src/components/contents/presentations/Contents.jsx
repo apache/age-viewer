@@ -35,6 +35,7 @@ const Contents = ({
           if (response.type === 'database/getConnectionStatus/fulfilled') {
             getMetaData({ currentGraph });
             getMetaChartData();
+            getMetaData();
           }
         });
       });

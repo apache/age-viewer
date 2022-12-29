@@ -19,7 +19,9 @@
 
 import React from 'react';
 import { Select } from 'antd';
+import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import './Components.scss';
 
 const StyleTextRight = {
   marginBottom: '10px', textAlign: 'right', fontSize: '13px', fontWeight: 'bold',
@@ -45,6 +47,19 @@ export const VerticalLine = () => (
       height: '120px',
       marginTop: '37px',
       marginBottom: '37px',
+    }}
+  />
+);
+
+export const HorizontalLine = () => (
+  <div
+    className="horizontalLine"
+    style={{
+      border: '1px solid #C4C4C4',
+      opacity: '1',
+      width: '80%',
+      height: '0',
+      margin: '3px auto',
     }}
   />
 );
@@ -76,33 +91,38 @@ SubLabelLeftWithLink.propTypes = {
   label: PropTypes.string.isRequired,
 };
 
-const GraphSelectDropdown = ({ graphs, changeCurrentGraph, changeGraphDB }) => {
+const GraphSelectDropdown = ({
+  currentGraph, graphs, changeCurrentGraph, changeGraphDB,
+}) => {
   const selectStyle = {
     marginTop: '1rem',
     display: 'block',
   };
-  const handleGraphClick = (e) => {
-    const graphName = graphs.find((graph) => graph[1] === e)[0];
-    changeCurrentGraph({ id: e });
-    changeGraphDB({ graphName });
+  const handleGraphClick = (_, e) => {
+    changeCurrentGraph({ id: e['data-gid'] });
+    changeGraphDB({ graphName: e.value });
   };
 
   const options = (
-    graphs.map(([gname, graphId]) => (<option value={graphId}>{gname}</option>))
+    graphs.map(([gname, graphId]) => (
+      <Select.Option value={gname} data-gid={graphId}>{gname}</Select.Option>
+    ))
   );
   return (
-    <div>
-      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle}>
+    <Col id="graphSelectionContainer">
+      <Select onChange={handleGraphClick} placeholder="Select Graph" style={selectStyle} value={currentGraph}>
         {options}
       </Select>
+      <br />
       <b>
         Current Graph
       </b>
-    </div>
+    </Col>
   );
 };
 
 GraphSelectDropdown.propTypes = {
+  currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeCurrentGraph: PropTypes.func.isRequired,
   changeGraphDB: PropTypes.func.isRequired,

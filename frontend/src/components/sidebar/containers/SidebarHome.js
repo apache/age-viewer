@@ -27,6 +27,7 @@ import { getMetaData, changeCurrentGraph } from '../../../features/database/Meta
 const mapStateToProps = (state) => {
   const currentGraphData = state.metadata.graphs[state.metadata.currentGraph] || '';
   return {
+    currentGraph: state.metadata.currentGraph,
     graphs: Object.entries(state.metadata.graphs).map(([k, v]) => [k, v.id]),
     edges: currentGraphData.edges,
     nodes: currentGraphData.nodes,
@@ -36,6 +37,7 @@ const mapStateToProps = (state) => {
     role: currentGraphData.role,
     command: state.editor.command,
     currentGraph: state.metadata.currentGraph,
+    isLabel: state.layout.isLabel,
   };
 };
 

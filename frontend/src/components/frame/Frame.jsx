@@ -20,13 +20,15 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes,
+  faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes, faClone,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
 import { removeFrame } from '../../features/frame/FrameSlice';
+import { setCommand } from '../../features/editor/EditorSlice';
+import { removeActiveRequests } from '../../features/cypher/CypherSlice';
 import EdgeWeight from '../../icons/EdgeWeight';
 import IconFilter from '../../icons/IconFilter';
 import IconSearchCancel from '../../icons/IconSearchCancel';
@@ -63,6 +65,17 @@ const Frame = ({
           <strong>
             {reqString}
           </strong>
+          <FontAwesomeIcon
+            id={styles.toEditor}
+            title="copy to editor"
+            icon={faClone}
+            size="s"
+            onClick={() => dispatch(setCommand(reqString))}
+            style={{
+              cursor: 'pointer',
+            }}
+          />
+
         </div>
         <div className={styles.ButtonArea}>
           {onThick ? (
@@ -176,7 +189,10 @@ const Frame = ({
             size="large"
             type="link"
             className={`${styles.FrameButton}`}
-            onClick={() => dispatch(removeFrame(refKey))}
+            onClick={() => {
+              dispatch(removeFrame(refKey));
+              dispatch(removeActiveRequests(refKey));
+            }}
             title="Close Window"
           >
             <FontAwesomeIcon

@@ -62,7 +62,7 @@ export const getMetaData = createAsyncThunk(
     }
   },
 );
-
+/*
 export const getMetaChartData = createAsyncThunk(
   'database/getMetaChartData',
   async () => {
@@ -82,6 +82,7 @@ export const getMetaChartData = createAsyncThunk(
     }
   },
 );
+*/
 
 const MetadataSlice = createSlice({
   name: 'metadata',
@@ -96,7 +97,7 @@ const MetadataSlice = createSlice({
     changeCurrentGraph: (state, action) => ({
       ...state,
       currentGraph: Object.entries(state.graphs)
-        .find(([, data]) => data.id === action.payload.id)[0],
+        .find(([k, data]) => data.id === action.payload.id || k === action.payload.name)[0],
     }),
   },
   extraReducers: {
@@ -116,12 +117,12 @@ const MetadataSlice = createSlice({
         dbname: action.payload.database,
       };
     },
-    [getMetaChartData.fulfilled]: (state, action) => {
+    /* [getMetaChartData.fulfilled]: (state, action) => {
       if (action.payload) {
         return Object.assign(state, { rows: action.payload });
       }
       return Object.assign(state, { rows: [] });
-    },
+    }, */
   },
 });
 
