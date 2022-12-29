@@ -17,10 +17,11 @@
  * under the License.
  */
 
-import {getQuery} from "../tools/SQLFlavorManager";
+import { getQuery } from "../tools/SQLFlavorManager";
 import * as util from "util";
 import GraphRepository from '../models/GraphRepository';
 import { start } from "repl";
+import { get } from "http";
 
 class DatabaseService {
     constructor() {
@@ -28,46 +29,62 @@ class DatabaseService {
     }
 
     async getMetaData(graphName) {
-        await this._graphRepository.initGraphNames();
-        const {graphs} = this._graphRepository.getConnectionInfo();
-        if(graphName){
-            if(graphs.includes(graphName)){
-                return await this.getMetaDataSingle(graphName);
-            }else{
-                throw new Error('graph does not exist');
+        let gr = this._graphRepository;
+        await gr.initGraphNames();
+        const { graphs } = gr.getConnectionInfo();
+        await DatabaseService.analyzeGraph(gr);
+        if (graphName) {
+            if (graphs.includes(graphName)) {
+                return await this.getMetaDataSingle(graphName, graphs);
+            } else {
+                return await this.getMetaDataSingle(gr._graph, graphs);
             }
-            
-        }else{
-            return await this.getMetaDataMultiple(graphs);
+        } else if (graphs.length > 0) {
+            return await this.graphNameInitialize(graphs);
+        } else {
+            throw new Error('graph does not exist');
+            // return await this.getMetaDataMultiple(graphs);
         }
-
     }
 
-    async getMetaDataMultiple(graphs){
-        const metadata = {};
-        await Promise.all(graphs.map(async(gname)=>{
-            metadata[gname] = await this.getMetaDataSingle(gname);
-        }))
-        return metadata;
-    }
+    // async getMetaDataMultiple(graphs){
+    //     const metadata = {};
+    //     await Promise.all(graphs.map(async(gname)=>{
+    //         metadata[gname] = await this.getMetaDataSingle(gname);
+    //     }))
+    //     return metadata;
+    // }
 
-    async getMetaDataSingle(curGraph){
+    async getMetaDataSingle(curGraph, graphs) {
         let metadata = {};
-        const {database} = this.getConnectionInfo();
+        let data = {};
+        const { database } = this.getConnectionInfo();
         try {
-            let {nodes, edges} = await this.readMetaData(curGraph);
-            metadata.nodes = nodes;
-            metadata.edges = edges;
-            metadata.propertyKeys = await this.getPropertyKeys();
-            metadata.graph = curGraph;
-            metadata.database = database;
-            metadata.role = await this.getRole();
+            let { nodes, edges } = await this.readMetaData(curGraph);
+            data.nodes = nodes;
+            data.edges = edges;
+            data.propertyKeys = await this.getPropertyKeys();
+            data.graph = curGraph;
+            data.database = database;
+            data.role = await this.getRole();
+            metadata[curGraph] = data;
+            graphs.forEach((gname) => {
+                if (gname !== curGraph) metadata[gname] = {};
+            })
         } catch (error) {
             throw error;
         }
         return metadata;
     }
-    /*
+
+    async graphNameInitialize(graphs) {
+        let metadata = {};
+        graphs.forEach((gname) => {
+            metadata[gname] = {};
+        })
+        return metadata;
+    }
+
     async getGraphLabels() {
         let graphRepository = this._graphRepository;
         let queryResult = {};
@@ -93,12 +110,17 @@ class DatabaseService {
         let queryResult = await graphRepository.execute(query);
 
         return queryResult.rows;
-    }*/
-    
-    async readMetaData(graphName){
+    }
+
+    static async analyzeGraph(gr) {
+        await gr.execute(getQuery('analyze_graph'));
+    }
+
+    async readMetaData(graphName) {
         let gr = this._graphRepository;
-        let queryResult = await gr.execute(util.format(getQuery('meta_data'), graphName));
-        return this.parseMeta(queryResult[1].rows);
+        const { version } = gr.getConnectionInfo();
+        let queryResult = await gr.execute(util.format(getQuery('meta_data', version.split('.')[0]), graphName));
+        return this.parseMeta(queryResult.rows);
     }
 
     async getPropertyKeys() {
@@ -121,7 +143,7 @@ class DatabaseService {
         }
 
         try {
-            let client = await graphRepository.getConnection(graphRepository.getConnectionInfo(), true);
+            let client = await graphRepository.connect();
             client.release();
         } catch (e) {
             this._graphRepository = null;
@@ -154,7 +176,7 @@ class DatabaseService {
         }
 
         try {
-            let client = await GraphRepository.getConnection(graphRepository.getConnectionInfo());
+            let client = await graphRepository.getConnection();
             client.release();
         } catch (err) {
             return false;
@@ -176,7 +198,7 @@ class DatabaseService {
         return this._graphRepository;
     }
 
-    convertEdge({label, id, start, end, props}) {
+    convertEdge({ label, id, start, end, props }) {
         return {
             label: label,
             id: `${id.oid}.${id.id}`,
@@ -185,28 +207,21 @@ class DatabaseService {
             properties: props,
         };
     }
-    parseMeta(data){
+    parseMeta(data) {
         const meta = {
-            edges:[],
-            nodes:[]
+            edges: [],
+            nodes: []
         };
-        const vertex = '_ag_label_vertex';
-        const edge = '_ag_label_edge';
-        let cur = null;
+        const vertex_name = '_ag_label_vertex';
+        const edge_name = '_ag_label_edge';
+
         data.forEach((element, index) => {
-            if ( element.label === vertex ){
-                cur = 'nodes';
-            }
-            else if ( element.label === edge ){
-                cur = 'edges';
-            }
-            else{
-                if(meta[cur]){
-                    meta[cur].push(element);
-                }
-                
+            if (element.name === vertex_name || element.name === edge_name) {
+                return;
             }
 
+            if (element.kind === 'v') meta.nodes.push(element);
+            if (element.kind === 'e') meta.edges.push(element);
         });
         return meta;
     }

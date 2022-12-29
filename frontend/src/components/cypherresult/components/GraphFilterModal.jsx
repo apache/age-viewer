@@ -38,6 +38,7 @@ const GraphFilterModal = ({
   onSubmit,
   properties,
   globalFilter,
+  isTable,
 }) => {
   const [propertyElements, setPropertyElements] = useState([]);
   const [filterList, setFilterList] = useState([
@@ -154,7 +155,7 @@ const GraphFilterModal = ({
     );
   }, [propertyElements, filterList]);
   return (
-    <Modal title="Filter on Graph" visible={visible} onOk={onOk} onCancel={() => setVisible(false)} width={800}>
+    <Modal title={isTable ? 'Filter Data in Table' : 'Filter on Graph'} visible={visible} onOk={onOk} onCancel={() => setVisible(false)} width={800}>
       {
         filterElements
       }
@@ -171,6 +172,7 @@ GraphFilterModal.propTypes = {
     property: PropTypes.string,
   })).isRequired,
   globalFilter: PropTypes.bool.isRequired,
+  isTable: PropTypes.bool.isRequired,
 };
 
 export default GraphFilterModal;
