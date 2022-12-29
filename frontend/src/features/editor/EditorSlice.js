@@ -24,6 +24,7 @@ const EditorSlice = createSlice({
   name: 'editor',
   initialState: {
     command: '',
+    updateClause: false,
     commandHistory: [],
     commandFavorites: [],
   },
@@ -31,6 +32,7 @@ const EditorSlice = createSlice({
     setCommand: {
       reducer: (state, action) => {
         state.command = action.payload.command;
+        state.updateClause = action.payload.command.match(/(CREATE|REMOVE|DELETE)/g) !== null;
       },
       prepare: (command) => ({ payload: { command } }),
     },

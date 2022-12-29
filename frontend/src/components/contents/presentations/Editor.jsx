@@ -29,11 +29,13 @@ import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 import { setting } from '../../../conf/config';
 import IconPlay from '../../../icons/IconPlay';
+import { getMetaData } from '../../../features/database/MetadataSlice';
 
 const Editor = ({
   setCommand,
   activeRequests,
   command,
+  update,
   addFrame,
   trimFrame,
   addAlert,
@@ -78,7 +80,7 @@ const Editor = ({
         dispatch(() => trimFrame('ServerConnect'));
         dispatch(() => addFrame(':server connect', 'ServerConnect'));
       }
-    } else if (database.status === 'disconnected' && command.toUpperCase().match('(MATCH|CREATE).*')) {
+    } else if (database.status === 'disconnected') {
       dispatch(() => trimFrame('ServerConnect'));
       dispatch(() => addAlert('ErrorNoDatabaseConnected'));
       dispatch(() => addFrame(command, 'ServerConnect', refKey));
@@ -104,7 +106,9 @@ const Editor = ({
               setCommand(command);
             }
           }
+          return;
         }
+        if (update) dispatch(getMetaData());
       });
       activePromises[refKey] = req;
       setPromises({ ...activePromises });
@@ -243,6 +247,7 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  update: PropTypes.bool.isRequired,
   setLabel: PropTypes.func.isRequired,
   isLabel: PropTypes.bool.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,

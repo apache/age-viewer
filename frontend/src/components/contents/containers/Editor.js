@@ -33,6 +33,7 @@ const mapStateToProps = (state) => ({
   alertList: state.alerts,
   database: state.database,
   command: state.editor.command,
+  update: state.editor.updateClause,
   isActive: state.navigator.isActive,
   activeRequests: state.cypher.activeRequests,
   isLabel: state.layout.isLabel,
