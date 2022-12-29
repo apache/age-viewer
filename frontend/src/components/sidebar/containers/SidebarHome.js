@@ -36,6 +36,7 @@ const mapStateToProps = (state) => {
     status: state.metadata.status,
     role: currentGraphData.role,
     command: state.editor.command,
+    currentGraph: state.metadata.currentGraph,
     isLabel: state.layout.isLabel,
   };
 };
