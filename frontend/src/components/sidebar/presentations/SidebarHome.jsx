@@ -363,7 +363,6 @@ const SidebarHome = ({
   getMetaData,
   changeCurrentGraph,
   changeGraph,
-  currentGraph,
   isLabel,
 }) => {
   const dispatch = useDispatch();
@@ -504,7 +503,6 @@ SidebarHome.propTypes = {
   currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeGraph: PropTypes.func.isRequired,
-  currentGraph: PropTypes.string.isRequired,
   isLabel: PropTypes.bool.isRequired,
 };
 
