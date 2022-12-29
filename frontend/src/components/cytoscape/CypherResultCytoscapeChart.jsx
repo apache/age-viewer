@@ -35,7 +35,6 @@ import {
   faLockOpen,
   faProjectDiagram,
   faWindowClose,
-  faHighlighter,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
