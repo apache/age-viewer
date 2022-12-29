@@ -46,18 +46,45 @@ const CypherResultTable = ({ data, ...props }) => {
     });
     setLocalColumns(columnsForFTable);
 
-    setLocalRows(data.rows.map((item) => {
-      const newItem = {
-        ...item,
-      };
-      if (hasKey) {
-        newItem[randKeyName] = newItem.key;
-        delete newItem.key;
-      }
-      newItem.key = uuid();
-      return newItem;
-    }));
-  }, []);
+    if (props.filterTable?.length > 0) {
+      const newItem = [];
+      data.rows.forEach((item) => {
+        props.filterTable.forEach((filter) => {
+          if ((filter.property.label === item.r.label
+            && item.r.properties[filter.property.property].includes(filter.keyword))
+            || (filter.property.label === item.v.label
+              && item.v.properties[filter.property.property].includes(filter.keyword))
+            || (filter.property.label === item.v2.label
+              && item.v2.properties[filter.property.property].includes(filter.keyword))) {
+            newItem.push(item);
+          }
+        });
+      });
+      setLocalRows(newItem.map((item) => {
+        const filteredItem = {
+          ...item,
+        };
+        if (hasKey) {
+          newItem[randKeyName] = newItem.key;
+          delete newItem.key;
+        }
+        filteredItem.key = uuid();
+        return filteredItem;
+      }));
+    } else {
+      setLocalRows(data.rows.map((item) => {
+        const newItem = {
+          ...item,
+        };
+        if (hasKey) {
+          newItem[randKeyName] = newItem.key;
+          delete newItem.key;
+        }
+        newItem.key = uuid();
+        return newItem;
+      }));
+    }
+  }, [props.filterTable]);
 
   if (data.command && data.command.toUpperCase().match('(GRAPH|COPY|UPDATE).*')) {
     return (
@@ -75,7 +102,7 @@ const CypherResultTable = ({ data, ...props }) => {
     return <div style={{ margin: '25px' }}><span style={{ whiteSpace: 'pre-line' }}>Query not entered!</span></div>;
   }
 
-  const { refKey } = props;
+  const { refKey, setIsTable } = props;
   return (
     <div className="legend-area">
       <div className="contianer-frame-tab">
@@ -83,7 +110,7 @@ const CypherResultTable = ({ data, ...props }) => {
           <div className="d-flex nodeLegend">Node:</div>
           <div className="d-flex edgeLegend">Edge:</div>
         </div>
-        <CypherResultTab refKey={refKey} currentTab="table" />
+        <CypherResultTab refKey={refKey} setIsTable={setIsTable} currentTab="table" />
       </div>
       <Table columns={localColumns} dataSource={localRows} />
     </div>
@@ -102,6 +129,9 @@ CypherResultTable.propTypes = {
     statusText: PropTypes.string,
   }).isRequired,
   refKey: PropTypes.string.isRequired,
+  setIsTable: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  filterTable: PropTypes.any.isRequired,
 };
 
 export default CypherResultTable;

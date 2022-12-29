@@ -99,10 +99,19 @@ const CodeMirrorWrapper = ({
       onChange={(editor) => {
         onChange(editor.getValue());
         const lineCount = editor.lineCount();
+        let draggedHeight;
+        let height;
         if (lineCount <= 1) {
           editor.setOption('lineNumberFormatter', () => '$');
         } else {
           editor.setOption('lineNumberFormatter', (number) => number);
+          draggedHeight = document.getElementById('codeMirrorEditor').style.height;
+          if (draggedHeight) {
+            [height] = draggedHeight.split('px');
+            if (height < (58 + 21 * lineCount)) {
+              document.getElementById('codeMirrorEditor').style.height = null;
+            }
+          }
         }
         return true;
       }}
