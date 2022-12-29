@@ -20,6 +20,7 @@
 import { connect } from 'react-redux';
 import CypherResultCytoscape from '../presentations/CypherResultCytoscape';
 import { setLabels } from '../../../features/cypher/CypherSlice';
+import { openModal, addGraphHistory, addElementHistory } from '../../../features/modal/ModalSlice';
 import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil';
 
 const mapStateToProps = (state, ownProps) => {
@@ -54,7 +55,12 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = { setLabels };
+const mapDispatchToProps = {
+  setLabels,
+  openModal,
+  addGraphHistory,
+  addElementHistory,
+};
 
 export default connect(
   mapStateToProps,

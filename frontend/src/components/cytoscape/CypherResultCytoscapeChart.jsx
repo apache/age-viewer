@@ -27,6 +27,7 @@ import klay from 'cytoscape-klay';
 import euler from 'cytoscape-euler';
 import avsdf from 'cytoscape-avsdf';
 import spread from 'cytoscape-spread';
+import { useDispatch } from 'react-redux';
 import CytoscapeComponent from 'react-cytoscapejs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -53,10 +54,12 @@ cytoscape.use(cxtmenu);
 
 const CypherResultCytoscapeCharts = ({
   elements, cytoscapeObject, setCytoscapeObject, cytoscapeLayout, maxDataOfGraph,
-  onElementsMouseover, addLegendData, graph,
+  onElementsMouseover, addLegendData, graph, openModal,
+  addGraphHistory, addElementHistory,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
+  const dispatch = useDispatch();
   const addEventOnElements = (targetElements) => {
     targetElements.bind('mouseover', (e) => {
       onElementsMouseover({ type: 'elements', data: e.target.data() });
@@ -234,6 +237,17 @@ const CypherResultCytoscapeCharts = ({
                 });
             },
           },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faTrash} size="lg" />),
+            ),
+            select(ele) {
+              dispatch(openModal());
+              dispatch(addGraphHistory(graph));
+              dispatch(addElementHistory(ele.id()));
+            },
+          },
         ],
         fillColor: 'rgba(210, 213, 218, 1)',
         activeFillColor: 'rgba(166, 166, 166, 1)',
@@ -310,6 +324,9 @@ CypherResultCytoscapeCharts.propTypes = {
   onElementsMouseover: PropTypes.func.isRequired,
   addLegendData: PropTypes.func.isRequired,
   graph: PropTypes.string.isRequired,
+  openModal: PropTypes.func.isRequired,
+  addGraphHistory: PropTypes.func.isRequired,
+  addElementHistory: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscapeCharts;
