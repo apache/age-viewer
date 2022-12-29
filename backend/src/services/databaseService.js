@@ -108,7 +108,7 @@ class DatabaseService {
         let queryResult = await graphRepository.execute(query);
 
         return queryResult.rows;
-    }*/
+    }
     
     async readMetaData(graphName){
         let gr = this._graphRepository;
