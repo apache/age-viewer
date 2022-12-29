@@ -22,7 +22,7 @@ import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
@@ -42,6 +42,8 @@ const Editor = ({
   executeCypherQuery,
   addCommandHistory,
   toggleMenu,
+  setLabel,
+  isLabel,
   // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
@@ -147,7 +149,7 @@ const Editor = ({
                 Editor
               </spna>
             </div>
-            <div className="form-control col-11 editor-code-wrapper">
+            <div id="codeMirrorEditor" className="form-control col-11 editor-code-wrapper">
               <CodeMirror
                 onClick={onClick}
                 value={command}
@@ -193,6 +195,17 @@ const Editor = ({
               >
                 <SideBarToggle isActive={isActive} />
               </button>
+              <button
+                className="frame-head-button btn btn-link"
+                type="button"
+                onClick={() => setLabel()}
+                title="Run Query"
+              >
+                <FontAwesomeIcon
+                  icon={isLabel ? faToggleOn : faToggleOff}
+                  size="2x"
+                />
+              </button>
             </div>
           </div>
         </div>
@@ -225,6 +238,8 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  setLabel: PropTypes.func.isRequired,
+  isLabel: PropTypes.bool.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,
 };
 

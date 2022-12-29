@@ -27,6 +27,7 @@ import CypherReducer from '../features/cypher/CypherSlice';
 import AlertReducer from '../features/alert/AlertSlice';
 import EditorSlice from '../features/editor/EditorSlice';
 import ModalSlice from '../features/modal/ModalSlice';
+import LayoutSlice from '../features/layout/LayoutSlice';
 
 const rootReducer = combineReducers({
   navigator: MenuReducer,
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   alerts: AlertReducer,
   editor: EditorSlice,
   modal: ModalSlice,
+  layout: LayoutSlice,
 });
 
 export default rootReducer;

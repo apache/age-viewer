@@ -219,22 +219,23 @@ const CypherResultCytoscapeCharts = ({
 
           {
             content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faHighlighter} size="lg" />),
+              (<FontAwesomeIcon icon={faTrash} size="lg" />),
             ),
             select(ele) {
-              if (ele.style().borderColor === 'rgb(232,228,6)') {
-                let border;
-                elements.nodes.forEach((e) => {
-                  if (e.data.id === ele.id()) border = e.data.borderColor;
+              fetch('/api/v1/cypher',
+                {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S) WHERE id(S) = ${ele.id()} DETACH DELETE S $$) as (S agtype);` }),
+                })
+                .then((res) => {
+                  if (res.ok) {
+                    ele.remove();
+                  }
                 });
-                ele.style('borderColor', border);
-                ele.style('borderWidth', '3px');
-                ele.style('borderOpacity', '0.6');
-              } else {
-                ele.style('borderColor', '#e8e406');
-                ele.style('borderWidth', '10px');
-                ele.style('borderOpacity', '1');
-              }
             },
           },
 

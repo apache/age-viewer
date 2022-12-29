@@ -240,6 +240,70 @@ PropertyItems.propTypes = {
   setCommand: PropTypes.func.isRequired,
 };
 
+const GraphList = ({
+  graphs,
+  currentGraph,
+  changeCurrentGraph,
+  changeGraph,
+}) => {
+  let list;
+  if (graphs) {
+    list = graphs.map((item) => (
+      <GraphItems
+        key={uuid()}
+        graph={item[0]}
+        gid={item[1]}
+        currentGraph={currentGraph}
+        changeCurrentGraph={changeCurrentGraph}
+        changeGraph={changeGraph}
+      />
+    ));
+    return (
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: '80px',
+        overflowY: 'auto',
+        marginTop: '12px',
+      }}
+      >
+        {list}
+      </div>
+    );
+  }
+
+  return null;
+};
+GraphList.propTypes = {
+  graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  currentGraph: PropTypes.string.isRequired,
+  changeCurrentGraph: PropTypes.func.isRequired,
+  changeGraph: PropTypes.func.isRequired,
+};
+
+const GraphItems = ({
+  graph,
+  gid,
+  currentGraph,
+  changeCurrentGraph,
+  changeGraph,
+}) => (
+  <button
+    type="button"
+    className={`${graph === currentGraph ? 'graph-item-clicked' : 'graph-item'}`}
+    onClick={() => { changeCurrentGraph({ id: gid }); changeGraph({ graphName: graph }); }}
+  >
+    {graph}
+  </button>
+);
+GraphItems.propTypes = {
+  graph: PropTypes.string.isRequired,
+  gid: PropTypes.string.isRequired,
+  currentGraph: PropTypes.string.isRequired,
+  changeCurrentGraph: PropTypes.func.isRequired,
+  changeGraph: PropTypes.func.isRequired,
+};
+
 const ConnectedText = ({ userName, roleName }) => (
   <div>
     <h6>
@@ -299,6 +363,7 @@ const SidebarHome = ({
   getMetaData,
   changeCurrentGraph,
   changeGraph,
+  isLabel,
 }) => {
   const dispatch = useDispatch();
   const { confirm } = Modal;
@@ -310,7 +375,7 @@ const SidebarHome = ({
   };
 
   const refreshSidebarHome = () => {
-    getMetaData();
+    getMetaData({ currentGraph });
   };
 
   return (
@@ -336,6 +401,23 @@ const SidebarHome = ({
         <div id="lastHorizontalLine">
           <VerticalLine />
         </div>
+        { isLabel && (
+          <>
+            <div className="form-group sidebar-item">
+              <b>Graphs</b>
+              <br />
+              <GraphList
+                graphs={graphs}
+                currentGraph={currentGraph}
+                changeCurrentGraph={changeCurrentGraph}
+                changeGraph={changeGraph}
+              />
+            </div>
+            <div id="lastHorizontalLine">
+              <VerticalLine />
+            </div>
+          </>
+        ) }
       </div>
       <div className="sidebar-item-disconnect-outer">
         <div className="form-group sidebar-item-disconnect">
@@ -380,15 +462,19 @@ const SidebarHome = ({
             <br />
             <b>Close Session</b>
           </div>
-          <HorizontalLine />
-          <div className="sidebar-item-disconnect-buttons">
-            <GraphSelectDropdown
-              currentGraph={currentGraph}
-              graphs={graphs}
-              changeCurrentGraph={changeCurrentGraph}
-              changeGraphDB={changeGraph}
-            />
-          </div>
+          { !isLabel && (
+            <>
+              <HorizontalLine />
+              <div className="sidebar-item-disconnect-buttons">
+                <GraphSelectDropdown
+                  currentGraph={currentGraph}
+                  graphs={graphs}
+                  changeCurrentGraph={changeCurrentGraph}
+                  changeGraphDB={changeGraph}
+                />
+              </div>
+            </>
+          ) }
         </div>
       </div>
     </div>
@@ -417,6 +503,7 @@ SidebarHome.propTypes = {
   currentGraph: PropTypes.string.isRequired,
   graphs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   changeGraph: PropTypes.func.isRequired,
+  isLabel: PropTypes.bool.isRequired,
 };
 
 export default SidebarHome;
