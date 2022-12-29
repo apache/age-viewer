@@ -368,7 +368,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
           isReloading={isReloading}
           legendData={legendData}
         />
-        <CypherResultTab refKey={props.refKey} currentTab="graph" />
+        <CypherResultTab refKey={props.refKey} setIsTable={props.setIsTable} currentTab="graph" />
       </div>
       <CypherResultCytoscapeChart
         onElementsMouseover={getFooterData}
@@ -427,6 +427,7 @@ CypherResultCytoscape.propTypes = {
   openModal: PropTypes.func.isRequired,
   addGraphHistory: PropTypes.func.isRequired,
   addElementHistory: PropTypes.func.isRequired,
+  setIsTable: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscape;

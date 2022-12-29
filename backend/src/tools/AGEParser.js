@@ -18,6 +18,7 @@
  */
 
 import antlr4 from 'antlr4';
+import { cli } from 'winston/lib/winston/config';
 import AgtypeLexer from './AgtypeLexer';
 import AgtypeParser from './AgtypeParser';
 import CustomAgTypeListener from './CustomAgTypeListener';
@@ -52,5 +53,9 @@ async function setAGETypes(client, types) {
     types.setTypeParser(oidResults.rows[0].typelem, AGTypeParse)
 }
 
+async function onConnectQueries(client){
+    const v = await client.query('show server_version;');
+    return {server_version: v.rows[0].server_version};
+}
 
-export {setAGETypes, AGTypeParse}
+export {setAGETypes, AGTypeParse, onConnectQueries}

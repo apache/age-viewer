@@ -37,7 +37,7 @@ const Frame = ({
   reqString, children, refKey,
   onSearch, onSearchCancel, onRefresh,
   onThick, thicnessMenu,
-  bodyNoPadding,
+  bodyNoPadding, isTable,
 }) => {
   const dispatch = useDispatch();
   const [isFullScreen, setFullScreen] = useState(false);
@@ -78,7 +78,7 @@ const Frame = ({
 
         </div>
         <div className={styles.ButtonArea}>
-          {onThick ? (
+          {!isTable && onThick ? (
             <Popover placement="bottomLeft" content={thicnessMenu} trigger="click">
               <Button
                 size="large"
@@ -146,7 +146,7 @@ const Frame = ({
             />
           </Button>
           {
-            onRefresh ? (
+            !isTable && onRefresh ? (
               <Button
                 size="large"
                 type="link"
@@ -228,6 +228,7 @@ Frame.propTypes = {
   onSearchCancel: PropTypes.func,
   onRefresh: PropTypes.func,
   bodyNoPadding: PropTypes.bool,
+  isTable: PropTypes.bool.isRequired,
 };
 
 export default Frame;

@@ -185,13 +185,11 @@ const getEdgeColor = (labelName) => {
 const getNodeSize = (labelName) => {
   let selectedSize = 0;
 
-  nodeLabelSizes.forEach((labelSize) => {
-    if (labelSize.labels.has(labelName)) {
-      selectedSize = labelSize.size;
-    }
-  });
+  const nSize = nodeLabelSizes.find((labelSize) => labelSize.labels.has(labelName));
 
-  if (selectedSize === 0) {
+  if (nSize) {
+    selectedSize = nSize.size;
+  } else {
     nodeLabelSizes[2].labels.add(labelName);
     selectedSize = nodeLabelSizes[2].size;
   }
@@ -202,13 +200,11 @@ const getNodeSize = (labelName) => {
 const getEdgeSize = (labelName) => {
   let selectedSize = 0;
 
-  edgeLabelSizes.forEach((labelSize) => {
-    if (labelSize.labels.has(labelName)) {
-      selectedSize = labelSize.size;
-    }
-  });
+  const eSize = edgeLabelSizes.find((labelSize) => labelSize.labels.has(labelName));
 
-  if (selectedSize === 0) {
+  if (eSize) {
+    selectedSize = eSize.size;
+  } else {
     edgeLabelSizes[0].labels.add(labelName);
     selectedSize = edgeLabelSizes[0].size;
   }
@@ -290,7 +286,7 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
   const edgeLegend = {};
 
   function generateElements(alias, val) {
-    const labelName = val.label;
+    const labelName = val.label.trim();
     let source = val.start;
     let target = val.end;
 
@@ -341,6 +337,7 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
           classes: isNew ? 'new node' : 'edge',
         },
       );
+      console.log(JSON.stringify(labelName), edgeLegend[labelName], edges);
     } else {
       if (!Object.prototype.hasOwnProperty.call(nodeLegend, labelName)) {
         nodeLegend[labelName] = {
@@ -380,7 +377,6 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
       );
     }
   }
-
   if (data) {
     data.forEach((row, index) => {
       if (index >= maxDataOfGraph && maxDataOfGraph !== 0) {
@@ -400,7 +396,7 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
       });
     });
   }
-
+  console.log('edge sizes', edgeLabelSizes);
   return {
     legend: {
       nodeLegend: sortByKey(nodeLegend),

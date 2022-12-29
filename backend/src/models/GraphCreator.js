@@ -74,7 +74,6 @@ class GraphCreator {
     async readData(file, type, resolve){
         Papa.parse(file, {
             complete: (res) => {
-                console.log(res);
                 res.errors.forEach((e)=>{
                     if (e.type === 'FieldMismatch'){
                         res.data.splice(e.row, 1);
@@ -116,7 +115,6 @@ class GraphCreator {
                 this.createEdge(e, edgeFile.type);
             });
         });
-        console.log(this.query);
         return this.query;
         
     }
