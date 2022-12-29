@@ -20,13 +20,14 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes,
+  faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes, faClone,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
 import { removeFrame } from '../../features/frame/FrameSlice';
+import { setCommand } from '../../features/editor/EditorSlice';
 import { removeActiveRequests } from '../../features/cypher/CypherSlice';
 import EdgeWeight from '../../icons/EdgeWeight';
 import IconFilter from '../../icons/IconFilter';
@@ -36,7 +37,7 @@ const Frame = ({
   reqString, children, refKey,
   onSearch, onSearchCancel, onRefresh,
   onThick, thicnessMenu,
-  bodyNoPadding,
+  bodyNoPadding, isTable,
 }) => {
   const dispatch = useDispatch();
   const [isFullScreen, setFullScreen] = useState(false);
@@ -64,9 +65,20 @@ const Frame = ({
           <strong>
             {reqString}
           </strong>
+          <FontAwesomeIcon
+            id={styles.toEditor}
+            title="copy to editor"
+            icon={faClone}
+            size="s"
+            onClick={() => dispatch(setCommand(reqString))}
+            style={{
+              cursor: 'pointer',
+            }}
+          />
+
         </div>
         <div className={styles.ButtonArea}>
-          {onThick ? (
+          {!isTable && onThick ? (
             <Popover placement="bottomLeft" content={thicnessMenu} trigger="click">
               <Button
                 size="large"
@@ -134,7 +146,7 @@ const Frame = ({
             />
           </Button>
           {
-            onRefresh ? (
+            !isTable && onRefresh ? (
               <Button
                 size="large"
                 type="link"
@@ -216,6 +228,7 @@ Frame.propTypes = {
   onSearchCancel: PropTypes.func,
   onRefresh: PropTypes.func,
   bodyNoPadding: PropTypes.bool,
+  isTable: PropTypes.bool.isRequired,
 };
 
 export default Frame;

@@ -26,7 +26,9 @@ import {
 import { addAlert } from '../../../features/alert/AlertSlice';
 import ServerConnectFrame from '../presentations/ServerConnectFrame';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  currentGraph: state.metadata.currentGraph,
+});
 
 const mapDispatchToProps = {
   connectToDatabase,
