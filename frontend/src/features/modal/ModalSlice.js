@@ -20,37 +20,56 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-const EditorSlice = createSlice({
-  name: 'editor',
+const ModalSlice = createSlice({
+  name: 'modal',
   initialState: {
-    command: '',
-    updateClause: false,
-    commandHistory: [],
-    commandFavorites: [],
+    isOpen: false,
+    graphHistory: [],
+    elementHistory: [],
   },
   reducers: {
-    setCommand: {
-      reducer: (state, action) => {
-        state.command = action.payload.command;
-        state.updateClause = action.payload.command.match(/(CREATE|REMOVE|DELETE)/g) !== null;
+    openModal: {
+      reducer: (state) => {
+        state.isOpen = true;
       },
-      prepare: (command) => ({ payload: { command } }),
     },
-    addCommandHistory: {
-      reducer: (state, action) => {
-        state.commandHistory.push(action.payload.command);
+    closeModal: {
+      reducer: (state) => {
+        state.isOpen = false;
       },
-      prepare: (command) => ({ payload: { command } }),
     },
-    addCommandFavorites: {
+    addGraphHistory: {
       reducer: (state, action) => {
-        state.commandFavorites.push(action.payload.command);
+        state.graphHistory.push(action.payload.graph);
       },
-      prepare: (command) => ({ payload: { command } }),
+      prepare: (graph) => ({ payload: { graph } }),
+    },
+    addElementHistory: {
+      reducer: (state, action) => {
+        state.elementHistory.push(action.payload.element);
+      },
+      prepare: (element) => ({ payload: { element } }),
+    },
+    removeGraphHistory: {
+      reducer: (state) => {
+        state.graphHistory = [];
+      },
+    },
+    removeElementHistory: {
+      reducer: (state) => {
+        state.elementHistory = [];
+      },
     },
   },
 });
 
-export const { setCommand, addCommandHistory, addCommandFavorites } = EditorSlice.actions;
+export const {
+  openModal,
+  closeModal,
+  addGraphHistory,
+  addElementHistory,
+  removeGraphHistory,
+  removeElementHistory,
+} = ModalSlice.actions;
 
-export default EditorSlice.reducer;
+export default ModalSlice.reducer;

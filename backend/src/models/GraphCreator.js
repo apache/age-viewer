@@ -31,7 +31,8 @@ class GraphCreator {
     }
 
     async createNode(node, type, qbuild = new QueryBuilder({
-        graphName:this.graphName
+        graphName:this.graphName,
+        returnAs:'v'
     })){
         const CREATENODE = 
         `(:${type} ${toAgeProps(node)})`;
@@ -41,6 +42,7 @@ class GraphCreator {
         }
         
         qbuild.insertQuery(CREATENODE);
+        this.query.nodes.push(qbuild.getGeneratedQuery());
     }
     async createEdge(edge, type, qbuild = new QueryBuilder(
         {
@@ -74,7 +76,6 @@ class GraphCreator {
     async readData(file, type, resolve){
         Papa.parse(file, {
             complete: (res) => {
-                console.log(res);
                 res.errors.forEach((e)=>{
                     if (e.type === 'FieldMismatch'){
                         res.data.splice(e.row, 1);
@@ -90,10 +91,6 @@ class GraphCreator {
         });
     }
     async parseData(){
-        const nodeQueryBuilder = new QueryBuilder({
-            graphName:this.graphName,
-            returnAs:'v'
-        });
         this.createGraph(this.dropGraph);
 
         this.nodes = await Promise.all(this.nodefiles.map((node) => new Promise((resolve) => {
@@ -102,21 +99,19 @@ class GraphCreator {
         })));
         this.nodes.forEach((nodeFile)=>{
             nodeFile.data.forEach((n)=>{
-                this.createNode(n, nodeFile.type, nodeQueryBuilder);
+                this.createNode(n, nodeFile.type);
             });
         });
-        this.query.nodes.push(nodeQueryBuilder.getGeneratedQuery());
-        
         this.edges = await Promise.all(this.edgefiles.map((edge) => new Promise((resolve) => {
             this.createEdgeLabel(edge.originalname);
             this.readData(edge.buffer.toString('utf8'), edge.originalname, resolve);
         })));
+
         this.edges.forEach((edgeFile)=>{
             edgeFile.data.forEach((e)=>{
                 this.createEdge(e, edgeFile.type);
             });
         });
-        console.log(this.query);
         return this.query;
         
     }

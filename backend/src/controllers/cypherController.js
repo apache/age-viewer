@@ -70,7 +70,7 @@ class CypherController {
                     return await transaction(q);
                 }));
                 await transaction('COMMIT');
-                res.status(204).end();                
+                res.status(204).end();
             } catch (e){
                 await transaction('ROLLBACK');
                 const details = e.toString();

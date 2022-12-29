@@ -5,8 +5,8 @@ class QueryBuilder {
     constructor({graphName, returnAs='x'}={}){
         this._graphName = graphName;
         this.ends = {
-            start:`SELECT * FROM cypher('${this._graphName}', $$ `,
-            end:` $$) as (${returnAs} agtype)`
+            start:`SELECT * FROM cypher('${this._graphName}', $$`,
+            end:`$$) as (${returnAs} agtype);`
         };
         this.clause = '';
         this.middle = [];

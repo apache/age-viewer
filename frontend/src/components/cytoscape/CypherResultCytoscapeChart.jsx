@@ -27,6 +27,7 @@ import klay from 'cytoscape-klay';
 import euler from 'cytoscape-euler';
 import avsdf from 'cytoscape-avsdf';
 import spread from 'cytoscape-spread';
+import { useDispatch } from 'react-redux';
 import CytoscapeComponent from 'react-cytoscapejs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -34,7 +35,7 @@ import {
   faLockOpen,
   faProjectDiagram,
   faWindowClose,
-  faHighlighter,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
@@ -57,9 +58,12 @@ cytoscape.use(cxtmenu);
 const CypherResultCytoscapeCharts = ({
   elements, cytoscapeObject, setCytoscapeObject, cytoscapeLayout, maxDataOfGraph,
   onElementsMouseover, addLegendData, graph, onAddSubmit, onRemoveSubmit,
+  onElementsMouseover, addLegendData, graph, openModal,
+  addGraphHistory, addElementHistory,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
+  const dispatch = useDispatch();
   const addEventOnElements = (targetElements) => {
     targetElements.bind('mouseover', (e) => {
       onElementsMouseover({ type: 'elements', data: e.target.data() });
@@ -218,22 +222,34 @@ const CypherResultCytoscapeCharts = ({
 
           {
             content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faHighlighter} size="lg" />),
+              (<FontAwesomeIcon icon={faTrash} size="lg" />),
             ),
             select(ele) {
-              if (ele.style().borderColor === 'rgb(232,228,6)') {
-                let border;
-                elements.nodes.forEach((e) => {
-                  if (e.data.id === ele.id()) border = e.data.borderColor;
+              fetch('/api/v1/cypher',
+                {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S) WHERE id(S) = ${ele.id()} DETACH DELETE S $$) as (S agtype);` }),
+                })
+                .then((res) => {
+                  if (res.ok) {
+                    ele.remove();
+                  }
                 });
-                ele.style('borderColor', border);
-                ele.style('borderWidth', '3px');
-                ele.style('borderOpacity', '0.6');
-              } else {
-                ele.style('borderColor', '#e8e406');
-                ele.style('borderWidth', '10px');
-                ele.style('borderOpacity', '1');
-              }
+            },
+          },
+
+          {
+            content: ReactDOMServer.renderToString(
+              (<FontAwesomeIcon icon={faTrash} size="lg" />),
+            ),
+            select(ele) {
+              dispatch(openModal());
+              dispatch(addGraphHistory(graph));
+              dispatch(addElementHistory(ele.id()));
             },
           },
 
@@ -343,6 +359,9 @@ CypherResultCytoscapeCharts.propTypes = {
   graph: PropTypes.string.isRequired,
   onAddSubmit: PropTypes.func.isRequired,
   onRemoveSubmit: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+  addGraphHistory: PropTypes.func.isRequired,
+  addElementHistory: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscapeCharts;

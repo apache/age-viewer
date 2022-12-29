@@ -375,7 +375,7 @@ const SidebarHome = ({
   };
 
   const refreshSidebarHome = () => {
-    getMetaData();
+    getMetaData({ currentGraph });
   };
 
   return (
