@@ -83,7 +83,7 @@
 }
 
 .ButtonArea {
-
+  // margin: auto 18%;
 }
 
 .FullScreen {
@@ -132,4 +132,23 @@
 
 .FullScreen .FlexContentWrapper {
   height: 100% !important;
+}
+
+#toEditor:hover{
+  color:rgb(20, 33, 55)
+}
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 670px) {
+
+  .FrameHeader{
+    display: block;
+  }
+
+  // .ButtonArea {
+  //   margin: auto 18%;
+  //   display: flex;
+  // }
 }

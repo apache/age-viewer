@@ -17,28 +17,23 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { connectToDatabase } from '../../../features/database/DatabaseSlice';
-import { /* getMetaChartData, */ getMetaData } from '../../../features/database/MetadataSlice';
-import {
-  addFrame, pinFrame, removeFrame, trimFrame,
-} from '../../../features/frame/FrameSlice';
-import { addAlert } from '../../../features/alert/AlertSlice';
-import ServerConnectFrame from '../presentations/ServerConnectFrame';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
-const mapStateToProps = (state) => ({
-  currentGraph: state.metadata.currentGraph,
+const LayoutSlice = createSlice({
+  name: 'layout',
+  initialState: {
+    isLabel: false,
+  },
+  reducers: {
+    setLabel: {
+      reducer: (state) => {
+        state.isLabel = !state.isLabel;
+      },
+    },
+  },
 });
 
-const mapDispatchToProps = {
-  connectToDatabase,
-  addFrame,
-  trimFrame,
-  removeFrame,
-  pinFrame,
-  addAlert,
-  getMetaData,
-  /* getMetaChartData, */
-};
+export const { setLabel } = LayoutSlice.actions;
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServerConnectFrame);
+export default LayoutSlice.reducer;

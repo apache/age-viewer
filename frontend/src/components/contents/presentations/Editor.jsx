@@ -22,7 +22,7 @@ import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
@@ -31,6 +31,7 @@ import IconPlay from '../../../icons/IconPlay';
 
 const Editor = ({
   setCommand,
+  activeRequests,
   command,
   addFrame,
   trimFrame,
@@ -41,11 +42,13 @@ const Editor = ({
   executeCypherQuery,
   addCommandHistory,
   toggleMenu,
-  getMetaData,
+  setLabel,
+  isLabel,
   // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
   const [alerts, setAlerts] = useState([]);
+  const [activePromises, setPromises] = useState({});
 
   // const favoritesCommand = () => {
   //   dispatch(() => addCommandFavorites(command));
@@ -56,7 +59,6 @@ const Editor = ({
   };
 
   const onClick = () => {
-    console.log('in editor presentation command is ', command);
     const refKey = uuid();
     if (command.toUpperCase().startsWith(':PLAY')) {
       dispatch(() => addFrame(command, 'Contents', refKey));
@@ -91,15 +93,29 @@ const Editor = ({
       }
     } else if (database.status === 'connected') {
       addFrame(command, 'CypherResultFrame', refKey);
-      dispatch(() => executeCypherQuery([refKey, command]).then((response) => {
+      const req = dispatch(() => executeCypherQuery([refKey, command]));
+      req.then((response) => {
         if (response.type === 'cypher/executeCypherQuery/rejected') {
-          dispatch(() => addAlert('ErrorCypherQuery'));
-        } else { dispatch(() => getMetaData()); }
-      }));
+          if (response.error.name !== 'AbortError') {
+            dispatch(() => addAlert('ErrorCypherQuery'));
+          }
+        }
+      });
+      activePromises[refKey] = req;
+      setPromises({ ...activePromises });
     }
     dispatch(() => addCommandHistory(command));
     clearCommand();
   };
+
+  useEffect(() => {
+    const reqCancel = Object.keys(activePromises).filter((ref) => !activeRequests.includes(ref));
+    reqCancel.forEach((ref) => {
+      activePromises[ref].abort();
+      delete activePromises[ref];
+    });
+    setPromises({ ...activePromises });
+  }, [activeRequests]);
 
   useEffect(() => {
     setAlerts(
@@ -179,6 +195,17 @@ const Editor = ({
               >
                 <SideBarToggle isActive={isActive} />
               </button>
+              <button
+                className="frame-head-button btn btn-link"
+                type="button"
+                onClick={() => setLabel()}
+                title="Run Query"
+              >
+                <FontAwesomeIcon
+                  icon={isLabel ? faToggleOn : faToggleOff}
+                  size="2x"
+                />
+              </button>
             </div>
           </div>
         </div>
@@ -190,6 +217,7 @@ const Editor = ({
 
 Editor.propTypes = {
   setCommand: PropTypes.func.isRequired,
+  activeRequests: PropTypes.arrayOf(PropTypes.string).isRequired,
   command: PropTypes.string.isRequired,
   addFrame: PropTypes.func.isRequired,
   trimFrame: PropTypes.func.isRequired,
@@ -210,7 +238,8 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  getMetaData: PropTypes.func.isRequired,
+  setLabel: PropTypes.func.isRequired,
+  isLabel: PropTypes.bool.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,
 };
 

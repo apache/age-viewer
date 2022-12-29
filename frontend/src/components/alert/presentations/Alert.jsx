@@ -239,6 +239,11 @@ const SingleAlert = ({
       />
     );
   }
+  if (alertName === 'CreateGraphSuccess') {
+    return (
+      <Alert type="success" message="Graph Created" description="Successfully created new graph" />
+    );
+  }
   return (<></>);
 };
 SingleAlert.propTypes = {

@@ -47,10 +47,7 @@ class CypherResultTab extends Component {
       }
     };
     return (
-      <div style={{
-        display: 'flex', flexDirection: 'row', width: '20%', height: '96px', border: 'solid 1px #C4C4C4',
-      }}
-      >
+      <div className="legend-button-area">
         <button
           className="btn"
           type="button"

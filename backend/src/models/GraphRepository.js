@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import Flavors from '../config/Flavors';
 import PgConfig from '../config/Pg'
 
 import pg from 'pg';
@@ -26,11 +25,7 @@ import { getQuery } from '../tools/SQLFlavorManager';
 
 
 class GraphRepository {
-    constructor({host, port, database, graph, user, password, flavor, graphs=[]} = {}) {
-        if (!flavor) {
-            throw new Error('Flavor is required.');
-        }
-
+    constructor({host, port, database, graph, user, password, graphs=[]} = {}) {
         this._host = host;
         this._port = port;
         this._database = database;
@@ -38,7 +33,6 @@ class GraphRepository {
         this._graph = graph;
         this._user = user;
         this._password = password;
-        this.flavor = flavor;
     }
 
     static async getConnection({
@@ -47,7 +41,6 @@ class GraphRepository {
                                    database,
                                    user,
                                    password,
-                                   flavor
                                } = {},
                                closeConnection = true) {
         const client = new pg.Client({
@@ -59,12 +52,7 @@ class GraphRepository {
             }
         )
         client.connect();
-        if (flavor === Flavors.AGE) {
-            await setAGETypes(client, types);
-        } else {
-            throw new Error(`Unknown flavor ${flavor}`)
-        }
-
+        await setAGETypes(client, types);
         if (closeConnection === true) {
             await client.end();
         }
@@ -89,8 +77,15 @@ class GraphRepository {
         return result;
     }
 
+    async createTransaction(){
+        const client = await this.getConnection();
+        return [client, async (query, params=[])=>{
+            return [await client.query(query, params), client];
+        }]
+    }
+
     async initGraphNames(){
-        const { rows } = await this.execute(getQuery(this.flavor, 'get_graph_names'));
+        const { rows } = await this.execute(getQuery('get_graph_names'));
         this._graphs = rows.map((item)=>item.name);
         // set current graph to first name
         this.setCurrentGraph(this._graphs[0]);
@@ -156,7 +151,6 @@ class GraphRepository {
             password: this._password,
             graphs: this._graphs,
             graph: this._graph,
-            flavor: this.flavor,
         };
     }
 
