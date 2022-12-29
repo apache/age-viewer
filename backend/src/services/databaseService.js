@@ -34,8 +34,8 @@ class DatabaseService {
         const { graphs } = gr.getConnectionInfo();
         await DatabaseService.analyzeGraph(gr);
         if (graphName) {
-            if (graphs.includes(graphName)) {
-                return await this.getMetaDataSingle(graphName, graphs);
+            if (graphs.includes(graphName.currentGraph)) {
+                return await this.getMetaDataSingle(graphName.currentGraph, graphs);
             } else {
                 return await this.getMetaDataSingle(gr._graph, graphs);
             }
@@ -67,9 +67,9 @@ class DatabaseService {
             data.graph = curGraph;
             data.database = database;
             data.role = await this.getRole();
-            metadata[curGraph] = data;
             graphs.forEach((gname) => {
                 if (gname !== curGraph) metadata[gname] = {};
+                else metadata[gname] = data;
             })
         } catch (error) {
             throw error;
