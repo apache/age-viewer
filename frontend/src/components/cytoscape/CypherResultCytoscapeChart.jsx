@@ -34,13 +34,15 @@ import {
   faEyeSlash,
   faLockOpen,
   faProjectDiagram,
-  faWindowClose,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
+import uuid from 'react-uuid';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
 import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
+import IconFilter from '../../icons/IconFilter';
+import IconSearchCancel from '../../icons/IconSearchCancel';
 import styles from '../frame/Frame.module.scss';
 
 cytoscape.use(COSEBilkent);
@@ -53,9 +55,19 @@ cytoscape.use(spread);
 cytoscape.use(cxtmenu);
 
 const CypherResultCytoscapeCharts = ({
-  elements, cytoscapeObject, setCytoscapeObject, cytoscapeLayout, maxDataOfGraph,
-  onElementsMouseover, addLegendData, graph, openModal,
-  addGraphHistory, addElementHistory,
+  elements,
+  cytoscapeObject,
+  setCytoscapeObject,
+  cytoscapeLayout,
+  maxDataOfGraph,
+  onElementsMouseover,
+  addLegendData,
+  graph,
+  onAddSubmit,
+  onRemoveSubmit,
+  openModal,
+  addGraphHistory,
+  addElementHistory,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
@@ -91,7 +103,11 @@ const CypherResultCytoscapeCharts = ({
         if (cytoscapeObject.nodes(':selected').size() === 1) {
           ele.neighborhood().selectify().select().unselectify();
         } else {
-          cytoscapeObject.nodes(':selected').filter(`[id != "${ele.id()}"]`).neighborhood().selectify()
+          cytoscapeObject
+            .nodes(':selected')
+            .filter(`[id != "${ele.id()}"]`)
+            .neighborhood()
+            .selectify()
             .select()
             .unselectify();
         }
@@ -115,7 +131,11 @@ const CypherResultCytoscapeCharts = ({
   };
 
   const addElements = (centerId, d) => {
-    const generatedData = generateCytoscapeElement(d.rows, maxDataOfGraph, true);
+    const generatedData = generateCytoscapeElement(
+      d.rows,
+      maxDataOfGraph,
+      true,
+    );
     if (generatedData.elements.nodes.length === 0) {
       alert('No data to extend.');
       return;
@@ -127,13 +147,19 @@ const CypherResultCytoscapeCharts = ({
     const newlyAddedEdges = cytoscapeObject.edges('.new');
     const newlyAddedTargets = newlyAddedEdges.targets();
     const newlyAddedSources = newlyAddedEdges.sources();
-    const rerenderTargets = newlyAddedEdges.union(newlyAddedTargets).union(newlyAddedSources);
+    const rerenderTargets = newlyAddedEdges
+      .union(newlyAddedTargets)
+      .union(newlyAddedSources);
 
-    const centerPosition = { ...cytoscapeObject.nodes().getElementById(centerId).position() };
+    const centerPosition = {
+      ...cytoscapeObject.nodes().getElementById(centerId).position(),
+    };
     cytoscapeObject.elements().unlock();
     rerenderTargets.layout(seletableLayouts.concentric).run();
 
-    const centerMovedPosition = { ...cytoscapeObject.nodes().getElementById(centerId).position() };
+    const centerMovedPosition = {
+      ...cytoscapeObject.nodes().getElementById(centerId).position(),
+    };
     const xGap = centerMovedPosition.x - centerPosition.x;
     const yGap = centerMovedPosition.y - centerPosition.y;
     rerenderTargets.forEach((ele) => {
@@ -156,7 +182,7 @@ const CypherResultCytoscapeCharts = ({
         commands: [
           {
             content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faLockOpen} size="lg" />),
+              <FontAwesomeIcon icon={faLockOpen} size="lg" />,
             ),
             select(ele) {
               ele.animate({ position: initLocation[ele.id()] });
@@ -164,7 +190,7 @@ const CypherResultCytoscapeCharts = ({
           },
           {
             content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faProjectDiagram} size="lg" />),
+              <FontAwesomeIcon icon={faProjectDiagram} size="lg" />,
             ),
             select(ele) {
               const elAnimate = ele.animation({
@@ -181,15 +207,16 @@ const CypherResultCytoscapeCharts = ({
                 }
               }, 1000);
 
-              fetch('/api/v1/cypher',
-                {
-                  method: 'POST',
-                  headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S)-[R]-(T) WHERE id(S) = ${ele.id()} RETURN S, R, T $$) as (S agtype, R agtype, T agtype);` }),
-                })
+              fetch('/api/v1/cypher', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S)-[R]-(T) WHERE id(S) = ${ele.id()} RETURN S, R, T $$) as (S agtype, R agtype, T agtype);`,
+                }),
+              })
                 .then((res) => res.json())
                 .then((data) => {
                   elAnimate.rewind().stop();
@@ -198,54 +225,47 @@ const CypherResultCytoscapeCharts = ({
                 });
             },
           },
-
           {
             content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faEyeSlash} size="lg" />),
+              <FontAwesomeIcon icon={faEyeSlash} size="lg" />,
             ),
             select(ele) {
               ele.remove();
             },
           },
-
           {
             content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faWindowClose} size="lg" />),
-            ),
-            select() {
-            },
-          },
-
-          {
-            content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faTrash} size="lg" />),
-            ),
-            select(ele) {
-              fetch('/api/v1/cypher',
-                {
-                  method: 'POST',
-                  headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S) WHERE id(S) = ${ele.id()} DETACH DELETE S $$) as (S agtype);` }),
-                })
-                .then((res) => {
-                  if (res.ok) {
-                    ele.remove();
-                  }
-                });
-            },
-          },
-
-          {
-            content: ReactDOMServer.renderToString(
-              (<FontAwesomeIcon icon={faTrash} size="lg" />),
+              <FontAwesomeIcon icon={faTrash} size="lg" />,
             ),
             select(ele) {
               dispatch(openModal());
               dispatch(addGraphHistory(graph));
               dispatch(addElementHistory(ele.id()));
+            },
+          },
+          {
+            content: ReactDOMServer.renderToString(<IconFilter size="lg" />),
+            select(ele) {
+              const newFilterObject = {
+                key: uuid(),
+                keyword: ele.data().properties[ele.data().caption],
+                property: {
+                  label: ele.data().label,
+                  property: ele.data().caption,
+                },
+              };
+              onAddSubmit(newFilterObject);
+            },
+          },
+          {
+            content: ReactDOMServer.renderToString(
+              <IconSearchCancel size="lg" />,
+            ),
+            select(ele) {
+              const keywordObject = {
+                keyword: ele.data().properties[ele.data().caption],
+              };
+              onRemoveSubmit(keywordObject);
             },
           },
         ],
@@ -284,11 +304,13 @@ const CypherResultCytoscapeCharts = ({
     }
   }, [cytoscapeObject, cytoscapeLayout]);
 
-  const cyCallback = useCallback((newCytoscapeObject) => {
-    if (cytoscapeObject) return;
-    setCytoscapeObject(newCytoscapeObject);
-  },
-  [cytoscapeObject]);
+  const cyCallback = useCallback(
+    (newCytoscapeObject) => {
+      if (cytoscapeObject) return;
+      setCytoscapeObject(newCytoscapeObject);
+    },
+    [cytoscapeObject],
+  );
 
   return (
     <CytoscapeComponent
@@ -307,14 +329,18 @@ CypherResultCytoscapeCharts.defaultProps = {
 
 CypherResultCytoscapeCharts.propTypes = {
   elements: PropTypes.shape({
-    nodes: PropTypes.arrayOf(PropTypes.shape({
-      // eslint-disable-next-line react/forbid-prop-types
-      data: PropTypes.any,
-    })),
-    edges: PropTypes.arrayOf(PropTypes.shape({
-      // eslint-disable-next-line react/forbid-prop-types
-      data: PropTypes.any,
-    })),
+    nodes: PropTypes.arrayOf(
+      PropTypes.shape({
+        // eslint-disable-next-line react/forbid-prop-types
+        data: PropTypes.any,
+      }),
+    ),
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        // eslint-disable-next-line react/forbid-prop-types
+        data: PropTypes.any,
+      }),
+    ),
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   cytoscapeObject: PropTypes.any,
@@ -324,6 +350,8 @@ CypherResultCytoscapeCharts.propTypes = {
   onElementsMouseover: PropTypes.func.isRequired,
   addLegendData: PropTypes.func.isRequired,
   graph: PropTypes.string.isRequired,
+  onAddSubmit: PropTypes.func.isRequired,
+  onRemoveSubmit: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   addGraphHistory: PropTypes.func.isRequired,
   addElementHistory: PropTypes.func.isRequired,
