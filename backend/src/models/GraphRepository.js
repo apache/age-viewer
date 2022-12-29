@@ -20,21 +20,22 @@ import PgConfig from '../config/Pg'
 
 import pg from 'pg';
 import types from 'pg-types';
-import {setAGETypes} from '../tools/AGEParser';
+import {setAGETypes, onConnectQueries} from '../tools/AGEParser';
 import { getQuery } from '../tools/SQLFlavorManager';
 
 
 class GraphRepository {
-    constructor({host, port, database, graph, user, password, graphs=[]} = {}) {
+    constructor({host, port, database, graph, user, password, graphs=[], server} = {}) {
         this._host = host;
         this._port = port;
         this._database = database;
+        this._server_version = server;
         this._graphs = graphs;
         this._graph = graph;
         this._user = user;
         this._password = password;
     }
-
+    /*
     static async getConnection({
                                    host,
                                    port,
@@ -51,11 +52,26 @@ class GraphRepository {
                 port,
             }
         )
+
         client.connect();
+        
         await setAGETypes(client, types);
         if (closeConnection === true) {
             await client.end();
         }
+        return client;
+    }
+    */
+    async connect(){
+        if (!this._pool) {
+            this._pool = GraphRepository.newConnectionPool(this.getPoolConnectionInfo());
+        }
+        const client = await this._pool.connect();
+        if (!this._server_version){
+            const {server_version: v} = await onConnectQueries(client);
+            this._server_version = v;
+        }
+
         return client;
     }
 
@@ -95,9 +111,7 @@ class GraphRepository {
      * Get connectionInfo
      */
     async getConnection() {
-        if (!this._pool) {
-            this._pool = GraphRepository.newConnectionPool(this.getPoolConnectionInfo());
-        }
+
         const client = await this._pool.connect();
 
         await setAGETypes(client, types);
@@ -128,6 +142,7 @@ class GraphRepository {
             host: this._host,
             port: this._port,
             database: this._database,
+            version: this._server_version,
             user: this._user,
             password: this._password,
             max: PgConfig.max,
@@ -145,6 +160,7 @@ class GraphRepository {
         }
         return {
             host: this._host,
+            version: this._server_version,
             port: this._port,
             database: this._database,
             user: this._user,

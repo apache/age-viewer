@@ -22,8 +22,8 @@ import fs from 'fs'
 const sqlBasePath = path.join(__dirname, '../../sql');
 
 // todo: util.format -> ejs
-function getQuery(name) {
-    const sqlPath = path.join(sqlBasePath, `${name}.sql`);
+function getQuery(name, version='') {
+    const sqlPath = path.join(sqlBasePath, version, `${name}.sql`);
     if (!fs.existsSync(sqlPath)) {
         throw new Error(`SQL does not exist, name = ${name}`);
     }
