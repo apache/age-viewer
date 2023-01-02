@@ -19,12 +19,16 @@
 
 import { connect } from 'react-redux';
 import { closeModal, removeGraphHistory, removeElementHistory } from '../../../features/modal/ModalSlice';
-import Modal from '../presentations/Modal';
+import ModalDialog from '../presentations/ModalDialog';
+import { getMetaData } from '../../../features/database/MetadataSlice';
 
 const mapStateToProps = (state) => ({
   graphHistory: state.modal.graphHistory,
   elementHistory: state.modal.elementHistory,
+  currentGraph: state.metadata.currentGraph,
 });
-const mapDispatchToProps = { closeModal, removeGraphHistory, removeElementHistory };
+const mapDispatchToProps = {
+  closeModal, removeGraphHistory, removeElementHistory, getMetaData,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalDialog);
