@@ -13,21 +13,25 @@ class KeyWordFinder {
   }
 
   getConnectedNames(kw) {
-    const startIndex = this.keywords[kw];
-    if (!startIndex) return [];
-    const nodesList = Object.keys(this.keywords);
-    const edgeList = this.matrix[startIndex];
-    const keywords = [];
-    edgeList.forEach((e, i) => {
-      if (e > 0) {
-        keywords.push(nodesList[i]);
+    const relationships = this.keywords[kw];
+    const keywordList = Object.keys(this.keywords);
+    const relatedKeys = [];
+    relationships.forEach((element, index) => {
+      if (element !== 0) {
+        relatedKeys.push(keywordList[index]);
       }
     });
-    return keywords;
+    return relatedKeys;
   }
 
-  static fromMatrix(m) {
-    //
+  static fromMatrix(data) {
+    const { kw, relationships } = data;
+    // kw is list of keywords and relationships is matrix
+    kw.forEach((element, index) => {
+      if (element === '') return;
+      this.keywords[element] = relationships[index].slice(1);
+    });
+    console.log(this.keywords);
   }
 }
 
