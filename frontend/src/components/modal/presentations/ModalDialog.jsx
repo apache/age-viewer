@@ -20,13 +20,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { Button, Modal } from 'react-bootstrap';
 
-const Modal = ({
+const ModalDialog = ({
   closeModal,
   graphHistory,
   elementHistory,
   removeGraphHistory,
   removeElementHistory,
+  getMetaData,
+  currentGraph,
 }) => {
   const dispatch = useDispatch();
 
@@ -45,31 +48,40 @@ const Modal = ({
           dispatch(removeGraphHistory());
           dispatch(removeElementHistory());
           dispatch(closeModal());
-          alert('The node has been deleted from your database. Please refresh the page or frame.');
+          alert('The node has been deleted from your database. Please re-run the query.');
+          getMetaData({ currentGraph });
         }
       });
   };
 
   return (
     <div className="modal-container">
-      <div className="modal-wrapper">
-        <h4>
-          After clicking on confirm, the node and related edge will be deleted from the database.
-        </h4>
-        <div className="btn-container">
-          <button type="button" className="btn confirm-btn" onClick={() => { dispatch(closeModal()); }}>
-            cancel
-          </button>
-          <button type="button" className="btn clear-btn" onClick={() => { removeNode(); }}>
-            confirm
-          </button>
-        </div>
+      <div
+        style={{ display: 'block', position: 'initial' }}
+      >
+        <Modal.Dialog>
+          <Modal.Header closeButton onClick={() => { dispatch(closeModal()); }}>
+            <Modal.Title>Delete Confirmation</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>
+              After clicking on confirm,
+              the node and related edge will be deleted from the database.
+            </p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => { dispatch(closeModal()); }}>Cancel</Button>
+            <Button variant="primary" onClick={() => { removeNode(); }}>Confirm</Button>
+          </Modal.Footer>
+        </Modal.Dialog>
       </div>
     </div>
   );
 };
 
-Modal.propTypes = {
+ModalDialog.propTypes = {
   closeModal: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   graphHistory: PropTypes.any.isRequired,
@@ -77,6 +89,8 @@ Modal.propTypes = {
   elementHistory: PropTypes.any.isRequired,
   removeGraphHistory: PropTypes.func.isRequired,
   removeElementHistory: PropTypes.func.isRequired,
+  getMetaData: PropTypes.func.isRequired,
+  currentGraph: PropTypes.string.isRequired,
 };
 
-export default Modal;
+export default ModalDialog;
