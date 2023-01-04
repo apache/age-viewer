@@ -23,6 +23,7 @@ import { useDispatch } from 'react-redux';
 import EditorContainer from '../../contents/containers/Editor';
 import Sidebar from '../../sidebar/containers/Sidebar';
 import Contents from '../../contents/containers/Contents';
+import Modal from '../../modal/containers/Modal';
 import { loadFromCookie, saveToCookie } from '../../../features/cookie/CookieUtil';
 
 const DefaultTemplate = ({
@@ -32,6 +33,7 @@ const DefaultTemplate = ({
   maxDataOfGraph,
   maxDataOfTable,
   changeSettings,
+  isOpen,
 }) => {
   const dispatch = useDispatch();
   const [stateValues] = useState({
@@ -74,6 +76,7 @@ const DefaultTemplate = ({
 
   return (
     <div className="default-template">
+      { isOpen && <Modal /> }
       <input
         type="radio"
         className="theme-switch"
@@ -109,6 +112,7 @@ DefaultTemplate.propTypes = {
   maxDataOfGraph: PropTypes.number.isRequired,
   maxDataOfTable: PropTypes.number.isRequired,
   changeSettings: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default DefaultTemplate;

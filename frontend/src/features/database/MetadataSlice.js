@@ -22,23 +22,31 @@ import uuid from 'react-uuid';
 
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',
-  async () => {
+  async (arg) => {
     try {
-      const response = await fetch('/api/v1/db/meta');
+      const response = await fetch('/api/v1/db/meta',
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(arg),
+        });
       if (response.ok) {
         const ret = await response.json();
         Object.keys(ret).forEach((gname) => {
           let allCountEdge = 0;
           let allCountNode = 0;
-          ret[gname].nodes.forEach((item) => {
+          ret[gname].nodes?.forEach((item) => {
             allCountNode += item.cnt;
           });
 
-          ret[gname].edges.forEach((item) => {
+          ret[gname].edges?.forEach((item) => {
             allCountEdge += item.cnt;
           });
-          ret[gname].nodes.unshift({ label: '*', cnt: allCountNode });
-          ret[gname].edges.unshift({ label: '*', cnt: allCountEdge });
+          ret[gname].nodes?.unshift({ label: '*', cnt: allCountNode });
+          ret[gname].edges?.unshift({ label: '*', cnt: allCountEdge });
           ret[gname].id = uuid();
         });
         return ret;
@@ -89,7 +97,7 @@ const MetadataSlice = createSlice({
     changeCurrentGraph: (state, action) => ({
       ...state,
       currentGraph: Object.entries(state.graphs)
-        .find(([, data]) => data.id === action.payload.id)[0],
+        .find(([k, data]) => data.id === action.payload.id || k === action.payload.name)[0],
     }),
   },
   extraReducers: {

@@ -16,18 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import * as path from "path";
-import fs from 'fs'
 
-const sqlBasePath = path.join(__dirname, '../../sql');
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
-// todo: util.format -> ejs
-function getQuery(name, version='') {
-    const sqlPath = path.join(sqlBasePath, version, `${name}.sql`);
-    if (!fs.existsSync(sqlPath)) {
-        throw new Error(`SQL does not exist, name = ${name}`);
-    }
-    return fs.readFileSync(sqlPath, 'utf8');
-}
+const LayoutSlice = createSlice({
+  name: 'layout',
+  initialState: {
+    isLabel: false,
+  },
+  reducers: {
+    setLabel: {
+      reducer: (state) => {
+        state.isLabel = !state.isLabel;
+      },
+    },
+  },
+});
 
-export {getQuery}
+export const { setLabel } = LayoutSlice.actions;
+
+export default LayoutSlice.reducer;

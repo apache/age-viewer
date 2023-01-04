@@ -16,18 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import * as path from "path";
-import fs from 'fs'
 
-const sqlBasePath = path.join(__dirname, '../../sql');
+import { connect } from 'react-redux';
+import { closeModal, removeGraphHistory, removeElementHistory } from '../../../features/modal/ModalSlice';
+import Modal from '../presentations/Modal';
 
-// todo: util.format -> ejs
-function getQuery(name, version='') {
-    const sqlPath = path.join(sqlBasePath, version, `${name}.sql`);
-    if (!fs.existsSync(sqlPath)) {
-        throw new Error(`SQL does not exist, name = ${name}`);
-    }
-    return fs.readFileSync(sqlPath, 'utf8');
-}
+const mapStateToProps = (state) => ({
+  graphHistory: state.modal.graphHistory,
+  elementHistory: state.modal.elementHistory,
+});
+const mapDispatchToProps = { closeModal, removeGraphHistory, removeElementHistory };
 
-export {getQuery}
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

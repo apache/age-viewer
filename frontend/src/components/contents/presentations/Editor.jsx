@@ -22,17 +22,20 @@ import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
+import store from '../../../app/store';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
 import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 import { setting } from '../../../conf/config';
 import IconPlay from '../../../icons/IconPlay';
+import { getMetaData } from '../../../features/database/MetadataSlice';
 
 const Editor = ({
   setCommand,
   activeRequests,
   command,
+  update,
   addFrame,
   trimFrame,
   addAlert,
@@ -42,6 +45,8 @@ const Editor = ({
   executeCypherQuery,
   addCommandHistory,
   toggleMenu,
+  setLabel,
+  isLabel,
   // addCommandFavorites,
 }) => {
   const dispatch = useDispatch();
@@ -75,7 +80,7 @@ const Editor = ({
         dispatch(() => trimFrame('ServerConnect'));
         dispatch(() => addFrame(':server connect', 'ServerConnect'));
       }
-    } else if (database.status === 'disconnected' && command.toUpperCase().match('(MATCH|CREATE).*')) {
+    } else if (database.status === 'disconnected') {
       dispatch(() => trimFrame('ServerConnect'));
       dispatch(() => addAlert('ErrorNoDatabaseConnected'));
       dispatch(() => addFrame(command, 'ServerConnect', refKey));
@@ -96,8 +101,14 @@ const Editor = ({
         if (response.type === 'cypher/executeCypherQuery/rejected') {
           if (response.error.name !== 'AbortError') {
             dispatch(() => addAlert('ErrorCypherQuery'));
+            const currentCommand = store.getState().editor.command;
+            if (currentCommand === '') {
+              setCommand(command);
+            }
           }
+          return;
         }
+        if (update) dispatch(getMetaData());
       });
       activePromises[refKey] = req;
       setPromises({ ...activePromises });
@@ -147,7 +158,7 @@ const Editor = ({
                 Editor
               </spna>
             </div>
-            <div className="form-control col-11 editor-code-wrapper">
+            <div id="codeMirrorEditor" className="form-control col-11 editor-code-wrapper">
               <CodeMirror
                 onClick={onClick}
                 value={command}
@@ -193,6 +204,17 @@ const Editor = ({
               >
                 <SideBarToggle isActive={isActive} />
               </button>
+              <button
+                className="frame-head-button btn btn-link"
+                type="button"
+                onClick={() => setLabel()}
+                title="Run Query"
+              >
+                <FontAwesomeIcon
+                  icon={isLabel ? faToggleOn : faToggleOff}
+                  size="2x"
+                />
+              </button>
             </div>
           </div>
         </div>
@@ -225,6 +247,9 @@ Editor.propTypes = {
   executeCypherQuery: PropTypes.func.isRequired,
   addCommandHistory: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  update: PropTypes.bool.isRequired,
+  setLabel: PropTypes.func.isRequired,
+  isLabel: PropTypes.bool.isRequired,
   // addCommandFavorites: PropTypes.func.isRequired,
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -27,12 +26,14 @@ import {
   faExpandAlt,
   faSync,
   faTimes,
+  faClone,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './Frame.module.scss';
 import { removeFrame } from '../../features/frame/FrameSlice';
+import { setCommand } from '../../features/editor/EditorSlice';
 import { removeActiveRequests } from '../../features/cypher/CypherSlice';
 import EdgeWeight from '../../icons/EdgeWeight';
 import IconFilter from '../../icons/IconFilter';
@@ -48,6 +49,7 @@ const Frame = ({
   onThick,
   thicnessMenu,
   bodyNoPadding,
+  isTable,
 }) => {
   const dispatch = useDispatch();
   const [isFullScreen, setFullScreen] = useState(false);
@@ -72,15 +74,23 @@ const Frame = ({
       <div className={styles.FrameHeader}>
         <div className={styles.FrameHeaderText}>
           {'$ '}
-          <strong>{reqString}</strong>
+          <strong>
+            {reqString}
+          </strong>
+          <FontAwesomeIcon
+            id={styles.toEditor}
+            title="copy to editor"
+            icon={faClone}
+            size="s"
+            onClick={() => dispatch(setCommand(reqString))}
+            style={{
+              cursor: 'pointer',
+            }}
+          />
         </div>
         <div className={styles.ButtonArea}>
-          {onThick ? (
-            <Popover
-              placement="bottomLeft"
-              content={thicnessMenu}
-              trigger="click"
-            >
+          {!isTable && onThick ? (
+            <Popover placement="bottomLeft" content={thicnessMenu} trigger="click">
               <Button
                 size="large"
                 type="link"
@@ -148,18 +158,22 @@ const Frame = ({
               size="lg"
             />
           </Button>
-          {onRefresh ? (
-            <Button
-              size="large"
-              type="link"
-              className={`${styles.FrameButton}`}
-              onClick={() => onRefresh()}
-              title="Refresh"
-            >
-              <FontAwesomeIcon icon={faSync} size="lg" />
-            </Button>
-          ) : null}
-
+          {
+            !isTable && onRefresh ? (
+              <Button
+                size="large"
+                type="link"
+                className={`${styles.FrameButton}`}
+                onClick={() => onRefresh()}
+                title="Refresh"
+              >
+                <FontAwesomeIcon
+                  icon={faSync}
+                  size="lg"
+                />
+              </Button>
+            ) : null
+          }
           {/* <Button
             size="large"
             type="link"
@@ -191,7 +205,7 @@ const Frame = ({
                 dispatch(removeFrame(refKey));
                 dispatch(removeActiveRequests(refKey));
               } else {
-                return false;
+                // Do nothing!
               }
             }}
             title="Close Window"
@@ -230,6 +244,7 @@ Frame.propTypes = {
   onSearchCancel: PropTypes.func,
   onRefresh: PropTypes.func,
   bodyNoPadding: PropTypes.bool,
+  isTable: PropTypes.bool.isRequired,
 };
 
 export default Frame;
