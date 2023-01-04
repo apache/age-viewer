@@ -807,31 +807,8 @@ textarea.editorTextarea
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
     z-index: 9999;
-    display: flex;
+    font-size: 16px;
+    display:flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .modal-wrapper {
-    background: #F8F8F8;
-    width: 80vw;
-    max-width: 400px;
-    border-radius: 10px;
-    padding: 2rem 1rem;
-    text-align: center;
-  }
-  .modal-wrapper h4 {
-    margin-bottom: 0;
-    line-height: 1.5;
-    font-size: 1.2rem;
-  }
-  .modal-wrapper .clear-btn,
-  .modal-wrapper .confirm-btn {
-    margin-top: 1rem;
-    cursor: pointer;
-  }
-  .btn-container {
-    display: flex;
-    justify-content: space-around;
-  }
-  
+}
