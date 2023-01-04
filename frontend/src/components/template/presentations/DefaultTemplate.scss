@@ -1,0 +1,19 @@
+.query-builder{
+    margin: 5px 5px 5px 5px;
+    height:100%;
+    width:20%;
+    display: flex;
+    background-color: rgb(8, 155, 155);
+}
+.editor-division{
+    display: flex;
+}
+.content-row{
+    flex-wrap: nowrap;
+    display: flex;
+    justify-items: space-evenly;
+    margin:2px 2px 2px 2px;
+}
+.row{
+    flex-wrap: nowrap;
+}

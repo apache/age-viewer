@@ -20,11 +20,14 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { Row } from 'react-bootstrap';
 import EditorContainer from '../../contents/containers/Editor';
 import Sidebar from '../../sidebar/containers/Sidebar';
 import Contents from '../../contents/containers/Contents';
 import Modal from '../../modal/containers/Modal';
 import { loadFromCookie, saveToCookie } from '../../../features/cookie/CookieUtil';
+import BuilderContainer from '../../query_builder/BuilderContainer';
+import './DefaultTemplate.scss';
 
 const DefaultTemplate = ({
   theme,
@@ -93,13 +96,19 @@ const DefaultTemplate = ({
         checked={theme === 'dark'}
         readOnly
       />
-      <div className="editor-divison">
-        <EditorContainer />
-        <Sidebar />
-      </div>
-      <div className="wrapper-extension-padding" id="wrapper">
-        <Contents />
-      </div>
+      <Row className="content-row">
+        <div className="query-builder">
+          <BuilderContainer />
+        </div>
+        <div className="editor-division wrapper-extension-padding">
+
+          <EditorContainer />
+          <Sidebar />
+          <Contents />
+
+        </div>
+
+      </Row>
 
     </div>
   );
