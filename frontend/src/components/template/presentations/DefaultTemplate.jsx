@@ -20,7 +20,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { Row } from 'react-bootstrap';
+import { Row, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import EditorContainer from '../../contents/containers/Editor';
 import Sidebar from '../../sidebar/containers/Sidebar';
 import Contents from '../../contents/containers/Contents';
@@ -39,6 +41,7 @@ const DefaultTemplate = ({
   isOpen,
 }) => {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const [stateValues] = useState({
     theme,
     maxNumOfFrames,
@@ -46,6 +49,16 @@ const DefaultTemplate = ({
     maxDataOfGraph,
     maxDataOfTable,
   });
+  const [queryOptions, setQueryOptions] = useState(null);
+
+  useEffect(async () => {
+    const req = {
+      method: 'GET',
+    };
+    const res = await fetch('/api/v1/miscellaneous', req);
+    const results = await res.json();
+    setQueryOptions(results);
+  }, []);
 
   useEffect(() => {
     let isChanged = false;
@@ -97,14 +110,19 @@ const DefaultTemplate = ({
         readOnly
       />
       <Row className="content-row">
-        <div className="query-builder">
-          <BuilderContainer />
+        <div>
+          <Button onClick={() => setOpen(true)}>
+            <FontAwesomeIcon icon={faBars} />
+          </Button>
+          <BuilderContainer open={open} setOpen={setOpen} queryOptions={queryOptions} />
         </div>
         <div className="editor-division wrapper-extension-padding">
 
           <EditorContainer />
           <Sidebar />
-          <Contents />
+          <div className="wrapper">
+            <Contents />
+          </div>
 
         </div>
 

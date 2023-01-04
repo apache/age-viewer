@@ -18,7 +18,7 @@ const readCSV = (file, resolve, reject)=>{
         error:(err)=>{
             console.log(err);
             reject(err);
-        }
+        },
     });
 }
 const getQueryList = async (req, res, next)=>{
@@ -34,7 +34,7 @@ const getQueryList = async (req, res, next)=>{
     });
 
     const kwResults = {
-        kw:results.data[0],
+        kw:results.data[0].splice(1),
         relationships:results.data.slice(1)
     }
     res.status(200).json(kwResults).end();
