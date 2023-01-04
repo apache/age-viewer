@@ -120,9 +120,7 @@ const DefaultTemplate = ({
 
           <EditorContainer />
           <Sidebar />
-          <div className="wrapper">
-            <Contents />
-          </div>
+          <Contents />
 
         </div>
 
