@@ -20,7 +20,13 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleDown, faAngleUp, faCompressAlt, faExpandAlt, faSync, faTimes, faClone,
+  faAngleDown,
+  faAngleUp,
+  faCompressAlt,
+  faExpandAlt,
+  faSync,
+  faTimes,
+  faClone,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
@@ -34,10 +40,16 @@ import IconFilter from '../../icons/IconFilter';
 import IconSearchCancel from '../../icons/IconSearchCancel';
 
 const Frame = ({
-  reqString, children, refKey,
-  onSearch, onSearchCancel, onRefresh,
-  onThick, thicnessMenu,
-  bodyNoPadding, isTable,
+  reqString,
+  children,
+  refKey,
+  onSearch,
+  onSearchCancel,
+  onRefresh,
+  onThick,
+  thicnessMenu,
+  bodyNoPadding,
+  isTable,
 }) => {
   const dispatch = useDispatch();
   const [isFullScreen, setFullScreen] = useState(false);
@@ -75,7 +87,6 @@ const Frame = ({
               cursor: 'pointer',
             }}
           />
-
         </div>
         <div className={styles.ButtonArea}>
           {!isTable && onThick ? (
@@ -90,7 +101,7 @@ const Frame = ({
                 <EdgeWeight />
               </Button>
             </Popover>
-          ) : null }
+          ) : null}
           {onSearchCancel ? (
             <Button
               size="large"
@@ -136,7 +147,9 @@ const Frame = ({
           <Button
             size="large"
             type="link"
-            className={`${styles.FrameButton} ${isFullScreen ? styles.activate : ''}`}
+            className={`${styles.FrameButton} ${
+              isFullScreen ? styles.activate : ''
+            }`}
             onClick={() => setFullScreen(!isFullScreen)}
             title="Expand"
           >
@@ -161,15 +174,13 @@ const Frame = ({
               </Button>
             ) : null
           }
-
           {/* <Button
             size="large"
             type="link"
             className={`${styles.FrameButton} ${isPinned ? styles.activate : ''}`}
             onClick={() => pinFrame(refKey)}
           >
-            <FontAwesomeIcon
-              icon={faPaperclip}
+          <FontAwesomeIcon icon={faPaperclip}
               size="lg"
             />
           </Button> */}
@@ -190,19 +201,24 @@ const Frame = ({
             type="link"
             className={`${styles.FrameButton}`}
             onClick={() => {
-              dispatch(removeFrame(refKey));
-              dispatch(removeActiveRequests(refKey));
+              if (window.confirm('Are you sure you want to close this window?')) {
+                dispatch(removeFrame(refKey));
+                dispatch(removeActiveRequests(refKey));
+              } else {
+                // Do nothing!
+              }
             }}
             title="Close Window"
           >
-            <FontAwesomeIcon
-              icon={faTimes}
-              size="lg"
-            />
+            <FontAwesomeIcon icon={faTimes} size="lg" />
           </Button>
         </div>
       </div>
-      <div className={`${styles.FrameBody} ${isExpand ? '' : styles.Contract} ${bodyNoPadding ? styles.NoPadding : ''}`}>
+      <div
+        className={`${styles.FrameBody} ${isExpand ? '' : styles.Contract} ${
+          bodyNoPadding ? styles.NoPadding : ''
+        }`}
+      >
         {children}
       </div>
     </div>
