@@ -1,12 +1,17 @@
 import { Drawer, Space } from 'antd';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Input from 'antd/lib/input/Input';
 import BuilderSelection from './BuilderSelection';
+import KeyWordFinder from '../../features/query_builder/KeyWordFinder';
+import CodeMirror from '../editor/containers/CodeMirrorWapperContainer';
 
-const BuilderContainer = ({ open, setOpen, queryOptions }) => {
-  // eslint-disable-next-line no-unused-vars
-  const [query, setQuery] = useState(0);
+const BuilderContainer = ({ open, setOpen, finder }) => {
+  const [query, setQuery] = useState('');
+
+  const handleSetQuery = (word) => {
+    const fullQuery = query !== '' ? `${query}\n ${word}` : word;
+    setQuery(fullQuery);
+  };
   return (
     <Drawer
       title="Query Generator"
@@ -15,10 +20,10 @@ const BuilderContainer = ({ open, setOpen, queryOptions }) => {
       placement="left"
     >
       <Space />
-      <Input placeholder="query" />
+      <CodeMirror onChange={setQuery} value={query} />
       <Space />
       <div>
-        <BuilderSelection queryOptions={queryOptions} />
+        <BuilderSelection finder={finder} setQuery={handleSetQuery} />
       </div>
     </Drawer>
   );
@@ -26,9 +31,6 @@ const BuilderContainer = ({ open, setOpen, queryOptions }) => {
 BuilderContainer.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  queryOptions: PropTypes.shape({
-    kw: PropTypes.objectOf.isRequired,
-    relationships: PropTypes.objectOf.isRequired,
-  }).isRequired,
+  finder: PropTypes.shape(KeyWordFinder).isRequired,
 };
 export default BuilderContainer;

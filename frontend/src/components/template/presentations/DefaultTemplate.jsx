@@ -30,6 +30,7 @@ import Modal from '../../modal/containers/Modal';
 import { loadFromCookie, saveToCookie } from '../../../features/cookie/CookieUtil';
 import BuilderContainer from '../../query_builder/BuilderContainer';
 import './DefaultTemplate.scss';
+import KeyWordFinder from '../../../features/query_builder/KeyWordFinder';
 
 const DefaultTemplate = ({
   theme,
@@ -49,7 +50,7 @@ const DefaultTemplate = ({
     maxDataOfGraph,
     maxDataOfTable,
   });
-  const [queryOptions, setQueryOptions] = useState(null);
+  const [finder, setFinder] = useState(null);
 
   useEffect(async () => {
     const req = {
@@ -57,7 +58,8 @@ const DefaultTemplate = ({
     };
     const res = await fetch('/api/v1/miscellaneous', req);
     const results = await res.json();
-    setQueryOptions(results);
+    const kwFinder = KeyWordFinder.fromMatrix(results);
+    setFinder(kwFinder);
   }, []);
 
   useEffect(() => {
@@ -114,7 +116,7 @@ const DefaultTemplate = ({
           <Button onClick={() => setOpen(true)}>
             <FontAwesomeIcon icon={faBars} />
           </Button>
-          <BuilderContainer open={open} setOpen={setOpen} queryOptions={queryOptions} />
+          <BuilderContainer open={open} setOpen={setOpen} finder={finder} />
         </div>
         <div className="editor-division wrapper-extension-padding">
 

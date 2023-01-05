@@ -1,37 +1,42 @@
 class KeyWordFinder {
   constructor() {
-    this.keywords = new Map();
+    this.keywordList = new Map();
     this.matrix = [];
   }
 
-  insertNode(kw, relationships) {
-    if (this.keywords[kw]) {
-      return;
-    }
-    this.keywords[kw] = Object.keys(this.keywords).length - 1;
-    this.matrix.push(relationships);
-  }
-
   getConnectedNames(kw) {
-    const relationships = this.keywords[kw];
-    const keywordList = Object.keys(this.keywords);
+    if (kw === '') {
+      return KeyWordFinder.INITIAL;
+    }
+    console.log(kw);
+    const relationships = this.keywordList[kw];
+    const keywordList = Object.keys(this.keywordList);
     const relatedKeys = [];
     relationships.forEach((element, index) => {
-      if (element !== 0) {
+      console.log(element, index);
+      if (element !== '0') {
+        console.log('not 0', element);
         relatedKeys.push(keywordList[index]);
       }
     });
+    console.log('connected names', relatedKeys);
+    console.log(this.keywordList);
     return relatedKeys;
+  }
+
+  static get INITIAL() {
+    return ['MATCH', 'CREATE', 'MERGE'];
   }
 
   static fromMatrix(data) {
     const { kw, relationships } = data;
-    // kw is list of keywords and relationships is matrix
+    const finder = new KeyWordFinder();
+    // kw is list of keywordList and relationships is matrix
     kw.forEach((element, index) => {
       if (element === '') return;
-      this.keywords[element] = relationships[index].slice(1);
+      finder.keywordList[element] = relationships[index].slice(1);
     });
-    console.log(this.keywords);
+    return finder;
   }
 }
 
