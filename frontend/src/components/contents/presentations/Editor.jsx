@@ -193,11 +193,11 @@ const Editor = ({
                 onClick={() => {
                   toggleMenu('home');
                   if (!isActive) {
-                    document.getElementById('wrapper').classList.remove('wrapper');
-                    document.getElementById('wrapper').classList.add('wrapper-extension-padding');
+                    document.getElementById('wrapper')?.classList?.remove('wrapper');
+                    document.getElementById('wrapper')?.classList?.add('wrapper-extension-padding');
                   } else {
-                    document.getElementById('wrapper').classList.remove('wrapper-extension-padding');
-                    document.getElementById('wrapper').classList.add('wrapper');
+                    document.getElementById('wrapper')?.classList?.remove('wrapper-extension-padding');
+                    document.getElementById('wrapper')?.classList?.add('wrapper');
                   }
                 }}
                 title={(isActive) ? 'Hide' : 'Show'}

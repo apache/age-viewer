@@ -12,7 +12,7 @@ const BuilderSelection = ({ finder, setQuery, currentWord }) => {
   return (
     <ListGroup>
       {
-    finder.getConnectedNames(currentWord).map(
+    finder?.getConnectedNames(currentWord).map(
       (element) => (
         <ListGroup.Item key={uuid()}>
           <Button

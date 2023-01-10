@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import CodeMirror from '../editor/containers/CodeMirrorWapperContainer';
 import BuilderSelection from './BuilderSelection';
-// import BuilderInput from './BuilderInput';
 import KeyWordFinder from '../../features/query_builder/KeyWordFinder';
 
 import { setCommand } from '../../features/editor/EditorSlice';
