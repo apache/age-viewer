@@ -25,7 +25,8 @@ const BuilderContainer = ({ open, setOpen, finder }) => {
 
   const getCurrentWord = (q) => {
     const words = q.split(/[ ,\n]/);
-    const word = words.findLast((element) => finder.hasWord(element));
+    const isWord = words.findLast((element) => finder.hasWord(element));
+    const word = isWord || '';
     setCurrentWord(word);
   };
 
@@ -68,7 +69,6 @@ const BuilderContainer = ({ open, setOpen, finder }) => {
 
       <Space />
       <div className="code-mirror-builder">
-        {console.log('query passed to input', query)}
         <CodeMirror onChange={handleSetQuery} value={query} />
       </div>
 

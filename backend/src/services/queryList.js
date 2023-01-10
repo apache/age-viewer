@@ -7,24 +7,19 @@ const readCSV = (file, resolve, reject)=>{
     return papa.parse(file, {
         skipEmptyLines:true,
         transform:(val, col)=>{
-            console.log(val, col);
             if (col !== 0) return val;
 
         },
         complete:(results)=>{
-            console.log(results);
             resolve(results);
         },
         error:(err)=>{
-            console.log(err);
             reject(err);
         },
     });
 }
 const getQueryList = async (req, res, next)=>{
-    console.log('misc req');
     const p = path.join(__dirname, "../../misc/graph_kw.csv");
-    console.log(p);
     const file = await fs.readFile(p, {
         encoding: 'utf-8'
     });

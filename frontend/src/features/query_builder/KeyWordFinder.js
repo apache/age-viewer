@@ -5,10 +5,11 @@ class KeyWordFinder {
   }
 
   getConnectedNames(kw) {
-    if (!this.allKeywords.has(kw)) {
+    const key = kw.toUpperCase();
+    if (!this.allKeywords.has(key)) {
       return KeyWordFinder.INITIAL;
     }
-    const relationships = this.keywordMap[kw];
+    const relationships = this.keywordMap[key];
     const keywordList = Object.keys(this.keywordMap);
     const relatedKeys = [];
     relationships.forEach((element, index) => {
@@ -20,7 +21,8 @@ class KeyWordFinder {
   }
 
   hasWord(word) {
-    return this.allKeywords.has(word);
+    const upperWord = word.toUpperCase();
+    return this.allKeywords.has(upperWord);
   }
 
   static get INITIAL() {
