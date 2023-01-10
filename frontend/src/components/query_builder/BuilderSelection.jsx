@@ -1,22 +1,20 @@
 import PropTypes from 'prop-types';
 import { ListGroup, Button } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React from 'react';
+import uuid from 'react-uuid';
 import KeyWordFinder from '../../features/query_builder/KeyWordFinder';
 
-const BuilderSelection = ({ finder, setQuery }) => {
-  const [selectedKw, setSelected] = useState('');
-
+const BuilderSelection = ({ finder, setQuery, currentWord }) => {
   const handleClick = (e) => {
     const selectedVal = e.target.getAttribute('data-val');
-    setSelected(selectedVal);
     setQuery(selectedVal);
   };
   return (
     <ListGroup>
       {
-    finder.getConnectedNames(selectedKw).map(
+    finder.getConnectedNames(currentWord).map(
       (element) => (
-        <ListGroup.Item>
+        <ListGroup.Item key={uuid()}>
           <Button
             size="small"
             onClick={handleClick}
@@ -35,5 +33,6 @@ const BuilderSelection = ({ finder, setQuery }) => {
 BuilderSelection.propTypes = {
   finder: PropTypes.shape(KeyWordFinder).isRequired,
   setQuery: PropTypes.func.isRequired,
+  currentWord: PropTypes.string.isRequired,
 };
 export default BuilderSelection;

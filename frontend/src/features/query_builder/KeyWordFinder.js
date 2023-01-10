@@ -1,27 +1,26 @@
 class KeyWordFinder {
   constructor() {
-    this.keywordList = new Map();
-    this.matrix = [];
+    this.keywordMap = new Map();
+    this.allKeywords = new Set();
   }
 
   getConnectedNames(kw) {
-    if (kw === '') {
+    if (!this.allKeywords.has(kw)) {
       return KeyWordFinder.INITIAL;
     }
-    console.log(kw);
-    const relationships = this.keywordList[kw];
-    const keywordList = Object.keys(this.keywordList);
+    const relationships = this.keywordMap[kw];
+    const keywordList = Object.keys(this.keywordMap);
     const relatedKeys = [];
     relationships.forEach((element, index) => {
-      console.log(element, index);
       if (element !== '0') {
-        console.log('not 0', element);
         relatedKeys.push(keywordList[index]);
       }
     });
-    console.log('connected names', relatedKeys);
-    console.log(this.keywordList);
     return relatedKeys;
+  }
+
+  hasWord(word) {
+    return this.allKeywords.has(word);
   }
 
   static get INITIAL() {
@@ -34,7 +33,8 @@ class KeyWordFinder {
     // kw is list of keywordList and relationships is matrix
     kw.forEach((element, index) => {
       if (element === '') return;
-      finder.keywordList[element] = relationships[index].slice(1);
+      finder.keywordMap[element] = relationships[index].slice(1);
+      finder.allKeywords.add(element);
     });
     return finder;
   }
