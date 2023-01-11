@@ -18,17 +18,19 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
-import uuid from 'react-uuid';
+import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 const FrameSlice = createSlice({
-  name: 'frames',
+  name: "frames",
   initialState: [],
   reducers: {
     addFrame: {
       reducer: (state, action) => {
         const reqString = action.payload.reqString.trim();
-        const firstNotPinnedIndex = state.findIndex((frame) => (frame.isPinned === false));
+        const firstNotPinnedIndex = state.findIndex(
+          (frame) => frame.isPinned === false
+        );
         const { frameName } = action.payload;
 
         const frameProps = {
@@ -36,14 +38,25 @@ const FrameSlice = createSlice({
           key: action.payload.refKey ? action.payload.refKey : uuid(),
         };
 
-        if (reqString.startsWith(':play')) {
+        if (reqString.startsWith(":play")) {
           frameProps.playTarget = reqString.split(/\s+/).pop();
         }
 
-        state.splice(firstNotPinnedIndex, 0, { frameName, frameProps, isPinned: false });
-        state.map((frame) => { if (frame.orgIndex) { frame.orgIndex += 1; } return frame; });
+        state.splice(firstNotPinnedIndex, 0, {
+          frameName,
+          frameProps,
+          isPinned: false,
+        });
+        state.map((frame) => {
+          if (frame.orgIndex) {
+            frame.orgIndex += 1;
+          }
+          return frame;
+        });
       },
-      prepare: (reqString, frameName, refKey) => ({ payload: { reqString, frameName, refKey } }),
+      prepare: (reqString, frameName, refKey) => ({
+        payload: { reqString, frameName, refKey },
+      }),
     },
     removeFrame: {
       reducer: (state, action) => {
@@ -51,12 +64,13 @@ const FrameSlice = createSlice({
         return state.filter((frame) => frame.frameProps.key !== frameKey);
       },
       prepare: (refKey) => ({ payload: { refKey } }),
-
     },
     pinFrame: {
       reducer: (state, action) => {
         const frameKey = action.payload.refKey;
-        const frameIndex = state.findIndex((frame) => (frame.frameProps.key === frameKey));
+        const frameIndex = state.findIndex(
+          (frame) => frame.frameProps.key === frameKey
+        );
         if (!state[frameIndex].isPinned) {
           state[frameIndex].isPinned = true;
           state[frameIndex].orgIndex = frameIndex;
@@ -72,16 +86,14 @@ const FrameSlice = createSlice({
     trimFrame: {
       reducer: (state, action) => {
         const { frameName } = action.payload;
-        return state.filter((frame) => (frame.frameName !== frameName));
+        return state.filter((frame) => frame.frameName !== frameName);
       },
       prepare: (frameName) => ({ payload: { frameName } }),
-
     },
   },
 });
 
-export const {
-  addFrame, removeFrame, pinFrame, trimFrame,
-} = FrameSlice.actions;
+export const { addFrame, removeFrame, pinFrame, trimFrame } =
+  FrameSlice.actions;
 
 export default FrameSlice.reducer;

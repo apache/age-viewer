@@ -23,7 +23,6 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
 import { Alert } from 'antd';
-
 const SingleAlert = ({
   alertKey,
   alertName,

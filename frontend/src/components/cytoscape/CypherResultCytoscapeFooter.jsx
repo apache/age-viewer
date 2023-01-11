@@ -20,7 +20,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
-import uuid from 'react-uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -399,4 +399,4 @@ CypherResultCytoscapeFooter.propTypes = {
   captions: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default CypherResultCytoscapeFooter;
+export {CypherResultCytoscapeFooter};

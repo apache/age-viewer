@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
-import uuid from 'react-uuid';
+import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import './GraphInit.scss';
 import { Divider, Checkbox, Input } from 'antd';
