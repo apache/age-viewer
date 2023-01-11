@@ -18,21 +18,10 @@
  */
 
 import { connect } from 'react-redux';
-import { pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
-import { generateCytoscapeMetadataElement } from '../../../features/cypher/CypherUtil';
-import ServerStatusFrame from '../presentations/ServerStatusFrame';
-import { openTutorial } from '../../../features/modal/ModalSlice';
+import TutorialDialog from '../presentations/TutorialDialog';
+import { closeTutorial } from '../../../features/modal/ModalSlice';
 
-const mapStateToProps = (state) => {
-  const generateElements = () => generateCytoscapeMetadataElement(state.metadata.rows);
+const mapStateToProps = () => ({});
+const mapDispatchToProps = { closeTutorial };
 
-  return {
-    serverInfo: state.database,
-    isTutorial: state.modal.isTutorial,
-    data: generateElements(),
-  };
-};
-
-const mapDispatchToProps = { removeFrame, pinFrame, openTutorial };
-
-export default connect(mapStateToProps, mapDispatchToProps)(ServerStatusFrame);
+export default connect(mapStateToProps, mapDispatchToProps)(TutorialDialog);
