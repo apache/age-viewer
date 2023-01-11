@@ -77,8 +77,11 @@ Install latest **pm2** with :
 	|	``-d``|	Run container in background and print container ID|
 - To Get the running log of the docker container created - 
 `` docker logs --follow myPostgresDb``
-- To Get into postgreSQL Shell - 
-`` docker exec -it myPostgresDb bash``
+- To Get into postgreSQL Shell - <br>
+	First get into docker shell using -	
+		`` docker exec -it myPostgresDb bash`` 
+	<br>Then get into postgreSQL shell using - 
+		`` psql -U postgresUser postgresDB``
 - After logging into postgreSQL shell follow the [Post-Installation](https://github.com/apache/age#post-installation) instruction to create a graph in the database.
 ### Connect Apache Age-Viewer to PostgreSQL Database
 **Initial Connection Layout**
