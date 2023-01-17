@@ -101,9 +101,10 @@ const InitGraphModal = ({ show, setShow }) => {
         } else {
           setShow(false);
           dispatch(addAlert('CreateGraphSuccess'));
-          getMetaData();
-          changeCurrentGraph({ name: graphName });
-          changeGraph(graphName);
+          dispatch(getMetaData()).then(() => {
+            dispatch(changeCurrentGraph({ name: graphName }));
+            dispatch(changeGraph({ graphName }));
+          });
         }
       })
       .catch((err) => {
