@@ -11,20 +11,29 @@ const START_PATH = '/api/v1'
 
 describe('Graph Creation', ()=>{
     const path = `${START_PATH}/db/connect`
-    before(()=>{
-        agent
+    before((done)=>{
+        console.log('running before');
+
+            agent
             .post(path)
             .type('form')
             .send(connectionForm)
-    })
-    beforeEach((done)=>{
-        
-        done();
-    });
-    it('creates a node', ()=>{
+            .end((err, res)=>{
+                expect(err).to.be.null;
+                expect(res).to.have.status(200);
+                console.log('results', res.status)
+                done();                
+            });
+
+        });
+
+
+
+    it('creates a node', (done)=>{
         // create csv file with a node
         //  request to init
         expect('1').to.be.equal('1')
+        done();
     });
     
 });
