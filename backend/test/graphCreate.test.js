@@ -1,5 +1,8 @@
+import exp from 'constants';
 import app from '../src/app';
 import connectionForm from './testDB';
+
+const fs = require('fs');
 
 const chai = require('chai');
 const chttp = require('chai-http');
@@ -29,11 +32,31 @@ describe('Graph Creation', ()=>{
 
 
 
-    it('creates a node', (done)=>{
+    it('creates a graph', (done)=>{
         // create csv file with a node
         //  request to init
-        expect('1').to.be.equal('1')
-        done();
+        const path = `${START_PATH}/cypher/init`
+        const nodesFilePath = ['./test-data/make.csv', './test-data/model.csv']
+        const edgesFilePath = ['./test-data/has-model.csv']
+        const formData = {
+            nodes:nodesFilePath.map((path)=>{
+                return fs.readFileSync(path);
+            }),
+            edges:edgesFilePath.map((path)=>{
+                return fs.readFileSync(path);
+            }),
+            graphName:'TEST_GRAPH',
+            dropGraph:'true'
+        }
+        agent
+            .post(path)
+            .type('form')
+            .send(formData)
+            .end((err, res)=>{
+                expect(err).to.be.null;
+                expect(res).to.have.status(204)
+                done();
+            });
     });
     
 });
