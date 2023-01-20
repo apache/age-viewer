@@ -173,7 +173,7 @@ const Editor = ({
                   size="lg"
                 />
               </button> */}
-              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onClick={() => clearCommand()}>
+              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onDoubleClick={() => clearCommand()}>
                 <FontAwesomeIcon
                   icon={faTimesCircle}
                   size="1x"
