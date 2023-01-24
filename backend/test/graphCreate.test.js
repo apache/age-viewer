@@ -1,5 +1,6 @@
 const app = require('../src/app');
-const {connectionForm} = require('./testDB');
+const { queries } = require('./test-queries/queries');
+const { connectionForm } = require('./testDB');
 const pathCreate = require('path');
 const request = require('supertest');
 const expect = require('chai').expect;
@@ -86,11 +87,14 @@ describe('Graph Creation', ()=>{
     });
     after((done)=>{
         const urlPath = `${START_PATH}/cypher`
-        const query = `SELECT * FROM drop_graph(${connectionForm.database}, true)`
+        const query = queries.drop_graph(connectionForm.database, true, (s)=>{
+            return {cmd: s}
+        })
         agent
-            .post('/')
-            .send({
-            })
+            .post(urlPath)
+            .send(query)
+            .expect(200)
+            .end(done)
     })
     
 });
