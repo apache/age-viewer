@@ -71,6 +71,7 @@ const CypherResultCytoscapeCharts = ({
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
+  const [generatedElements, setGeneratedElements] = useState({});
   const dispatch = useDispatch();
   const addEventOnElements = (targetElements) => {
     targetElements.bind('mouseover', (e) => {
@@ -170,6 +171,20 @@ const CypherResultCytoscapeCharts = ({
 
     addLegendData(generatedData.legend);
     rerenderTargets.removeClass('new');
+    generatedElements[centerId] = rerenderTargets.filter((ele) => {
+      const curId = centerId;
+      return ele.data().id !== curId;
+    });
+    setGeneratedElements({ ...generatedElements });
+  };
+
+  const removeElements = (centerId, elAnimate) => {
+    cytoscapeObject.elements().lock();
+    cytoscapeObject.remove(generatedElements[centerId]);
+    cytoscapeObject.elements().unlock();
+    delete generatedElements[centerId];
+    elAnimate.stop();
+    setGeneratedElements(generatedElements);
   };
 
   useEffect(() => {
@@ -206,23 +221,26 @@ const CypherResultCytoscapeCharts = ({
                   elAnimate.reverse().play();
                 }
               }, 1000);
-
-              fetch('/api/v1/cypher', {
-                method: 'POST',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S)-[R]-(T) WHERE id(S) = ${ele.id()} RETURN S, R, T $$) as (S agtype, R agtype, T agtype);`,
-                }),
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  elAnimate.rewind().stop();
-                  clearInterval(animateTimer);
-                  addElements(ele.id(), data);
-                });
+              if (Object.keys(generatedElements).includes(ele.id())) {
+                removeElements(ele.id(), elAnimate);
+              } else {
+                fetch('/api/v1/cypher', {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    cmd: `SELECT * FROM cypher('${graph}', $$ MATCH (S)-[R]-(T) WHERE id(S) = ${ele.id()} RETURN S, R, T $$) as (S agtype, R agtype, T agtype);`,
+                  }),
+                })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    elAnimate.rewind().stop();
+                    clearInterval(animateTimer);
+                    addElements(ele.id(), data);
+                  });
+              }
             },
           },
           {
