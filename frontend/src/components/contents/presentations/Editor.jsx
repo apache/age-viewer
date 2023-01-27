@@ -144,20 +144,7 @@ const Editor = ({
       <div className="editor">
         <div className="container-fluid editor-area card-header">
           <div className="input-group input-style">
-            <div style={{
-              height: '60px',
-              width: '60px',
-              color: '#ffffff',
-              textAlign: 'left',
-              lineHeight: '30px',
-            }}
-            >
-              <spna>
-                Query
-                <br />
-                Editor
-              </spna>
-            </div>
+
             <div id="codeMirrorEditor" className="form-control col-11 editor-code-wrapper">
               <CodeMirror
                 onClick={onClick}
