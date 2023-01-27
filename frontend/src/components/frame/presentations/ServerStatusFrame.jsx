@@ -18,19 +18,23 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle } from '@fortawesome/free-regular-svg-icons';
+import { faPlayCircle, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 import { Col, Row } from 'antd';
 import { Button } from 'react-bootstrap';
 import MetadataCytoscapeChart from '../../cytoscape/MetadataCytoscapeChart';
 import InitGraphModal from '../../initializer/presentation/GraphInitializer';
 import Frame from '../Frame';
 import FrameStyles from '../Frame.module.scss';
+import Tutorial from '../../modal/containers/Tutorial';
+import { openTutorial } from '../../../features/modal/ModalSlice';
 
 const ServerStatusFrame = ({
-  refKey, isPinned, reqString, serverInfo, data,
+  refKey, isPinned, reqString, serverInfo, data, isTutorial,
 }) => {
+  const dispatch = useDispatch();
   const [elements, setElements] = useState({ edges: [], nodes: [] });
   const [showModal, setShow] = useState(false);
   const {
@@ -46,50 +50,54 @@ const ServerStatusFrame = ({
   const setContent = () => {
     if (status === 'connected') {
       return (
-        <div className={FrameStyles.FlexContentWrapper}>
-          <InitGraphModal show={showModal} setShow={setShow} />
-          <Row>
-            <Col span={6}>
-              <h3>Connection Status</h3>
-              <p>This is your current connection information.</p>
-            </Col>
-            <Col span={18}>
-              <p>
-                You are connected as user&nbsp;
-                <strong>{user}</strong>
-              </p>
-              <p>
-                to&nbsp;
-                <strong>
-                  {host}
-                  :
-                  {port}
-                  /
-                  {database}
-                </strong>
-              </p>
-              <p>
-                Graph path has been set to&nbsp;
-                <strong>{graph}</strong>
-              </p>
-            </Col>
-            <Col>
-              <p>
-                <Button onClick={() => setShow(!showModal)}>Create Graph</Button>
-              </p>
-            </Col>
-          </Row>
+        <>
+          { isTutorial && <Tutorial />}
+          <div className={FrameStyles.FlexContentWrapper}>
+            <InitGraphModal show={showModal} setShow={setShow} />
+            <Row>
+              <Col span={6}>
+                <h3>Connection Status</h3>
+                <p>This is your current connection information.</p>
+              </Col>
+              <Col span={18}>
+                <p>
+                  You are connected as user&nbsp;
+                  <strong>{user}</strong>
+                </p>
+                <p>
+                  to&nbsp;
+                  <strong>
+                    {host}
+                    :
+                    {port}
+                    /
+                    {database}
+                  </strong>
+                </p>
+                <p>
+                  Graph path has been set to&nbsp;
+                  <strong>{graph}</strong>
+                </p>
+              </Col>
+              <Col>
+                <p>
+                  <Button onClick={() => setShow(!showModal)}>Create Graph</Button>
+                  <FontAwesomeIcon onClick={() => dispatch(openTutorial())} icon={faQuestionCircle} size="lg" style={{ marginLeft: '1rem', cursor: 'pointer' }} />
+                </p>
+              </Col>
+            </Row>
 
-          <hr style={{
-            color: 'rgba(0,0,0,.125)',
-            backgroundColor: '#fff',
-            margin: '0px 10px 0px 10px',
-            height: '0.3px',
-          }}
-          />
+            <hr style={{
+              color: 'rgba(0,0,0,.125)',
+              backgroundColor: '#fff',
+              margin: '0px 10px 0px 10px',
+              height: '0.3px',
+            }}
+            />
 
-          <MetadataCytoscapeChart elements={elements} />
-        </div>
+            <MetadataCytoscapeChart elements={elements} />
+          </div>
+        </>
       );
     }
     if (status === 'disconnected') {
@@ -145,6 +153,7 @@ ServerStatusFrame.propTypes = {
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.any.isRequired,
+  isTutorial: PropTypes.bool.isRequired,
 };
 
 export default ServerStatusFrame;

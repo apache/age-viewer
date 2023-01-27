@@ -24,6 +24,7 @@ const ModalSlice = createSlice({
   name: 'modal',
   initialState: {
     isOpen: false,
+    isTutorial: false,
     graphHistory: [],
     elementHistory: [],
   },
@@ -36,6 +37,16 @@ const ModalSlice = createSlice({
     closeModal: {
       reducer: (state) => {
         state.isOpen = false;
+      },
+    },
+    openTutorial: {
+      reducer: (state) => {
+        state.isTutorial = true;
+      },
+    },
+    closeTutorial: {
+      reducer: (state) => {
+        state.isTutorial = false;
       },
     },
     addGraphHistory: {
@@ -66,6 +77,8 @@ const ModalSlice = createSlice({
 export const {
   openModal,
   closeModal,
+  openTutorial,
+  closeTutorial,
   addGraphHistory,
   addElementHistory,
   removeGraphHistory,
