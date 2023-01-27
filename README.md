@@ -64,10 +64,10 @@ Install latest **pm2** with :
 	```docker pull apache/age ```
 	
 	- Create AGE docker container
-		```console
-		docker run --name myPostgresDb -p 5455:5432 -e POSTGRES_USER=postgresUser -e POSTGRES_PASSWORD=pos  
-		tgresPW -e POSTGRES_DB=postgresDB -d apache/age
-		 ```
+	```bash
+	docker run --name myPostgresDb -p 5455:5432 -e POSTGRES_USER=postgresUser \
+	-e POSTGRES_PASSWORD=postgresPW -e POSTGRES_DB=postgresDB -d apache/age
+	```
 	
 	| Docker variables| Description |
 	|--|--|
