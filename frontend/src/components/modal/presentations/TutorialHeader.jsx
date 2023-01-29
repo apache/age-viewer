@@ -17,18 +17,32 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { closeModal, removeGraphHistory, removeElementHistory } from '../../../features/modal/ModalSlice';
-import ModalDialog from '../presentations/ModalDialog';
-import { getMetaData } from '../../../features/database/MetadataSlice';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Modal } from 'react-bootstrap';
 
-const mapStateToProps = (state) => ({
-  graphHistory: state.modal.graphHistory,
-  elementHistory: state.modal.elementHistory,
-  currentGraph: state.metadata.currentGraph,
-});
-const mapDispatchToProps = {
-  closeModal, removeGraphHistory, removeElementHistory, getMetaData,
+const TutorialHeader = ({ page }) => {
+  const [curPage, setCurPage] = useState();
+
+  useEffect(() => {
+    setCurPage(page);
+  }, [page]);
+
+  return (
+    <Modal.Header
+      style={{
+        padding: '0.3rem 0.5rem 0 0.5rem', borderBottom: '1px solid black', margin: '0', background: '#A9A9A9',
+      }}
+    >
+      <Modal.Title style={{ fontSize: '0.88rem', paddingBottom: '0px', color: '#F0FFF0' }}>
+        {`Tip of AGE Viewer -${curPage}`}
+      </Modal.Title>
+    </Modal.Header>
+  );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalDialog);
+TutorialHeader.propTypes = {
+  page: PropTypes.string.isRequired,
+};
+
+export default TutorialHeader;

@@ -144,20 +144,7 @@ const Editor = ({
       <div className="editor">
         <div className="container-fluid editor-area card-header">
           <div className="input-group input-style">
-            <div style={{
-              height: '60px',
-              width: '60px',
-              color: '#ffffff',
-              textAlign: 'left',
-              lineHeight: '30px',
-            }}
-            >
-              <spna>
-                Query
-                <br />
-                Editor
-              </spna>
-            </div>
+
             <div id="codeMirrorEditor" className="form-control col-11 editor-code-wrapper">
               <CodeMirror
                 onClick={onClick}
@@ -173,7 +160,7 @@ const Editor = ({
                   size="lg"
                 />
               </button> */}
-              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onClick={() => clearCommand()}>
+              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onDoubleClick={() => clearCommand()}>
                 <FontAwesomeIcon
                   icon={faTimesCircle}
                   size="1x"
@@ -192,13 +179,15 @@ const Editor = ({
                 type="button"
                 onClick={() => {
                   toggleMenu('home');
+                  /*
                   if (!isActive) {
-                    document.getElementById('wrapper').classList.remove('wrapper');
-                    document.getElementById('wrapper').classList.add('wrapper-extension-padding');
+                    document.getElementById('wrapper')?.classList?.remove('wrapper');
+                    document.getElementById('wrapper')?.classList?.add('wrapper-extension-padding');
                   } else {
-                    document.getElementById('wrapper').classList.remove('wrapper-extension-padding');
-                    document.getElementById('wrapper').classList.add('wrapper');
-                  }
+                    document.getElementById('wrapper')?
+                    .classList?.remove('wrapper-extension-padding');
+                    document.getElementById('wrapper')?.classList?.add('wrapper');
+                  } */
                 }}
                 title={(isActive) ? 'Hide' : 'Show'}
               >
