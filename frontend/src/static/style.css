@@ -213,7 +213,7 @@ a[data-toggle="collapse"] {
     height: auto;
     word-wrap: break-word;
     background-clip: border-box;
-    background: #142B80 0% 0% no-repeat padding-box;
+    background: #0f6d8f 0% 0% no-repeat padding-box;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .25rem;
     border-radius: 5px;
@@ -420,7 +420,7 @@ a[data-toggle="collapse"] {
     color: #c4c4c4 !important;
 }
 .btn-link:hover {
-    color: #2756FF !important;
+    color: #627bd2 !important;
 }
 
 .card.fullscreen {
@@ -762,7 +762,7 @@ textarea.editorTextarea
 }
 
 .close_session {
-    background-color: #142B80;
+    background-color: #586fc3;
     display: inline-block;
     cursor: pointer;
     color: #ffffff;
@@ -781,7 +781,7 @@ textarea.editorTextarea
 }
 
 .refresh_button {
-    background-color: #18CCC5;
+    background-color: #065351;
     display: inline-block;
     cursor: pointer;
     color: #ffffff;
