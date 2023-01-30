@@ -29,6 +29,7 @@ const mapStateToProps = (state) => {
   return {
     serverInfo: state.database,
     isTutorial: state.modal.isTutorial,
+    graphs: Object.keys(state.metadata.graphs),
     data: generateElements(),
   };
 };

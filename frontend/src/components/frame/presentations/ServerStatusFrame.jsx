@@ -32,7 +32,7 @@ import Tutorial from '../../modal/containers/Tutorial';
 import { openTutorial } from '../../../features/modal/ModalSlice';
 
 const ServerStatusFrame = ({
-  refKey, isPinned, reqString, serverInfo, data, isTutorial,
+  refKey, isPinned, reqString, serverInfo, data, isTutorial, graphs,
 }) => {
   const dispatch = useDispatch();
   const [elements, setElements] = useState({ edges: [], nodes: [] });
@@ -53,7 +53,7 @@ const ServerStatusFrame = ({
         <>
           { isTutorial && <Tutorial />}
           <div className={FrameStyles.FlexContentWrapper}>
-            <InitGraphModal show={showModal} setShow={setShow} />
+            <InitGraphModal show={showModal} setShow={setShow} graphs={graphs} />
             <Row>
               <Col span={6}>
                 <h3>Connection Status</h3>
@@ -154,6 +154,8 @@ ServerStatusFrame.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.any.isRequired,
   isTutorial: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  graphs: PropTypes.any.isRequired,
 };
 
 export default ServerStatusFrame;
