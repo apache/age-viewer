@@ -374,6 +374,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         onElementsMouseover={getFooterData}
         legendData={legendData}
         elements={elements}
+        setElements={setElements}
         setCytoscapeObject={setCytoscapeObject}
         cytoscapeObject={cytoscapeObject}
         cytoscapeLayout={cytoscapeLayout}

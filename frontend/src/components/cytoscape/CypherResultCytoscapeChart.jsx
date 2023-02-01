@@ -37,6 +37,10 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
+import edgehandles from 'cytoscape-edgehandles';
+import Form from 'react-bootstrap/Form';
+import { Badge } from 'react-bootstrap';
+import EdgeProperySettingModal from '../cypherresult/components/EdgePropertyMenu';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
@@ -44,6 +48,7 @@ import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
 import IconFilter from '../../icons/IconFilter';
 import IconSearchCancel from '../../icons/IconSearchCancel';
 import styles from '../frame/Frame.module.scss';
+import EdgeQuerySaveModal from '../cypherresult/components/EdgeQueryMenu';
 
 cytoscape.use(COSEBilkent);
 cytoscape.use(cola);
@@ -53,9 +58,10 @@ cytoscape.use(euler);
 cytoscape.use(avsdf);
 cytoscape.use(spread);
 cytoscape.use(cxtmenu);
-
+cytoscape.use(edgehandles);
 const CypherResultCytoscapeCharts = ({
   elements,
+  setElements,
   cytoscapeObject,
   setCytoscapeObject,
   cytoscapeLayout,
@@ -70,7 +76,14 @@ const CypherResultCytoscapeCharts = ({
   addElementHistory,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
+  const [cytoscapeEdgeHandle, setCytoscapeEdgeHandle] = useState(null);
   const [initialized, setInitialized] = useState(false);
+  const [edgeElements, setEdgeElements] = useState([]);
+  const [edgeParams, setEdgeParams] = useState({});
+  const [edgeModal, setEdgeModal] = useState(false);
+  const [saveModal, setSaveModal] = useState(false);
+  const [entity, setEntity] = useState();
+  const [generatedCount, setGeneratedCount] = useState(0);
   const dispatch = useDispatch();
   const addEventOnElements = (targetElements) => {
     targetElements.bind('mouseover', (e) => {
@@ -170,6 +183,7 @@ const CypherResultCytoscapeCharts = ({
 
     addLegendData(generatedData.legend);
     rerenderTargets.removeClass('new');
+    setEdgeElements([]);
   };
 
   useEffect(() => {
@@ -285,7 +299,90 @@ const CypherResultCytoscapeCharts = ({
       };
       setCytoscapeMenu(cytoscapeObject.cxtmenu(cxtMenuConf));
     }
-  }, [cytoscapeObject, cytoscapeMenu]);
+    if (cytoscapeEdgeHandle === null && cytoscapeObject !== null) {
+      const defaults = {
+        complete: (sourceNode, targetNode, addedEntities) => {
+          const source = sourceNode[0].data().id;
+          const target = targetNode[0].data().id;
+          let connected = false;
+          cytoscapeObject.edges().forEach((ele) => {
+            if (ele.data().size && ele.data().source === source && ele.data().target === target) {
+              connected = true;
+              addedEntities.remove();
+            }
+          });
+          if (!connected) {
+            const edgeParam = {
+              source: sourceNode[0].data().id,
+              target: targetNode[0].data().id,
+              sourceLabel: sourceNode[0].data().label,
+              targetLabel: targetNode[0].data().label,
+            };
+            setEdgeParams(edgeParam);
+            setEdgeModal(true);
+            setEntity(addedEntities);
+          } else setEdgeModal(false);
+        },
+        preview: false,
+        handleLineType: 'ghost',
+        handleColor: '#ff0000',
+        handleNodes: 'node',
+        handlePosition: 'middle top',
+        hoverDelay: 150,
+        toggleOffOnLeave: true,
+      };
+      setCytoscapeEdgeHandle(cytoscapeObject.edgehandles(defaults));
+      cytoscapeObject.edgehandles('disable');
+    }
+  }, [cytoscapeObject, cytoscapeMenu, cytoscapeEdgeHandle]);
+
+  const edgeHanlder = (e) => {
+    if (e.target.checked && cytoscapeObject) {
+      cytoscapeObject.edgehandles('enable');
+      cytoscapeObject.edgehandles('drawon');
+    } else {
+      cytoscapeObject.edgehandles('disable');
+      cytoscapeObject.edgehandles('drawoff');
+    }
+  };
+
+  const resetHandler = () => {
+    for (let i = 0; i < generatedCount; i += 1) {
+      elements.edges.pop();
+    }
+    setGeneratedCount(0);
+    setElements(elements);
+    setEdgeElements([]);
+  };
+
+  useEffect(() => {
+    if (!edgeModal && edgeElements.length >= 1) {
+      entity.remove();
+      setEntity(entity);
+      const { source, target, label } = edgeElements[edgeElements.length - 1];
+      const alias = 'r';
+      const generateEdge = {
+        group: 'edges',
+        data: {
+          id: uuid(),
+          source,
+          target,
+          label,
+          properties: {},
+          backgroundColor: '#F36924',
+          borderColor: '#F36924',
+          fontColor: '#2A2C34',
+          size: 1,
+          caption: 'label',
+        },
+        alias,
+        classes: 'edge',
+      };
+      elements.edges.push(generateEdge);
+      setGeneratedCount(generatedCount + 1);
+      setElements(elements);
+    }
+  }, [edgeElements, edgeModal]);
 
   useEffect(() => {
     if (cytoscapeLayout && cytoscapeObject) {
@@ -313,13 +410,61 @@ const CypherResultCytoscapeCharts = ({
   );
 
   return (
-    <CytoscapeComponent
-      elements={CytoscapeComponent.normalizeElements(elements)}
-      stylesheet={stylesheet}
-      cy={cyCallback}
-      className={styles.NormalChart}
-      wheelSensitivity={0.3}
-    />
+    <div className="cytoscape-component" style={{ position: 'relative' }}>
+      <Form style={{
+        position: 'absolute',
+        right: '0.88rem',
+        top: '0.88rem',
+        zIndex: '9999',
+      }}
+      >
+        <Form.Check
+          type="switch"
+          id="custom-switch"
+          label="Draw Mode"
+          onChange={edgeHanlder}
+        />
+        {edgeElements.length >= 1 && (
+          <h6>
+            <Badge className="edge-badge" onClick={resetHandler}>
+              Reset
+            </Badge>
+          </h6>
+        )}
+        {edgeElements.length >= 1 && (
+          <h6>
+            <Badge className="edge-badge" style={{ marginTop: '0.88rem' }} onClick={() => setSaveModal(true)}>
+              Save
+            </Badge>
+          </h6>
+        )}
+      </Form>
+      { edgeModal && (
+        <EdgeProperySettingModal
+          show={edgeModal}
+          setShow={setEdgeModal}
+          edgeElements={edgeElements}
+          edgeParams={edgeParams}
+          setEdgeElements={setEdgeElements}
+        />
+      )}
+      { saveModal && (
+        <EdgeQuerySaveModal
+          show={saveModal}
+          setShow={setSaveModal}
+          edgeElements={edgeElements}
+          setEdgeElements={setEdgeElements}
+          graph={graph}
+        />
+      )}
+      <CytoscapeComponent
+        elements={CytoscapeComponent.normalizeElements(elements)}
+        stylesheet={stylesheet}
+        cy={cyCallback}
+        className={styles.NormalChart}
+        wheelSensitivity={0.3}
+      />
+    </div>
   );
 };
 
@@ -342,6 +487,7 @@ CypherResultCytoscapeCharts.propTypes = {
       }),
     ),
   }).isRequired,
+  setElements: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   cytoscapeObject: PropTypes.any,
   setCytoscapeObject: PropTypes.func.isRequired,
