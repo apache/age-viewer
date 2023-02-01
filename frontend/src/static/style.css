@@ -831,3 +831,9 @@ textarea.editorTextarea
     font-weight: bold;
     padding: 0.2rem 0.35rem;
 }
+
+.edge-badge {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+}

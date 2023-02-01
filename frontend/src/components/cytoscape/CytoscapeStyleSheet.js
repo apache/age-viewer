@@ -23,6 +23,7 @@ export const selectedLabel = {
 };
 
 const getLabel = (ele, captionProp) => {
+  if (!captionProp) return '';
   if (captionProp === 'gid') {
     if (ele.isNode()) {
       selectedLabel.node[ele.data('label')] = 'gid';

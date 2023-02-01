@@ -89,3 +89,20 @@
   color: #F8F9FA;
   background-color: #2756FF;
 }
+
+.container {
+  padding: 0.8rem 1.2rem;
+  border-radius: 5px;
+}
+
+.edgeInput,
+.edgeInput:focus {
+  width: 100%;
+  height: 48px;
+  background: #F8F9FA 0% 0% no-repeat padding-box !important;
+  border-radius: 5px !important;
+  opacity: 1 !important;
+  border: none;
+  margin: 5px 0px 5px 0px;
+  outline: none;
+}
