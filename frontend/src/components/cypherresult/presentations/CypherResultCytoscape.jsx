@@ -147,9 +147,8 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     }));
   };
 
-  const changeSizeOnCytoscapeElements = (elementType, label, size) => {
-    const changedData = cytoscapeObject.elements(`${elementType}[label = "${label}"]`).data('size', size);
-
+  const changeSizeOnCytoscapeElements = (elementType, label, size, id) => {
+    const changedData = id ? cytoscapeObject.elements(`${elementType}[id = "${id}"]`).data('size', size) : cytoscapeObject.elements(`${elementType}[label = "${label}"]`).data('size', size);
     if (size > 6) {
       changedData.style('text-background-opacity', 0);
     } else {
@@ -157,12 +156,12 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     }
   };
 
-  const sizeChange = (elementType, label, size) => {
-    const footerObj = footerData.data;
+  const sizeChange = (elementType, label, size, edgeData = null, id = null) => {
+    const footerObj = footerData.data ? footerData.data : edgeData.data;
     footerObj.size = size;
     setFooterData({ ...footerData, data: footerObj });
     setIsReloading(false);
-    changeSizeOnCytoscapeElements(elementType, label, size);
+    changeSizeOnCytoscapeElements(elementType, label, size, id);
 
     if (elementType === 'node') {
       const nodeLegendObj = legendData.nodeLegend;
@@ -385,6 +384,7 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
         openModal={props.openModal}
         addGraphHistory={props.addGraphHistory}
         addElementHistory={props.addElementHistory}
+        sizeChange={sizeChange}
       />
       <CypherResultCytoscapeFooter
         captions={captions}
