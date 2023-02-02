@@ -35,12 +35,14 @@ import {
   faLockOpen,
   faProjectDiagram,
   faTrash,
+  faPlus,
+  faMinus,
 } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
 import { initLocation, seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
-import { generateCytoscapeElement } from '../../features/cypher/CypherUtil';
+import { generateCytoscapeElement, updateEdgeLabelSize, edgeLabelSizes } from '../../features/cypher/CypherUtil';
 import IconFilter from '../../icons/IconFilter';
 import IconSearchCancel from '../../icons/IconSearchCancel';
 import styles from '../frame/Frame.module.scss';
@@ -68,6 +70,7 @@ const CypherResultCytoscapeCharts = ({
   openModal,
   addGraphHistory,
   addElementHistory,
+  sizeChange,
 }) => {
   const [cytoscapeMenu, setCytoscapeMenu] = useState(null);
   const [initialized, setInitialized] = useState(false);
@@ -174,7 +177,7 @@ const CypherResultCytoscapeCharts = ({
 
   useEffect(() => {
     if (cytoscapeMenu === null && cytoscapeObject !== null) {
-      const cxtMenuConf = {
+      const cxtNodeMenuConf = {
         menuRadius(ele) {
           return ele.cy().zoom() <= 1 ? 55 : 70;
         },
@@ -283,7 +286,81 @@ const CypherResultCytoscapeCharts = ({
         zIndex: 9999,
         atMouse: false,
       };
-      setCytoscapeMenu(cytoscapeObject.cxtmenu(cxtMenuConf));
+      const cxtEdgeMenuConf = {
+        menuRadius(ele) {
+          return ele.cy().zoom() <= 1 ? 55 : 70;
+        },
+        selector: 'edge',
+        commands: [
+          {
+            content: ReactDOMServer.renderToString(
+              <FontAwesomeIcon icon={faPlus} size="lg" />,
+            ),
+            select(ele) {
+              let newEdgeSize = ele.data().size;
+              for (let i = 0; i < edgeLabelSizes.length; i += 1) {
+                if (edgeLabelSizes[i].size > newEdgeSize) {
+                  newEdgeSize = edgeLabelSizes[i].size;
+                  break;
+                }
+              }
+              const legendData = {
+                type: 'labels',
+                data: {
+                  type: 'edge',
+                  backgroundColor: ele.data().backgroundColor,
+                  fontColor: ele.data().fontColor,
+                  size: ele.data().size,
+                  label: ele.data().label,
+                },
+              };
+              updateEdgeLabelSize(ele.data().label, newEdgeSize);
+              sizeChange('edge', ele.data().label, newEdgeSize, legendData, ele.data().id);
+            },
+          },
+          {
+            content: ReactDOMServer.renderToString(
+              <FontAwesomeIcon icon={faMinus} size="lg" />,
+            ),
+            select(ele) {
+              let newEdgeSize = ele.data().size;
+              for (let i = 0; i < edgeLabelSizes.length; i += 1) {
+                if (edgeLabelSizes[i].size === newEdgeSize) {
+                  newEdgeSize = i === 0 ? edgeLabelSizes[i].size : edgeLabelSizes[i - 1].size;
+                  break;
+                }
+              }
+              const legendData = {
+                type: 'labels',
+                data: {
+                  type: 'edge',
+                  backgroundColor: ele.data().backgroundColor,
+                  fontColor: ele.data().fontColor,
+                  size: ele.data().size,
+                  label: ele.data().label,
+                },
+              };
+              updateEdgeLabelSize(ele.data().label, newEdgeSize);
+              sizeChange('edge', ele.data().label, newEdgeSize, legendData, ele.data().id);
+            },
+          },
+        ],
+        fillColor: 'rgba(210, 213, 218, 1)',
+        activeFillColor: 'rgba(166, 166, 166, 1)',
+        activePadding: 0,
+        indicatorSize: 0,
+        separatorWidth: 4,
+        spotlightPadding: 3,
+        minSpotlightRadius: 11,
+        maxSpotlightRadius: 99,
+        openMenuEvents: 'cxttap',
+        itemColor: '#2A2C34',
+        itemTextShadowColor: 'transparent',
+        zIndex: 9999,
+        atMouse: false,
+      };
+      setCytoscapeMenu(cytoscapeObject.cxtmenu(cxtNodeMenuConf));
+      setCytoscapeMenu(cytoscapeObject.cxtmenu(cxtEdgeMenuConf));
     }
   }, [cytoscapeObject, cytoscapeMenu]);
 
@@ -355,6 +432,7 @@ CypherResultCytoscapeCharts.propTypes = {
   openModal: PropTypes.func.isRequired,
   addGraphHistory: PropTypes.func.isRequired,
   addElementHistory: PropTypes.func.isRequired,
+  sizeChange: PropTypes.func.isRequired,
 };
 
 export default CypherResultCytoscapeCharts;

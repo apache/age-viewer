@@ -337,7 +337,6 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
           classes: isNew ? 'new node' : 'edge',
         },
       );
-      console.log(JSON.stringify(labelName), edgeLegend[labelName], edges);
     } else {
       if (!Object.prototype.hasOwnProperty.call(nodeLegend, labelName)) {
         nodeLegend[labelName] = {
@@ -396,7 +395,6 @@ export const generateCytoscapeElement = (data, maxDataOfGraph, isNew) => {
       });
     });
   }
-  console.log('edge sizes', edgeLabelSizes);
   return {
     legend: {
       nodeLegend: sortByKey(nodeLegend),
