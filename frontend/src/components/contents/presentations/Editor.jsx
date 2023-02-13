@@ -22,13 +22,13 @@ import { useDispatch } from 'react-redux';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle, faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTimesCircle, faToggleOff, faToggleOn, faPlay, faChevronUp, faChevronDown,
+} from '@fortawesome/free-solid-svg-icons';
 import store from '../../../app/store';
 import AlertContainers from '../../alert/containers/AlertContainers';
 import CodeMirror from '../../editor/containers/CodeMirrorWapperContainer';
-import SideBarToggle from '../../editor/containers/SideBarMenuToggleContainer';
 import { setting } from '../../../conf/config';
-import IconPlay from '../../../icons/IconPlay';
 import { getMetaData } from '../../../features/database/MetadataSlice';
 
 const Editor = ({
@@ -52,6 +52,7 @@ const Editor = ({
   const dispatch = useDispatch();
   const [alerts, setAlerts] = useState([]);
   const [activePromises, setPromises] = useState({});
+  const [showView, setShowView] = useState(true);
 
   // const favoritesCommand = () => {
   //   dispatch(() => addCommandFavorites(command));
@@ -160,10 +161,12 @@ const Editor = ({
                   size="lg"
                 />
               </button> */}
-              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onDoubleClick={() => clearCommand()}>
+              <button className={command ? 'btn show-eraser' : 'btn hide-eraser'} type="button" id="eraser" onClick={() => clearCommand()}>
                 <FontAwesomeIcon
                   icon={faTimesCircle}
+                  color="red"
                   size="1x"
+                  title="clear"
                 />
               </button>
               <button
@@ -172,32 +175,28 @@ const Editor = ({
                 onClick={() => onClick()}
                 title="Run Query"
               >
-                <IconPlay />
+                <FontAwesomeIcon color="green" icon={faPlay} size="1x" />
               </button>
               <button
                 className="frame-head-button btn btn-link"
                 type="button"
-                onClick={() => {
-                  toggleMenu('home');
-                  /*
-                  if (!isActive) {
-                    document.getElementById('wrapper')?.classList?.remove('wrapper');
-                    document.getElementById('wrapper')?.classList?.add('wrapper-extension-padding');
-                  } else {
-                    document.getElementById('wrapper')?
-                    .classList?.remove('wrapper-extension-padding');
-                    document.getElementById('wrapper')?.classList?.add('wrapper');
-                  } */
-                }}
                 title={(isActive) ? 'Hide' : 'Show'}
               >
-                <SideBarToggle isActive={isActive} />
+                <FontAwesomeIcon
+                  color="grey"
+                  icon={showView ? faChevronUp : faChevronDown}
+                  size="2x"
+                  onClick={() => {
+                    toggleMenu('home');
+                    setShowView(!showView);
+                  }}
+                />
               </button>
               <button
                 className="frame-head-button btn btn-link"
                 type="button"
                 onClick={() => setLabel()}
-                title="Run Query"
+                title="Graph Names"
               >
                 <FontAwesomeIcon
                   icon={isLabel ? faToggleOn : faToggleOff}

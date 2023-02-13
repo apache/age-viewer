@@ -6,6 +6,9 @@
 .Modal {
     margin: auto;
 }
+.modal-content .row{
+    overflow-y: hidden;
+}
 .modalRow {
     padding: 1%;
     justify-content: space-around;
