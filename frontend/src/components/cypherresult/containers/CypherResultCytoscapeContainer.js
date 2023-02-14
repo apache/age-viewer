@@ -18,10 +18,10 @@
  */
 
 import { connect } from 'react-redux';
-import CypherResultCytoscape from '../presentations/CypherResultCytoscape';
 import { setLabels } from '../../../features/cypher/CypherSlice';
 import { openModal, addGraphHistory, addElementHistory } from '../../../features/modal/ModalSlice';
 import { generateCytoscapeElement } from '../../../features/cypher/CypherUtil';
+import CypherResultCytoscapeContainer from "../../cypherresult/containers/CypherResultCytoscapeContainer";
 
 const mapStateToProps = (state, ownProps) => {
   const { refKey } = ownProps;
@@ -67,4 +67,4 @@ export default connect(
   mapDispatchToProps,
   null,
   { forwardRef: true },
-)(CypherResultCytoscape);
+)(CypherResultCytoscapeCounter);

@@ -24,7 +24,7 @@ import {
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import uuid from 'react-uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const generateNewFilterObject = () => ({
   key: uuid(),

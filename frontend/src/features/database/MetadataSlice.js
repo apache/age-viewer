@@ -18,7 +18,7 @@
  */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import uuid from 'react-uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export const getMetaData = createAsyncThunk(
   'database/getMetaData',

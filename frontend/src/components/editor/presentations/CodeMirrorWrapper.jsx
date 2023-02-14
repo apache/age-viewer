@@ -19,10 +19,7 @@
 
 import React, { useRef, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import 'codemirror/keymap/sublime';
-import 'codemirror/addon/display/placeholder';
-import 'codemirror/theme/ambiance-mobile.css';
-import './CodeMirror.scss';
+
 import PropTypes from 'prop-types';
 
 const CodeMirrorWrapper = ({
