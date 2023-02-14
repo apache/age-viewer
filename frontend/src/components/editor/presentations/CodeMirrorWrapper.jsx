@@ -19,6 +19,7 @@
 
 import React, { useRef, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
+
 import PropTypes from 'prop-types';
 
 const CodeMirrorWrapper = ({
@@ -35,6 +36,7 @@ const CodeMirrorWrapper = ({
       options={{
         keyMap: 'sublime',
         mode: 'cypher',
+        placeholder: 'Create a query...',
         tabSize: 4,
         lineNumbers: true,
         spellcheck: false,

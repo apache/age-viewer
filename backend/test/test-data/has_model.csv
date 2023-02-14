@@ -1,0 +1,7 @@
+start_id,start_vertex_type,end_id,end_vertex_type,type
+1,Make,1,Model,S
+1,Make,2,Model,S
+2,Make,6,Model,S
+3,Make,4,Model,A
+4,Make,3,Model,A
+5,Make,5,Model,A

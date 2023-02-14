@@ -27,6 +27,7 @@ const {stream} = require('./config/winston');
 const cypherRouter = require('./routes/cypherRouter');
 const databaseRouter = require('./routes/databaseRouter');
 const sessionRouter = require('./routes/sessionRouter');
+const miscellaneousRouter = require('./routes/miscellaneous');
 const app = express();
 
 app.use(cors({
@@ -56,6 +57,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
 app.use('/api/v1/*', sessionRouter);
+app.use('/api/v1/miscellaneous', miscellaneousRouter);
 app.use('/api/v1/cypher', cypherRouter);
 app.use('/api/v1/db', databaseRouter);
 

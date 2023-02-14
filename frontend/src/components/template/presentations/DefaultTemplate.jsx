@@ -20,11 +20,17 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { Row, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import EditorContainer from '../../contents/containers/Editor';
 import Sidebar from '../../sidebar/containers/Sidebar';
 import Contents from '../../contents/containers/Contents';
 import Modal from '../../modal/containers/Modal';
 import { loadFromCookie, saveToCookie } from '../../../features/cookie/CookieUtil';
+import BuilderContainer from '../../query_builder/BuilderContainer';
+import './DefaultTemplate.scss';
+import KeyWordFinder from '../../../features/query_builder/KeyWordFinder';
 
 const DefaultTemplate = ({
   theme,
@@ -36,6 +42,7 @@ const DefaultTemplate = ({
   isOpen,
 }) => {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const [stateValues] = useState({
     theme,
     maxNumOfFrames,
@@ -43,6 +50,17 @@ const DefaultTemplate = ({
     maxDataOfGraph,
     maxDataOfTable,
   });
+  const [finder, setFinder] = useState(null);
+
+  useEffect(async () => {
+    const req = {
+      method: 'GET',
+    };
+    const res = await fetch('/api/v1/miscellaneous', req);
+    const results = await res.json();
+    const kwFinder = KeyWordFinder.fromMatrix(results);
+    setFinder(kwFinder);
+  }, []);
 
   useEffect(() => {
     let isChanged = false;
@@ -93,13 +111,22 @@ const DefaultTemplate = ({
         checked={theme === 'dark'}
         readOnly
       />
-      <div className="editor-divison">
-        <EditorContainer />
-        <Sidebar />
-      </div>
-      <div className="wrapper-extension-padding" id="wrapper">
-        <Contents />
-      </div>
+      <Row className="content-row">
+        <div>
+          <Button onClick={() => setOpen(true)}>
+            <FontAwesomeIcon icon={faBars} />
+          </Button>
+          <BuilderContainer open={open} setOpen={setOpen} finder={finder} />
+        </div>
+        <div className="editor-division wrapper-extension-padding">
+
+          <EditorContainer />
+          <Sidebar />
+          <Contents />
+
+        </div>
+
+      </Row>
 
     </div>
   );
