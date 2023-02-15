@@ -220,8 +220,8 @@ class DatabaseService {
                 return;
             }
 
-            if (element.kind === 'v') meta.nodes.push(element);
-            if (element.kind === 'e') meta.edges.push(element);
+            if (element.cnt > 0 && element.kind === 'v') meta.nodes.push(element);
+            if (element.cnt > 0 && element.kind === 'e') meta.edges.push(element);
         });
         return meta;
     }

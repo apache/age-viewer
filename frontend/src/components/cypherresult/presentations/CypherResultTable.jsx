@@ -51,11 +51,11 @@ const CypherResultTable = ({ data, ...props }) => {
       data.rows.forEach((item) => {
         props.filterTable.forEach((filter) => {
           if ((filter.property.label === item.r.label
-            && item.r.properties[filter.property.property].includes(filter.keyword))
+            && String(item.r.properties[filter.property.property]).includes(filter.keyword))
             || (filter.property.label === item.v.label
-              && item.v.properties[filter.property.property].includes(filter.keyword))
+              && String(item.v.properties[filter.property.property]).includes(filter.keyword))
             || (filter.property.label === item.v2.label
-              && item.v2.properties[filter.property.property].includes(filter.keyword))) {
+              && String(item.v2.properties[filter.property.property]).includes(filter.keyword))) {
             newItem.push(item);
           }
         });
