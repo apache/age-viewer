@@ -3,9 +3,9 @@ const { getDelete, toAgeProps } = require('../util/ObjectExtras');
 const QueryBuilder = require('./QueryBuilder');
 
 class GraphCreator {
-    constructor({nodes, edges, graphName, dropGraph}={}){
-        this.nodefiles = nodes;
-        this.edgefiles = edges;
+    constructor({nodefiles=[], edgefiles=[], graphName, dropGraph}={}){
+        this.nodefiles = nodefiles;
+        this.edgefiles = edgefiles;
         this.dropGraph = dropGraph;
         this.graphName = graphName;
         this.nodes = [];
@@ -92,7 +92,7 @@ class GraphCreator {
     }
     async parseData(){
         this.createGraph(this.dropGraph);
-        if(this.nodes.length > 0){
+        if(this.nodefiles.length > 0){
             this.nodes = await Promise.all(this.nodefiles.map((node) => new Promise((resolve) => {
                 this.createNodeLabel(node.originalname);
                 this.readData(node.buffer.toString('utf8'), node.originalname, resolve);
@@ -102,7 +102,7 @@ class GraphCreator {
                     this.createNode(n, nodeFile.type);
                 });
             });
-            if (this.edges.length > 0){
+            if (this.edgefiles.length > 0){
                 this.edges = await Promise.all(this.edgefiles.map((edge) => new Promise((resolve) => {
                     this.createEdgeLabel(edge.originalname);
                     this.readData(edge.buffer.toString('utf8'), edge.originalname, resolve);

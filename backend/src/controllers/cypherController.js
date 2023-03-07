@@ -41,8 +41,8 @@ class CypherController {
             let [client, transaction] = await db.graphRepository.createTransaction();
             try {
                 let graph = new GraphCreator({
-                    nodes: req.files.nodes,
-                    edges: req.files.edges,
+                    nodefiles: req.files.nodes,
+                    edgefiles: req.files.edges,
                     graphName: req.body.graphName,
                     dropGraph: req.body.dropGraph === 'true'
                 });
