@@ -46,7 +46,6 @@ class CypherController {
                     graphName: req.body.graphName,
                     dropGraph: req.body.dropGraph === 'true'
                 });
-                
                 await graph.parseData();
                 const DROP = graph.query.graph.drop;
                 const CREATE = graph.query.graph.create;

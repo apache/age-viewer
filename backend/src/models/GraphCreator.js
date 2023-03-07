@@ -92,26 +92,30 @@ class GraphCreator {
     }
     async parseData(){
         this.createGraph(this.dropGraph);
-
-        this.nodes = await Promise.all(this.nodefiles.map((node) => new Promise((resolve) => {
-            this.createNodeLabel(node.originalname);
-            this.readData(node.buffer.toString('utf8'), node.originalname, resolve);
-        })));
-        this.nodes.forEach((nodeFile)=>{
-            nodeFile.data.forEach((n)=>{
-                this.createNode(n, nodeFile.type);
+        if(this.nodes.length > 0){
+            this.nodes = await Promise.all(this.nodefiles.map((node) => new Promise((resolve) => {
+                this.createNodeLabel(node.originalname);
+                this.readData(node.buffer.toString('utf8'), node.originalname, resolve);
+            })));
+            this.nodes.forEach((nodeFile)=>{
+                nodeFile.data.forEach((n)=>{
+                    this.createNode(n, nodeFile.type);
+                });
             });
-        });
-        this.edges = await Promise.all(this.edgefiles.map((edge) => new Promise((resolve) => {
-            this.createEdgeLabel(edge.originalname);
-            this.readData(edge.buffer.toString('utf8'), edge.originalname, resolve);
-        })));
+            if (this.edges.length > 0){
+                this.edges = await Promise.all(this.edgefiles.map((edge) => new Promise((resolve) => {
+                    this.createEdgeLabel(edge.originalname);
+                    this.readData(edge.buffer.toString('utf8'), edge.originalname, resolve);
+                })));
 
-        this.edges.forEach((edgeFile)=>{
-            edgeFile.data.forEach((e)=>{
-                this.createEdge(e, edgeFile.type);
-            });
-        });
+                this.edges.forEach((edgeFile)=>{
+                    edgeFile.data.forEach((e)=>{
+                        this.createEdge(e, edgeFile.type);
+                    });
+                });                
+            }
+        }
+
         return this.query;
         
     }
