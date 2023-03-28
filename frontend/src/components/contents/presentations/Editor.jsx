@@ -108,7 +108,8 @@ const Editor = ({
           }
           return;
         }
-        if (update) dispatch(getMetaData());
+        const graphsUpdate = response?.payload?.query?.toLowerCase().includes('create_graph') || response?.payload?.query?.toLowerCase().includes('drop_graph');
+        if (update || graphsUpdate) dispatch(getMetaData());
       });
       activePromises[refKey] = req;
       setPromises({ ...activePromises });
