@@ -55,7 +55,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:3001",
+  "overrides": {
+    "react-error-overlay": "6.0.9"
+  },
+  "proxy": "http://localhost:3001/",
   "browserslist": {
     "production": [
       ">0.2%",
