@@ -17,22 +17,32 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { pinFrame, removeFrame } from '../../../features/frame/FrameSlice';
-import { generateCytoscapeMetadataElement } from '../../../features/cypher/CypherUtil';
-import ServerStatusFrame from '../presentations/ServerStatusFrame';
-import { openTutorial } from '../../../features/modal/ModalSlice';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Modal } from 'react-bootstrap';
 
-const mapStateToProps = (state) => {
-  const generateElements = () => generateCytoscapeMetadataElement(state.metadata.rows);
+const TutorialHeader = ({ page }) => {
+  const [curPage, setCurPage] = useState();
 
-  return {
-    serverInfo: state.database,
-    isTutorial: state.modal.isTutorial,
-    data: generateElements(),
-  };
+  useEffect(() => {
+    setCurPage(page);
+  }, [page]);
+
+  return (
+    <Modal.Header
+      style={{
+        padding: '0.3rem 0.5rem 0 0.5rem', borderBottom: '1px solid black', margin: '0', background: '#A9A9A9',
+      }}
+    >
+      <Modal.Title style={{ fontSize: '0.88rem', paddingBottom: '0px', color: '#F0FFF0' }}>
+        {`Tip of AGE Viewer -${curPage}`}
+      </Modal.Title>
+    </Modal.Header>
+  );
 };
 
-const mapDispatchToProps = { removeFrame, pinFrame, openTutorial };
+TutorialHeader.propTypes = {
+  page: PropTypes.string.isRequired,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServerStatusFrame);
+export default TutorialHeader;
