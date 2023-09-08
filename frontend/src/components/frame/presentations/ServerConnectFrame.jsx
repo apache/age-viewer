@@ -68,7 +68,7 @@ const ServerConnectFrame = ({
       dispatch(addAlert('ErrorServerConnectFail', response.error.message));
     }
   });
-
+  const normalizeTrim = (value) => (value ? value.trim() : value);
   return (
     <Frame
       reqString={reqString}
@@ -87,13 +87,13 @@ const ServerConnectFrame = ({
               layout="vertical"
               onFinish={connectToDatabase}
             >
-              <Form.Item name="host" label="Connect URL" rules={[{ required: true }]}>
+              <Form.Item name="host" label="Connect URL" rules={[{ required: true }]} normalize={normalizeTrim}>
                 <Input placeholder="192.168.0.1" />
               </Form.Item>
-              <Form.Item name="port" label="Connect Port" rules={[{ required: true }]}>
+              <Form.Item name="port" label="Connect Port" rules={[{ required: true }]} normalize={normalizeTrim}>
                 <InputNumber placeholder="5432" className={styles.FullWidth} />
               </Form.Item>
-              <Form.Item name="database" label="Database Name" rules={[{ required: true }]}>
+              <Form.Item name="database" label="Database Name" rules={[{ required: true }]} normalize={normalizeTrim}>
                 <Input placeholder="postgres" />
               </Form.Item>
               <Form.Item name="user" label="User Name" rules={[{ required: true }]}>
