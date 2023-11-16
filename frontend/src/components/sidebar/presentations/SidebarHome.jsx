@@ -430,6 +430,7 @@ const SidebarHome = ({
               className="frame-head-button refresh_button btn btn-link"
               type="button"
               onClick={() => refreshSidebarHome()}
+              aria-label="Refresh Button"
             >
               <FontAwesomeIcon
                 icon={faRedo}
@@ -456,6 +457,7 @@ const SidebarHome = ({
                   return false;
                 },
               })}
+              aria-label="Close Button"
             >
               <FontAwesomeIcon
                 icon={faTimes}
