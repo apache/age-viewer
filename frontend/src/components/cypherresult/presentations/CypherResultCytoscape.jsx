@@ -94,8 +94,15 @@ const CypherResultCytoscape = forwardRef((props, ref) => {
     setLegendData(addedLegendData);
     props.setChartLegend(addedLegendData);
   };
-
-  const changeColorOnCytoscapeElements = (elementType, label, color) => {
+  const truncateLabel = (label) => {
+    const maxLenEnglish = 8;
+    const maxLenKorean = 6;
+    const koreanCharRegex = /[\u3131-\uD79D]/ugi;
+    const maxLength = koreanCharRegex.test(label) ? maxLenKorean : maxLenEnglish;
+    return label.length > maxLength ? `${label.substring(0, maxLength)}...` : label;
+  };
+  const changeColorOnCytoscapeElements = (elementType, originalLabel, color) => {
+    const label = truncateLabel(originalLabel);
     const colorObject = Array.isArray(color) ? {
       color: color[0],
       borderColor: color[1],
