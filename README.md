@@ -1,3 +1,31 @@
+<br>
+
+<p align="center">
+     <img src="https://age.apache.org/age-manual/master/_static/logo.png" width="30%" height="30%">
+</p>
+<br>
+
+<h3 align="center">
+    <a href="https://age.apache.org/age-manual/master/_static/logo.png" target="_blank">
+        <img src="https://age.apache.org/age-manual/master/_static/logo.png" height="25" height="30% alt="Apache AGE style="margin: 0 0 -3px 0">
+    </a>
+    <a href="https://age.apache.org/age-manual/master/_static/logo.png" target="_blank">
+    </a>
+     is a leading multi-model graph database </h3>
+     
+</h3>
+
+<h3 align="center">Graph Processing & Analytics for Relational Databases</h3>
+
+<br>
+
+
+</br>
+
+
+
+
+
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
   <a href="https://github.com/apache/age/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/apache/age-viewer"/>
@@ -5,13 +33,15 @@
     <img src="https://img.shields.io/github/stars/apache/age-viewer"/>
 </p>
 
+
+<h2><img height="30" src="https://age.apache.org/age-manual/master/_static/logo.png">&nbsp;&nbsp;What is Apache-Age Viewer?</h2>
 # What is Apache-Age Viewer
 Apache-Age Viewer is a web based user interface that provides visualization of graph data stored in a postgreSQL database with AGE extension. 
 It is graph visualisation tool, for Apache AGE.
 
 This is a sub-project of [the Apache AGE project](https://age.apache.org/#).
 
-# Recommend Node Version & install module
+<h2><img height="30" src="https://github.com/apache/age/raw/master/img/documentation.svg">&nbsp;&nbsp;Recommend Node Version & install module</h2> 
 
 - Node version - ^14.16.0
 
@@ -23,7 +53,8 @@ Install latest **pm2** with :
 
 > [pm2](https://www.npmjs.com/package/pm2) is an NPM module to run the project in production mode, and hence is optional for getting started with setting up development environment for Age-Viewer 
 
-# Running Age-Viewer
+<h2><img height="30" src="https://github.com/apache/age/raw/master/img/gettingstarted.svg">&nbsp;&nbsp;Running Age-Viewer</h2>
+
 
  - Install the required node modules using  :  
 	```npm run setup```
@@ -32,8 +63,7 @@ Install latest **pm2** with :
 
 >This will start the age-viewer on http://localhost:3000 if port 3000 is free.
 
-
-# How to build using command
+<h2><img height="30" src="https://github.com/apache/age/raw/master/img/gettingstarted.svg">&nbsp;&nbsp;How to build using command</h2>
 
 - Build the front-end : 
 ```npm run build-front ```
@@ -50,8 +80,7 @@ Install latest **pm2** with :
 	pm2 start ecosystem.config.js
 
 	```
-
-  # How to start using Age-Viewer
+<h2><img height="30" src="https://github.com/apache/age/raw/master/img/gettingstarted.svg">&nbsp;&nbsp;How to start using Age-Viewer</h2>
  - To start using Age-Viewer we need to have a running postgreSQL database server with Apache Age Extension 
 	 ### Setting up the PostgreSQL server with AGE extension
 	-  Easiest way  for Windows, Mac-OS and Linux Environment using **Docker**
@@ -99,7 +128,6 @@ To Connect to postgreSQL server running from Docker Container
 > The following field is same as used to make the docker container specified above as flags.
 
 
-
-# License
+<h2><img height="30" src="https://github.com/apache/age/raw/master/img/contents.svg">&nbsp;&nbsp;License</h2>
 
 Apache AGE Viewer is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
