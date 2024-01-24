@@ -35,7 +35,6 @@
 
 
 <h2><img height="30" src="https://age.apache.org/age-manual/master/_static/logo.png">&nbsp;&nbsp;What is Apache-Age Viewer?</h2>
-# What is Apache-Age Viewer
 Apache-Age Viewer is a web based user interface that provides visualization of graph data stored in a postgreSQL database with AGE extension. 
 It is graph visualisation tool, for Apache AGE.
 
