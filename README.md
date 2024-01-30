@@ -1,3 +1,5 @@
+<h2><img height="30" src="https://age.apache.org/age-manual/master/_static/logo.png">&nbsp;&nbsp;What is Apache-Age Viewer?</h2>
+
 <br>
 
 <p align="center">
@@ -26,15 +28,10 @@
 
 
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-  <a href="https://github.com/apache/age/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/apache/age-viewer"/>
-  <a href="https://github.com/apache/age/stargazers">
-    <img src="https://img.shields.io/github/stars/apache/age-viewer"/>
-</p>
 
 
-<h2><img height="30" src="https://age.apache.org/age-manual/master/_static/logo.png">&nbsp;&nbsp;What is Apache-Age Viewer?</h2>
+
+
 Apache-Age Viewer is a web based user interface that provides visualization of graph data stored in a postgreSQL database with AGE extension. 
 It is graph visualisation tool, for Apache AGE.
 
