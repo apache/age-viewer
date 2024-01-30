@@ -82,6 +82,7 @@ Install latest **pm2** with :
 
 	```
 <h2><img height="30" src="https://github.com/apache/age/raw/master/img/gettingstarted.svg">&nbsp;&nbsp;How to start using Age-Viewer</h2>
+
  - To start using Age-Viewer we need to have a running postgreSQL database server with Apache Age Extension 
 	 ### Setting up the PostgreSQL server with AGE extension
 	-  Easiest way  for Windows, Mac-OS and Linux Environment using **Docker**
