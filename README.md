@@ -9,7 +9,7 @@
 Apache-Age Viewer is a web based user interface that provides visualization of graph data stored in a postgreSQL database with AGE extension. 
 It is graph visualisation tool, for Apache AGE.
 
-This is a sub-project of [the Apache AGE project](https://age.apache.org/#).
+This is a sub-project of [the Apache AGE project](https://github.com/apache/age).
 
 # Recommend Node Version & install module
 
