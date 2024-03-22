@@ -35,6 +35,7 @@ import {
   faLockOpen,
   faProjectDiagram,
   faTrash,
+  faThumbtack,
 } from '@fortawesome/free-solid-svg-icons';
 import uuid from 'react-uuid';
 import cxtmenu from '../../lib/cytoscape-cxtmenu';
@@ -241,6 +242,18 @@ const CypherResultCytoscapeCharts = ({
               dispatch(openModal());
               dispatch(addGraphHistory(graph));
               dispatch(addElementHistory(ele.id()));
+            },
+          },
+          {
+            content: ReactDOMServer.renderToString(
+              <FontAwesomeIcon icon={faThumbtack} size="lg" />,
+            ),
+            select(ele) {
+              if (!ele.locked()) {
+                ele.lock();
+              } else {
+                ele.unlock();
+              }
             },
           },
           {

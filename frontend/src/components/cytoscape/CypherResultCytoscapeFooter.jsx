@@ -94,6 +94,7 @@ const CypherResultCytoscapeFooter = ({
             type="button"
             className="frame-head-button btn btn-link px-3"
             onClick={() => setFooterExpanded(!footerExpanded)}
+            aria-label="Set Footer Expanded"
           >
             <FontAwesomeIcon
               icon={footerExpanded ? faAngleUp : faAngleDown}
@@ -170,6 +171,7 @@ const CypherResultCytoscapeFooter = ({
             type="button"
             className={`btn sizeSelector node ${footerData.data.size >= nodeSize ? ' selectedSize ' : ''}`}
             style={{ width: `${size}px`, height: `${size}px` }}
+            aria-label="Update NodeLabel Size"
           >
             &nbsp;
           </button>
@@ -186,6 +188,7 @@ const CypherResultCytoscapeFooter = ({
             type="button"
             className={`btn sizeSelector edge ${footerData.data.size >= edgeSize ? ' selectedSize ' : ''}`}
             style={{ width: `${size + 18}px`, height: `${size}px` }}
+            aria-label="Update Edge Label Size"
           >
             &nbsp;
           </button>
@@ -212,6 +215,7 @@ const CypherResultCytoscapeFooter = ({
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
               style={{ backgroundColor: color.color }}
+              aria-label="Update Label Color"
             >
               &nbsp;
             </button>
@@ -227,6 +231,7 @@ const CypherResultCytoscapeFooter = ({
               type="button"
               className={`btn colorSelector ${footerData.data.backgroundColor === color.color ? ' selectedColor ' : ''}`}
               style={{ backgroundColor: color.color }}
+              aria-label="Update Label Color"
             >
               &nbsp;
             </button>
@@ -293,6 +298,7 @@ const CypherResultCytoscapeFooter = ({
             type="button"
             className="frame-head-button btn btn-link px-3"
             onClick={() => setFooterExpanded(!footerExpanded)}
+            aria-label="Set Footer Expanded"
           >
             <FontAwesomeIcon
               icon={footerExpanded ? faAngleUp : faAngleDown}
