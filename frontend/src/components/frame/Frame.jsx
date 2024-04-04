@@ -54,7 +54,7 @@ const Frame = ({
   const dispatch = useDispatch();
   const [isFullScreen, setFullScreen] = useState(false);
   const [isExpand, setExpand] = useState(true);
-
+  const [showCopyPopup, setShowCopyPopup] = useState(false);
   // const downloadMenu = () => (
   //   <Menu onClick={(e) => onDownload(e)}>
   //     <Menu.Item key="png">
@@ -69,6 +69,14 @@ const Frame = ({
   //   </Menu>
   // );
 
+  const handleOnClickCopyToEditor = () => {
+    setShowCopyPopup(true);
+    setTimeout(() => {
+      setShowCopyPopup(false);
+    }, 2000);
+    dispatch(setCommand(reqString));
+  };
+
   return (
     <div className={`${styles.Frame} ${isFullScreen ? styles.FullScreen : ''}`}>
       <div className={styles.FrameHeader}>
@@ -82,11 +90,12 @@ const Frame = ({
             title="copy to editor"
             icon={faClone}
             size="s"
-            onClick={() => dispatch(setCommand(reqString))}
+            onClick={handleOnClickCopyToEditor}
             style={{
               cursor: 'pointer',
             }}
           />
+          {showCopyPopup && <div>Copied to editor</div>}
         </div>
         <div className={styles.ButtonArea}>
           {!isTable && onThick ? (
