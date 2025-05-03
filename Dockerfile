@@ -6,6 +6,8 @@ WORKDIR /src
 
 COPY . .
 
+RUN npm add @babel/runtime
+
 RUN npm run setup
 
 CMD ["npm", "run", "start"]
