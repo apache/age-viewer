@@ -22,7 +22,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "codemirror": "5.59.0",
-    "cytoscape": "^3.18.0",
+    "cytoscape": "^3.21.0",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-cise": "^1.0.0",
     "cytoscape-cola": "^2.4.0",
@@ -50,11 +50,11 @@
     "serve": "^11.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+  "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+},
   "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
