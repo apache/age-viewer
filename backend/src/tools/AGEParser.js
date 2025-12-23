@@ -43,6 +43,7 @@ async function setAGETypes(client, types) {
         SET search_path = ag_catalog, "$user", public;
     `)
 */
+
     const oidResults = await client.query(`
         select typelem
         from pg_type
