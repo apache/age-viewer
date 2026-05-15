@@ -1,10 +1,9 @@
 notifications:
-    commits:      commits@age.apache.org
-    pullrequests: commits@age.apache.org
+  commits: commits@age.apache.org
+  pullrequests: commits@age.apache.org
 
 github:
-  description: "Graph database optimized for fast analysis and real-time data processing. 
-     It is provided as an extension to PostgreSQL."
+  description: "Graph database optimized for fast analysis and real-time data processing. It is provided as an extension to PostgreSQL."
   homepage: https://age.apache.org
   labels:
     - postgresql
@@ -21,6 +20,19 @@ github:
     discussions: true
 
   enabled_merge_buttons:
-    squash:  true
-    merge:   false
-    rebase:  true
+    squash: true
+    merge: false
+    rebase: true
+  rulesets:
+    - name: "Default Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "~DEFAULT_BRANCH"
+          - "release/*"
+          - "rel/*"
+        excludes: []
+      bypass_teams:
+        - root
+      restrict_deletion: true
+      restrict_force_push: true
