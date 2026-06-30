@@ -53,6 +53,7 @@ export const executeCypherQuery = createAsyncThunk(
       const response = await fetch('/api/v1/cypher',
         {
           method: 'POST',
+          credentials: 'include',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

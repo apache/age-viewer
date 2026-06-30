@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": "^14.16.0"
+    "node": ">=20"
   },
   "scripts": {
     "setup": "npm install && npm-run-all setup-front setup-backend",

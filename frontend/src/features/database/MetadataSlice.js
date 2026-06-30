@@ -27,6 +27,7 @@ export const getMetaData = createAsyncThunk(
       const response = await fetch('/api/v1/db/meta',
         {
           method: 'POST',
+          credentials: 'include',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -53,9 +54,19 @@ export const getMetaData = createAsyncThunk(
       }
       throw response;
     } catch (error) {
+      let errorJson = { severity: '', code: '', message: 'Unknown error' };
+      try {
+        if (error.json && typeof error.json === 'function') {
+          errorJson = await error.json();
+        } else if (error.message) {
+          errorJson.message = error.message;
+        }
+      } catch (parseError) {
+        errorJson.message = error.statusText || 'Failed to connect to the database. Are you sure the database is running on the server?';
+      }
       const errorDetail = {
         name: 'Database Connection Failed',
-        message: `[${error.severity}]:(${error.code}) ${error.message} `,
+        message: `[${errorJson.severity}]:(${errorJson.code}) ${errorJson.message} `,
         statusText: error.statusText,
       };
       throw errorDetail;

@@ -17,11 +17,10 @@
  * under the License.
  */
 
-import antlr4 from 'antlr4';
-import { cli } from 'winston/lib/winston/config';
-import AgtypeLexer from './AgtypeLexer';
-import AgtypeParser from './AgtypeParser';
-import CustomAgTypeListener from './CustomAgTypeListener';
+const antlr4 = require('antlr4');
+const AgtypeLexer = require('./AgtypeLexer');
+const AgtypeParser = require('./AgtypeParser');
+const CustomAgTypeListener = require('./CustomAgTypeListener');
 
 function AGTypeParse(input) {
     const chars = new antlr4.InputStream(input);
@@ -58,4 +57,4 @@ async function onConnectQueries(client){
     return {server_version: v.rows[0].server_version};
 }
 
-export {setAGETypes, AGTypeParse, onConnectQueries}
+module.exports = {setAGETypes, AGTypeParse, onConnectQueries};

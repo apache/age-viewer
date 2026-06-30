@@ -157,7 +157,11 @@ sketch
 
 ### react frontend ###
 frontend/build
+frontend/.env.local
 frontend/src/conf/config.js
+
+### backend build ###
+backend/build
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,react
 

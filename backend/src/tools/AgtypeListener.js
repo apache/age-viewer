@@ -19,10 +19,10 @@
 
 // Generated from src/tools/Agtype.g4 by ANTLR 4.9.2
 // jshint ignore: start
-import antlr4 from 'antlr4';
+const antlr4 = require('antlr4');
 
 // This class defines a complete listener for a parse tree produced by AgtypeParser.
-export default class AgtypeListener extends antlr4.tree.ParseTreeListener {
+class AgtypeListener extends antlr4.tree.ParseTreeListener {
 
     // Enter a parse tree produced by AgtypeParser#agType.
     enterAgType(ctx) {
@@ -159,3 +159,5 @@ export default class AgtypeListener extends antlr4.tree.ParseTreeListener {
     }
 
 }
+
+module.exports = AgtypeListener;

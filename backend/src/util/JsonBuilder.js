@@ -17,11 +17,11 @@
  * under the License.
  */
 
-export function stringWrap(valstr, flavor) {
+function stringWrap(valstr, flavor) {
     return JSON.stringify(valstr);
 }
 
-export function JsonStringify(flavor, record) {
+function JsonStringify(flavor, record) {
     let ageJsonStr = '{';
     let isFirst = true;
     for (const [key, value] of Object.entries(record)) {
@@ -36,7 +36,7 @@ export function JsonStringify(flavor, record) {
     return ageJsonStr;
 }
 
-export async function createVertex(client, graphPathStr, label, record, flavor) {
+async function createVertex(client, graphPathStr, label, record, flavor) {
     const createQ = `CREATE (n:${label} ${JsonStringify(flavor, record)})`;
     if (flavor === 'AGE') {
         return AGECreateVertex(client, graphPathStr, createQ);
@@ -51,7 +51,7 @@ async function AGECreateVertex(client, graphPathStr, createQ) {
          from cypher('${graphPathStr}', $$ ${createQ} $$) as (a agtype)`);
 }
 
-export async function createEdge(client, label, record, graphPathStr, edgeStartLabel, edgeEndLabel, startNodeName, endNodeName, flavor) {
+async function createEdge(client, label, record, graphPathStr, edgeStartLabel, edgeEndLabel, startNodeName, endNodeName, flavor) {
     const createQ = `CREATE (:${edgeStartLabel} {name: ${stringWrap(startNodeName, flavor)}})-[n:${label} ${JsonStringify(flavor, record)}]->(:${edgeEndLabel} {name: ${stringWrap(endNodeName, flavor)}})`;
     if (flavor === 'AGE') {
         return AGECreateEdge(client, graphPathStr, createQ);
@@ -65,3 +65,10 @@ async function AGECreateEdge(client, graphPathStr, createQ) {
         `select *
          from cypher('${graphPathStr}', $$ ${createQ} $$) as (a agtype)`);
 }
+
+module.exports = {
+    stringWrap,
+    JsonStringify,
+    createVertex,
+    createEdge
+};

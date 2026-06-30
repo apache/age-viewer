@@ -17,6 +17,6 @@
  * under the License.
  */
 
-export default {
+module.exports = {
     AGE: 'AGE'
-}
+};

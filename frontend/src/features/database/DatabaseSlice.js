@@ -26,6 +26,7 @@ export const connectToDatabase = createAsyncThunk(
       const response = await fetch('/api/v1/db/connect',
         {
           method: 'POST',
+          credentials: 'include',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -35,7 +36,16 @@ export const connectToDatabase = createAsyncThunk(
       if (response.ok) { return await response.json(); }
       throw response;
     } catch (error) {
-      const errorJson = await error.json();
+      let errorJson = { severity: '', code: '', message: 'Unknown error' };
+      try {
+        if (error.json && typeof error.json === 'function') {
+          errorJson = await error.json();
+        } else if (error.message) {
+          errorJson.message = error.message;
+        }
+      } catch (parseError) {
+        errorJson.message = error.statusText || 'Failed to connect to the database. Are you sure the database is running on the server?';
+      }
       const errorDetail = {
         name: 'Failed to Retrieve Connection Information',
         message: `[${errorJson.severity}]:(${errorJson.code}) ${errorJson.message} `,
@@ -49,7 +59,7 @@ export const connectToDatabase = createAsyncThunk(
 export const disconnectToDatabase = createAsyncThunk(
   'database/disconnectToDatabase',
   async () => {
-    await fetch('/api/v1/db/disconnect');
+    await fetch('/api/v1/db/disconnect', { credentials: 'include' });
   },
 );
 
@@ -57,11 +67,20 @@ export const getConnectionStatus = createAsyncThunk(
   'database/getConnectionStatus',
   async () => {
     try {
-      const response = await fetch('/api/v1/db');
+      const response = await fetch('/api/v1/db', { credentials: 'include' });
       if (response.ok) { return await response.json(); }
       throw response;
     } catch (error) {
-      const errorJson = await error.json();
+      let errorJson = { severity: '', code: '', message: 'Unknown error' };
+      try {
+        if (error.json && typeof error.json === 'function') {
+          errorJson = await error.json();
+        } else if (error.message) {
+          errorJson.message = error.message;
+        }
+      } catch (parseError) {
+        errorJson.message = error.statusText || 'Failed to retrieve connection status';
+      }
       const errorDetail = {
         name: 'Failed to Retrieve Connection Information',
         message: `[${errorJson.severity}]:(${errorJson.code}) ${errorJson.message} `,

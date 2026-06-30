@@ -52,14 +52,18 @@ const DefaultTemplate = ({
   });
   const [finder, setFinder] = useState(null);
 
-  useEffect(async () => {
-    const req = {
-      method: 'GET',
+  useEffect(() => {
+    const loadKeywordFinder = async () => {
+      const req = {
+        method: 'GET',
+        credentials: 'include',
+      };
+      const res = await fetch('/api/v1/miscellaneous', req);
+      const results = await res.json();
+      const kwFinder = KeyWordFinder.fromMatrix(results);
+      setFinder(kwFinder);
     };
-    const res = await fetch('/api/v1/miscellaneous', req);
-    const results = await res.json();
-    const kwFinder = KeyWordFinder.fromMatrix(results);
-    setFinder(kwFinder);
+    loadKeywordFinder();
   }, []);
 
   useEffect(() => {

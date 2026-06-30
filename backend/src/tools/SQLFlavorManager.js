@@ -16,18 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import * as path from "path";
-import fs from 'fs'
+const path = require("path");
+const fs = require('fs');
 
 const sqlBasePath = path.join(__dirname, '../../sql');
 
 // todo: util.format -> ejs
 function getQuery(name, version='') {
-    const sqlPath = path.join(sqlBasePath, version, `${name}.sql`);
+    let sqlPath = path.join(sqlBasePath, version, `${name}.sql`);
+
+    // If version-specific file doesn't exist, try fallback versions
+    if (version && !fs.existsSync(sqlPath)) {
+        const versionNum = parseInt(version, 10);
+        // For versions >= 16, use version 15 (compatible)
+        if (versionNum >= 16) {
+            sqlPath = path.join(sqlBasePath, '15', `${name}.sql`);
+        } else if (versionNum >= 11) {
+            // For versions 11-15, try each down to 11
+            for (let v = versionNum; v >= 11; v--) {
+                const fallbackPath = path.join(sqlBasePath, v.toString(), `${name}.sql`);
+                if (fs.existsSync(fallbackPath)) {
+                    sqlPath = fallbackPath;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Final fallback: check base sql directory
+    if (!fs.existsSync(sqlPath)) {
+        sqlPath = path.join(sqlBasePath, `${name}.sql`);
+    }
+
     if (!fs.existsSync(sqlPath)) {
         throw new Error(`SQL does not exist, name = ${name}`);
     }
     return fs.readFileSync(sqlPath, 'utf8');
 }
 
-export {getQuery}
+module.exports = { getQuery };

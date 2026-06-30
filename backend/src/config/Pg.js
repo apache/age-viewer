@@ -17,7 +17,7 @@
  * under the License.
  */
 
-export default {
+module.exports = {
   // all valid client config options are also valid here
   // in addition here are the pool specific configuration parameters:
   // number of milliseconds to wait before timing out when connecting a new client
@@ -30,4 +30,4 @@ export default {
   // maximum number of clients the pool should contain
   // by default this is set to 10.
   max: 10,
-}
+};

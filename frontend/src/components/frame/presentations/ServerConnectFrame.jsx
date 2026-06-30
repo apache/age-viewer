@@ -32,12 +32,12 @@ import { addFrame, trimFrame } from '../../../features/frame/FrameSlice';
 import { /* getMetaChartData, */ getMetaData } from '../../../features/database/MetadataSlice';
 
 const FormInitialValue = {
-  database: '',
+  database: 'rag_chat',
   graph: '',
-  host: '',
-  password: '',
-  port: null,
-  user: '',
+  host: 'host.docker.internal',
+  password: 'rag_password',
+  port: 5432,
+  user: 'rag_user',
 };
 
 const ServerConnectFrame = ({

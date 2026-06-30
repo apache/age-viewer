@@ -16,12 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import PgConfig from '../config/Pg'
-
-import pg from 'pg';
-import types from 'pg-types';
-import {setAGETypes, onConnectQueries} from '../tools/AGEParser';
-import { getQuery } from '../tools/SQLFlavorManager';
+const PgConfig = require('../config/Pg');
+const pg = require('pg');
+const types = require('pg-types');
+const {setAGETypes, onConnectQueries} = require('../tools/AGEParser');
+const { getQuery } = require('../tools/SQLFlavorManager');
 
 
 class GraphRepository {

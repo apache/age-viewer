@@ -26,7 +26,7 @@ import dagre from 'cytoscape-dagre';
 import klay from 'cytoscape-klay';
 import euler from 'cytoscape-euler';
 import avsdf from 'cytoscape-avsdf';
-import spread from 'cytoscape-spread';
+// import spread from 'cytoscape-spread'; // Disabled due to weaverjs dependency issues
 import CytoscapeComponent from 'react-cytoscapejs';
 import { seletableLayouts } from './CytoscapeLayouts';
 import { stylesheet } from './CytoscapeStyleSheet';
@@ -39,7 +39,7 @@ cytoscape.use(dagre);
 cytoscape.use(klay);
 cytoscape.use(euler);
 cytoscape.use(avsdf);
-cytoscape.use(spread);
+// cytoscape.use(spread); // Disabled due to weaverjs dependency issues
 
 const MetadataCytoscapeChart = ({ elements }) => {
   const [cytoscapeObject, setCytoscapeObject] = useState(null);

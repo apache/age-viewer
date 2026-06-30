@@ -17,11 +17,9 @@
  * under the License.
  */
 
-import { getQuery } from "../tools/SQLFlavorManager";
-import * as util from "util";
-import GraphRepository from '../models/GraphRepository';
-import { start } from "repl";
-import { get } from "http";
+const { getQuery } = require("../tools/SQLFlavorManager");
+const util = require("util");
+const GraphRepository = require('../models/GraphRepository');
 
 class DatabaseService {
     constructor() {

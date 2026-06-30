@@ -17,7 +17,7 @@
  * under the License.
  */
 
-export function wrap(asyncFn) {
+function wrap(asyncFn) {
     return (async (req, res, next) => {
         try {
             return await asyncFn(req, res, next)
@@ -26,3 +26,5 @@ export function wrap(asyncFn) {
         }
     })
 }
+
+module.exports = { wrap };

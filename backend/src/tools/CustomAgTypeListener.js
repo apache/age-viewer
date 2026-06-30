@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import AgtypeListener from "./AgtypeListener";
+const AgtypeListener = require("./AgtypeListener");
 
 class CustomAgTypeListener extends AgtypeListener {
     rootObject = null;
@@ -159,4 +159,4 @@ class CustomAgTypeListener extends AgtypeListener {
     }
 }
 
-export default CustomAgTypeListener;
+module.exports = CustomAgTypeListener;

@@ -26,7 +26,7 @@ import dagre from 'cytoscape-dagre';
 import klay from 'cytoscape-klay';
 import euler from 'cytoscape-euler';
 import avsdf from 'cytoscape-avsdf';
-import spread from 'cytoscape-spread';
+// import spread from 'cytoscape-spread'; // Disabled due to weaverjs dependency issues
 import { useDispatch } from 'react-redux';
 import CytoscapeComponent from 'react-cytoscapejs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,7 +52,7 @@ cytoscape.use(dagre);
 cytoscape.use(klay);
 cytoscape.use(euler);
 cytoscape.use(avsdf);
-cytoscape.use(spread);
+// cytoscape.use(spread); // Disabled due to weaverjs dependency issues
 cytoscape.use(cxtmenu);
 
 const CypherResultCytoscapeCharts = ({
@@ -210,6 +210,7 @@ const CypherResultCytoscapeCharts = ({
 
               fetch('/api/v1/cypher', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json',

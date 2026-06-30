@@ -89,7 +89,7 @@ const InitGraphModal = ({ show, setShow }) => {
       method: 'POST',
       body: sendFiles,
       mode: 'cors',
-
+      credentials: 'include',
     };
     fetch('/api/v1/cypher/init', reqData)
       .then(async (res) => {

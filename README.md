@@ -11,17 +11,9 @@ It is graph visualisation tool, for Apache AGE.
 
 This is a sub-project of [the Apache AGE project](https://age.apache.org/#).
 
-# Recommend Node Version & install module
+# Recommend Node Version
 
-- Node version - ^14.16.0
-
-- Node Module - pm2 
-
-Install latest **pm2** with :
-``` npm i pm2 ```
-
-
-> [pm2](https://www.npmjs.com/package/pm2) is an NPM module to run the project in production mode, and hence is optional for getting started with setting up development environment for Age-Viewer 
+- Node version - >=20
 
 # Running Age-Viewer
 
@@ -41,17 +33,7 @@ Install latest **pm2** with :
 - Build the back-end :
 ``` npm run build-back```
 
-- Start the project in production mode :
-  ``` 
-	pm2 stop ag-viewer-develop
-
-	pm2 delete ag-viewer-develop
-
-	pm2 start ecosystem.config.js
-
-	```
-
-  # How to start using Age-Viewer
+# How to start using Age-Viewer
  - To start using Age-Viewer we need to have a running postgreSQL database server with Apache Age Extension 
 	 ### Setting up the PostgreSQL server with AGE extension
 	-  Easiest way  for Windows, Mac-OS and Linux Environment using **Docker**

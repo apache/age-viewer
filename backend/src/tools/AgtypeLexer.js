@@ -19,7 +19,7 @@
 
 // Generated from src/tools/Agtype.g4 by ANTLR 4.9.2
 // jshint ignore: start
-import antlr4 from 'antlr4';
+const antlr4 = require('antlr4');
 
 
 const serializedATN = ["\u0003\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786",
@@ -146,7 +146,7 @@ const atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
 
 const decisionsToDFA = atn.decisionToState.map((ds, index) => new antlr4.dfa.DFA(ds, index));
 
-export default class AgtypeLexer extends antlr4.Lexer {
+class AgtypeLexer extends antlr4.Lexer {
 
     static grammarFileName = "Agtype.g4";
     static channelNames = ["DEFAULT_TOKEN_CHANNEL", "HIDDEN"];
@@ -194,5 +194,5 @@ AgtypeLexer.RegularFloat = 17;
 AgtypeLexer.ExponentFloat = 18;
 AgtypeLexer.WS = 19;
 
-
+module.exports = AgtypeLexer;
 
