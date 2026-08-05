@@ -11,6 +11,27 @@ It is graph visualisation tool, for Apache AGE.
 
 This is a sub-project of [the Apache AGE project](https://age.apache.org/#).
 
+# Requierement
+
+* PostgreSQL 18.1 with Apache AGE extension
+
+# Build and run Apache-Age Viewer
+
+## Build
+
+``` docker build -t age-viewer . ```
+
+## Run
+
+``` docker run -p 3000:3000 age-viewer ```
+
+# Usage
+
+Open in Browser : [Apache-Age Viewer](http://localhost:3000/)
+
+
+=== version originelle du README === 
+
 # Recommend Node Version & install module
 
 - Node version - ^14.16.0
